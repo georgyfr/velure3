@@ -1,0 +1,934 @@
+     1→=== PAGE 1 ===
+     2→NutriVitaX
+     3→Pro
+     4→Thème WooCommerce Premium — Compléments Alimentaires
+     5→Document de spécification technique & fonctionnelle complet · Version 1.0 · Juin 2026
+     6→Type
+     7→Thème WooCommerce + Framework FSE (Full Site Editing)
+     8→Cible
+     9→Boutiques e-commerce · Compléments alimentaires · Nutraceutique
+    10→Stack
+    11→WordPress 6.7+ · WooCommerce 9.x · PHP 8.3+ · React 18
+    12→Standards
+    13→Core Web Vitals 2026 · WCAG 2.2 AA · GDPR · Schema.org
+    14→Nom unique
+    15→Slug WordPress : nutrivitax-pro (non enregistré au 06/2026)
+    16→
+    17→=== PAGE 2 ===
+    18→Table des Matières
+    19→01
+    20→Concept & Positionnement Stratégique
+    21→I Proposition de valeur unique
+    22→I Analyse concurrentielle
+    23→I Persona cibles
+    24→02
+    25→Architecture Technique
+    26→I Stack technologique
+    27→I Structure de fichiers FSE
+    28→I Base de données & APIs
+    29→03
+    30→Design System & Charte Graphique
+    31→I Typographie & couleurs
+    32→I Tokens de design
+    33→I Composants UI de base
+    34→04
+    35→Fonctionnalités Core — Pages & Templates
+    36→I Homepage hero avancé
+    37→I Page produit enrichie
+    38→I Catalogue & filtres
+    39→05
+    40→Intégration WooCommerce Avancée
+    41→I Configurateur de stack nutritionnel
+    42→I Abonnements & récurrence
+    43→I Loyalty & gamification
+    44→06
+    45→Fonctionnalités Innovantes 2026
+    46→I IA nutritionnelle
+    47→I AR Try-On
+    48→I Personnalisation dynamique
+    49→07
+    50→Performance & SEO
+    51→I Core Web Vitals
+    52→I Schema.org Health
+    53→I Stratégie de cache
+    54→08
+    55→Admin & Back-Office
+    56→I Dashboard personnalisé
+    57→
+    58→=== PAGE 3 ===
+    59→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+    60→Page 3
+    61→© 2026 NutriVitaX Pro — Document Confidentiel
+    62→Standards WordPress/WooCommerce 2026
+    63→I Gestion stocks
+    64→I Analytics avancés
+    65→09
+    66→Accessibilité, RGPD & Conformité
+    67→I WCAG 2.2 AA
+    68→I Consentement cookies
+    69→I Mentions légales
+    70→10
+    71→Roadmap & Phases de Développement
+    72→I Phase 1 — MVP
+    73→I Phase 2 — Premium
+    74→I Phase 3 — Enterprise AI
+    75→
+    76→=== PAGE 4 ===
+    77→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+    78→Page 4
+    79→© 2026 NutriVitaX Pro — Document Confidentiel
+    80→Standards WordPress/WooCommerce 2026
+    81→01 — Concept & Positionnement Stratégique
+    82→1.1 Nom & Identité : NutriVitaX Pro
+    83→NutriVitaX Pro est un thème WordPress/WooCommerce de nouvelle génération, conçu exclusivement pour
+    84→les boutiques de compléments alimentaires, de nutraceutique et de bien-être. Il combine une expérience
+    85→d'achat ultra-personnalisée, propulsée par l'intelligence artificielle, avec un design biomimétique inspiré de la
+    86→nature et des laboratoires pharmaceutiques modernes. Le nom — NutriVitaX — évoque la nutrition, la vitalité
+    87→et l'excellence (X), un positionnement premium inédit dans l'écosystème WordPress.
+    88→I Vérification effectuée en juin 2026 : le slug 'nutrivitax-pro' n'est pas référencé sur le répertoire officiel wordpress.org,
+    89→ThemeForest, ni sur les principaux marketplaces.
+    90→1.2 Proposition de Valeur Unique (UVP)
+    91→Fonctionnalité Différenciante
+    92→Description
+    93→IA Nutritionnelle Intégrée
+    94→Recommandations personnalisées basées sur profil
+    95→santé, objectifs, allergies
+    96→Configurateur de Stack
+    97→Builder drag-and-drop pour créer des programmes
+    98→de supplémentation sur mesure
+    99→Transparence Produit 360°
+   100→QR code traçabilité, certificats COA, origine
+   101→ingrédients cartographiée
+   102→Abonnements Intelligents
+   103→Cycles adaptatifs, pauses, swaps de produits, alertes
+   104→de réapprovisionnement
+   105→Gamification Santé
+   106→Scores vitalité, badges, challenges communautaires,
+   107→récompenses fidélité
+   108→Performance Extrême
+   109→LCP < 1.2s, INP < 100ms, CLS < 0.05, score
+   110→Lighthouse 100/100
+   111→1.3 Analyse Concurrentielle
+   112→Thème
+   113→Spécialisation
+   114→WooCommerce
+   115→IA / Perso.
+   116→Abonnements
+   117→Astra Pro
+   118→Généraliste
+   119→ Non spécialisé
+   120→ Pas d'IA
+   121→ Pas de
+   122→configurateur
+   123→Flatsome
+   124→Multi-usage
+   125→ Non spécialisé
+   126→ Pas d'IA
+   127→Limité
+   128→Woodmart
+   129→Électronique/Mode
+   130→ Non spécialisé
+   131→ Pas d'IA
+   132→Basique
+   133→Rehub
+   134→Comparaison prix
+   135→Partiel
+   136→ Pas d'IA
+   137→Limité
+   138→NutriVitaX Pro
+   139→Nutrition/Santé
+   140→ Natif profond
+   141→ IA intégrée
+   142→ Natif avancé
+   143→1.4 Personas Cibles
+   144→
+   145→=== PAGE 5 ===
+   146→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   147→Page 5
+   148→© 2026 NutriVitaX Pro — Document Confidentiel
+   149→Standards WordPress/WooCommerce 2026
+   150→IIII Sophie, 32 ans
+   151→Sportive amateur, cherche stack pré/post training, budget moyen,
+   152→mobile-first
+   153→III Thomas, 45 ans
+   154→Entrepreneur stressé, intéressé par nootropiques & immunité,
+   155→paiement récurrent
+   156→IIII Dr. Émilie
+   157→Nutritionniste, recommande des produits à ses patients, cherche
+   158→fiabilité & traçabilité
+   159→I Marc, revendeur
+   160→Gérant d'une pharmacie, commandes B2B en gros, tableau de bord
+   161→professionnel
+   162→
+   163→=== PAGE 6 ===
+   164→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   165→Page 6
+   166→© 2026 NutriVitaX Pro — Document Confidentiel
+   167→Standards WordPress/WooCommerce 2026
+   168→02 — Architecture Technique
+   169→2.1 Stack Technologique
+   170→Technologie
+   171→Version
+   172→Usage Clé
+   173→WordPress
+   174→6.7+
+   175→Full Site Editing (FSE), Block
+   176→Bindings API, Interactivity API v2
+   177→WooCommerce
+   178→9.x
+   179→Cart & Checkout Blocks natifs,
+   180→HPOS, High Performance Order
+   181→Storage
+   182→PHP
+   183→8.3+
+   184→Fibers, Readonly classes,
+   185→First-class callables, JIT optimisé
+   186→JavaScript
+   187→React 18 + TypeScript 5.x
+   188→Concurrent Mode, Suspense,
+   189→Server Components
+   190→CSS
+   191→CSS Layers + Container Queries
+   192→Design tokens natifs, cascade
+   193→gérée par couches
+   194→Build
+   195→Vite 6 + @wordpress/scripts
+   196→HMR ultra-rapide, tree-shaking,
+   197→code splitting auto
+   198→Cache
+   199→Object Cache Pro + Redis 7
+   200→Fragment caching, full-page
+   201→cache conditionnel
+   202→API
+   203→REST API WP + GraphQL
+   204→(WPGraphQL)
+   205→Headless-ready, SSR optionnel
+   206→avec Next.js 15
+   207→Tests
+   208→PHPUnit 11 + Playwright 1.4x
+   209→Tests E2E automatisés, coverage
+   210→> 80%
+   211→CI/CD
+   212→GitHub Actions + WP-CLI
+   213→Déploiement zéro-downtime,
+   214→rollback automatique
+   215→2.2 Structure de Fichiers FSE (Full Site Editing)
+   216→Architecture suivant les standards WordPress 6.7 Block Theme :
+   217→nutrivitax-pro/
+   218→III parts/                    # Template parts réutilisables
+   219→I   III header.html           # Header adaptatif (mega-menu + recherche IA)
+   220→I   III footer.html           # Footer avec newsletter + certifications
+   221→I   III sidebar-shop.html     # Sidebar filtre produits avancé
+   222→I   III product-sticky-bar.html  # Barre CTA sticky produit
+   223→III templates/                # Templates FSE complets
+   224→I   III index.html
+   225→I   III home.html             # Homepage premium avec sections dynamiques
+   226→I   III single-product.html   # Page produit enrichie (lab + IA)
+   227→I   III archive-product.html  # Catalogue avec filtres avancés
+   228→I   III page-quiz.html        # Quiz santé personnalisé
+   229→I   III page-stack-builder.html  # Configurateur stack nutritionnel
+   230→I   III taxonomy-product_cat.html
+   231→III patterns/                 # Block Patterns réutilisables
+   232→I   III hero-homepage.php
+   233→I   III product-card-premium.php
+   234→
+   235→=== PAGE 7 ===
+   236→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   237→Page 7
+   238→© 2026 NutriVitaX Pro — Document Confidentiel
+   239→Standards WordPress/WooCommerce 2026
+   240→I   III ingredient-transparency.php
+   241→I   III testimonial-verified.php
+   242→I   III trust-badges.php
+   243→III assets/
+   244→I   III css/
+   245→I   I   III style.css         # Styles globaux + Design Tokens
+   246→I   I   III editor-style.css  # Styles éditeur Gutenberg
+   247→I   I   III layers/           # CSS Layers modulaires
+   248→I   III js/
+   249→I   I   III modules/          # Modules ES natifs
+   250→I   I   III blocks/           # Blocs Gutenberg custom
+   251→I   III images/
+   252→III inc/
+   253→I   III setup.php             # Bootstrap thème
+   254→I   III ai-recommendations.php  # Moteur IA recommandations
+   255→I   III quiz-engine.php       # Moteur quiz nutritionnel
+   256→I   III stack-builder.php     # API configurateur
+   257→I   III woo-enhancements.php  # Hooks WooCommerce avancés
+   258→III functions.php
+   259→III theme.json               # Design tokens centralisés
+   260→III style.css                # Header thème WordPress
+   261→2.3 Base de Données — Tables Personnalisées
+   262→Table
+   263→Description
+   264→Colonnes Clés
+   265→nvx_health_profiles
+   266→Profils santé utilisateurs (objectifs,
+   267→allergies, conditions)
+   268→user_id, data JSON
+   269→nvx_supplement_stacks
+   270→Configurations personnalisées de
+   271→stacks
+   272→stack_id, products JSON, user_id
+   273→nvx_ai_recommendations
+   274→Historique recommandations IA
+   275→user_id, context, recommended,
+   276→score
+   277→nvx_loyalty_points
+   278→Points fidélité & transactions
+   279→user_id, points, action, date
+   280→nvx_ingredient_origins
+   281→Traçabilité ingrédients
+   282→ingredient_id, origin_country,
+   283→supplier, coa_url
+   284→nvx_quiz_responses
+   285→Réponses quiz santé
+   286→session_id, question_id, answer,
+   287→timestamp
+   288→
+   289→=== PAGE 8 ===
+   290→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   291→Page 8
+   292→© 2026 NutriVitaX Pro — Document Confidentiel
+   293→Standards WordPress/WooCommerce 2026
+   294→03 — Design System & Charte Graphique
+   295→3.1 Philosophie de Design
+   296→NutriVitaX Pro adopte un design 'BioLab Luxe' : l'esthétique épurée des laboratoires pharmaceutiques
+   297→modernes fusionnée avec la chaleur organique de la nature. Blanc clinique, verts profonds, accents dorés et
+   298→micro-animations évoquant la croissance cellulaire créent une expérience de marque premium et rassurante.
+   299→3.2 Palette de Couleurs
+   300→Nom
+   301→Code Hex
+   302→Usage
+   303→Aperç
+   304→u
+   305→Forêt Profonde
+   306→#1A6B3A
+   307→Couleur primaire — confiance, nature, santé
+   308→Émeraude Vif
+   309→#2ECC71
+   310→Secondaire — fraîcheur, vitalité, succès
+   311→Or Scientifique
+   312→#F4A900
+   313→Accent 
+   314→— 
+   315→premium, 
+   316→énergie, 
+   317→CTAs
+   318→importants
+   319→Nuit Marine
+   320→#12243A
+   321→Textes foncés, fonds hero, profondeur
+   322→Brume Verte
+   323→#F0F9F4
+   324→Fonds de sections, cartes, alt rows
+   325→Blanc Clinique
+   326→#FFFFFF
+   327→Fonds principaux, cartes produits
+   328→Gris Doux
+   329→#6B7280
+   330→Textes secondaires, placeholders
+   331→Rouge Alerte
+   332→#EF4444
+   333→Erreurs, stock faible, urgence
+   334→3.3 Typographie
+   335→Police
+   336→Usage
+   337→Graisses
+   338→Justification
+   339→Clash Display
+   340→H1–H3, Hero titles
+   341→700–800
+   342→Variable font,
+   343→géométrique premium,
+   344→impact fort
+   345→Cabinet Grotesk
+   346→H4–H6, Sous-titres
+   347→500–700
+   348→Moderne, lisible,
+   349→intermédiaire entre serif
+   350→et sans
+   351→Inter Variable
+   352→Body text, UI
+   353→400–500
+   354→Optimisé écran,
+   355→excellent rendu petite
+   356→taille
+   357→Space Mono
+   358→Codes, données lab, prix
+   359→400
+   360→Technique, évoque
+   361→rigueur scientifique
+   362→DM Serif Display
+   363→Citations, testimonials
+   364→400 Italic
+   365→Élégance, contraste
+   366→avec la géométrie
+   367→générale
+   368→
+   369→=== PAGE 9 ===
+   370→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   371→Page 9
+   372→© 2026 NutriVitaX Pro — Document Confidentiel
+   373→Standards WordPress/WooCommerce 2026
+   374→3.4 Design Tokens (theme.json)
+   375→Extrait des tokens de design centralisés dans theme.json (WordPress 6.7+ Block Theme) :
+   376→{
+   377→  "settings": {
+   378→    "color": {
+   379→      "palette": [
+   380→        {"slug": "nvx-primary",   "color": "#1A6B3A", "name": "Forêt Profonde"},
+   381→        {"slug": "nvx-secondary", "color": "#2ECC71", "name": "Émeraude Vif"},
+   382→        {"slug": "nvx-accent",    "color": "#F4A900", "name": "Or Scientifique"}
+   383→      ],
+   384→      "gradients": [
+   385→        {"slug": "nvx-hero",    "gradient": "linear-gradient(135deg, #12243A 0%, #1A6B3A 100%)"},
+   386→        {"slug": "nvx-premium", "gradient": "linear-gradient(180deg, #2ECC71 0%, #1A6B3A 100%)"}
+   387→      ]
+   388→    },
+   389→    "spacing": { "spacingScale": {"operator": "*", "increment": 1.5, "steps": 8, "mediumStep": 1} },
+   390→    "typography": {
+   391→      "fontSizes": [
+   392→        {"slug": "xs", "size": "0.75rem"},  {"slug": "sm", "size": "0.875rem"},
+   393→        {"slug": "md", "size": "1rem"},     {"slug": "lg", "size": "1.25rem"},
+   394→        {"slug": "xl", "size": "1.5rem"},   {"slug": "2xl", "size": "2rem"},
+   395→        {"slug": "3xl", "size": "3rem"},    {"slug": "hero", "size": "clamp(2.5rem,6vw,5rem)"}
+   396→      ],
+   397→      "fluid": true
+   398→    },
+   399→    "custom": {
+   400→      "borderRadius": {"sm": "6px", "md": "12px", "lg": "20px", "full": "9999px"},
+   401→      "shadow": {
+   402→        "sm":  "0 1px 3px rgba(26,107,58,0.12)",
+   403→        "md":  "0 4px 16px rgba(26,107,58,0.16)",
+   404→        "lg":  "0 12px 40px rgba(26,107,58,0.22)",
+   405→        "glow":"0 0 30px rgba(46,204,113,0.35)"
+   406→      }
+   407→    }
+   408→  }
+   409→}
+   410→
+   411→=== PAGE 10 ===
+   412→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   413→Page 10
+   414→© 2026 NutriVitaX Pro — Document Confidentiel
+   415→Standards WordPress/WooCommerce 2026
+   416→04 — Fonctionnalités Core — Pages & Templates
+   417→4.1 Homepage — Architecture en Sections
+   418→Section
+   419→Contenu & Fonctionnalités
+   420→Hero Cinématique
+   421→Vidéo WebM + fallback image, titre fluid, CTA quiz
+   422→santé, particules CSS
+   423→Barre de Confiance
+   424→Logos certifications (GMP, ISO, Bio), livraison,
+   425→satisfaction, compteur clients
+   426→Quiz Rapide
+   427→5 questions objectifs santé → redirection vers stack
+   428→recommandé
+   429→Produits Vedettes
+   430→Grille 3D flip-card, badges IA, notation vérifiée, ajout
+   431→panier animé
+   432→Preuve Sociale
+   433→Témoignages vidéo, photos avant/après vérifiées,
+   434→notes agrégées Google/Trustpilot
+   435→Univers Produits
+   436→Navigation par objectif : Énergie, Immunité,
+   437→Cognition, Sport, Minceur
+   438→Transparence Lab
+   439→Timeline fabrication, photos labo, liens vers COA
+   440→(Certificate of Analysis)
+   441→Blog Expert
+   442→Articles dernières recherches, auteurs certifiés,
+   443→temps de lecture, catégories
+   444→Newsletter IA
+   445→Capture e-mail avec promesse de programme
+   446→nutritionnel personnalisé gratuit
+   447→Pied de Page Premium
+   448→Mega-footer : navigation, certifications, paiements
+   449→sécurisés, réseaux
+   450→4.2 Page Produit — Enrichissement Maximum
+   451→La page produit de NutriVitaX Pro est la pièce maîtresse du thème. Elle dépasse largement les standards
+   452→WooCommerce classiques avec des couches d'information scientifique, des outils de personnalisation et
+   453→des signaux de confiance ultra-développés.
+   454→Composant
+   455→Description Fonctionnelle
+   456→Galerie 3D Interactive
+   457→Rotation 360° du packaging, zoom puce intelligente,
+   458→vue ingredients 'X-ray'
+   459→Sélecteur de Format
+   460→Pilules / Poudre / Gélules / Liquide avec comparatif
+   461→biodisponibilité
+   462→Calculateur de Dosage IA
+   463→Adapte la dose selon poids, objectif, niveau sportif,
+   464→autres suppléments
+   465→Tableau Nutritionnel Visuel
+   466→Infographie interactive par ingrédient avec % AJR,
+   467→sources scientifiques
+   468→
+   469→=== PAGE 11 ===
+   470→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   471→Page 11
+   472→© 2026 NutriVitaX Pro — Document Confidentiel
+   473→Standards WordPress/WooCommerce 2026
+   474→Composant
+   475→Description Fonctionnelle
+   476→Carte d'Origine
+   477→Carte Mapbox interactive montrant l'origine
+   478→géographique de chaque ingrédient
+   479→Certificats & Tests
+   480→Bouton téléchargement COA, lien vers rapport
+   481→laboratoire tiers indépendant
+   482→Abonnement Intelligent
+   483→Fréquence adaptative, calcul économies, mode
+   484→'auto-refill' prédictif
+   485→Compatibilité Stack
+   486→Badge 'Compatible avec vos produits', alerte
+   487→interactions potentielles
+   488→Questions & Réponses
+   489→Q&A; structuré, réponses de nutritionnistes vérifiés,
+   490→Schema FAQ
+   491→Études Cliniques
+   492→Résumés d'études PubMed liées, note
+   493→méthodologique, niveau de preuve
+   494→4.3 Catalogue & Moteur de Filtres Avancé
+   495→Filtres Disponibles
+   496→Options de Tri & Affichage
+   497→G Filtre par objectif santé (multi-sélection)
+   498→G Tri par score IA pertinence profil
+   499→G Filtre par type de régime (Vegan, Keto,
+   500→Paleo...)
+   501→G Tri par popularité (ventes 30 jours)
+   502→G Filtre par forme galénique
+   503→G Tri par nouveauté
+   504→G Filtre par certification (Bio, GMP, Halal,
+   505→Kosher)
+   506→G Tri par note vérifiée
+   507→G Filtre par ingrédient spécifique
+   508→G Tri par rapport qualité/prix
+   509→G Filtre par budget mensuel (abonnement)
+   510→G Mode 'Recommandé pour vous' (IA)
+   511→G Filtre par compatibilité avec d'autres produits
+   512→G Vue grille / liste / comparatif
+   513→G Mode comparaison jusqu'à 4 produits
+   514→G Sauvegarde filtres favoris (compte)
+   515→
+   516→=== PAGE 12 ===
+   517→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   518→Page 12
+   519→© 2026 NutriVitaX Pro — Document Confidentiel
+   520→Standards WordPress/WooCommerce 2026
+   521→05 — Intégration WooCommerce Avancée
+   522→5.1 Configurateur de Stack Nutritionnel
+   523→Le Stack Builder est la fonctionnalité signature de NutriVitaX Pro. C'est un outil de configuration visuel
+   524→drag-and-drop permettant aux clients de composer leur programme de supplémentation personnalisé, de
+   525→visualiser les synergies entre produits, de planifier leur routine journalière et de s'abonner au package en un
+   526→clic.
+   527→G Interface de type Kanban divisée en Morning Stack / Afternoon Stack / Evening Stack
+   528→G Détection automatique des doublons et des interactions potentielles entre produits
+   529→G Calcul en temps réel du coût journalier et mensuel de l'ensemble du stack
+   530→G Analyse nutritionnelle cumulée : vitamines, minéraux, protéines, BCAA totaux
+   531→G Partage du stack sur réseaux sociaux avec image générée automatiquement
+   532→G Sauvegarde dans le compte client, historique des stacks, duplication et modification
+   533→G Recommandation de 'produit manquant' basée sur les lacunes nutritionnelles détectées
+   534→G Export PDF du programme avec posologie détaillée et conseils de prise
+   535→5.2 Système d'Abonnements Intelligents (WooCommerce
+   536→Subscriptions compatible)
+   537→Fonctionnalité
+   538→Description
+   539→Fréquences Flexibles
+   540→Hebdomadaire, bi-mensuel, mensuel, trimestriel,
+   541→personnalisé
+   542→Cycles Adaptatifs
+   543→L'IA analyse la consommation réelle et suggère
+   544→d'ajuster la fréquence
+   545→Swap Produit
+   546→Changer un produit dans l'abonnement sans annuler
+   547→(upgrade/downgrade)
+   548→Pause Intelligente
+   549→Pause 1–8 semaines avec reprise automatique +
+   550→email de rappel
+   551→Bundle Abonnement
+   552→Réduction progressive selon fidélité : -10%, -15%,
+   553→-20%, -25%
+   554→Coffret Découverte
+   555→Box mensuelle surprise basée sur le profil, avec
+   556→personnalisation
+   557→Auto-refill Prédictif
+   558→Commande automatique avant rupture calculée sur
+   559→historique conso
+   560→Portail Client Complet
+   561→Dashboard abonnement autonome : tout gérer sans
+   562→contacter SAV
+   563→5.3 Paiement & Checkout Optimisé
+   564→Modes de Paiement
+   565→Optimisations Conversion
+   566→G Checkout 1 page (One-Page Checkout)
+   567→G Sauvegarde panier cross-device (compte)
+   568→
+   569→=== PAGE 13 ===
+   570→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   571→Page 13
+   572→© 2026 NutriVitaX Pro — Document Confidentiel
+   573→Standards WordPress/WooCommerce 2026
+   574→G Guest checkout ultra-rapide (2 champs)
+   575→G Abandon panier : email + SMS automatique
+   576→G Apple Pay / Google Pay / PayPal Express
+   577→G Upsell post-achat (thank you page)
+   578→G Stripe + Klarna + Alma (paiement 3x/4x)
+   579→G Trust badges dynamiques au checkout
+   580→G Crypto via Coinbase Commerce (option)
+   581→G Adresse auto-complétée (Google Places)
+   582→G Facturation automatique PDF personnalisée
+   583→G Récapitulatif nutritionnel dans le panier
+   584→5.4 Fidélité & Gamification — NutriPoints
+   585→Le programme NutriPoints transforme chaque interaction avec la boutique en opportunité d'engagement.
+   586→Les clients accumulent des points sur tous leurs achats et actions, les échangent contre des réductions, et
+   587→progressent dans des niveaux de membership avec des avantages croissants.
+   588→Action
+   589→Points Accordés
+   590→Achat produit
+   591→1 point / euro dépensé (x2 en abonnement)
+   592→Avis vérifié + photo
+   593→50 points
+   594→Avis vérifié + vidéo
+   595→100 points
+   596→Parrainage actif
+   597→200 points + 10% récurrent sur achats filleul
+   598→Challenge 30 jours
+   599→500 points à l'accomplissement
+   600→Partage stack réseaux
+   601→25 points / partage (max 5/semaine)
+   602→Quiz santé complété
+   603→75 points
+   604→Anniversaire NutriVitaX
+   605→300 points bonus
+   606→
+   607→=== PAGE 14 ===
+   608→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   609→Page 14
+   610→© 2026 NutriVitaX Pro — Document Confidentiel
+   611→Standards WordPress/WooCommerce 2026
+   612→06 — Fonctionnalités Innovantes 2026
+   613→6.1 Moteur IA Nutritionnel — NutriAI Engine
+   614→NutriAI Engine est le cerveau de NutriVitaX Pro. Alimenté par l'API Claude (Anthropic) via un proxy
+   615→WordPress sécurisé, il analyse le profil complet de l'utilisateur pour fournir des recommandations
+   616→contextuelles, personnalisées et évolutives. Toutes les recommandations sont accompagnées de leur
+   617→niveau de confiance et des sources scientifiques qui les étayent.
+   618→G Quiz d'onboarding 12 questions : objectifs, mode de vie, alimentation, santé, allergies, budget
+   619→G Scoring nutritionnel sur 100 points basé sur le profil renseigné
+   620→G Recommandations produits rankées avec score de pertinence visible (ex: 94% match)
+   621→G Détection automatique des carences probables selon mode de vie décrit
+   622→G Alertes interactions médicamenteuses (base de données pharmacologique intégrée)
+   623→G Re-scoring dynamique après chaque achat : affinement continu du profil
+   624→G Chatbot nutritionnel 24/7 pour questions produits, dosages, conseils généraux
+   625→G Génération de rapports PDF personnalisés 'Mon Bilan Nutritionnel'
+   626→I L'IA ne remplace pas un avis médical. Toutes les pages IA incluent un disclaimer légal visible et recommandent une
+   627→consultation professionnelle pour les situations médicales.
+   628→6.2 Réalité Augmentée — NutriAR
+   629→G Scan QR code packaging → visualisation 3D du produit et de ses ingrédients sur mobile
+   630→G Mode 'X-Ray' : superposition des informations nutritionnelles en AR sur la photo du plat
+   631→G Visualisation 3D de la molécule active principale de chaque ingrédient clé
+   632→G Comparaison AR : deux produits côte à côte avec infographie différentielle
+   633→G Fonctionnel via WebXR API (Chrome/Safari mobile) sans installation d'app requise
+   634→6.3 Personnalisation Dynamique du Site
+   635→Fonctionnalité
+   636→Description
+   637→Hero Personnalisé
+   638→Le texte du hero change selon le profil (Sport /
+   639→Bien-être / Immunité...)
+   640→Bannières Contextuelles
+   641→Promotions affichées selon historique achats, saison,
+   642→météo locale
+   643→Emails Adaptatifs
+   644→Newsletters générées par IA selon les produits
+   645→vus/achetés
+   646→Prix Abonnement Dynamique
+   647→Meilleur prix affiché selon fréquence optimale
+   648→calculée
+   649→Ordre Catalogue Personnalisé
+   650→Produits triés selon pertinence profil (logged users)
+   651→Notifications Push Web
+   652→Alertes réapprovisionnement, nouveautés dans ma
+   653→catégorie, promo flash
+   654→
+   655→=== PAGE 15 ===
+   656→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   657→Page 15
+   658→© 2026 NutriVitaX Pro — Document Confidentiel
+   659→Standards WordPress/WooCommerce 2026
+   660→Fonctionnalité
+   661→Description
+   662→Dashboard Client IA
+   663→Résumé mensuel : dépenses, bénéfices estimés,
+   664→progression objectifs
+   665→Mode Sombre Adaptatif
+   666→Transition automatique selon heure + préférence OS
+   667→6.4 Autres Innovations 2026
+   668→G Accessibilité vocale : navigation au clavier étendue + commandes vocales produit (Web Speech API)
+   669→G Mode hors-ligne : PWA (Progressive Web App) avec Service Worker pour consultation catalogue offline
+   670→G Social Commerce : intégration TikTok Shop + Instagram Shopping + Pinterest Catalogs
+   671→G Live Shopping : module de vente en direct avec WooCommerce + Zoom/YouTube Live intégré
+   672→G NFT Fidélité : badges de membership sous forme de NFT (optionnel, chaîne Polygon low-gas)
+   673→G B2B Portal : espace revendeur avec tarifs dégressifs, bons de commande, facturation NET30
+   674→G API Partenaires : connecteurs natifs MyFitnessPal, Garmin Connect, Apple Health, Google Fit
+   675→
+   676→=== PAGE 16 ===
+   677→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   678→Page 16
+   679→© 2026 NutriVitaX Pro — Document Confidentiel
+   680→Standards WordPress/WooCommerce 2026
+   681→07 — Performance & SEO Technique
+   682→7.1 Objectifs Core Web Vitals 2026
+   683→Métrique
+   684→Cible
+   685→Technique
+   686→d'Optimisation
+   687→Statut
+   688→LCP (Largest Contentful
+   689→Paint)
+   690→< 1.2s
+   691→Optimisation hero image,
+   692→preload, CDN
+   693→I Excellent
+   694→INP (Interaction to Next
+   695→Paint)
+   696→< 100ms
+   697→Debounce, Web
+   698→Workers, React 18
+   699→concurrent
+   700→I Excellent
+   701→CLS (Cumulative Layout
+   702→Shift)
+   703→< 0.05
+   704→Dimensions images
+   705→statiques,
+   706→font-display:swap
+   707→I Excellent
+   708→FID (First Input Delay)
+   709→< 50ms
+   710→Splitting JS, lazy
+   711→hydration, no
+   712→render-blocking
+   713→I Excellent
+   714→TTFB (Time To First
+   715→Byte)
+   716→< 200ms
+   717→Redis cache, CDN edge,
+   718→PHP 8.3 JIT, OPcache
+   719→I Excellent
+   720→Score Lighthouse Global
+   721→100/100
+   722→Toutes catégories : Perf,
+   723→Access., Best Practices,
+   724→SEO
+   725→I Parfait
+   726→7.2 Stratégie de Cache & Performance
+   727→G Object Cache Pro (Redis 7) : cache des requêtes DB complexes (recommandations, stacks, quiz)
+   728→G Page caching complet pour visiteurs non-connectés (Nginx FastCGI ou LiteSpeed Cache)
+   729→G Fragment caching pour les zones dynamiques (panier, wishlist) avec invalidation ciblée
+   730→G Critical CSS inliné automatiquement pour chaque template (outil Penthouse intégré)
+   731→G Images au format WebP/AVIF avec fallback automatique + lazy loading natif (loading='lazy')
+   732→G CDN multi-régional pour assets statiques (Cloudflare R2 ou BunnyCDN recommandés)
+   733→G Preloading intelligent des pages likely-next basé sur heatmaps (comportement utilisateur)
+   734→G Service Worker avec stratégie stale-while-revalidate pour retours fréquents
+   735→7.3 SEO & Données Structurées
+   736→Type de Balisage
+   737→Détails d'Implémentation
+   738→Product Schema
+   739→Nom, prix, disponibilité, note, avis, marque, GTIN,
+   740→SKU — complet
+   741→NutritionInformation
+   742→Valeurs nutritionnelles schema.org pour chaque
+   743→produit (unique sur le marché)
+   744→FAQPage Schema
+   745→Q&A; automatiquement balisés sur les pages
+   746→produits
+   747→
+   748→=== PAGE 17 ===
+   749→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   750→Page 17
+   751→© 2026 NutriVitaX Pro — Document Confidentiel
+   752→Standards WordPress/WooCommerce 2026
+   753→Type de Balisage
+   754→Détails d'Implémentation
+   755→BreadcrumbList
+   756→Fil d'Ariane complet + navigation catégories
+   757→Organization Schema
+   758→Informations marque, certifications, réseaux sociaux
+   759→Review Schema
+   760→Avis vérifiés avec schema ReviewRating et
+   761→aggregateRating
+   762→HowTo Schema
+   763→Schémas sur les articles blog 'comment utiliser' +
+   764→recettes
+   765→VideoObject
+   766→Vidéos produits et tutoriels correctement balisés
+   767→7.4 Internationalisation & Multi-devise
+   768→G WPML + WooCommerce Multilingual ready (FR, EN, ES, DE, AR natifs)
+   769→G RTL (Right-to-Left) complet pour l'arabe et l'hébreu
+   770→G Multi-devise avec conversion automatique (API taux de change en temps réel)
+   771→G Contenu localisé : unités de mesure, formats date, normes réglementaires par pays
+   772→G Hreflang correctement implémenté pour éviter le duplicate content international
+   773→
+   774→=== PAGE 18 ===
+   775→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   776→Page 18
+   777→© 2026 NutriVitaX Pro — Document Confidentiel
+   778→Standards WordPress/WooCommerce 2026
+   779→08 — Admin & Back-Office
+   780→8.1 Dashboard Admin Personnalisé
+   781→G Tableau de bord NutriVitaX avec KPIs temps réel : CA jour/semaine/mois, LTV, churn abonnements
+   782→G Heatmap des profils clients : répartition par objectif santé, tranche d'âge, géographie
+   783→G Alertes intelligentes : stock critique, pic de retours, produit sous-performant
+   784→G Suivi des scores IA : taux d'adoption recommandations, conversion quiz → achat
+   785→G Comparateur périodes : N vs N-1 avec graphiques interactifs (Chart.js)
+   786→G Export CSV/Excel des rapports personnalisés avec filtres avancés
+   787→8.2 Gestion Produits Enrichie
+   788→Fonctionnalité
+   789→Description
+   790→Onglet 'Composition'
+   791→Saisie ingrédients avec pourcentage, origine pays,
+   792→fournisseur, COA
+   793→Onglet 'IA & SEO'
+   794→Score pertinence par objectif, keywords SEO
+   795→suggérés, meta auto-générée
+   796→Onglet 'Interactions'
+   797→Définir compatibilités et incompatibilités avec d'autres
+   798→produits
+   799→Onglet 'Certifications'
+   800→Upload certificats, dates validité, organismes
+   801→certificateurs
+   802→Bulk Editor
+   803→Modification en masse : prix, stock, catégorie, statut
+   804→abonnement
+   805→Variantes Avancées
+   806→Gestion dosage x format x saveur avec matrice
+   807→prix/stock visuelle
+   808→Import/Export
+   809→Compatible WooCommerce CSV + formats
+   810→fournisseurs (EDI, XML catalogue)
+   811→Synchronisation ERP
+   812→Connecteurs natifs SAP, Sage, Cegid pour stocks et
+   813→comptabilité
+   814→
+   815→=== PAGE 19 ===
+   816→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   817→Page 19
+   818→© 2026 NutriVitaX Pro — Document Confidentiel
+   819→Standards WordPress/WooCommerce 2026
+   820→09 — Accessibilité, RGPD & Conformité
+   821→9.1 Accessibilité WCAG 2.2 AA
+   822→G Ratio de contraste ≥ 4.5:1 pour tous les textes (automatisé via plugin WPCS)
+   823→G Navigation complète au clavier avec indicateurs de focus visibles (outline custom)
+   824→G Ordre de tabulation logique respecté sur tous les formulaires et composants interactifs
+   825→G Textes alternatifs générés automatiquement par IA pour toutes les images produits
+   826→G Composants ARIA labels complets sur menus, modales, carrousels, accordéons
+   827→G Respect des préférences OS : prefers-reduced-motion, prefers-color-scheme, prefers-contrast
+   828→G Taille minimale de cible tactile 44×44px sur tous les éléments interactifs mobiles
+   829→G Sous-titres automatiques pour toutes les vidéos (intégration Rev.ai API)
+   830→9.2 Conformité RGPD & Réglementation
+   831→Aspect
+   832→Implémentation
+   833→Bannière Cookies
+   834→Granularité catégories, consentement préalable,
+   835→Consent Mode v3 Google
+   836→Données IA
+   837→Les profils santé ne quittent jamais le serveur (IA
+   838→locale préférée)
+   839→Droit à l'oubli
+   840→Outil admin pour suppression complète données
+   841→client en 1 clic
+   842→Portabilité données
+   843→Export JSON/PDF du profil complet + historique
+   844→achats
+   845→Mentions légales auto
+   846→Génération semi-automatique selon pays, secteur,
+   847→modules actifs
+   848→Réglementation santé
+   849→Disclaimer automatique sur toutes allégations santé
+   850→(règl. CE 1924/2006)
+   851→Pharmacovigilance
+   852→Formulaire de déclaration d'effets indésirables
+   853→(ANSM compatible)
+   854→DMARC / SPF / DKIM
+   855→Configuration email transactionnel conforme pour
+   856→délivrabilité maximale
+   857→
+   858→=== PAGE 20 ===
+   859→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   860→Page 20
+   861→© 2026 NutriVitaX Pro — Document Confidentiel
+   862→Standards WordPress/WooCommerce 2026
+   863→10 — Roadmap & Phases de Développement
+   864→Phase 1 — MVP (Mois 1–4) — Fondations Premium
+   865→Livrable
+   866→Détail
+   867→Thème FSE complet
+   868→Templates, patterns, design tokens, dark mode
+   869→WooCommerce Core
+   870→Produits enrichis, panier optimisé, checkout 1-page
+   871→Quiz santé basique
+   872→5–8 questions, recommandations règle-based
+   873→Page produit v1
+   874→Galerie, onglets composition, certifications, Q&A;
+   875→Performance baseline
+   876→LCP < 1.5s, Lighthouse > 95, SEO schema complet
+   877→Accessibilité WCAG AA
+   878→Audit automatisé + corrections manuelles
+   879→Documentation
+   880→Guide installation, configuration, personnalisation
+   881→Phase 2 — Premium (Mois 5–8) — Différenciation Marché
+   882→G Stack Builder drag-and-drop complet avec analyse synergies
+   883→G Intégration IA nutritionnelle (API Claude) avec quiz avancé 12 questions
+   884→G Système d'abonnements intelligents avec portail client autonome
+   885→G Programme de fidélité NutriPoints avec gamification
+   886→G Dashboard admin avancé avec KPIs et heatmaps
+   887→G Module traçabilité ingrédients avec carte interactive
+   888→G Support WPML + multi-devise + RTL
+   889→Phase 3 — Enterprise AI (Mois 9–12) — Innovation Radicale
+   890→G NutriAR : module réalité augmentée WebXR sur mobile
+   891→G Live Shopping : ventes en direct avec WooCommerce intégré
+   892→G B2B Portal complet avec tarifs dégressifs et bons de commande
+   893→G Connecteurs Health APIs : MyFitnessPal, Apple Health, Garmin Connect
+   894→G Social Commerce : TikTok Shop, Instagram Shopping, Pinterest Catalogs
+   895→G Moteur de personnalisation dynamique full-site basé sur comportement
+   896→G PWA complète avec fonctionnalités offline et push notifications
+   897→G Tests A/B natifs avec statistiques bayésiennes intégrées
+   898→Estimation Budgétaire Développement
+   899→Phase
+   900→Ressources
+   901→Fourchette Budget
+   902→Phase 1 — MVP
+   903→2 développeurs × 4 mois
+   904→~24 000 – 32 000 €
+   905→Phase 2 — Premium
+   906→3 développeurs × 4 mois
+   907→~40 000 – 55 000 €
+   908→
+   909→=== PAGE 21 ===
+   910→NutriVitaX Pro — Spécification Thème WooCommerce 2026
+   911→Page 21
+   912→© 2026 NutriVitaX Pro — Document Confidentiel
+   913→Standards WordPress/WooCommerce 2026
+   914→Phase
+   915→Ressources
+   916→Fourchette Budget
+   917→Phase 3 — Enterprise
+   918→4 développeurs × 4 mois
+   919→~60 000 – 80 000 €
+   920→Design UX/UI
+   921→Designer senior × 6 mois
+   922→~18 000 – 25 000 €
+   923→Tests & QA
+   924→Testeur dédié × 8 mois
+   925→~12 000 – 16 000 €
+   926→Total Projet
+   927→12 mois
+   928→~154 000 – 208 000 €
+   929→I Ces estimations correspondent à des développeurs senior WordPress/WooCommerce en Europe occidentale. Des
+   930→économies significatives sont possibles via des équipes en Afrique francophone ou en Europe de l'Est sans
+   931→compromettre la qualité si le cahier des charges est bien documenté.
+   932→NutriVitaX Pro · Document de Spécification Technique v1.0 · Juin 2026 · Confidentiel
+   933→Ce document constitue le cahier des charges complet pour le développement du thème WooCommerce NutriVitaX Pro. Il est protégé par
+   934→le droit d'auteur et destiné uniquement aux équipes de développement autorisées.
