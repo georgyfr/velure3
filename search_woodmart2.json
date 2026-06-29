@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://woodmart.xtemos.com",
+    "name": "WoodMart - WordPress WooCommerce Theme",
+    "snippet": "WoodMart is an ultra fast, modern, and easy to use multipurpose WooCommerce theme. Give your customers the ultimate online shopping experience.",
+    "host_name": "woodmart.xtemos.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://xtemos.com/woodmart-changelog.php",
+    "name": "WoodMart Changelog - XTemos Studio",
+    "snippet": "UPDATED: WooCommerce templates. UPDATED: Google Fonts list. DEV: Added new filter 'woodmart_wishlist_cookie_expires' to control wishlist cookie expiration.",
+    "host_name": "xtemos.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.wpallimport.com/woodmart-vs-xstore",
+    "name": "WoodMart vs XStore (2024): Best WooCommerce Theme?",
+    "snippet": "This article provides a detailed comparison of WoodMart and XStore, focusing on their key features, customization capabilities, performance, and pricing.",
+    "host_name": "www.wpallimport.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=mQ81Aqwpz4Y",
+    "name": "How to Customize the Shop Page in Woodmart Theme – Easy Guide!",
+    "snippet": "HireMe: https://bit.ly/2UoFQm7 The Woodmart theme is a powerful and flexible WooCommerce theme that allows you to create a stunning online ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://stackoverflow.com/questions/77850261/woodmart-theme-filter-woocommerce-products-by-color-issue",
+    "name": "Woodmart theme Filter WooCommerce products by Color issue",
+    "snippet": "I have a WordPress website using Woodmart theme and WooCommerce plugin latest version, which has some products with different color variations.",
+    "host_name": "stackoverflow.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://wordpress.org/support/topic/wish-list-of-woodmart-not-working-with-ls",
+    "name": "Wish list of WoodMart not working with LS - WordPress.org",
+    "snippet": "for wish list , please try this: go to Caceh -> Advance -> vary cookies , add woodmart_wishlist_products into the list , save and purge all.",
+    "host_name": "wordpress.org",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=YDqTerMcDvQ",
+    "name": "WOODMART THEME tutorial 2025! - YouTube",
+    "snippet": "... woodmart/ 17:41 Woocommerce settings 31:07 Create Single Products 36:34 Product Page Layouts 41:58 Create Variable Products 53:42 Using ...",
+    "host_name": "www.youtube.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://xtemos.com/how-to-choose-a-wordpress-theme-for-ecommerce-in-2025",
+    "name": "How to choose a WordPress theme for eCommerce in 2025",
+    "snippet": "WoodMart offers a wishlist and compare feature, quick view options, and an AJAX-powered shopping cart that improves the browsing experience ...",
+    "host_name": "xtemos.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://themeforest.net/item/woodmart-woocommerce-wordpress-theme/20264492?srsltid=AfmBOoqHaKcKg385A_EFik_XknJVrjLoSLLXq1Sz2N44tRxQxuQ0VVDl",
+    "name": "WoodMart - Multipurpose WooCommerce Theme - ThemeForest",
+    "snippet": "Variable product features. WoodMart extends WooCommerce variable products with features that make options easier to choose and buy: Color & ...",
+    "host_name": "themeforest.net",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://fibofilters.com/documentation/theme-integrations/woodmart-theme",
+    "name": "WoodMart theme - WooCommerce Product Filters Plugin",
+    "snippet": "In the WoodMart theme, you can define your own color palette. You can do it in the Theme settings -> Styles and colors -> Colors. FiboFilters uses Primary color ...",
+    "host_name": "fibofilters.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
