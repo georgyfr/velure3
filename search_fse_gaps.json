@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://www.reddit.com/r/Wordpress/comments/1ucbtfb/wordpress_agency_classic_vs_block_vs_hybrid_in",
+    "name": "Wordpress Agency - Classic vs Block vs Hybrid in 2026",
+    "snippet": "Pure block themes can work, but for bespoke client builds they can add extra overhead and less control, especially with WooCommerce. A well- ...",
+    "host_name": "www.reddit.com",
+    "rank": 0,
+    "date": "Jun 22, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=oOEvif0329k",
+    "name": "My New Free Starter Block Theme for WordPress 2026! - YouTube",
+    "snippet": "My *Free* Starter Block Theme just got an update! If you want to build a block-based website or design a theme directly in the browser, ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://olliewp.com/best-woocommerce-block-themes",
+    "name": "The Best WooCommerce Block Themes for 2026 - OllieWP",
+    "snippet": "Looking for the best WooCommerce block themes for your online store? This guide walks you through the top choices.",
+    "host_name": "olliewp.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/woocommerce/woocommerce/discussions/57860",
+    "name": "Is Woo FSE Ready ? current status #57860 - GitHub",
+    "snippet": "Hello, working on first classic/hybrid theme to FSE store migration here. Mostly straightforward process with some custom blocks to fill gaps. There's quite ...",
+    "host_name": "github.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://make.wordpress.org/test/2023/05/04/fse-program-build-a-block-theme-summary",
+    "name": "FSE Program Build a Block Theme Summary - Make WordPress",
+    "snippet": "This post is a summary of the Build a Block Theme exploration for the FSE outreach program, the twenty-first effort.",
+    "host_name": "make.wordpress.org",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]
