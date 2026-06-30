@@ -1,0 +1,1891 @@
+     1→Voici la structure complète et détaillée du header pour NutriVitaX Pro, sans code, avec toutes les spécifications techniques, visuelles et fonctionnelles.
+     2→
+     3→🏗️ Structure Globale du Header
+     4→Hiérarchie des Composants
+     5→text
+     6→Copier
+     7→
+     8→Header
+     9→├── Top Bar (Optionnelle - Desktop uniquement)
+    10→│   ├── Message de bienvenue
+    11→│   ├── Navigation secondaire (Contact, FAQ, Blog)
+    12→│   └── Icônes des réseaux sociaux
+    13→│
+    14→├── Header Principal
+    15→│   ├── Logo (NutriVitaX Pro)
+    16→│   ├── Navigation Principale
+    17→│   │   ├── Menu Desktop (7-9 items avec dropdowns)
+    18→│   │   └── Mega Menu pour "Produits"
+    19→│   │
+    20→│   └── Actions Header
+    21→│       ├── Barre de recherche
+    22→│       ├── Icône Compte (Utilisateur)
+    23→│       ├── Icône Panier (WooCommerce) + Badge
+    24→│       └── Bouton CTA "Commencer le Quiz" (Desktop uniquement)
+    25→│
+    26→└── Menu Mobile
+    27→    ├── Bouton Hamburger (3 lignes)
+    28→    ├── Overlay sombre
+    29→    └── Menu plein écran
+    30→        ├── Logo
+    31→        ├── Bouton Fermer (×)
+    32→        ├── Navigation verticale
+    33→        │   └── Sous-menus dépliables
+    34→        └── Actions (Se connecter / S'inscrire)
+    35→
+    36→
+    37→
+    38→
+    39→📐 Spécifications Techniques Précises
+    40→
+    41→1. Dimensions et Espacements (en pixels)
+    42→
+    43→
+    44→  
+    45→    
+    46→      Élément
+    47→      Hauteur
+    48→      Largeur
+    49→      Padding
+    50→      Margin
+    51→      Notes
+    52→    
+    53→  
+    54→  
+    55→    
+    56→      Header entier
+    57→      80px
+    58→      100%
+    59→      0
+    60→      0
+    61→      Position: fixed, z-index: 1000
+    62→    
+    63→    
+    64→      Header (scrollé)
+    65→      64px
+    66→      100%
+    67→      0
+    68→      0
+    69→      Ombre plus prononcée
+    70→    
+    71→    
+    72→      Top Bar
+    73→      32px
+    74→      100%
+    75→      0 24px
+    76→      0
+    77→      Fond: #F8F9FA
+    78→    
+    79→    
+    80→      Logo
+    81→      40px
+    82→      Max 180px
+    83→      0
+    84→      0
+    85→      Centré verticalement
+    86→    
+    87→    
+    88→      Logo (scrollé)
+    89→      32px
+    90→      Proportionnel
+    91→      0
+    92→      0
+    93→      Réduction fluide
+    94→    
+    95→    
+    96→      Navigation (Desktop)
+    97→      -
+    98→      Auto
+    99→      0
+   100→      0 32px
+   101→      Gap entre items: 24px
+   102→    
+   103→    
+   104→      Barre de recherche
+   105→      48px
+   106→      320px (Desktop)
+   107→      0 16px
+   108→      0
+   109→      400px sur >1440px
+   110→    
+   111→    
+   112→      Barre de recherche (Mobile)
+   113→      48px
+   114→      100%
+   115→      0 16px
+   116→      0
+   117→      Pleine largeur
+   118→    
+   119→    
+   120→      Icônes (Compte/Panier)
+   121→      24px
+   122→      24px
+   123→      8px
+   124→      0
+   125→      Gap entre icônes: 16px
+   126→    
+   127→    
+   128→      Badge Panier
+   129→      18px
+   130→      18px (diamètre)
+   131→      0
+   132→      -8px (top/right)
+   133→      Position: absolute
+   134→    
+   135→    
+   136→      Bouton CTA
+   137→      40px
+   138→      Auto
+   139→      12px 24px
+   140→      0
+   141→      Border-radius: 8px
+   142→    
+   143→    
+   144→      Menu Mobile (Overlay)
+   145→      100vh
+   146→      100%
+   147→      0
+   148→      0
+   149→      z-index: 2000
+   150→    
+   151→    
+   152→      Items Menu Mobile
+   153→      -
+   154→      100%
+   155→      16px 24px
+   156→      0
+   157→      Border-bottom: 1px #F1F3F5
+   158→    
+   159→  
+   160→
+   161→
+   162→
+   163→
+   164→2. Palette de Couleurs
+   165→
+   166→
+   167→  
+   168→    
+   169→      Élément
+   170→      Couleur de Fond
+   171→      Couleur de Texte
+   172→      Border
+   173→      Box Shadow
+   174→    
+   175→  
+   176→  
+   177→    
+   178→      Header
+   179→      #FFFFFF
+   180→      -
+   181→      1px solid #E9ECEF
+   182→      0 2px 10px rgba(0,0,0,0.05)
+   183→    
+   184→    
+   185→      Header (scrollé)
+   186→      #FFFFFF
+   187→      -
+   188→      1px solid #E9ECEF
+   189→      0 4px 20px rgba(0,0,0,0.1)
+   190→    
+   191→    
+   192→      Top Bar
+   193→      #F8F9FA
+   194→      #6C757D
+   195→      Aucun
+   196→      Aucun
+   197→    
+   198→    
+   199→      Logo (Texte)
+   200→      -
+   201→      #1A6B3A
+   202→      -
+   203→      -
+   204→    
+   205→    
+   206→      Logo (Accent "Pro")
+   207→      -
+   208→      #F4A900
+   209→      -
+   210→      -
+   211→    
+   212→    
+   213→      Navigation - Item
+   214→      Transparent
+   215→      #212529
+   216→      -
+   217→      -
+   218→    
+   219→    
+   220→      Navigation - Item Hover
+   221→      Transparent
+   222→      #1A6B3A
+   223→      -
+   224→      -
+   225→    
+   226→    
+   227→      Navigation - Soulignement
+   228→      #1A6B3A
+   229→      -
+   230→      -
+   231→      -
+   232→    
+   233→    
+   234→      Barre de Recherche
+   235→      #FFFFFF
+   236→      #212529
+   237→      1px solid #E9ECEF
+   238→      0 2px 8px rgba(0,0,0,0.05)
+   239→    
+   240→    
+   241→      Barre de Recherche (Focus)
+   242→      #FFFFFF
+   243→      #212529
+   244→      1px solid #2ECC71
+   245→      0 2px 12px rgba(46,204,113,0.2)
+   246→    
+   247→    
+   248→      Icônes (Normal)
+   249→      -
+   250→      #6C757D
+   251→      -
+   252→      -
+   253→    
+   254→    
+   255→      Icônes (Hover)
+   256→      -
+   257→      #1A6B3A
+   258→      -
+   259→      -
+   260→    
+   261→    
+   262→      Badge Panier
+   263→      #F4A900
+   264→      #1A6B3A
+   265→      Aucun
+   266→      -
+   267→    
+   268→    
+   269→      Bouton CTA
+   270→      #1A6B3A
+   271→      #FFFFFF
+   272→      Aucun
+   273→      -
+   274→    
+   275→    
+   276→      Bouton CTA (Hover)
+   277→      #165A30
+   278→      #FFFFFF
+   279→      Aucun
+   280→      0 4px 12px rgba(26,107,58,0.3)
+   281→    
+   282→    
+   283→      Menu Mobile
+   284→      #FFFFFF
+   285→      -
+   286→      -
+   287→      0 4px 20px rgba(0,0,0,0.15)
+   288→    
+   289→    
+   290→      Overlay Mobile
+   291→      rgba(0,0,0,0.5)
+   292→      -
+   293→      -
+   294→      -
+   295→    
+   296→  
+   297→
+   298→
+   299→
+   300→
+   301→3. Typographie
+   302→
+   303→
+   304→  
+   305→    
+   306→      Élément
+   307→      Police
+   308→      Poids
+   309→      Taille
+   310→      Line Height
+   311→      Letter Spacing
+   312→      Text Transform
+   313→    
+   314→  
+   315→  
+   316→    
+   317→      Logo
+   318→      Clash Display
+   319→      700
+   320→      1.5rem (24px)
+   321→      1.1
+   322→      -0.5px
+   323→      Aucune
+   324→    
+   325→    
+   326→      Logo (scrollé)
+   327→      Clash Display
+   328→      700
+   329→      1.25rem (20px)
+   330→      1.1
+   331→      -0.5px
+   332→      Aucune
+   333→    
+   334→    
+   335→      Top Bar - Texte
+   336→      Inter Variable
+   337→      400
+   338→      0.875rem (14px)
+   339→      1.5
+   340→      0
+   341→      Aucune
+   342→    
+   343→    
+   344→      Navigation - Item
+   345→      Cabinet Grotesk
+   346→      500
+   347→      1rem (16px)
+   348→      1.4
+   349→      0
+   350→      Aucune
+   351→    
+   352→    
+   353→      Navigation - Item Actif
+   354→      Cabinet Grotesk
+   355→      600
+   356→      1rem (16px)
+   357→      1.4
+   358→      0
+   359→      Aucune
+   360→    
+   361→    
+   362→      Barre de Recherche
+   363→      Inter Variable
+   364→      400
+   365→      1rem (16px)
+   366→      1.5
+   367→      0
+   368→      Aucune
+   369→    
+   370→    
+   371→      Placeholder Recherche
+   372→      Inter Variable
+   373→      400
+   374→      1rem (16px)
+   375→      1.5
+   376→      0
+   377→      Aucune
+   378→    
+   379→    
+   380→      Icônes - Texte
+   381→      Space Mono
+   382→      400
+   383→      0.75rem (12px)
+   384→      1
+   385→      0.5px
+   386→      uppercase
+   387→    
+   388→    
+   389→      Bouton CTA
+   390→      Cabinet Grotesk
+   391→      600
+   392→      0.875rem (14px)
+   393→      1.3
+   394→      0.5px
+   395→      uppercase
+   396→    
+   397→    
+   398→      Menu Mobile - Item
+   399→      Cabinet Grotesk
+   400→      500
+   401→      1.125rem (18px)
+   402→      1.4
+   403→      0
+   404→      Aucune
+   405→    
+   406→    
+   407→      Menu Mobile - Sous-item
+   408→      Inter Variable
+   409→      400
+   410→      1rem (16px)
+   411→      1.5
+   412→      0
+   413→      Aucune
+   414→    
+   415→    
+   416→      Menu Mobile - Catégorie
+   417→      Inter Variable
+   418→      600
+   419→      0.875rem (14px)
+   420→      1.5
+   421→      0.5px
+   422→      uppercase
+   423→    
+   424→  
+   425→
+   426→
+   427→
+   428→
+   429→🎨 Disposition Visuelle par Appareil
+   430→
+   431→🖥️ Desktop (>1440px)
+   432→Hauteur totale: 112px (Top Bar 32px + Header 80px)
+   433→text
+   434→Copier
+   435→
+   436→┌─────────────────────────────────────────────────────────────────────────────────────────┐
+   437→│  BIENVENUE CHEZ NUTRIVITAX PRO!    Contact    FAQ    Blog    📘    🐦    🐦       │
+   438→├─────────────────────────────────────────────────────────────────────────────────────────┤
+   439→│                                                                                     │
+   440→│   NutriVitaXPro          Accueil     Produits      Quiz Rapide   Stack   Témoignages   │
+   441→│                                                                                     │
+   442→│   [🔍 Rechercher des produits...]       [👤 Compte]    [🛒 0]    [COMMENCER LE QUIZ]   │
+   443→│                                                                                     │
+   444→└─────────────────────────────────────────────────────────────────────────────────────────┘
+   445→
+   446→
+   447→
+   448→Caractéristiques:
+   449→
+   450→Top Bar visible avec message de bienvenue et liens secondaires
+   451→Logo à gauche, navigation centrée, actions à droite
+   452→Barre de recherche de 400px de large
+   453→Bouton CTA "Commencer le Quiz" visible
+   454→Espacement généreux entre les éléments
+   455→
+   456→💻 Tablette (768-1024px)
+   457→Hauteur totale: 80px
+   458→text
+   459→Copier
+   460→
+   461→┌─────────────────────────────────────────────────────────────────────────────┐
+   462→│   NutriVitaXPro    Accueil   Produits   Quiz   Stack   Blog   [👤][🛒 0]     │
+   463→└─────────────────────────────────────────────────────────────────────────────┘
+   464→
+   465→
+   466→
+   467→Caractéristiques:
+   468→
+   469→Top Bar masquée
+   470→Navigation réduite à 5 items principaux
+   471→Barre de recherche masquée
+   472→Icônes sans texte
+   473→Bouton CTA masqué
+   474→
+   475→📱 Mobile (<768px)
+   476→Hauteur: 64px
+   477→État par défaut:
+   478→text
+   479→Copier
+   480→
+   481→┌─────────────────────────────────────────────────────────┐
+   482→│  ☰   NutriVitaXPro                          [👤] [🛒 0]   │
+   483→└─────────────────────────────────────────────────────────┘
+   484→
+   485→
+   486→
+   487→Menu ouvert (Overlay plein écran):
+   488→text
+   489→Copier
+   490→
+   491→┌─────────────────────────────────────────────────────────┐
+   492→│  × NutriVitaXPro                                           │
+   493→├─────────────────────────────────────────────────────────┤
+   494→│                                                         │
+   495→│  Accueil                                                  │
+   496→│  ┌───────────────────────────────────────────────────┐   │
+   497→│  ▼ Produits                                           │   │
+   498→│  ┌─────────────────────────────────────────────────┐ │   │
+   499→│  │ → Protéines                                         │ │   │
+   500→│  │ → Créatine                                          │ │   │
+   501→│  │ → Pré-Workout                                        │ │   │
+   502→│  │ → BCAA                                               │ │   │
+   503→│  │ → Oméga-3                                            │ │   │
+   504→│  └─────────────────────────────────────────────────┘ │   │
+   505→│  Quiz Rapide                                             │   │
+   506→│  Constructeur de Stack                                    │   │
+   507→│  Témoignages                                             │   │
+   508→│  Blog                                                   │   │
+   509→│  Contact                                               │   │
+   510→│                                                         │
+   511→├─────────────────────────────────────────────────────────┤
+   512→│  [👤 Se connecter]    [👤+ S'inscrire]                    │
+   513→└─────────────────────────────────────────────────────────┘
+   514→
+   515→
+   516→
+   517→Caractéristiques:
+   518→
+   519→Bouton Hamburger (3 lignes horizontales)
+   520→Logo centré
+   521→Icônes Compte et Panier à droite
+   522→Menu glisse de droite à gauche
+   523→Overlay sombre derrière le menu
+   524→Sous-menus dépliables avec animation
+   525→Actions "Se connecter/S'inscrire" en bas
+   526→
+   527→📋 Détail des Éléments du Header
+   528→
+   529→1️⃣ Top Bar (Desktop uniquement >1024px)
+   530→Contenu:
+   531→
+   532→Message de bienvenue: "Bienvenue chez NutriVitaX Pro!"
+   533→Navigation secondaire:
+   534→
+   535→Contact (lien vers /contact)
+   536→FAQ (lien vers /faq)
+   537→Blog (lien vers /blog)
+   538→
+   539→Réseaux sociaux:
+   540→
+   541→Facebook (icône 📘)
+   542→Instagram (icône 🐦)
+   543→Twitter (icône 🐦)
+   544→
+   545→Comportements:
+   546→
+   547→Les liens changent de couleur au survol (#1A6B3A)
+   548→Les icônes sociales ont une animation de scale (1.1x) au survol
+   549→Masquée sur mobile et tablette
+   550→
+   551→2️⃣ Logo
+   552→Spécifications:
+   553→
+   554→Texte: "NutriVitaX" + "Pro" (avec "Pro" en couleur accent)
+   555→Couleurs:
+   556→
+   557→"NutriVitaX": #1A6B3A (Forêt Profonde)
+   558→"Pro": #F4A900 (Or Scientifique)
+   559→
+   560→Taille:
+   561→
+   562→Desktop: 1.5rem (24px)
+   563→Scrollé: 1.25rem (20px)
+   564→Mobile: 1.25rem (20px)
+   565→
+   566→Police: Clash Display, poids 700
+   567→Lien: Pointe vers la page d'accueil
+   568→Alt text: "NutriVitaX Pro - Thème WooCommerce pour compléments alimentaires"
+   569→Comportements:
+   570→
+   571→Réduction de taille lors du scroll
+   572→Animation de fade si nécessaire
+   573→
+   574→3️⃣ Navigation Principale
+   575→Items du Menu (Desktop):
+   576→
+   577→
+   578→  
+   579→    
+   580→      #
+   581→      Texte
+   582→      Lien
+   583→      Type
+   584→      Sous-menu
+   585→      Icône
+   586→    
+   587→  
+   588→  
+   589→    
+   590→      1
+   591→      Accueil
+   592→      /
+   593→      Simple
+   594→      Non
+   595→      🏠
+   596→    
+   597→    
+   598→      2
+   599→      Produits
+   600→      /produits
+   601→      Mega Menu
+   602→      Oui
+   603→      📦
+   604→    
+   605→    
+   606→      3
+   607→      Quiz Rapide
+   608→      /quiz
+   609→      Simple
+   610→      Non
+   611→      🎯
+   612→    
+   613→    
+   614→      4
+   615→      Constructeur de Stack
+   616→      /constructeur
+   617→      Simple
+   618→      Non
+   619→      🧩
+   620→    
+   621→    
+   622→      5
+   623→      Témoignages
+   624→      /temoignages
+   625→      Simple
+   626→      Non
+   627→      💬
+   628→    
+   629→    
+   630→      6
+   631→      Blog
+   632→      /blog
+   633→      Simple
+   634→      Non
+   635→      📝
+   636→    
+   637→    
+   638→      7
+   639→      Contact
+   640→      /contact
+   641→      Simple
+   642→      Non
+   643→      ✉️
+   644→    
+   645→  
+   646→
+   647→
+   648→
+   649→Spécifications:
+   650→
+   651→Police: Cabinet Grotesk
+   652→Taille: 1rem (16px)
+   653→Couleur normale: #212529
+   654→Couleur hover: #1A6B3A
+   655→Couleur active: #1A6B3A
+   656→Soulignement: Ligne de 2px en #1A6B3A au survol/actif
+   657→Gap entre items: 24px
+   658→Padding vertical: 8px
+   659→
+   660→Mega Menu "Produits"
+   661→Structure en 3 colonnes:
+   662→
+   663→
+   664→  
+   665→    
+   666→      Colonne 1
+   667→      Colonne 2
+   668→      Colonne 3
+   669→    
+   670→  
+   671→  
+   672→    
+   673→      Catégories
+   674→      Formats
+   675→      Produits Vedettes
+   676→    
+   677→    
+   678→      Protéines
+   679→      Poudre
+   680→      Whey Protéine Isolat (49.99€)
+   681→    
+   682→    
+   683→      Créatine
+   684→      Comprimés
+   685→      Créatine Monohydrate (24.99€)
+   686→    
+   687→    
+   688→      Pré-Workout
+   689→      Gélules
+   690→      Pré-Workout Extreme (39.99€)
+   691→    
+   692→    
+   693→      BCAA
+   694→      Liquide
+   695→      BCAA 4:1:1 (29.99€)
+   696→    
+   697→    
+   698→      Oméga-3
+   699→      Barres
+   700→      Oméga-3 (19.99€)
+   701→    
+   702→    
+   703→      Vitamines
+   704→      Gummies
+   705→      
+   706→    
+   707→    
+   708→      Minéraux
+   709→      
+   710→      Voir tous les produits →
+   711→    
+   712→  
+   713→
+   714→
+   715→
+   716→Spécifications du Mega Menu:
+   717→
+   718→Largeur: 100% (max-width: 1200px sur desktop, 600px sur tablette)
+   719→Fond: #FFFFFF
+   720→Border: 1px solid #E9ECEF
+   721→Border Radius: 0 0 12px 12px
+   722→Box Shadow: 0 10px 40px rgba(0,0,0,0.08)
+   723→Padding: 24px
+   724→Z-index: 1001
+   725→Animation: fadeIn (0.3s) + slideDown (0.3s)
+   726→Comportements:
+   727→
+   728→S'affiche au survol (desktop)
+   729→Se ferme quand la souris quitte la zone
+   730→Sur mobile: s'ouvre au clic
+   731→
+   732→4️⃣ Actions Header
+   733→Barre de Recherche
+   734→
+   735→Largeur:
+   736→
+   737→Desktop: 320px (1024-1440px) / 400px (>1440px)
+   738→Mobile: 100%
+   739→
+   740→Hauteur: 48px
+   741→Fond: #FFFFFF
+   742→Border: 1px solid #E9ECEF
+   743→Border Radius: 8px
+   744→Box Shadow: 0 2px 8px rgba(0,0,0,0.05)
+   745→Placeholder: "Rechercher des produits..." en #6C757D
+   746→Police: Inter Variable, 1rem, #212529
+   747→Bouton Recherche: Icône 🔍 à droite
+   748→Comportements:
+   749→
+   750→S'étend à 400px au focus (desktop)
+   751→Barre de recherche pleine largeur sur mobile
+   752→Résultats de recherche en dropdown (à implémenter)
+   753→
+   754→Icône Compte (👤)
+   755→
+   756→Taille: 24px
+   757→Couleur normale: #6C757D
+   758→Couleur hover: #1A6B3A
+   759→Lien:
+   760→
+   761→Connecté: /mon-compte
+   762→Déconnecté: /mon-compte (page de connexion)
+   763→
+   764→Texte (Desktop): "Compte" en Space Mono, 0.75rem, uppercase
+   765→Texte (Mobile): Masqué
+   766→
+   767→Icône Panier (🛒)
+   768→
+   769→Taille: 24px
+   770→Couleur normale: #6C757D
+   771→Couleur hover: #1A6B3A
+   772→Lien: /panier
+   773→Badge:
+   774→
+   775→Position: Absolute, top: -8px, right: -8px
+   776→Forme: Cercle (18px de diamètre)
+   777→Fond: #F4A900
+   778→Texte: #1A6B3A, Space Mono, 0.75rem, 700
+   779→Contenu: Nombre d'articles dans le panier
+   780→Animation: Bounce (0.5s) quand le nombre change
+   781→
+   782→Texte (Desktop): "Panier" en Space Mono, 0.75rem, uppercase
+   783→Texte (Mobile): Masqué
+   784→
+   785→Bouton CTA "Commencer le Quiz"
+   786→
+   787→Affichage: Desktop uniquement (>1024px)
+   788→Texte: "COMMENCER LE QUIZ"
+   789→Police: Cabinet Grotesk, 600, 0.875rem
+   790→Couleurs:
+   791→
+   792→Fond: #1A6B3A
+   793→Texte: #FFFFFF
+   794→
+   795→Padding: 12px 24px
+   796→Border Radius: 8px
+   797→Text Transform: uppercase
+   798→Letter Spacing: 0.5px
+   799→Comportements:
+   800→
+   801→Fond: #165A30 au survol
+   802→Transform: translateY(-2px) au survol
+   803→Box Shadow: 0 4px 12px rgba(26,107,58,0.3) au survol
+   804→
+   805→
+   806→5️⃣ Menu Mobile
+   807→Bouton Hamburger:
+   808→
+   809→Affichage: Mobile uniquement (<768px)
+   810→Structure: 3 lignes horizontales
+   811→Taille: 24px de large, 2px de haut
+   812→Couleur: #1A6B3A
+   813→Border Radius: 2px
+   814→Animation: Les lignes se transforment en croix (×) quand le menu est ouvert
+   815→Position: z-index: 2001
+   816→Overlay:
+   817→
+   818→Position: Fixed, couvre tout l'écran
+   819→Fond: rgba(0,0,0,0.5)
+   820→Z-index: 1999
+   821→Opacité: 0 (fermé) → 1 (ouvert)
+   822→Comportement: Ferme le menu quand on clique dessus
+   823→Menu (Plein écran):
+   824→
+   825→Position: Fixed, top: 0, left: 0, right: 0, bottom: 0
+   826→Fond: #FFFFFF
+   827→Z-index: 2000
+   828→Box Shadow: 0 4px 20px rgba(0,0,0,0.15)
+   829→Animation: Glisse de droite à gauche (0.3s)
+   830→Scroll: Défilement vertical activé
+   831→En-tête du Menu:
+   832→
+   833→Logo: Même style que le logo principal
+   834→Bouton Fermer (×): 24px, #6C757D, positionné à droite
+   835→Navigation:
+   836→
+   837→Items: Liste verticale avec border-bottom (1px #F1F3F5)
+   838→Police: Cabinet Grotesk, 500, 1.125rem, #212529
+   839→Padding: 16px 24px
+   840→Sous-menus:
+   841→
+   842→Dépliables au clic
+   843→Animation: max-height 0 → 500px (0.3s)
+   844→Police: Inter Variable, 400, 1rem, #6C757D
+   845→Padding: 12px 0
+   846→Indentation: 24px à gauche
+   847→
+   848→Actions:
+   849→
+   850→Affichage: En bas du menu
+   851→Border Top: 1px solid #E9ECEF
+   852→Padding: 16px
+   853→Boutons:
+   854→
+   855→"Se connecter" (👤) - Fond: #F8F9FA
+   856→"S'inscrire" (👤+) - Fond: #F8F9FA
+   857→
+   858→Police: Cabinet Grotesk, 1rem, #212529
+   859→Comportements:
+   860→
+   861→Le menu glisse de droite à gauche
+   862→Le bouton hamburger se transforme en croix
+   863→Les sous-menus s'ouvrent/ferment avec animation
+   864→Le menu se ferme:
+   865→
+   866→En cliquant sur le bouton fermer (×)
+   867→En cliquant sur l'overlay
+   868→En appuyant sur Échap
+   869→En cliquant à l'extérieur
+   870→
+   871→Le scroll du body est désactivé quand le menu est ouvert
+   872→
+   873→🎭 Comportements et Animations
+   874→
+   875→1. Comportements Généraux
+   876→
+   877→
+   878→  
+   879→    
+   880→      Élément
+   881→      Comportement
+   882→      Trigger
+   883→      Effet
+   884→    
+   885→  
+   886→  
+   887→    
+   888→      Header
+   889→      Réduction de hauteur
+   890→      Scroll down > 50px
+   891→      Hauteur: 80px → 64px
+   892→    
+   893→    
+   894→      Header
+   895→      Masquage temporaire
+   896→      Scroll down
+   897→      translateY(-100%)
+   898→    
+   899→    
+   900→      Header
+   901→      Réapparition
+   902→      Scroll up
+   903→      translateY(0)
+   904→    
+   905→    
+   906→      Logo
+   907→      Réduction de taille
+   908→      Scroll down > 50px
+   909→      Taille: 1.5rem → 1.25rem
+   910→    
+   911→    
+   912→      Top Bar
+   913→      Masquage
+   914→      Scroll down > 50px
+   915→      display: none
+   916→    
+   917→    
+   918→      Navigation - Item
+   919→      Soulignement
+   920→      Hover
+   921→      ::after: width 0 → 100%
+   922→    
+   923→    
+   924→      Navigation - Dropdown
+   925→      Affichage
+   926→      Hover (Desktop) / Click (Mobile)
+   927→      fadeIn + slideDown (0.3s)
+   928→    
+   929→    
+   930→      Navigation - Dropdown
+   931→      Masquage
+   932→      Mouse leave / Click
+   933→      fadeOut + slideUp (0.2s)
+   934→    
+   935→    
+   936→      Barre de Recherche
+   937→      Extension
+   938→      Focus (Desktop)
+   939→      Width: 320px → 400px
+   940→    
+   941→    
+   942→      Barre de Recherche
+   943→      Rétrécissement
+   944→      Blur (Desktop)
+   945→      Width: 400px → 320px
+   946→    
+   947→    
+   948→      Icônes
+   949→      Changement de couleur
+   950→      Hover
+   951→      #6C757D → #1A6B3A
+   952→    
+   953→    
+   954→      Badge Panier
+   955→      Animation de bounce
+   956→      Changement de nombre
+   957→      scale(1) → scale(1.2) → scale(1)
+   958→    
+   959→    
+   960→      Bouton CTA
+   961→      Scale + Shadow
+   962→      Hover
+   963→      scale(1.05) + shadow
+   964→    
+   965→    
+   966→      Menu Mobile - Toggle
+   967→      Rotation
+   968→      Click
+   969→      Lignes → Croix (×)
+   970→    
+   971→    
+   972→      Menu Mobile - Overlay
+   973→      Affichage/Masquage
+   974→      Menu ouvert/fermé
+   975→      fadeIn/fadeOut (0.3s)
+   976→    
+   977→    
+   978→      Menu Mobile - Menu
+   979→      Glissement
+   980→      Menu ouvert/fermé
+   981→      translateX(100%) → translateX(0)
+   982→    
+   983→    
+   984→      Menu Mobile - Submenu
+   985→      Déploiement
+   986→      Click
+   987→      max-height: 0 → 500px
+   988→    
+   989→  
+   990→
+   991→
+   992→
+   993→
+   994→2. Animations CSS
+   995→
+   996→
+   997→  
+   998→    
+   999→      Nom
+  1000→      Description
+  1001→      Durée
+  1002→      Timing Function
+  1003→      Itérations
+  1004→    
+  1005→  
+  1006→  
+  1007→    
+  1008→      fadeIn
+  1009→      Opacité: 0 → 1
+  1010→      0.3s
+  1011→      ease
+  1012→      1
+  1013→    
+  1014→    
+  1015→      fadeOut
+  1016→      Opacité: 1 → 0
+  1017→      0.2s
+  1018→      ease
+  1019→      1
+  1020→    
+  1021→    
+  1022→      slideDown
+  1023→      Transform: translateY(-10px) → 0
+  1024→      0.3s
+  1025→      ease
+  1026→      1
+  1027→    
+  1028→    
+  1029→      slideUp
+  1030→      Transform: 0 → translateY(-10px)
+  1031→      0.2s
+  1032→      ease
+  1033→      1
+  1034→    
+  1035→    
+  1036→      slideInRight
+  1037→      Transform: translateX(100%) → 0
+  1038→      0.3s
+  1039→      ease
+  1040→      1
+  1041→    
+  1042→    
+  1043→      slideOutRight
+  1044→      Transform: 0 → translateX(100%)
+  1045→      0.3s
+  1046→      ease
+  1047→      1
+  1048→    
+  1049→    
+  1050→      bounce
+  1051→      Scale: 1 → 1.2 → 1
+  1052→      0.5s
+  1053→      ease
+  1054→      1
+  1055→    
+  1056→    
+  1057→      pulse
+  1058→      Scale: 1 → 1.05 → 1
+  1059→      2s
+  1060→      infinite
+  1061→      infinite
+  1062→    
+  1063→    
+  1064→      scale
+  1065→      Scale: 1 → 1.05
+  1066→      0.2s
+  1067→      ease
+  1068→      1 (hover)
+  1069→    
+  1070→  
+  1071→
+  1072→
+  1073→
+  1074→
+  1075→📱 Responsive Design Détaillé
+  1076→
+  1077→Breakpoints et Adaptations
+  1078→
+  1079→
+  1080→  
+  1081→    
+  1082→      Breakpoint
+  1083→      Adaptations
+  1084→    
+  1085→  
+  1086→  
+  1087→    
+  1088→      <768px (Mobile)
+  1089→      Top Bar masquée, Logo + Hamburger, Barre de recherche masquée, Icônes seulement, CTA masqué, Menu glisse de droite
+  1090→    
+  1091→    
+  1092→      768-1024px (Tablette)
+  1093→      Top Bar masquée, Logo + Navigation (5 items), Barre de recherche masquée, Icônes sans texte, CTA masqué, Mega Menu en 2 colonnes
+  1094→    
+  1095→    
+  1096→      1024-1440px (Desktop)
+  1097→      Top Bar affichée, Logo + Navigation complète (7 items), Barre de recherche 320px, Icônes + texte, CTA masqué, Mega Menu en 3 colonnes
+  1098→    
+  1099→    
+  1100→      >1440px (Large Desktop)
+  1101→      Top Bar affichée, Logo + Navigation complète, Barre de recherche 400px, Icônes + texte, CTA affiché, Mega Menu en 3 colonnes
+  1102→    
+  1103→  
+  1104→
+  1105→
+  1106→
+  1107→
+  1108→Adaptations Spécifiques par Élément
+  1109→
+  1110→
+  1111→  
+  1112→    
+  1113→      Élément
+  1114→      Mobile
+  1115→      Tablette
+  1116→      Desktop
+  1117→      Large Desktop
+  1118→    
+  1119→  
+  1120→  
+  1121→    
+  1122→      Top Bar
+  1123→      Masquée
+  1124→      Masquée
+  1125→      Affichée
+  1126→      Affichée
+  1127→    
+  1128→    
+  1129→      Logo
+  1130→      1.25rem, centré
+  1131→      1.5rem
+  1132→      1.5rem
+  1133→      1.5rem
+  1134→    
+  1135→    
+  1136→      Navigation
+  1137→      Masquée (remplacée par Hamburger)
+  1138→      5 items principaux
+  1139→      7 items complets
+  1140→      7 items complets
+  1141→    
+  1142→    
+  1143→      Barre de Recherche
+  1144→      Masquée
+  1145→      Masquée
+  1146→      320px
+  1147→      400px
+  1148→    
+  1149→    
+  1150→      Icônes - Texte
+  1151→      Masqué
+  1152→      Masqué
+  1153→      Affiché
+  1154→      Affiché
+  1155→    
+  1156→    
+  1157→      CTA Principal
+  1158→      Masqué
+  1159→      Masqué
+  1160→      Masqué
+  1161→      Affiché
+  1162→    
+  1163→    
+  1164→      Mega Menu
+  1165→      Menu mobile plein écran
+  1166→      2 colonnes
+  1167→      3 colonnes
+  1168→      3 colonnes
+  1169→    
+  1170→    
+  1171→      Menu Mobile
+  1172→      Affiché
+  1173→      Masqué
+  1174→      Masqué
+  1175→      Masqué
+  1176→    
+  1177→  
+  1178→
+  1179→
+  1180→
+  1181→
+  1182→♿ Accessibilité (WCAG 2.2 AA)
+  1183→
+  1184→1. Checklist de Conformité
+  1185→
+  1186→
+  1187→  
+  1188→    
+  1189→      Critère WCAG 2.2 AA
+  1190→      Implémentation
+  1191→      Statut
+  1192→    
+  1193→  
+  1194→  
+  1195→    
+  1196→      1.1.1 Non-text Content
+  1197→      Toutes les images/icônes ont un alt ou aria-label descriptif
+  1198→      ✅
+  1199→    
+  1200→    
+  1201→      1.3.1 Info and Relationships
+  1202→      Utilisation de balises sémantiques (, , , , )
+  1203→
+  1204→      ✅
+  1205→    
+  1206→    
+  1207→      1.3.2 Meaningful Sequence
+  1208→      Ordre logique des éléments dans le DOM
+  1209→      ✅
+  1210→    
+  1211→    
+  1212→      1.4.1 Use of Color
+  1213→      Le texte reste lisible sans couleur (contraste suffisant)
+  1214→      ✅
+  1215→    
+  1216→    
+  1217→      1.4.3 Contrast (Minimum)
+  1218→      Contraste ≥ 4.5:1 pour le texte normal, ≥ 3:1 pour le texte large
+  1219→      ✅
+  1220→    
+  1221→    
+  1222→      1.4.4 Resize Text
+  1223→      Texte redimensionnable jusqu'à 200% sans perte de fonctionnalité
+  1224→      ✅
+  1225→    
+  1226→    
+  1227→      1.4.10 Reflow
+  1228→      Contenu lisible à 400% de zoom
+  1229→      ✅
+  1230→    
+  1231→    
+  1232→      1.4.11 Non-text Contrast
+  1233→      Contraste ≥ 3:1 pour les icônes et éléments graphiques
+  1234→      ✅
+  1235→    
+  1236→    
+  1237→      1.4.12 Text Spacing
+  1238→      Espacement du texte personnalisable sans perte de contenu
+  1239→      ✅
+  1240→    
+  1241→    
+  1242→      2.1.1 Keyboard
+  1243→      Tous les éléments interactifs accessibles au clavier (Tab, Enter, Space, Échap)
+  1244→      ✅
+  1245→    
+  1246→    
+  1247→      2.1.2 No Keyboard Trap
+  1248→      Pas de piège au clavier (possibilité de sortir de tous les composants)
+  1249→      ✅
+  1250→    
+  1251→    
+  1252→      2.4.1 Bypass Blocks
+  1253→      Lien "Aller au contenu principal" pour sauter le header
+  1254→      ✅
+  1255→    
+  1256→    
+  1257→      2.4.3 Focus Order
+  1258→      Ordre de tabulation logique (de gauche à droite, de haut en bas)
+  1259→      ✅
+  1260→    
+  1261→    
+  1262→      2.4.4 Link Purpose (In Context)
+  1263→      Texte des liens descriptif dans leur contexte
+  1264→      ✅
+  1265→    
+  1266→    
+  1267→      2.4.6 Headings and Labels
+  1268→      Titres et labels descriptifs
+  1269→      ✅
+  1270→    
+  1271→    
+  1272→      2.4.7 Focus Visible
+  1273→      Style de focus visible pour tous les éléments interactifs (outline: 2px solid #2ECC71)
+  1274→      ✅
+  1275→    
+  1276→    
+  1277→      2.5.1 Pointer Gestures
+  1278→      Toutes les fonctionnalités disponibles au clavier (pas de dépendance à la souris)
+  1279→      ✅
+  1280→    
+  1281→    
+  1282→      2.5.2 Pointer Cancellation
+  1283→      Pas de déclenchement accidentel (ex: clic après scroll)
+  1284→      ✅
+  1285→    
+  1286→    
+  1287→      2.5.3 Label in Name
+  1288→      Texte visible dans le nom accessible (ex: aria-label correspond au texte visible)
+  1289→      ✅
+  1290→    
+  1291→    
+  1292→      3.2.1 On Focus
+  1293→      Pas de changement de contexte au focus (ex: menu qui s'ouvre automatiquement)
+  1294→      ✅
+  1295→    
+  1296→    
+  1297→      3.2.2 On Input
+  1298→      Pas de changement de contexte à l'entrée (ex: soumission automatique de formulaire)
+  1299→      ✅
+  1300→    
+  1301→    
+  1302→      3.3.2 Labels or Instructions
+  1303→      Labels pour tous les champs de formulaire (recherche)
+  1304→      ✅
+  1305→    
+  1306→    
+  1307→      4.1.1 Parsing
+  1308→      HTML valide (pas d'erreurs de balisage)
+  1309→      ✅
+  1310→    
+  1311→    
+  1312→      4.1.2 Name, Role, Value
+  1313→      Attributs ARIA appropriés pour tous les éléments interactifs
+  1314→      ✅
+  1315→    
+  1316→  
+  1317→
+  1318→
+  1319→
+  1320→
+  1321→2. Attributs ARIA par Élément
+  1322→
+  1323→
+  1324→  
+  1325→    
+  1326→      Élément
+  1327→      Rôle
+  1328→      Attributs ARIA
+  1329→    
+  1330→  
+  1331→  
+  1332→    
+  1333→      Header
+  1334→      banner
+  1335→      role="banner"
+  1336→    
+  1337→    
+  1338→      Navigation Principale
+  1339→      navigation
+  1340→      aria-label="Navigation principale"
+  1341→    
+  1342→    
+  1343→      Top Bar Navigation
+  1344→      navigation
+  1345→      aria-label="Navigation secondaire"
+  1346→    
+  1347→    
+  1348→      Logo
+  1349→      -
+  1350→      aria-label="NutriVitaX Pro - Accueil"
+  1351→    
+  1352→    
+  1353→      Navigation Items
+  1354→      -
+  1355→      aria-current="page" (pour l'item actif)
+  1356→    
+  1357→    
+  1358→      Dropdown Menus
+  1359→      -
+  1360→      aria-haspopup="true", aria-expanded="false/true", aria-controls="id-du-dropdown"
+  1361→    
+  1362→    
+  1363→      Barre de Recherche
+  1364→      search
+  1365→      role="search", aria-label="Rechercher des produits"
+  1366→    
+  1367→    
+  1368→      Input Recherche
+  1369→      -
+  1370→      aria-label="Rechercher", aria-autocomplete="list", aria-controls="search-results"
+  1371→    
+  1372→    
+  1373→      Résultats Recherche
+  1374→      -
+  1375→      aria-live="polite"
+  1376→    
+  1377→    
+  1378→      Icône Compte
+  1379→      -
+  1380→      aria-label="Mon compte"
+  1381→    
+  1382→    
+  1383→      Icône Panier
+  1384→      -
+  1385→      aria-label="Panier"
+  1386→    
+  1387→    
+  1388→      Badge Panier
+  1389→      -
+  1390→      aria-label="{n} articles dans le panier"
+  1391→    
+  1392→    
+  1393→      Bouton CTA
+  1394→      button
+  1395→      aria-label="Commencer le quiz"
+  1396→    
+  1397→    
+  1398→      Bouton Hamburger
+  1399→      button
+  1400→      aria-label="Ouvrir le menu", aria-expanded="false/true", aria-controls="mobile-menu"
+  1401→    
+  1402→    
+  1403→      Menu Mobile
+  1404→      -
+  1405→      aria-hidden="true/false"
+  1406→    
+  1407→    
+  1408→      Bouton Fermer Menu
+  1409→      button
+  1410→      aria-label="Fermer le menu"
+  1411→    
+  1412→    
+  1413→      Overlay Mobile
+  1414→      -
+  1415→      aria-hidden="true/false"
+  1416→    
+  1417→    
+  1418→      Submenu Toggle
+  1419→      button
+  1420→      aria-expanded="false/true", aria-controls="id-du-sous-menu"
+  1421→    
+  1422→    
+  1423→      Submenu Mobile
+  1424→      -
+  1425→      aria-hidden="true/false"
+  1426→    
+  1427→    
+  1428→      Skip Link
+  1429→      -
+  1430→      aria-label="Aller au contenu principal" (masqué visuellement mais accessible au clavier)
+  1431→    
+  1432→  
+  1433→
+  1434→
+  1435→
+  1436→
+  1437→3. Styles de Focus
+  1438→
+  1439→
+  1440→  
+  1441→    
+  1442→      Élément
+  1443→      Style de Focus
+  1444→    
+  1445→  
+  1446→  
+  1447→    
+  1448→      Tous les éléments
+  1449→      outline: 2px solid #2ECC71; outline-offset: 2px;
+  1450→    
+  1451→    
+  1452→      Liens de Navigation
+  1453→      outline: 2px solid #2ECC71; outline-offset: -2px; border-radius: 2px;
+  1454→    
+  1455→    
+  1456→      Boutons
+  1457→      outline: 2px solid #2ECC71; outline-offset: 2px;
+  1458→    
+  1459→    
+  1460→      Input Recherche
+  1461→      box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.3); (pas d'outline)
+  1462→    
+  1463→    
+  1464→      Items Menu Mobile
+  1465→      outline: 2px solid #2ECC71; outline-offset: -2px; background: #F8F9FA; border-radius: 4px;
+  1466→    
+  1467→    
+  1468→      Skip Link
+  1469→      outline: 2px solid #F4A900; outline-offset: -2px; (quand visible)
+  1470→    
+  1471→  
+  1472→
+  1473→
+  1474→
+  1475→
+  1476→4. Navigation au Clavier
+  1477→
+  1478→
+  1479→  
+  1480→    
+  1481→      Touche
+  1482→      Comportement
+  1483→    
+  1484→  
+  1485→  
+  1486→    
+  1487→      Tab
+  1488→      Passe au prochain élément interactif (ordre logique)
+  1489→    
+  1490→    
+  1491→      Shift + Tab
+  1492→      Passe à l'élément interactif précédent
+  1493→    
+  1494→    
+  1495→      Enter
+  1496→      Active le lien/bouton
+  1497→    
+  1498→    
+  1499→      Space
+  1500→      Active le bouton (pour les boutons comme le toggle mobile)
+  1501→    
+  1502→    
+  1503→      Escape
+  1504→      Ferme le menu mobile/le dropdown
+  1505→    
+  1506→    
+  1507→      Flèches (↑↓)
+  1508→      Navigue entre les items du menu mobile
+  1509→    
+  1510→    
+  1511→      Flèches (←→)
+  1512→      Navigue entre les items du dropdown (desktop)
+  1513→    
+  1514→  
+  1515→
+  1516→
+  1517→
+  1518→
+  1519→🎯 Intégration avec WooCommerce
+  1520→
+  1521→1. Fonctionnalités WooCommerce Intégrées
+  1522→
+  1523→
+  1524→  
+  1525→    
+  1526→      Élément
+  1527→      Fonctionnalité
+  1528→      Source des Données
+  1529→    
+  1530→  
+  1531→  
+  1532→    
+  1533→      Compte Utilisateur
+  1534→      Lien vers la page "Mon Compte"
+  1535→      WooCommerce
+  1536→    
+  1537→    
+  1538→      Panier
+  1539→      Lien vers la page panier + nombre d'articles
+  1540→      WooCommerce
+  1541→    
+  1542→    
+  1543→      Recherche
+  1544→      Recherche de produits WooCommerce
+  1545→      WooCommerce
+  1546→    
+  1547→    
+  1548→      Badge Panier
+  1549→      Affichage dynamique du nombre d'articles
+  1550→      WooCommerce AJAX
+  1551→    
+  1552→    
+  1553→      Menu "Produits"
+  1554→      Catégories et sous-catégories WooCommerce
+  1555→      WooCommerce
+  1556→    
+  1557→    
+  1558→      Prix dans Mega Menu
+  1559→      Affichage des prix des produits vedettes
+  1560→      WooCommerce
+  1561→    
+  1562→  
+  1563→
+  1564→
+  1565→
+  1566→
+  1567→2. Données Dynamiques
+  1568→
+  1569→
+  1570→  
+  1571→    
+  1572→      Élément
+  1573→      Donnée
+  1574→      Format
+  1575→      Mise à jour
+  1576→    
+  1577→  
+  1578→  
+  1579→    
+  1580→      Badge Panier
+  1581→      Nombre d'articles
+  1582→      Entier
+  1583→      AJAX (added_to_cart, removed_from_cart)
+  1584→    
+  1585→    
+  1586→      Sous-menus "Produits"
+  1587→      Catégories WooCommerce
+  1588→      Liste hiérarchique
+  1589→      Statique (ou AJAX si dynamique)
+  1590→    
+  1591→    
+  1592→      Produits Vedettes
+  1593→      Produits populaires
+  1594→      Image + Nom + Prix
+  1595→      Query WooCommerce
+  1596→    
+  1597→    
+  1598→      Compte Utilisateur
+  1599→      État de connexion
+  1600→      Lien conditionnel
+  1601→      PHP (is_user_logged_in)
+  1602→    
+  1603→  
+  1604→
+  1605→
+  1606→
+  1607→
+  1608→📊 Checklist de Validation Complète
+  1609→
+  1610→✅ Design et Apparence
+  1611→
+  1612→
+  1613→  
+  1614→    
+  1615→      Critère
+  1616→      Validation
+  1617→    
+  1618→  
+  1619→  
+  1620→    
+  1621→      Respect du système de design
+  1622→      Couleurs (#1A6B3A, #2ECC71, #F4A900), typographie (Clash Display, Cabinet Grotesk, Inter)
+  1623→    
+  1624→    
+  1625→      Espacement cohérent
+  1626→      Padding/margin respectés selon les spécifications
+  1627→    
+  1628→    
+  1629→      Alignement des éléments
+  1630→      Tous les éléments correctement alignés (flexbox)
+  1631→    
+  1632→    
+  1633→      Responsive Design
+  1634→      Adaptation parfaite sur Mobile, Tablette, Desktop, Large Desktop
+  1635→    
+  1636→    
+  1637→      Animations fluides
+  1638→      Transitions et animations sans saccades
+  1639→    
+  1640→    
+  1641→      États visuels (hover, focus, actif)
+  1642→      Tous les états correctement stylisés
+  1643→    
+  1644→  
+  1645→
+  1646→
+  1647→
+  1648→
+  1649→✅ Fonctionnalités
+  1650→
+  1651→
+  1652→  
+  1653→    
+  1654→      Critère
+  1655→      Validation
+  1656→    
+  1657→  
+  1658→  
+  1659→    
+  1660→      Navigation principale
+  1661→      Tous les liens fonctionnels, dropdowns s'ouvrent/ferment correctement
+  1662→    
+  1663→    
+  1664→      Mega Menu "Produits"
+  1665→      Affichage correct des 3 colonnes avec produits vedettes
+  1666→    
+  1667→    
+  1668→      Barre de recherche
+  1669→      Fonctionnelle, extension au focus (desktop)
+  1670→    
+  1671→    
+  1672→      Icône Compte
+  1673→      Lien vers la page de compte WooCommerce
+  1674→    
+  1675→    
+  1676→      Icône Panier
+  1677→      Lien vers le panier, badge mis à jour dynamiquement
+  1678→    
+  1679→    
+  1680→      Bouton CTA
+  1681→      Lien vers le quiz, visible uniquement sur desktop
+  1682→    
+  1683→    
+  1684→      Menu Mobile
+  1685→      Ouverture/fermeture fluide, sous-menus dépliables
+  1686→    
+  1687→    
+  1688→      Scroll du Header
+  1689→      Réduction de hauteur et masquage temporaire
+  1690→    
+  1691→    
+  1692→      Accessibilité clavier
+  1693→      Tous les éléments accessibles via Tab/Enter/Espace/Échap
+  1694→    
+  1695→  
+  1696→
+  1697→
+  1698→
+  1699→
+  1700→✅ Accessibilité
+  1701→
+  1702→
+  1703→  
+  1704→    
+  1705→      Critère
+  1706→      Validation
+  1707→    
+  1708→  
+  1709→  
+  1710→    
+  1711→      Contraste des couleurs
+  1712→      ≥ 4.5:1 pour le texte normal, ≥ 3:1 pour les icônes
+  1713→    
+  1714→    
+  1715→      Balises sémantiques
+  1716→      Utilisation correcte de , , , , 
+  1717→
+  1718→    
+  1719→    
+  1720→      Attributs ARIA
+  1721→      Tous les éléments interactifs ont les attributs ARIA appropriés
+  1722→    
+  1723→    
+  1724→      Focus visible
+  1725→      Style de focus visible pour tous les éléments interactifs
+  1726→    
+  1727→    
+  1728→      Navigation au clavier
+  1729→      Tous les éléments accessibles et utilisables via clavier
+  1730→    
+  1731→    
+  1732→      Texte alternatif
+  1733→      Toutes les images/icônes ont un alt ou aria-label descriptif
+  1734→    
+  1735→    
+  1736→      Skip Link
+  1737→      Lien "Aller au contenu principal" présent et fonctionnel
+  1738→    
+  1739→    
+  1740→      Ordre de tabulation
+  1741→      Logique et cohérent avec la disposition visuelle
+  1742→    
+  1743→  
+  1744→
+  1745→
+  1746→
+  1747→
+  1748→✅ Performances
+  1749→
+  1750→
+  1751→  
+  1752→    
+  1753→      Critère
+  1754→      Validation
+  1755→    
+  1756→  
+  1757→  
+  1758→    
+  1759→      Taille des assets
+  1760→      CSS/JS minifiés et optimisés
+  1761→    
+  1762→    
+  1763→      Lazy Loading
+  1764→      Images chargées en lazy loading (loading="lazy")
+  1765→    
+  1766→    
+  1767→      Requêtes HTTP
+  1768→      Minimisées (sprites pour les icônes si possible)
+  1769→    
+  1770→    
+  1771→      JavaScript
+  1772→      Code efficace, pas de fuites mémoire
+  1773→    
+  1774→    
+  1775→      Animations
+  1776→      Utilisation de transform et opacity pour les animations (GPU-accelerated)
+  1777→    
+  1778→  
+  1779→
+  1780→
+  1781→
+  1782→
+  1783→✅ Intégration WooCommerce
+  1784→
+  1785→
+  1786→  
+  1787→    
+  1788→      Critère
+  1789→      Validation
+  1790→    
+  1791→  
+  1792→  
+  1793→    
+  1794→      Compte utilisateur
+  1795→      Lien correct vers la page de compte
+  1796→    
+  1797→    
+  1798→      Panier
+  1799→      Lien correct vers le panier, badge mis à jour via AJAX
+  1800→    
+  1801→    
+  1802→      Recherche
+  1803→      Fonctionne avec la recherche WooCommerce
+  1804→    
+  1805→    
+  1806→      Catégories de produits
+  1807→      Menu "Produits" reflète les catégories WooCommerce
+  1808→    
+  1809→    
+  1810→      Produits vedettes
+  1811→      Affichage correct des produits populaires
+  1812→    
+  1813→  
+  1814→
+  1815→
+  1816→
+  1817→
+  1818→📌 Résumé des Spécifications Clés
+  1819→
+  1820→
+  1821→  
+  1822→    
+  1823→      Catégorie
+  1824→      Détails
+  1825→    
+  1826→  
+  1827→  
+  1828→    
+  1829→      Hauteur
+  1830→      112px (Desktop avec Top Bar), 80px (Desktop sans Top Bar), 64px (Mobile)
+  1831→    
+  1832→    
+  1833→      Couleurs Principales
+  1834→      #1A6B3A (Forêt Profonde), #2ECC71 (Émeraude Vif), #F4A900 (Or Scientifique), #FFFFFF
+  1835→    
+  1836→    
+  1837→      Polices
+  1838→      Clash Display (titres), Cabinet Grotesk (navigation), Inter Variable (texte), Space Mono (détails)
+  1839→    
+  1840→    
+  1841→      Items Navigation
+  1842→      7 items principaux (Accueil, Produits, Quiz, Stack, Témoignages, Blog, Contact)
+  1843→    
+  1844→    
+  1845→      Mega Menu
+  1846→      3 colonnes (Catégories, Formats, Produits Vedettes) pour "Produits"
+  1847→    
+  1848→    
+  1849→      Actions
+  1850→      Recherche, Compte, Panier (+ badge), CTA "Commencer le Quiz" (Desktop uniquement)
+  1851→    
+  1852→    
+  1853→      Menu Mobile
+  1854→      Overlay plein écran, glissement de droite, sous-menus dépliables
+  1855→    
+  1856→    
+  1857→      Accessibilité
+  1858→      Conforme WCAG 2.2 AA, navigation clavier, focus visible, attributs ARIA
+  1859→    
+  1860→    
+  1861→      Responsive
+  1862→      4 breakpoints (Mobile <768px, Tablette 768-1024px, Desktop 1024-1440px, Large >1440px)
+  1863→    
+  1864→  
+  1865→
+  1866→
+  1867→
+  1868→
+  1869→🚀 Prochaines Étapes pour Implémentation
+  1870→
+  1871→Créer la structure HTML selon le schéma fourni
+  1872→Appliquer les styles CSS avec les dimensions, couleurs et typographies spécifiées
+  1873→Ajouter les comportements JavaScript pour:
+  1874→
+  1875→Scroll du header
+  1876→Menu mobile (ouverture/fermeture)
+  1877→Dropdowns (desktop et mobile)
+  1878→Barre de recherche (extension)
+  1879→Mise à jour du badge panier (AJAX)
+  1880→
+  1881→Intégrer avec WooCommerce pour:
+  1882→
+  1883→Le compteur du panier
+  1884→Le lien du compte utilisateur
+  1885→La recherche de produits
+  1886→Les catégories de produits
+  1887→
+  1888→Tester sur tous les appareils (Mobile, Tablette, Desktop)
+  1889→Valider l'accessibilité avec des outils comme WAVE ou axe
+  1890→Optimiser les performances (minification, lazy loading)
+  1891→
