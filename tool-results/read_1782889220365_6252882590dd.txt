@@ -1,0 +1,964 @@
+   900→   900→                grid-column: span 1;
+   901→   901→                grid-template-columns: 1fr;
+   902→   902→        }
+   903→   903→}
+   904→   904→
+   905→   905→/* Video Placeholder */
+   906→   906→.nvx-testimonial__video-placeholder {
+   907→   907→        width: 100%;
+   908→   908→        aspect-ratio: 16 / 9;
+   909→   909→        background: linear-gradient(135deg, rgba(26, 107, 58, 0.3), rgba(18, 36, 58, 0.5));
+   910→   910→        border-radius: var(--nvx-radius-md);
+   911→   911→        display: flex;
+   912→   912→        flex-direction: column;
+   913→   913→        align-items: center;
+   914→   914→        justify-content: center;
+   915→   915→        gap: 0.75rem;
+   916→   916→        cursor: pointer;
+   917→   917→        transition: var(--nvx-transition);
+   918→   918→}
+   919→   919→
+   920→   920→.nvx-testimonial__video-placeholder:hover {
+   921→   921→        background: linear-gradient(135deg, rgba(26, 107, 58, 0.4), rgba(18, 36, 58, 0.6));
+   922→   922→}
+   923→   923→
+   924→   924→.nvx-testimonial__play-btn {
+   925→   925→        display: flex;
+   926→   926→        align-items: center;
+   927→   927→        justify-content: center;
+   928→   928→        width: 56px;
+   929→   929→        height: 56px;
+   930→   930→        font-size: 1.25rem;
+   931→   931→        background: var(--wp--preset--color--nvx-accent);
+   932→   932→        color: var(--wp--preset--color--nvx-dark);
+   933→   933→        border-radius: 50%;
+   934→   934→        box-shadow: 0 4px 20px rgba(244, 169, 0, 0.3);
+   935→   935→        transition: var(--nvx-transition);
+   936→   936→}
+   937→   937→
+   938→   938→.nvx-testimonial__video-placeholder:hover .nvx-testimonial__play-btn {
+   939→   939→        transform: scale(1.1);
+   940→   940→        box-shadow: 0 6px 30px rgba(244, 169, 0, 0.4);
+   941→   941→}
+   942→   942→
+   943→   943→.nvx-testimonial__video-label {
+   944→   944→        font-size: var(--wp--preset--font-size--nvx-xs);
+   945→   945→        color: rgba(255, 255, 255, 0.6);
+   946→   946→        text-transform: uppercase;
+   947→   947→        letter-spacing: 0.1em;
+   948→   948→}
+   949→   949→
+   950→   950→/* Testimonial Content */
+   951→   951→.nvx-testimonial__stars {
+   952→   952→        color: var(--wp--preset--color--nvx-accent);
+   953→   953→        font-size: 1rem;
+   954→   954→        letter-spacing: 2px;
+   955→   955→        margin-bottom: 1rem;
+   956→   956→}
+   957→   957→
+   958→   958→.nvx-testimonial__quote {
+   959→   959→        font-size: var(--wp--preset--font-size--nvx-md);
+   960→   960→        line-height: 1.7;
+   961→   961→        color: rgba(255, 255, 255, 0.85);
+   962→   962→        font-style: italic;
+   963→   963→        margin: 0 0 1.25rem;
+   964→   964→}
+   965→   965→
+   966→   966→.nvx-testimonial__author {
+   967→   967→        display: flex;
+   968→   968→        align-items: center;
+   969→   969→        gap: 0.75rem;
+   970→   970→        flex-wrap: wrap;
+   971→   971→}
+   972→   972→
+   973→   973→.nvx-testimonial__name {
+   974→   974→        font-size: var(--wp--preset--font-size--nvx-sm);
+   975→   975→        color: #fff;
+   976→   976→}
+   977→   977→
+   978→   978→.nvx-testimonial__badge,
+   979→   979→.nvx-testimonial__role {
+   980→   980→        font-size: var(--wp--preset--font-size--nvx-xs);
+   981→   981→        padding: 0.2rem 0.6rem;
+   982→   982→        border-radius: var(--nvx-radius-sm);
+   983→   983→}
+   984→   984→
+   985→   985→.nvx-testimonial__badge {
+   986→   986→        background: rgba(46, 204, 113, 0.15);
+   987→   987→        color: var(--wp--preset--color--nvx-secondary);
+   988→   988→}
+   989→   989→
+   990→   990→.nvx-testimonial__role {
+   991→   991→        color: rgba(255, 255, 255, 0.5);
+   992→   992→}
+   993→   993→
+   994→   994→/* Before / After */
+   995→   995→.nvx-social-proof__before-after {
+   996→   996→        margin-top: 3rem;
+   997→   997→        max-width: var(--nvx-section-max);
+   998→   998→        margin-left: auto;
+   999→   999→        margin-right: auto;
+  1000→  1000→}
+  1001→  1001→
+  1002→  1002→.nvx-social-proof__ba-title {
+  1003→  1003→        text-align: center;
+  1004→  1004→        color: rgba(255, 255, 255, 0.9);
+  1005→  1005→        margin-bottom: 1.5rem;
+  1006→  1006→}
+  1007→  1007→
+  1008→  1008→.nvx-social-proof__ba-grid {
+  1009→  1009→        display: grid;
+  1010→  1010→        grid-template-columns: repeat(2, 1fr);
+  1011→  1011→        gap: 1.5rem;
+  1012→  1012→}
+  1013→  1013→
+  1014→  1014→@media (max-width: 768px) {
+  1015→  1015→        .nvx-social-proof__ba-grid { grid-template-columns: 1fr; }
+  1016→  1016→}
+  1017→  1017→
+  1018→  1018→.nvx-ba-card {
+  1019→  1019→        border-radius: var(--nvx-radius-lg);
+  1020→  1020→        overflow: hidden;
+  1021→  1021→        background: rgba(255, 255, 255, 0.05);
+  1022→  1022→        border: 1px solid rgba(255, 255, 255, 0.08);
+  1023→  1023→}
+  1024→  1024→
+  1025→  1025→.nvx-ba-card__images {
+  1026→  1026→        display: grid;
+  1027→  1027→        grid-template-columns: 1fr 1fr;
+  1028→  1028→}
+  1029→  1029→
+  1030→  1030→.nvx-ba-card__image {
+  1031→  1031→        aspect-ratio: 3 / 4;
+  1032→  1032→        background: linear-gradient(135deg, rgba(26, 107, 58, 0.15), rgba(18, 36, 58, 0.25));
+  1033→  1033→        display: flex;
+  1034→  1034→        align-items: flex-end;
+  1035→  1035→        justify-content: center;
+  1036→  1036→        padding-bottom: 1rem;
+  1037→  1037→}
+  1038→  1038→
+  1039→  1039→.nvx-ba-card__image span {
+  1040→  1040→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1041→  1041→        font-weight: 600;
+  1042→  1042→        text-transform: uppercase;
+  1043→  1043→        letter-spacing: 0.1em;
+  1044→  1044→        color: rgba(255, 255, 255, 0.7);
+  1045→  1045→        padding: 0.3rem 0.8rem;
+  1046→  1046→        background: rgba(0, 0, 0, 0.3);
+  1047→  1047→        border-radius: var(--nvx-radius-pill);
+  1048→  1048→}
+  1049→  1049→
+  1050→  1050→.nvx-ba-card__caption {
+  1051→  1051→        padding: 1rem 1.25rem;
+  1052→  1052→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1053→  1053→        color: rgba(255, 255, 255, 0.7);
+  1054→  1054→}
+  1055→  1055→
+  1056→  1056→
+  1057→  1057→/* ═══════════════════════════════════════════════════════════════════════
+  1058→  1058→   6. UNIVERS PRODUITS (Navigation Thématique)
+  1059→  1059→   ═══════════════════════════════════════════════════════════════════════ */
+  1060→  1060→
+  1061→  1061→.nvx-univers {
+  1062→  1062→        text-align: center;
+  1063→  1063→}
+  1064→  1064→
+  1065→  1065→.nvx-univers__grid {
+  1066→  1066→        display: grid;
+  1067→  1067→        grid-template-columns: repeat(5, 1fr);
+  1068→  1068→        gap: clamp(1rem, 2vw, 1.5rem);
+  1069→  1069→        margin-top: 2.5rem;
+  1070→  1070→}
+  1071→  1071→
+  1072→  1072→@media (max-width: 1024px) {
+  1073→  1073→        .nvx-univers__grid { grid-template-columns: repeat(3, 1fr); }
+  1074→  1074→}
+  1075→  1075→@media (max-width: 640px) {
+  1076→  1076→        .nvx-univers__grid { grid-template-columns: repeat(2, 1fr); }
+  1077→  1077→}
+  1078→  1078→
+  1079→  1079→.nvx-univers-card {
+  1080→  1080→        display: flex;
+  1081→  1081→        flex-direction: column;
+  1082→  1082→        align-items: center;
+  1083→  1083→        text-align: center;
+  1084→  1084→        padding: clamp(1.5rem, 3vw, 2.5rem) 1.25rem;
+  1085→  1085→        background: var(--wp--preset--color--nvx-light);
+  1086→  1086→        border-radius: var(--nvx-radius-lg);
+  1087→  1087→        border: 2px solid transparent;
+  1088→  1088→        text-decoration: none !important;
+  1089→  1089→        transition: var(--nvx-transition);
+  1090→  1090→}
+  1091→  1091→
+  1092→  1092→.nvx-univers-card:hover {
+  1093→  1093→        border-color: var(--wp--preset--color--nvx-primary);
+  1094→  1094→        transform: translateY(-4px);
+  1095→  1095→        box-shadow: 0 8px 30px rgba(26, 107, 58, 0.12);
+  1096→  1096→}
+  1097→  1097→
+  1098→  1098→.nvx-univers-card__icon {
+  1099→  1099→        font-size: clamp(2rem, 4vw, 3rem);
+  1100→  1100→        margin-bottom: 1rem;
+  1101→  1101→        transition: transform var(--nvx-transition);
+  1102→  1102→}
+  1103→  1103→
+  1104→  1104→.nvx-univers-card:hover .nvx-univers-card__icon {
+  1105→  1105→        transform: scale(1.15);
+  1106→  1106→}
+  1107→  1107→
+  1108→  1108→.nvx-univers-card__title {
+  1109→  1109→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1110→  1110→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+  1111→  1111→        font-weight: 700 !important;
+  1112→  1112→        color: var(--wp--preset--color--nvx-dark) !important;
+  1113→  1113→        margin: 0 0 0.5rem !important;
+  1114→  1114→}
+  1115→  1115→
+  1116→  1116→.nvx-univers-card__desc {
+  1117→  1117→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1118→  1118→        color: var(--wp--preset--color--nvx-gray);
+  1119→  1119→        line-height: 1.6;
+  1120→  1120→        margin: 0 0 1rem;
+  1121→  1121→        flex: 1;
+  1122→  1122→}
+  1123→  1123→
+  1124→  1124→.nvx-univers-card__cta {
+  1125→  1125→        font-family: var(--wp--preset--font-family--nvx-subheading);
+  1126→  1126→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1127→  1127→        font-weight: 600;
+  1128→  1128→        color: var(--wp--preset--color--nvx-primary);
+  1129→  1129→}
+  1130→  1130→
+  1131→  1131→
+  1132→  1132→/* ═══════════════════════════════════════════════════════════════════════
+  1133→  1133→   7. TRANSPARENCE LAB (Timeline)
+  1134→  1134→   ═══════════════════════════════════════════════════════════════════════ */
+  1135→  1135→
+  1136→  1136→.nvx-lab-section {
+  1137→  1137→        text-align: center;
+  1138→  1138→}
+  1139→  1139→
+  1140→  1140→/* Timeline */
+  1141→  1141→.nvx-lab-timeline {
+  1142→  1142→        max-width: 800px;
+  1143→  1143→        margin: 3rem auto 0;
+  1144→  1144→        position: relative;
+  1145→  1145→        text-align: left;
+  1146→  1146→}
+  1147→  1147→
+  1148→  1148→.nvx-lab-timeline::before {
+  1149→  1149→        content: '';
+  1150→  1150→        position: absolute;
+  1151→  1151→        left: 24px;
+  1152→  1152→        top: 0;
+  1153→  1153→        bottom: 0;
+  1154→  1154→        width: 3px;
+  1155→  1155→        background: linear-gradient(
+  1156→  1156→                to bottom,
+  1157→  1157→                var(--wp--preset--color--nvx-primary),
+  1158→  1158→                var(--wp--preset--color--nvx-secondary)
+  1159→  1159→        );
+  1160→  1160→        border-radius: 2px;
+  1161→  1161→}
+  1162→  1162→
+  1163→  1163→.nvx-lab-timeline__item {
+  1164→  1164→        position: relative;
+  1165→  1165→        padding-left: 64px;
+  1166→  1166→        padding-bottom: 2.5rem;
+  1167→  1167→}
+  1168→  1168→
+  1169→  1169→.nvx-lab-timeline__item:last-child {
+  1170→  1170→        padding-bottom: 0;
+  1171→  1171→}
+  1172→  1172→
+  1173→  1173→.nvx-lab-timeline__marker {
+  1174→  1174→        position: absolute;
+  1175→  1175→        left: 6px;
+  1176→  1176→        top: 0;
+  1177→  1177→        display: flex;
+  1178→  1178→        align-items: center;
+  1179→  1179→        justify-content: center;
+  1180→  1180→        width: 40px;
+  1181→  1181→        height: 40px;
+  1182→  1182→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1183→  1183→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1184→  1184→        font-weight: 700;
+  1185→  1185→        color: #fff;
+  1186→  1186→        background: var(--wp--preset--color--nvx-primary);
+  1187→  1187→        border-radius: 50%;
+  1188→  1188→        box-shadow: 0 2px 8px rgba(26, 107, 58, 0.3);
+  1189→  1189→        z-index: 1;
+  1190→  1190→}
+  1191→  1191→
+  1192→  1192→.nvx-lab-timeline__title {
+  1193→  1193→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1194→  1194→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+  1195→  1195→        font-weight: 700 !important;
+  1196→  1196→        color: var(--wp--preset--color--nvx-dark) !important;
+  1197→  1197→        margin: 0 0 0.5rem !important;
+  1198→  1198→}
+  1199→  1199→
+  1200→  1200→.nvx-lab-timeline__desc {
+  1201→  1201→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1202→  1202→        color: var(--wp--preset--color--nvx-gray);
+  1203→  1203→        line-height: 1.7;
+  1204→  1204→        margin: 0;
+  1205→  1205→}
+  1206→  1206→
+  1207→  1207→.nvx-lab-timeline__link {
+  1208→  1208→        color: var(--wp--preset--color--nvx-primary);
+  1209→  1209→        font-weight: 600;
+  1210→  1210→        text-decoration: none;
+  1211→  1211→        transition: var(--nvx-transition);
+  1212→  1212→}
+  1213→  1213→
+  1214→  1214→.nvx-lab-timeline__link:hover {
+  1215→  1215→        color: var(--wp--preset--color--nvx-secondary);
+  1216→  1216→}
+  1217→  1217→
+  1218→  1218→/* Lab Photos */
+  1219→  1219→.nvx-lab-photos {
+  1220→  1220→        display: grid;
+  1221→  1221→        grid-template-columns: repeat(3, 1fr);
+  1222→  1222→        gap: 1.5rem;
+  1223→  1223→        max-width: var(--nvx-section-max);
+  1224→  1224→        margin: 3rem auto 0;
+  1225→  1225→}
+  1226→  1226→
+  1227→  1227→@media (max-width: 768px) {
+  1228→  1228→        .nvx-lab-photos { grid-template-columns: 1fr; }
+  1229→  1229→        .nvx-lab-timeline::before { left: 19px; }
+  1230→  1230→        .nvx-lab-timeline__item { padding-left: 50px; }
+  1231→  1231→        .nvx-lab-timeline__marker { left: 2px; width: 36px; height: 36px; }
+  1232→  1232→}
+  1233→  1233→
+  1234→  1234→.nvx-lab-photo__placeholder {
+  1235→  1235→        aspect-ratio: 4 / 3;
+  1236→  1236→        background: linear-gradient(135deg, var(--wp--preset--color--nvx-light), #e8f0eb);
+  1237→  1237→        border-radius: var(--nvx-radius-md);
+  1238→  1238→        display: flex;
+  1239→  1239→        flex-direction: column;
+  1240→  1240→        align-items: center;
+  1241→  1241→        justify-content: center;
+  1242→  1242→        gap: 0.5rem;
+  1243→  1243→        font-size: 2.5rem;
+  1244→  1244→        transition: var(--nvx-transition);
+  1245→  1245→}
+  1246→  1246→
+  1247→  1247→.nvx-lab-photo__placeholder:hover {
+  1248→  1248→        transform: scale(1.02);
+  1249→  1249→        box-shadow: 0 4px 20px rgba(26, 107, 58, 0.1);
+  1250→  1250→}
+  1251→  1251→
+  1252→  1252→.nvx-lab-photo__placeholder p {
+  1253→  1253→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1254→  1254→        font-weight: 600;
+  1255→  1255→        color: var(--wp--preset--color--nvx-gray);
+  1256→  1256→        margin: 0;
+  1257→  1257→        text-transform: uppercase;
+  1258→  1258→        letter-spacing: 0.05em;
+  1259→  1259→}
+  1260→  1260→
+  1261→  1261→
+  1262→  1262→/* ═══════════════════════════════════════════════════════════════════════
+  1263→  1263→   8. BLOG EXPERT
+  1264→  1264→   ═══════════════════════════════════════════════════════════════════════ */
+  1265→  1265→
+  1266→  1266→.nvx-blog-grid {
+  1267→  1267→        display: grid;
+  1268→  1268→        grid-template-columns: repeat(3, 1fr);
+  1269→  1269→        gap: clamp(1rem, 2vw, 1.5rem);
+  1270→  1270→        margin-top: 2.5rem;
+  1271→  1271→}
+  1272→  1272→
+  1273→  1273→@media (max-width: 1024px) {
+  1274→  1274→        .nvx-blog-grid { grid-template-columns: repeat(2, 1fr); }
+  1275→  1275→}
+  1276→  1276→@media (max-width: 640px) {
+  1277→  1277→        .nvx-blog-grid { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
+  1278→  1278→}
+  1279→  1279→
+  1280→  1280→.nvx-blog-card {
+  1281→  1281→        background: #fff;
+  1282→  1282→        border-radius: var(--nvx-radius-lg);
+  1283→  1283→        overflow: hidden;
+  1284→  1284→        border: 1px solid rgba(26, 107, 58, 0.06);
+  1285→  1285→        transition: var(--nvx-transition);
+  1286→  1286→        display: flex;
+  1287→  1287→        flex-direction: column;
+  1288→  1288→}
+  1289→  1289→
+  1290→  1290→.nvx-blog-card:hover {
+  1291→  1291→        transform: translateY(-4px);
+  1292→  1292→        box-shadow: 0 12px 40px rgba(26, 107, 58, 0.12);
+  1293→  1293→}
+  1294→  1294→
+  1295→  1295→.nvx-blog-card__image {
+  1296→  1296→        aspect-ratio: 16 / 9;
+  1297→  1297→        overflow: hidden;
+  1298→  1298→}
+  1299→  1299→
+  1300→  1300→.nvx-blog-card__image img {
+  1301→  1301→        width: 100%;
+  1302→  1302→        height: 100%;
+  1303→  1303→        object-fit: cover;
+  1304→  1304→        transition: transform var(--nvx-transition-slow);
+  1305→  1305→}
+  1306→  1306→
+  1307→  1307→.nvx-blog-card:hover .nvx-blog-card__image img {
+  1308→  1308→        transform: scale(1.05);
+  1309→  1309→}
+  1310→  1310→
+  1311→  1311→.nvx-blog-card__body {
+  1312→  1312→        padding: 1.5rem;
+  1313→  1313→        flex: 1;
+  1314→  1314→        display: flex;
+  1315→  1315→        flex-direction: column;
+  1316→  1316→}
+  1317→  1317→
+  1318→  1318→.nvx-blog-card__meta {
+  1319→  1319→        display: flex;
+  1320→  1320→        align-items: center;
+  1321→  1321→        justify-content: space-between;
+  1322→  1322→        gap: 0.5rem;
+  1323→  1323→        margin-bottom: 0.75rem;
+  1324→  1324→}
+  1325→  1325→
+  1326→  1326→.nvx-blog-card__category {
+  1327→  1327→        font-family: var(--wp--preset--font-family--nvx-mono);
+  1328→  1328→        font-size: 0.7rem;
+  1329→  1329→        font-weight: 600;
+  1330→  1330→        text-transform: uppercase;
+  1331→  1331→        letter-spacing: 0.08em;
+  1332→  1332→        color: var(--wp--preset--color--nvx-primary);
+  1333→  1333→        padding: 0.2rem 0.6rem;
+  1334→  1334→        background: rgba(26, 107, 58, 0.06);
+  1335→  1335→        border-radius: var(--nvx-radius-sm);
+  1336→  1336→}
+  1337→  1337→
+  1338→  1338→.nvx-blog-card__reading-time {
+  1339→  1339→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1340→  1340→        color: var(--wp--preset--color--nvx-gray);
+  1341→  1341→}
+  1342→  1342→
+  1343→  1343→.nvx-blog-card__title {
+  1344→  1344→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1345→  1345→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+  1346→  1346→        font-weight: 700 !important;
+  1347→  1347→        color: var(--wp--preset--color--nvx-dark) !important;
+  1348→  1348→        line-height: 1.3 !important;
+  1349→  1349→        margin: 0 0 0.75rem !important;
+  1350→  1350→}
+  1351→  1351→
+  1352→  1352→.nvx-blog-card__title a {
+  1353→  1353→        text-decoration: none !important;
+  1354→  1354→}
+  1355→  1355→
+  1356→  1356→.nvx-blog-card__excerpt {
+  1357→  1357→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1358→  1358→        color: var(--wp--preset--color--nvx-gray);
+  1359→  1359→        line-height: 1.7;
+  1360→  1360→        flex: 1;
+  1361→  1361→        margin: 0 0 1.25rem;
+  1362→  1362→}
+  1363→  1363→
+  1364→  1364→.nvx-blog-card__author {
+  1365→  1365→        display: flex;
+  1366→  1366→        align-items: center;
+  1367→  1367→        gap: 0.5rem;
+  1368→  1368→        padding-top: 1rem;
+  1369→  1369→        border-top: 1px solid rgba(26, 107, 58, 0.06);
+  1370→  1370→}
+  1371→  1371→
+  1372→  1372→.nvx-blog-card__author-avatar {
+  1373→  1373→        font-size: 1.2rem;
+  1374→  1374→}
+  1375→  1375→
+  1376→  1376→.nvx-blog-card__author-name {
+  1377→  1377→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1378→  1378→        font-weight: 600;
+  1379→  1379→        color: var(--wp--preset--color--nvx-dark);
+  1380→  1380→}
+  1381→  1381→
+  1382→  1382→.nvx-blog-card__author-name a {
+  1383→  1383→        text-decoration: none !important;
+  1384→  1384→        color: inherit !important;
+  1385→  1385→}
+  1386→  1386→
+  1387→  1387→.nvx-blog-card__author-cred {
+  1388→  1388→        font-size: 0.65rem;
+  1389→  1389→        font-weight: 700;
+  1390→  1390→        color: var(--wp--preset--color--nvx-secondary);
+  1391→  1391→        padding: 0.1rem 0.4rem;
+  1392→  1392→        background: rgba(46, 204, 113, 0.1);
+  1393→  1393→        border-radius: var(--nvx-radius-sm);
+  1394→  1394→}
+  1395→  1395→
+  1396→  1396→
+  1397→  1397→/* ═══════════════════════════════════════════════════════════════════════
+  1398→  1398→   9. NEWSLETTER IA
+  1399→  1399→   ═══════════════════════════════════════════════════════════════════════ */
+  1400→  1400→
+  1401→  1401→.nvx-newsletter-section {
+  1402→  1402→        padding: 0 var(--nvx-section-pad);
+  1403→  1403→        margin-bottom: var(--nvx-section-pad);
+  1404→  1404→}
+  1405→  1405→
+  1406→  1406→.nvx-newsletter__inner {
+  1407→  1407→        max-width: 800px;
+  1408→  1408→        margin: 0 auto;
+  1409→  1409→        text-align: center;
+  1410→  1410→        position: relative;
+  1411→  1411→        overflow: hidden;
+  1412→  1412→}
+  1413→  1413→
+  1414→  1414→.nvx-newsletter__inner::before {
+  1415→  1415→        content: '';
+  1416→  1416→        position: absolute;
+  1417→  1417→        top: -50%;
+  1418→  1418→        right: -20%;
+  1419→  1419→        width: 400px;
+  1420→  1420→        height: 400px;
+  1421→  1421→        background: radial-gradient(circle, rgba(46, 204, 113, 0.15), transparent 70%);
+  1422→  1422→        pointer-events: none;
+  1423→  1423→}
+  1424→  1424→
+  1425→  1425→/* Form */
+  1426→  1426→.nvx-newsletter__form-row {
+  1427→  1427→        display: flex;
+  1428→  1428→        gap: 0.75rem;
+  1429→  1429→        max-width: 560px;
+  1430→  1430→        margin: 0 auto;
+  1431→  1431→}
+  1432→  1432→
+  1433→  1433→@media (max-width: 640px) {
+  1434→  1434→        .nvx-newsletter__form-row {
+  1435→  1435→                flex-direction: column;
+  1436→  1436→        }
+  1437→  1437→}
+  1438→  1438→
+  1439→  1439→.nvx-newsletter__input {
+  1440→  1440→        flex: 1;
+  1441→  1441→        padding: 0.9rem 1.25rem;
+  1442→  1442→        font-family: var(--wp--preset--font-family--nvx-body);
+  1443→  1443→        font-size: var(--wp--preset--font-size--nvx-md);
+  1444→  1444→        border: 2px solid rgba(255, 255, 255, 0.2);
+  1445→  1445→        border-radius: var(--nvx-radius-md);
+  1446→  1446→        background: rgba(255, 255, 255, 0.1);
+  1447→  1447→        color: #fff;
+  1448→  1448→        transition: var(--nvx-transition);
+  1449→  1449→}
+  1450→  1450→
+  1451→  1451→.nvx-newsletter__input::placeholder {
+  1452→  1452→        color: rgba(255, 255, 255, 0.5);
+  1453→  1453→}
+  1454→  1454→
+  1455→  1455→.nvx-newsletter__input:focus {
+  1456→  1456→        outline: none;
+  1457→  1457→        border-color: var(--wp--preset--color--nvx-accent);
+  1458→  1458→        background: rgba(255, 255, 255, 0.15);
+  1459→  1459→}
+  1460→  1460→
+  1461→  1461→.nvx-newsletter__btn {
+  1462→  1462→        display: inline-flex;
+  1463→  1463→        align-items: center;
+  1464→  1464→        gap: 0.5rem;
+  1465→  1465→        padding: 0.9rem 1.5rem;
+  1466→  1466→        background: var(--wp--preset--color--nvx-accent);
+  1467→  1467→        color: var(--wp--preset--color--nvx-dark);
+  1468→  1468→        border: none;
+  1469→  1469→        border-radius: var(--nvx-radius-md);
+  1470→  1470→        font-family: var(--wp--preset--font-family--nvx-subheading);
+  1471→  1471→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1472→  1472→        font-weight: 700;
+  1473→  1473→        cursor: pointer;
+  1474→  1474→        white-space: nowrap;
+  1475→  1475→        transition: var(--nvx-transition);
+  1476→  1476→}
+  1477→  1477→
+  1478→  1478→.nvx-newsletter__btn:hover {
+  1479→  1479→        background: #ffd966;
+  1480→  1480→        transform: translateY(-2px);
+  1481→  1481→        box-shadow: 0 4px 20px rgba(244, 169, 0, 0.4);
+  1482→  1482→}
+  1483→  1483→
+  1484→  1484→.nvx-newsletter__disclaimer {
+  1485→  1485→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1486→  1486→        color: rgba(255, 255, 255, 0.6);
+  1487→  1487→        margin-top: 1rem;
+  1488→  1488→}
+  1489→  1489→
+  1490→  1490→.nvx-newsletter__trust {
+  1491→  1491→        display: flex;
+  1492→  1492→        justify-content: center;
+  1493→  1493→        flex-wrap: wrap;
+  1494→  1494→        gap: 1.5rem;
+  1495→  1495→        margin-top: 1.5rem;
+  1496→  1496→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1497→  1497→        color: rgba(255, 255, 255, 0.7);
+  1498→  1498→}
+  1499→  1499→
+  1500→  1500→
+  1501→  1501→/* ═══════════════════════════════════════════════════════════════════════
+  1502→  1502→   UTILITY CLASSES
+  1503→  1503→   ═══════════════════════════════════════════════════════════════════════ */
+  1504→  1504→
+  1505→  1505→/* Screen reader only */
+  1506→  1506→.screen-reader-text {
+  1507→  1507→        position: absolute !important;
+  1508→  1508→        width: 1px;
+  1509→  1509→        height: 1px;
+  1510→  1510→        padding: 0;
+  1511→  1511→        margin: -1px;
+  1512→  1512→        overflow: hidden;
+  1513→  1513→        clip: rect(0, 0, 0, 0);
+  1514→  1514→        white-space: nowrap;
+  1515→  1515→        border: 0;
+  1516→  1516→}
+  1517→  1517→
+  1518→  1518→/* Outline button variation */
+  1519→  1519→.is-style-nvx-outline.wp-block-button__link,
+  1520→  1520→a.is-style-nvx-outline {
+  1521→  1521→        border: 2px solid var(--wp--preset--color--nvx-primary) !important;
+  1522→  1522→        background: transparent !important;
+  1523→  1523→        color: var(--wp--preset--color--nvx-primary) !important;
+  1524→  1524→        border-radius: var(--nvx-radius-md) !important;
+  1525→  1525→        padding: 0.85rem 2rem !important;
+  1526→  1526→        font-weight: 600 !important;
+  1527→  1527→        transition: var(--nvx-transition);
+  1528→  1528→        display: inline-block;
+  1529→  1529→        text-decoration: none;
+  1530→  1530→}
+  1531→  1531→
+  1532→  1532→.is-style-nvx-outline:hover {
+  1533→  1533→        background: var(--wp--preset--color--nvx-primary) !important;
+  1534→  1534→        color: #fff !important;
+  1535→  1535→}
+  1536→  1536→
+  1537→  1537→/* Section Header (shared) */
+  1538→  1538→.nvx-section-header {
+  1539→  1539→        text-align: center;
+  1540→  1540→        max-width: 600px;
+  1541→  1541→        margin: 0 auto 2.5rem;
+  1542→  1542→}
+  1543→  1543→
+  1544→  1544→/* Dark Mode Overrides */
+  1545→  1545→.nvx-dark .nvx-quiz-mini__option-card {
+  1546→  1546→        background: rgba(255, 255, 255, 0.05);
+  1547→  1547→        border-color: rgba(255, 255, 255, 0.1);
+  1548→  1548→        color: #fff;
+  1549→  1549→}
+  1550→  1550→
+  1551→  1551→.nvx-dark .nvx-quiz-mini__legend {
+  1552→  1552→        color: #fff;
+  1553→  1553→}
+  1554→  1554→
+  1555→  1555→.nvx-dark .nvx-univers-card {
+  1556→  1556→        background: rgba(255, 255, 255, 0.05);
+  1557→  1557→}
+  1558→  1558→
+  1559→  1559→.nvx-dark .nvx-univers-card__title {
+  1560→  1560→        color: #fff !important;
+  1561→  1561→}
+  1562→  1562→
+  1563→  1563→.nvx-dark .nvx-univers-card__desc {
+  1564→  1564→        color: rgba(255, 255, 255, 0.6);
+  1565→  1565→}
+  1566→  1566→
+  1567→  1567→.nvx-dark .nvx-blog-card {
+  1568→  1568→        background: rgba(255, 255, 255, 0.05);
+  1569→  1569→        border-color: rgba(255, 255, 255, 0.08);
+  1570→  1570→}
+  1571→  1571→
+  1572→  1572→.nvx-dark .nvx-blog-card__title {
+  1573→  1573→        color: #fff !important;
+  1574→  1574→}
+  1575→  1575→
+  1576→  1576→.nvx-dark .nvx-blog-card__author-name {
+  1577→  1577→        color: rgba(255, 255, 255, 0.8);
+  1578→  1578→}
+  1579→  1579→
+  1580→  1580→/* Reduced Motion */
+  1581→  1581→@media (prefers-reduced-motion: reduce) {
+  1582→  1582→        .nvx-particle,
+  1583→  1583→        .nvx-hero__scroll-line,
+  1584→  1584→        .nvx-product-card__flipper,
+  1585→  1585→        .nvx-quiz-mini__step {
+  1586→  1586→                animation: none !important;
+  1587→  1587→                transition: none !important;
+  1588→  1588→        }
+  1589→  1589→}
+  1590→  1590→
+  1591→  1591→
+  1592→  1592→/* ═══════════════════════════════════════════════════════════════════════
+  1593→  1593→   MEGA-FOOTER
+  1594→  1594→   ═══════════════════════════════════════════════════════════════════════ */
+  1595→  1595→
+  1596→  1596→.nvx-mega-footer {
+  1597→  1597→        background: linear-gradient(180deg, #0a1426 0%, #040a16 100%);
+  1598→  1598→        color: rgba(255, 255, 255, 0.7);
+  1599→  1599→}
+  1600→  1600→
+  1601→  1601→/* Accent Lines */
+  1602→  1602→.nvx-mega-footer__accent {
+  1603→  1603→        display: block;
+  1604→  1604→        line-height: 0;
+  1605→  1605→}
+  1606→  1606→
+  1607→  1607→.nvx-mega-footer__accent-line {
+  1608→  1608→        display: block;
+  1609→  1609→        width: 100%;
+  1610→  1610→}
+  1611→  1611→
+  1612→  1612→.nvx-mega-footer__accent-line--primary {
+  1613→  1613→        height: 2.5px;
+  1614→  1614→        background: linear-gradient(90deg, var(--wp--preset--color--nvx-primary), var(--wp--preset--color--nvx-secondary));
+  1615→  1615→}
+  1616→  1616→
+  1617→  1617→.nvx-mega-footer__accent-line--secondary {
+  1618→  1618→        height: 0.5px;
+  1619→  1619→        background: var(--wp--preset--color--nvx-secondary);
+  1620→  1620→        opacity: 0.4;
+  1621→  1621→}
+  1622→  1622→
+  1623→  1623→/* Main Grid */
+  1624→  1624→.nvx-mega-footer__main {
+  1625→  1625→        display: grid;
+  1626→  1626→        grid-template-columns: 1.2fr 0.8fr 0.8fr 0.9fr 1.1fr;
+  1627→  1627→        gap: clamp(2rem, 4vw, 4rem);
+  1628→  1628→        max-width: 1200px;
+  1629→  1629→        margin: 0 auto;
+  1630→  1630→        padding-left: var(--nvx-section-pad);
+  1631→  1631→        padding-right: var(--nvx-section-pad);
+  1632→  1632→}
+  1633→  1633→
+  1634→  1634→@media (max-width: 1024px) {
+  1635→  1635→        .nvx-mega-footer__main {
+  1636→  1636→                grid-template-columns: repeat(3, 1fr);
+  1637→  1637→        }
+  1638→  1638→        .nvx-footer-col--brand {
+  1639→  1639→                grid-column: span 3;
+  1640→  1640→        }
+  1641→  1641→}
+  1642→  1642→@media (max-width: 640px) {
+  1643→  1643→        .nvx-mega-footer__main {
+  1644→  1644→                grid-template-columns: 1fr;
+  1645→  1645→        }
+  1646→  1646→        .nvx-footer-col--brand {
+  1647→  1647→                grid-column: span 1;
+  1648→  1648→        }
+  1649→  1649→}
+  1650→  1650→
+  1651→  1651→/* Footer Columns */
+  1652→  1652→.nvx-footer-col {
+  1653→  1653→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1654→  1654→}
+  1655→  1655→
+  1656→  1656→/* Links */
+  1657→  1657→.nvx-footer-links {
+  1658→  1658→        list-style: none;
+  1659→  1659→        padding: 0;
+  1660→  1660→        margin: 0;
+  1661→  1661→}
+  1662→  1662→
+  1663→  1663→.nvx-footer-links li {
+  1664→  1664→        margin-bottom: 0.5rem;
+  1665→  1665→}
+  1666→  1666→
+  1667→  1667→.nvx-footer-links a {
+  1668→  1668→        color: var(--wp--preset--color--nvx-link-text, rgba(170, 180, 195, 0.9));
+  1669→  1669→        text-decoration: none;
+  1670→  1670→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1671→  1671→        transition: color 0.2s ease;
+  1672→  1672→        display: inline-flex;
+  1673→  1673→        align-items: center;
+  1674→  1674→        gap: 0.4rem;
+  1675→  1675→}
+  1676→  1676→
+  1677→  1677→.nvx-footer-links a::before {
+  1678→  1678→        content: '›';
+  1679→  1679→        color: var(--wp--preset--color--nvx-secondary);
+  1680→  1680→        font-weight: 700;
+  1681→  1681→        transition: transform 0.2s ease;
+  1682→  1682→}
+  1683→  1683→
+  1684→  1684→.nvx-footer-links a:hover {
+  1685→  1685→        color: #fff;
+  1686→  1686→}
+  1687→  1687→
+  1688→  1688→.nvx-footer-links a:hover::before {
+  1689→  1689→        transform: translateX(3px);
+  1690→  1690→}
+  1691→  1691→
+  1692→  1692→/* Social Icons */
+  1693→  1693→.nvx-footer-social {
+  1694→  1694→        display: flex;
+  1695→  1695→        gap: 0.6rem;
+  1696→  1696→        margin-top: 0.5rem;
+  1697→  1697→}
+  1698→  1698→
+  1699→  1699→.nvx-footer-social__link {
+  1700→  1700→        display: inline-flex;
+  1701→  1701→        align-items: center;
+  1702→  1702→        justify-content: center;
+  1703→  1703→        width: 36px;
+  1704→  1704→        height: 36px;
+  1705→  1705→        border: 1px solid rgba(255, 255, 255, 0.15);
+  1706→  1706→        border-radius: 50%;
+  1707→  1707→        color: var(--wp--preset--color--nvx-light-gray, rgba(229, 231, 235, 0.8));
+  1708→  1708→        text-decoration: none;
+  1709→  1709→        font-size: 0.8rem;
+  1710→  1710→        font-weight: 600;
+  1711→  1711→        transition: var(--nvx-transition);
+  1712→  1712→}
+  1713→  1713→
+  1714→  1714→.nvx-footer-social__link:hover {
+  1715→  1715→        border-color: var(--wp--preset--color--nvx-secondary);
+  1716→  1716→        color: var(--wp--preset--color--nvx-secondary);
+  1717→  1717→        background: rgba(46, 204, 113, 0.1);
+  1718→  1718→        transform: translateY(-2px);
+  1719→  1719→}
+  1720→  1720→
+  1721→  1721→/* Contact */
+  1722→  1722→.nvx-footer-contact {
+  1723→  1723→        list-style: none;
+  1724→  1724→        padding: 0;
+  1725→  1725→        margin: 0;
+  1726→  1726→}
+  1727→  1727→
+  1728→  1728→.nvx-footer-contact li {
+  1729→  1729→        display: flex;
+  1730→  1730→        align-items: flex-start;
+  1731→  1731→        gap: 0.5rem;
+  1732→  1732→        margin-bottom: 0.6rem;
+  1733→  1733→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1734→  1734→}
+  1735→  1735→
+  1736→  1736→.nvx-footer-contact__icon {
+  1737→  1737→        color: var(--wp--preset--color--nvx-secondary);
+  1738→  1738→        flex-shrink: 0;
+  1739→  1739→        margin-top: 0.15rem;
+  1740→  1740→}
+  1741→  1741→
+  1742→  1742→.nvx-footer-contact a {
+  1743→  1743→        color: var(--wp--preset--color--nvx-link-text, rgba(170, 180, 195, 0.9));
+  1744→  1744→        text-decoration: none;
+  1745→  1745→        transition: color 0.2s ease;
+  1746→  1746→}
+  1747→  1747→
+  1748→  1748→.nvx-footer-contact a:hover {
+  1749→  1749→        color: #fff;
+  1750→  1750→}
+  1751→  1751→
+  1752→  1752→/* Certification Badges */
+  1753→  1753→.nvx-footer-certs {
+  1754→  1754→        margin-top: 1.25rem;
+  1755→  1755→}
+  1756→  1756→
+  1757→  1757→.nvx-footer-certs__label {
+  1758→  1758→        display: block;
+  1759→  1759→        font-size: 0.75rem;
+  1760→  1760→        color: var(--wp--preset--color--nvx-gray-dim, rgba(100, 108, 120, 1));
+  1761→  1761→        margin-bottom: 0.6rem;
+  1762→  1762→}
+  1763→  1763→
+  1764→  1764→.nvx-footer-certs__badges {
+  1765→  1765→        display: flex;
+  1766→  1766→        gap: 0.75rem;
+  1767→  1767→        flex-wrap: wrap;
+  1768→  1768→}
+  1769→  1769→
+  1770→  1770→.nvx-footer-cert-badge {
+  1771→  1771→        display: flex;
+  1772→  1772→        flex-direction: column;
+  1773→  1773→        align-items: center;
+  1774→  1774→        gap: 0.2rem;
+  1775→  1775→}
+  1776→  1776→
+  1777→  1777→.nvx-footer-cert-badge__check {
+  1778→  1778→        display: flex;
+  1779→  1779→        align-items: center;
+  1780→  1780→        justify-content: center;
+  1781→  1781→        width: 32px;
+  1782→  1782→        height: 32px;
+  1783→  1783→        font-size: 0.8rem;
+  1784→  1784→        font-weight: 700;
+  1785→  1785→        color: var(--wp--preset--color--nvx-secondary);
+  1786→  1786→        border: 2px solid var(--wp--preset--color--nvx-primary);
+  1787→  1787→        border-radius: 50%;
+  1788→  1788→        transition: var(--nvx-transition);
+  1789→  1789→}
+  1790→  1790→
+  1791→  1791→.nvx-footer-cert-badge:hover .nvx-footer-cert-badge__check {
+  1792→  1792→        background: rgba(46, 204, 113, 0.1);
+  1793→  1793→}
+  1794→  1794→
+  1795→  1795→.nvx-footer-cert-badge__text {
+  1796→  1796→        font-size: 0.65rem;
+  1797→  1797→        font-weight: 600;
+  1798→  1798→        color: var(--wp--preset--color--nvx-gray);
+  1799→  1799→        text-transform: uppercase;
+  1800→  1800→        letter-spacing: 0.05em;
+  1801→  1801→}
+  1802→  1802→
+  1803→  1803→/* Bottom Bar */
+  1804→  1804→.nvx-mega-footer__bottom {
+  1805→  1805→        border-top: 1px solid rgba(255, 255, 255, 0.06);
+  1806→  1806→        background: var(--wp--preset--color--nvx-dark, #040a16);
+  1807→  1807→}
+  1808→  1808→
+  1809→  1809→.nvx-mega-footer__bottom-inner {
+  1810→  1810→        max-width: 1200px;
+  1811→  1811→        margin: 0 auto;
+  1812→  1812→        padding-left: var(--nvx-section-pad);
+  1813→  1813→        padding-right: var(--nvx-section-pad);
+  1814→  1814→        display: flex;
+  1815→  1815→        align-items: center;
+  1816→  1816→        justify-content: space-between;
+  1817→  1817→        flex-wrap: wrap;
+  1818→  1818→        gap: 0.75rem;
+  1819→  1819→}
+  1820→  1820→
+  1821→  1821→.nvx-mega-footer__copy {
+  1822→  1822→        font-size: 0.7rem;
+  1823→  1823→        color: var(--wp--preset--color--nvx-subtle, rgba(80, 90, 105, 1));
+  1824→  1824→        margin: 0;
+  1825→  1825→}
+  1826→  1826→
+  1827→  1827→/* Payment Badges */
+  1828→  1828→.nvx-footer-payments {
+  1829→  1829→        display: flex;
+  1830→  1830→        gap: 0.5rem;
+  1831→  1831→        align-items: center;
+  1832→  1832→}
+  1833→  1833→
+  1834→  1834→.nvx-footer-payment {
+  1835→  1835→        display: inline-flex;
+  1836→  1836→        align-items: center;
+  1837→  1837→        justify-content: center;
+  1838→  1838→        padding: 0.25rem 0.6rem;
+  1839→  1839→        font-size: 0.55rem;
+  1840→  1840→        font-weight: 700;
+  1841→  1841→        color: #fff;
+  1842→  1842→        border-radius: 4px;
+  1843→  1843→        letter-spacing: 0.03em;
+  1844→  1844→        text-transform: uppercase;
+  1845→  1845→}
+  1846→  1846→
+  1847→  1847→.nvx-mega-footer__compat {
+  1848→  1848→        font-size: 0.65rem;
+  1849→  1849→        color: var(--wp--preset--color--nvx-subtle, rgba(80, 90, 105, 1));
+  1850→  1850→        margin: 0;
+  1851→  1851→}
+  1852→  1852→
+  1853→  1853→@media (max-width: 768px) {
+  1854→  1854→        .nvx-mega-footer__bottom-inner {
+  1855→  1855→                flex-direction: column;
+  1856→  1856→                text-align: center;
+  1857→  1857→        }
+  1858→  1858→        .nvx-footer-payments {
+  1859→  1859→                justify-content: center;
+  1860→  1860→        }
+  1861→  1861→}
+  1862→  1862→
+  1863→  1863→} /* @layer nvx-homepage */

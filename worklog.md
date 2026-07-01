@@ -81,3 +81,62 @@ Stage Summary:
 - Full spec compliance: dimensions, colors, typography, responsive, ARIA, WCAG, animations
 - ZIP updated at /home/z/my-project/download/nutrivitax-pro.zip (107KB)
 - Local git repo committed, ready for push with GitHub token
+
+---
+Task ID: 2
+Agent: HTML Template Fixer
+Task: Fix all HTML template bugs (home.html, footer.html, header.html)
+
+Work Log:
+- Removed PHP from home.html hero video section
+- Fixed H2 color on dark social proof section with nvx-heading--on-dark class
+- Added nvx-section-header class to lab and blog section headers
+- Replaced PHP year/version in footer.html with [nvx_year] and [nvx_version] shortcodes
+- Replaced text social icons in footer with proper SVG icons
+- Replaced empty img tags in header mega menu with styled div placeholders
+
+Stage Summary:
+- All PHP code removed from FSE .html templates
+- Shortcodes used for dynamic content
+- SVG icons replace text placeholders
+- All templates are valid FSE block HTML
+
+---
+Task ID: 1
+Agent: PHP Backend Fixer
+Task: Fix all PHP backend bugs (setup.php, ajax-handlers.php, theme.json, functions.php, style.css)
+
+Work Log:
+- Fixed is_page_template() for FSE detection
+- Fixed nvx_html_attributes to use language_attributes filter
+- Added shortcodes [nvx_asset_url], [nvx_year], [nvx_version]
+- Created inc/ajax-handlers.php with product search and newsletter handlers
+- Removed missing fontFace from ClashDisplay in theme.json
+- Bumped version to 0.3.0 in functions.php and style.css
+
+Stage Summary:
+- All PHP backend bugs fixed
+- AJAX handlers registered for product search and newsletter
+- Shortcodes replace PHP in FSE .html templates
+
+---
+Task ID: 3
+Agent: CSS/JS/Assets Fixer
+Task: Fix CSS, JS files and create placeholder assets
+
+Work Log:
+- Created base.css with @layer ordering, reset, utilities, scroll animations, dark mode
+- Removed duplicate dark mode rules from homepage.css
+- Wrapped header.css in @layer nvx-header for proper cascade
+- Fixed skip-link class in theme.js (.skip-link -> .nvx-skip-link)
+- Fixed quiz validation in homepage.js (validates ALL steps before submit)
+- Fixed newsletter in homepage.js (real AJAX call instead of setTimeout simulation)
+- Created placeholder asset directories (fonts/, images/, videos/)
+- Created hero-fallback.svg placeholder
+
+Stage Summary:
+- All CSS/JS bugs fixed
+- Proper @layer cascade ordering established
+- Scroll animations (.nvx-in-view) now have CSS rules
+- Dark mode fully defined with unlayered overrides
+- Newsletter and quiz use proper validation/AJAX
