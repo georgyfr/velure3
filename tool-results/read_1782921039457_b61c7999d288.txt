@@ -1,0 +1,390 @@
+     1→<!--
+     2→  NutriVitaX Pro — Header Template Part
+     3→
+     4→  Structure conforme a la spec header (1890 lignes):
+     5→  - Skip Link (WCAG 2.2 AA)
+     6→  - Top Bar (desktop >1024px)
+     7→  - Header Principal fixe (scroll shrink/hide/show)
+     8→  - Logo NutriVitaX + Pro (accent)
+     9→  - Navigation 7 items + Mega Menu "Produits" (3 colonnes)
+    10→  - Barre de recherche extensible
+    11→  - Icones Compte + Panier + Badge dynamique
+    12→  - Bouton CTA "COMMENCER LE QUIZ" (desktop >1440px)
+    13→  - Hamburger + Menu Mobile plein ecran
+    14→  - Accessibilite ARIA complete
+    15→
+    16→  @package NutriVitaX_Pro
+    17→  @since   0.2.0
+    18→-->
+    19→
+    20→<!-- Skip Link -->
+    21→<a class="nvx-skip-link" href="#nvx-woo-content" aria-label="Aller au contenu principal">
+    22→        Aller au contenu principal
+    23→</a>
+    24→
+    25→<!-- ═══ HEADER WRAPPER ═══ -->
+    26→<header class="nvx-header" role="banner" id="nvx-header">
+    27→
+    28→        <!-- ──── TOP BAR (Desktop >1024px) ──── -->
+    29→        <div class="nvx-topbar">
+    30→                <div class="nvx-topbar__inner">
+    31→                        <span class="nvx-topbar__welcome">Bienvenue chez NutriVitaX Pro!</span>
+    32→                        <nav aria-label="Navigation secondaire">
+    33→                                <div class="nvx-topbar__nav">
+    34→                                        <a href="/contact">Contact</a>
+    35→                                        <a href="/faq">FAQ</a>
+    36→                                        <a href="/blog">Blog</a>
+    37→                                </div>
+    38→                        </nav>
+    39→                        <div class="nvx-topbar__social">
+    40→                                <a href="#" aria-label="Facebook">
+    41→                                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    42→                                </a>
+    43→                                <a href="#" aria-label="Instagram">
+    44→                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    45→                                </a>
+    46→                                <a href="#" aria-label="Twitter / X">
+    47→                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733-16zM4 20l6.768-6.768M20 4l-6.768 6.768"/></svg>
+    48→                                </a>
+    49→                        </div>
+    50→                </div>
+    51→        </div>
+    52→
+    53→        <!-- ──── MAIN HEADER ──── -->
+    54→        <div class="nvx-header__inner">
+    55→
+    56→                <!-- Hamburger (Mobile) -->
+    57→                <button class="nvx-hamburger"
+    58→                                aria-label="Ouvrir le menu"
+    59→                                aria-expanded="false"
+    60→                                aria-controls="nvx-mobile-menu"
+    61→                                id="nvx-hamburger-btn">
+    62→                        <span class="nvx-hamburger__line"></span>
+    63→                        <span class="nvx-hamburger__line"></span>
+    64→                        <span class="nvx-hamburger__line"></span>
+    65→                </button>
+    66→
+    67→                <!-- Logo -->
+    68→                <a href="/" class="nvx-logo" aria-label="NutriVitaX Pro - Accueil">
+    69→                        <span class="nvx-logo__icon" aria-hidden="true">
+    70→                                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    71→                                        <circle cx="20" cy="20" r="19" stroke="#1A6B3A" stroke-width="2" fill="#F0F9F4"/>
+    72→                                        <path d="M14 28V16l6-4 6 4v12" stroke="#1A6B3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    73→                                        <circle cx="20" cy="20" r="3" fill="#2ECC71"/>
+    74→                                        <line x1="20" y1="12" x2="20" y2="10" stroke="#F4A900" stroke-width="2" stroke-linecap="round"/>
+    75→                                </svg>
+    76→                        </span>
+    77→                        <span class="nvx-logo__text">NutriVitaX<span class="nvx-logo__accent">Pro</span></span>
+    78→                </a>
+    79→
+    80→                <!-- Navigation Principale -->
+    81→                <nav class="nvx-nav" aria-label="Navigation principale">
+    82→                        <ul class="nvx-nav__list">
+    83→                                <!-- 1. Accueil -->
+    84→                                <li class="nvx-nav__item">
+    85→                                        <a href="/" class="nvx-nav__link nvx-nav__link--active" aria-current="page">
+    86→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    87→                                                Accueil
+    88→                                        </a>
+    89→                                </li>
+    90→
+    91→                                <!-- 2. Produits (Mega Menu) -->
+    92→                                <li class="nvx-nav__item nvx-nav__item--mega" id="nvx-mega-trigger">
+    93→                                        <a href="/produits" class="nvx-nav__link"
+    94→                                           aria-haspopup="true"
+    95→                                           aria-expanded="false"
+    96→                                           aria-controls="nvx-mega-menu">
+    97→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    98→                                                Produits
+    99→                                                <span class="nvx-nav__arrow" aria-hidden="true">
+   100→                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+   101→                                                </span>
+   102→                                        </a>
+   103→
+   104→                                        <!-- Mega Menu Dropdown -->
+   105→                                        <div class="nvx-mega" id="nvx-mega-menu" role="menu" aria-label="Sous-menu Produits">
+   106→                                                <div class="nvx-mega__grid">
+   107→                                                        <!-- Col 1: Categories -->
+   108→                                                        <div>
+   109→                                                                <p class="nvx-mega__column-title">Categories</p>
+   110→                                                                <ul class="nvx-mega__list">
+   111→                                                                        <li><a href="/categorie/proteines" role="menuitem">
+   112→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   113→                                                                                Proteines
+   114→                                                                        </a></li>
+   115→                                                                        <li><a href="/categorie/creatine" role="menuitem">
+   116→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   117→                                                                                Creatine
+   118→                                                                        </a></li>
+   119→                                                                        <li><a href="/categorie/pre-workout" role="menuitem">
+   120→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   121→                                                                                Pre-Workout
+   122→                                                                        </a></li>
+   123→                                                                        <li><a href="/categorie/bcaa" role="menuitem">
+   124→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   125→                                                                                BCAA
+   126→                                                                        </a></li>
+   127→                                                                        <li><a href="/categorie/omega-3" role="menuitem">
+   128→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   129→                                                                                Omega-3
+   130→                                                                        </a></li>
+   131→                                                                        <li><a href="/categorie/vitamines" role="menuitem">
+   132→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   133→                                                                                Vitamines
+   134→                                                                        </a></li>
+   135→                                                                        <li><a href="/categorie/mineraux" role="menuitem">
+   136→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   137→                                                                                Mineraux
+   138→                                                                        </a></li>
+   139→                                                                </ul>
+   140→                                                        </div>
+   141→
+   142→                                                        <!-- Col 2: Formats -->
+   143→                                                        <div>
+   144→                                                                <p class="nvx-mega__column-title">Formats</p>
+   145→                                                                <ul class="nvx-mega__list">
+   146→                                                                        <li><a href="/format/poudre" role="menuitem">
+   147→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   148→                                                                                Poudre
+   149→                                                                        </a></li>
+   150→                                                                        <li><a href="/format/comprimes" role="menuitem">
+   151→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   152→                                                                                Comprimes
+   153→                                                                        </a></li>
+   154→                                                                        <li><a href="/format/gelules" role="menuitem">
+   155→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   156→                                                                                Gelules
+   157→                                                                        </a></li>
+   158→                                                                        <li><a href="/format/liquide" role="menuitem">
+   159→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   160→                                                                                Liquide
+   161→                                                                        </a></li>
+   162→                                                                        <li><a href="/format/barres" role="menuitem">
+   163→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   164→                                                                                Barres
+   165→                                                                        </a></li>
+   166→                                                                        <li><a href="/format/gummies" role="menuitem">
+   167→                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   168→                                                                                Gummies
+   169→                                                                        </a></li>
+   170→                                                                </ul>
+   171→                                                        </div>
+   172→
+   173→                                                        <!-- Col 3: Produits Vedettes -->
+   174→                                                        <div class="nvx-mega__featured">
+   175→                                                                <p class="nvx-mega__column-title">Produits Vedettes</p>
+   176→                                                                <div class="nvx-mega__featured-item">
+   177→                                                                        <div class="nvx-mega__featured-img" role="img" aria-label="Whey Proteine Isolat" style="background:linear-gradient(135deg, var(--wp--preset--color--nvx-light), #d5f5e3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--wp--preset--color--nvx-primary);">W</div>
+   178→                                                                        <div class="nvx-mega__featured-info">
+   179→                                                                                <span class="nvx-mega__featured-name">Whey Proteine Isolat</span>
+   180→                                                                                <span class="nvx-mega__featured-price">49,99 EUR</span>
+   181→                                                                        </div>
+   182→                                                                </div>
+   183→                                                                <div class="nvx-mega__featured-item">
+   184→                                                                        <div class="nvx-mega__featured-img" role="img" aria-label="Creatine Monohydrate" style="background:linear-gradient(135deg, var(--wp--preset--color--nvx-light), #d5f5e3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--wp--preset--color--nvx-primary);">C</div>
+   185→                                                                        <div class="nvx-mega__featured-info">
+   186→                                                                                <span class="nvx-mega__featured-name">Creatine Monohydrate</span>
+   187→                                                                                <span class="nvx-mega__featured-price">24,99 EUR</span>
+   188→                                                                        </div>
+   189→                                                                </div>
+   190→                                                                <div class="nvx-mega__featured-item">
+   191→                                                                        <div class="nvx-mega__featured-img" role="img" aria-label="Pre-Workout Extreme" style="background:linear-gradient(135deg, var(--wp--preset--color--nvx-light), #d5f5e3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--wp--preset--color--nvx-primary);">P</div>
+   192→                                                                        <div class="nvx-mega__featured-info">
+   193→                                                                                <span class="nvx-mega__featured-name">Pre-Workout Extreme</span>
+   194→                                                                                <span class="nvx-mega__featured-price">39,99 EUR</span>
+   195→                                                                        </div>
+   196→                                                                </div>
+   197→                                                                <div class="nvx-mega__featured-item">
+   198→                                                                        <div class="nvx-mega__featured-img" role="img" aria-label="BCAA 4:1:1" style="background:linear-gradient(135deg, var(--wp--preset--color--nvx-light), #d5f5e3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--wp--preset--color--nvx-primary);">B</div>
+   199→                                                                        <div class="nvx-mega__featured-info">
+   200→                                                                                <span class="nvx-mega__featured-name">BCAA 4:1:1</span>
+   201→                                                                                <span class="nvx-mega__featured-price">29,99 EUR</span>
+   202→                                                                        </div>
+   203→                                                                </div>
+   204→                                                        </div>
+   205→
+   206→                                                        <!-- Footer: Voir tous -->
+   207→                                                        <div class="nvx-mega__footer">
+   208→                                                                <a href="/produits">Voir tous les produits <span aria-hidden="true">&rarr;</span></a>
+   209→                                                        </div>
+   210→                                                </div>
+   211→                                        </div>
+   212→                                </li>
+   213→
+   214→                                <!-- 3. Quiz Rapide -->
+   215→                                <li class="nvx-nav__item nvx-nav__item--hide-tablet">
+   216→                                        <a href="/quiz" class="nvx-nav__link">
+   217→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+   218→                                                Quiz Rapide
+   219→                                        </a>
+   220→                                </li>
+   221→
+   222→                                <!-- 4. Constructeur de Stack -->
+   223→                                <li class="nvx-nav__item nvx-nav__item--hide-tablet">
+   224→                                        <a href="/constructeur" class="nvx-nav__link">
+   225→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+   226→                                                Constructeur de Stack
+   227→                                        </a>
+   228→                                </li>
+   229→
+   230→                                <!-- 5. Temoignages (hide on tablet) -->
+   231→                                <li class="nvx-nav__item nvx-nav__item--hide-tablet">
+   232→                                        <a href="/temoignages" class="nvx-nav__link">
+   233→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+   234→                                                Temoignages
+   235→                                        </a>
+   236→                                </li>
+   237→
+   238→                                <!-- 6. Blog -->
+   239→                                <li class="nvx-nav__item">
+   240→                                        <a href="/blog" class="nvx-nav__link">
+   241→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+   242→                                                Blog
+   243→                                        </a>
+   244→                                </li>
+   245→
+   246→                                <!-- 7. Contact (hide on tablet) -->
+   247→                                <li class="nvx-nav__item nvx-nav__item--hide-tablet">
+   248→                                        <a href="/contact" class="nvx-nav__link">
+   249→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+   250→                                                Contact
+   251→                                        </a>
+   252→                                </li>
+   253→                        </ul>
+   254→                </nav>
+   255→
+   256→                <!-- Actions -->
+   257→                <div class="nvx-actions">
+   258→
+   259→                        <!-- Search Bar (Desktop) -->
+   260→                        <form class="nvx-search" role="search" aria-label="Rechercher des produits" action="/boutique/" method="get">
+   261→                                <div class="nvx-search__input-wrapper">
+   262→                                        <input type="search"
+   263→                                                   name="s"
+   264→                                                   class="nvx-search__input"
+   265→                                                   placeholder="Rechercher des produits..."
+   266→                                                   aria-label="Rechercher"
+   267→                                                   aria-autocomplete="list"
+   268→                                                   aria-controls="nvx-search-results"
+   269→                                                   autocomplete="off"/>
+   270→                                        <button type="submit" class="nvx-search__btn" aria-label="Lancer la recherche">
+   271→                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+   272→                                        </button>
+   273→                                </div>
+   274→                                <div class="nvx-search__results" id="nvx-search-results" aria-live="polite"></div>
+   275→                        </form>
+   276→
+   277→                        <!-- Account Icon -->
+   278→                        <a href="/mon-compte" class="nvx-icon-btn" aria-label="Mon compte">
+   279→                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+   280→                                <span class="nvx-icon-btn__label">Compte</span>
+   281→                        </a>
+   282→
+   283→                        <!-- Cart Icon -->
+   284→                        <a href="/panier" class="nvx-icon-btn" aria-label="Panier">
+   285→                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+   286→                                <span class="nvx-cart-badge" id="nvx-cart-count" aria-label="0 articles dans le panier">0</span>
+   287→                                <span class="nvx-icon-btn__label">Panier</span>
+   288→                        </a>
+   289→
+   290→                        <!-- CTA Button (Desktop >1440px) -->
+   291→                        <a href="/quiz" class="nvx-cta" aria-label="Commencer le quiz">
+   292→                                Commencer le Quiz
+   293→                        </a>
+   294→
+   295→                </div><!-- /.nvx-actions -->
+   296→
+   297→        </div><!-- /.nvx-header__inner -->
+   298→
+   299→        <!-- Header Spacer (compensates fixed position) -->
+   300→        <div class="nvx-header-spacer" id="nvx-header-spacer" aria-hidden="true"></div>
+   301→
+   302→        <!-- Mobile Overlay -->
+   303→        <div class="nvx-mobile-overlay" id="nvx-mobile-overlay" aria-hidden="true"></div>
+   304→</header>
+   305→
+   306→<!-- ═══ MOBILE MENU ═══ -->
+   307→<div class="nvx-mobile-menu" id="nvx-mobile-menu" aria-hidden="true" aria-label="Menu mobile">
+   308→
+   309→        <!-- Mobile Menu Header -->
+   310→        <div class="nvx-mobile-menu__header">
+   311→                <a href="/" class="nvx-logo" aria-label="NutriVitaX Pro - Accueil">
+   312→                        <span class="nvx-logo__icon" aria-hidden="true">
+   313→                                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+   314→                                        <circle cx="20" cy="20" r="19" stroke="#1A6B3A" stroke-width="2" fill="#F0F9F4"/>
+   315→                                        <path d="M14 28V16l6-4 6 4v12" stroke="#1A6B3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+   316→                                        <circle cx="20" cy="20" r="3" fill="#2ECC71"/>
+   317→                                        <line x1="20" y1="12" x2="20" y2="10" stroke="#F4A900" stroke-width="2" stroke-linecap="round"/>
+   318→                                </svg>
+   319→                        </span>
+   320→                        <span class="nvx-logo__text">NutriVitaX<span class="nvx-logo__accent">Pro</span></span>
+   321→                </a>
+   322→                <button class="nvx-mobile-menu__close" id="nvx-mobile-close-btn" aria-label="Fermer le menu">
+   323→                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+   324→                </button>
+   325→        </div>
+   326→
+   327→        <!-- Mobile Search -->
+   328→        <div class="nvx-mobile-search" role="search" aria-label="Rechercher des produits (mobile)">
+   329→                <div class="nvx-mobile-search__input-wrapper">
+   330→                        <input type="search"
+   331→                                   class="nvx-mobile-search__input"
+   332→                                   placeholder="Rechercher des produits..."
+   333→                                   aria-label="Rechercher"/>
+   334→                </div>
+   335→        </div>
+   336→
+   337→        <!-- Mobile Navigation -->
+   338→        <nav class="nvx-mobile-nav" aria-label="Navigation mobile">
+   339→                <ul class="nvx-mobile-nav__list">
+   340→                        <li class="nvx-mobile-nav__item">
+   341→                                <a href="/" class="nvx-mobile-nav__link">Accueil</a>
+   342→                        </li>
+   343→                        <li class="nvx-mobile-nav__item nvx-mobile-nav__item--has-children">
+   344→                                <button class="nvx-mobile-nav__link" aria-expanded="false" aria-controls="nvx-mobile-submenu-products">
+   345→                                        Produits
+   346→                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+   347→                                </button>
+   348→                                <div class="nvx-mobile-submenu" id="nvx-mobile-submenu-products" aria-hidden="true">
+   349→                                        <ul class="nvx-mobile-submenu__list">
+   350→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/proteines" class="nvx-mobile-submenu__link">Proteines</a></li>
+   351→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/creatine" class="nvx-mobile-submenu__link">Creatine</a></li>
+   352→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/pre-workout" class="nvx-mobile-submenu__link">Pre-Workout</a></li>
+   353→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/bcaa" class="nvx-mobile-submenu__link">BCAA</a></li>
+   354→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/omega-3" class="nvx-mobile-submenu__link">Omega-3</a></li>
+   355→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/vitamines" class="nvx-mobile-submenu__link">Vitamines</a></li>
+   356→                                                <li class="nvx-mobile-submenu__item"><a href="/categorie/mineraux" class="nvx-mobile-submenu__link">Mineraux</a></li>
+   357→                                        </ul>
+   358→                                </div>
+   359→                        </li>
+   360→                        <li class="nvx-mobile-nav__item">
+   361→                                <a href="/quiz" class="nvx-mobile-nav__link">Quiz Rapide</a>
+   362→                        </li>
+   363→                        <li class="nvx-mobile-nav__item">
+   364→                                <a href="/constructeur" class="nvx-mobile-nav__link">Constructeur de Stack</a>
+   365→                        </li>
+   366→                        <li class="nvx-mobile-nav__item">
+   367→                                <a href="/temoignages" class="nvx-mobile-nav__link">Temoignages</a>
+   368→                        </li>
+   369→                        <li class="nvx-mobile-nav__item">
+   370→                                <a href="/blog" class="nvx-mobile-nav__link">Blog</a>
+   371→                        </li>
+   372→                        <li class="nvx-mobile-nav__item">
+   373→                                <a href="/contact" class="nvx-mobile-nav__link">Contact</a>
+   374→                        </li>
+   375→                </ul>
+   376→        </nav>
+   377→
+   378→        <!-- Mobile Menu Footer -->
+   379→        <div class="nvx-mobile-menu__footer">
+   380→                <a href="/mon-compte" class="nvx-mobile-menu__action nvx-mobile-menu__action--login">
+   381→                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+   382→                        Se connecter
+   383→                </a>
+   384→                <a href="/mon-compte?action=register" class="nvx-mobile-menu__action nvx-mobile-menu__action--register">
+   385→                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+   386→                        S'inscrire
+   387→                </a>
+   388→        </div>
+   389→
+   390→</div><!-- /.nvx-mobile-menu -->
