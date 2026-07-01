@@ -1,0 +1,1837 @@
+     1→/**
+     2→ * NutriVitaX Pro — Homepage Styles
+     3→ * CSS Layer: nvx-homepage
+     4→ *
+     5→ * Styles pour les 10 sections de la page d'accueil:
+     6→ * 1. Hero Cinématique (vidéo, particules, titre fluide)
+     7→ * 2. Barre de Confiance (certifications, compteur)
+     8→ * 3. Quiz Rapide (form multi-étapes)
+     9→ * 4. Produits Vedettes (flip-card 3D, badges IA)
+    10→ * 5. Preuve Sociale (témoignages, avant/après)
+    11→ * 6. Univers Produits (navigation thématique)
+    12→ * 7. Transparence Lab (timeline, photos labo)
+    13→ * 8. Blog Expert (articles, auteurs)
+    14→ * 9. Newsletter IA (capture email)
+    15→ *
+    16→ * Design System: BioLab Luxe
+    17→ * Breakpoints: <768, 768-1024, 1024-1440, >1440
+    18→ *
+    19→ * @package NutriVitaX_Pro
+    20→ * @since   0.3.0
+    21→ */
+    22→
+    23→@layer nvx-homepage {
+    24→
+    25→/* ═══════════════════════════════════════════════════════════════════════
+    26→   0. CUSTOM PROPERTIES
+    27→   ═══════════════════════════════════════════════════════════════════════ */
+    28→
+    29→.nvx-hero,
+    30→.nvx-trust-bar,
+    31→.nvx-quiz-section,
+    32→.nvx-featured-section,
+    33→.nvx-social-proof,
+    34→.nvx-univers,
+    35→.nvx-lab-section,
+    36→.nvx-blog-section,
+    37→.nvx-newsletter-section {
+    38→        --nvx-section-max: 1200px;
+    39→        --nvx-section-pad: clamp(2rem, 5vw, 4rem);
+    40→        --nvx-radius-sm: 6px;
+    41→        --nvx-radius-md: 12px;
+    42→        --nvx-radius-lg: 20px;
+    43→        --nvx-radius-pill: 9999px;
+    44→        --nvx-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    45→        --nvx-transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    46→}
+    47→
+    48→
+    49→/* H2 on dark backgrounds — override theme.json global H2 color */
+    50→.nvx-hero h2,
+    51→.nvx-hero .wp-block-heading,
+    52→.nvx-social-proof h2,
+    53→.nvx-social-proof .wp-block-heading,
+    54→.nvx-mega-footer h2,
+    55→.nvx-mega-footer .wp-block-heading {
+    56→        color: #FFFFFF !important;
+    57→}
+    58→
+    59→/* ═══════════════════════════════════════════════════════════════════════
+    60→   1. HERO CINÉMATIQUE
+    61→   ═══════════════════════════════════════════════════════════════════════ */
+    62→
+    63→.nvx-hero {
+    64→        position: relative;
+    65→        min-height: 100vh;
+    66→        min-height: 100svh;
+    67→        display: flex;
+    68→        align-items: center;
+    69→        justify-content: center;
+    70→        overflow: hidden;
+    71→        background: var(--wp--preset--color--nvx-dark);
+    72→}
+    73→
+    74→/* Video Background */
+    75→.nvx-hero__video-bg {
+    76→        position: absolute;
+    77→        inset: 0;
+    78→        z-index: 0;
+    79→}
+    80→
+    81→.nvx-hero__video-bg video {
+    82→        width: 100%;
+    83→        height: 100%;
+    84→        object-fit: cover;
+    85→        opacity: 0.45;
+    86→}
+    87→
+    88→.nvx-hero__video-overlay {
+    89→        position: absolute;
+    90→        inset: 0;
+    91→        background: linear-gradient(
+    92→                135deg,
+    93→                rgba(18, 36, 58, 0.92) 0%,
+    94→                rgba(26, 107, 58, 0.78) 100%
+    95→        );
+    96→}
+    97→
+    98→/* CSS Particles */
+    99→.nvx-hero__particles {
+   100→        position: absolute;
+   101→        inset: 0;
+   102→        z-index: 1;
+   103→        overflow: hidden;
+   104→        pointer-events: none;
+   105→}
+   106→
+   107→.nvx-particle {
+   108→        position: absolute;
+   109→        width: 3px;
+   110→        height: 3px;
+   111→        background: rgba(46, 204, 113, 0.5);
+   112→        border-radius: 50%;
+   113→        animation: nvx-particle-float linear infinite;
+   114→}
+   115→
+   116→.nvx-particle--lg {
+   117→        width: 6px;
+   118→        height: 6px;
+   119→        background: rgba(244, 169, 0, 0.3);
+   120→}
+   121→
+   122→@keyframes nvx-particle-float {
+   123→        0% {
+   124→                transform: translateY(100vh) translateX(0) scale(0);
+   125→                opacity: 0;
+   126→        }
+   127→        10% {
+   128→                opacity: 1;
+   129→                transform: translateY(90vh) translateX(10px) scale(1);
+   130→        }
+   131→        90% {
+   132→                opacity: 0.6;
+   133→        }
+   134→        100% {
+   135→                transform: translateY(-10vh) translateX(-20px) scale(0.3);
+   136→                opacity: 0;
+   137→        }
+   138→}
+   139→
+   140→/* Hero Content */
+   141→.nvx-hero__content {
+   142→        position: relative;
+   143→        z-index: 2;
+   144→        max-width: var(--nvx-section-max);
+   145→        margin: 0 auto;
+   146→        padding: 0 var(--nvx-section-pad);
+   147→        text-align: center;
+   148→}
+   149→
+   150→/* Badge */
+   151→.nvx-hero__badge {
+   152→        display: inline-flex;
+   153→        justify-content: center;
+   154→}
+   155→
+   156→.nvx-hero__badge-text {
+   157→        display: inline-block;
+   158→        padding: 0.5rem 1.5rem;
+   159→        background: var(--wp--preset--color--nvx-secondary);
+   160→        color: #fff;
+   161→        font-family: var(--wp--preset--font-family--nvx-mono);
+   162→        font-size: var(--wp--preset--font-size--nvx-xs);
+   163→        font-weight: 600;
+   164→        letter-spacing: 0.15em;
+   165→        text-transform: uppercase;
+   166→        border-radius: var(--nvx-radius-pill);
+   167→}
+   168→
+   169→/* Fluid Title */
+   170→.nvx-hero__title {
+   171→        font-family: var(--wp--preset--font-family--nvx-heading);
+   172→        font-size: var(--wp--preset--font-size--nvx-hero);
+   173→        font-weight: 700;
+   174→        line-height: 1.05;
+   175→        color: #fff;
+   176→        margin: 0;
+   177→}
+   178→
+   179→.nvx-hero__title-main {
+   180→        display: block;
+   181→}
+   182→
+   183→.nvx-hero__title-accent {
+   184→        display: block;
+   185→        background: linear-gradient(135deg, var(--wp--preset--color--nvx-accent) 0%, #ffd966 100%);
+   186→        -webkit-background-clip: text;
+   187→        -webkit-text-fill-color: transparent;
+   188→        background-clip: text;
+   189→}
+   190→
+   191→/* Subtitle */
+   192→.nvx-hero__subtitle {
+   193→        font-family: var(--wp--preset--font-family--nvx-body);
+   194→        font-size: clamp(1rem, 2vw, 1.25rem);
+   195→        color: var(--wp--preset--color--nvx-light);
+   196→        max-width: 640px;
+   197→        margin: 0 auto;
+   198→        line-height: 1.7;
+   199→        opacity: 0.9;
+   200→}
+   201→
+   202→/* CTA Buttons */
+   203→.nvx-hero__ctas {
+   204→        display: flex;
+   205→        gap: 1rem;
+   206→        justify-content: center;
+   207→        flex-wrap: wrap;
+   208→}
+   209→
+   210→.nvx-hero__cta-primary {
+   211→        display: inline-flex;
+   212→        align-items: center;
+   213→        gap: 0.5rem;
+   214→        padding: 1rem 2rem;
+   215→        font-weight: 700;
+   216→        font-size: 0.95rem;
+   217→        border-radius: var(--nvx-radius-md);
+   218→        text-decoration: none;
+   219→        transition: var(--nvx-transition);
+   220→        box-shadow: 0 4px 20px rgba(244, 169, 0, 0.35);
+   221→}
+   222→
+   223→.nvx-hero__cta-primary:hover {
+   224→        transform: translateY(-2px);
+   225→        box-shadow: 0 8px 30px rgba(244, 169, 0, 0.45);
+   226→}
+   227→
+   228→.nvx-hero__cta-secondary {
+   229→        display: inline-flex;
+   230→        align-items: center;
+   231→        padding: 1rem 2rem;
+   232→        font-weight: 600;
+   233→        font-size: 0.95rem;
+   234→        border: 2px solid rgba(255, 255, 255, 0.4);
+   235→        border-radius: var(--nvx-radius-md);
+   236→        color: #fff !important;
+   237→        text-decoration: none;
+   238→        transition: var(--nvx-transition);
+   239→}
+   240→
+   241→.nvx-hero__cta-secondary:hover {
+   242→        border-color: #fff;
+   243→        background: rgba(255, 255, 255, 0.1);
+   244→}
+   245→
+   246→/* Animated Button */
+   247→.nvx-btn-animated {
+   248→        position: relative;
+   249→        overflow: hidden;
+   250→}
+   251→
+   252→.nvx-btn-animated__icon {
+   253→        display: inline-block;
+   254→        transition: transform 0.3s ease;
+   255→}
+   256→
+   257→.nvx-btn-animated:hover .nvx-btn-animated__icon {
+   258→        transform: translateX(4px);
+   259→}
+   260→
+   261→/* Scroll Indicator */
+   262→.nvx-hero__scroll-indicator {
+   263→        position: absolute;
+   264→        bottom: 2rem;
+   265→        left: 50%;
+   266→        transform: translateX(-50%);
+   267→        z-index: 2;
+   268→        display: flex;
+   269→        flex-direction: column;
+   270→        align-items: center;
+   271→        gap: 0.5rem;
+   272→        color: rgba(255, 255, 255, 0.6);
+   273→        font-size: 0.75rem;
+   274→        letter-spacing: 0.1em;
+   275→        text-transform: uppercase;
+   276→}
+   277→
+   278→.nvx-hero__scroll-line {
+   279→        display: block;
+   280→        width: 1px;
+   281→        height: 40px;
+   282→        background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+   283→        animation: nvx-scroll-pulse 2s ease-in-out infinite;
+   284→}
+   285→
+   286→@keyframes nvx-scroll-pulse {
+   287→        0%, 100% { opacity: 0.4; transform: scaleY(0.7); }
+   288→        50% { opacity: 1; transform: scaleY(1); }
+   289→}
+   290→
+   291→/* Personalized Welcome Back */
+   292→.nvx-hero__personalized:not([hidden]) {
+   293→        margin-top: 1.5rem;
+   294→}
+   295→
+   296→.nvx-hero__welcome-back {
+   297→        font-size: var(--wp--preset--font-size--nvx-sm);
+   298→        color: var(--wp--preset--color--nvx-accent);
+   299→        font-style: italic;
+   300→}
+   301→
+   302→
+   303→/* ═══════════════════════════════════════════════════════════════════════
+   304→   2. BARRE DE CONFIANCE
+   305→   ═══════════════════════════════════════════════════════════════════════ */
+   306→
+   307→.nvx-trust-bar {
+   308→        border-bottom: 1px solid rgba(26, 107, 58, 0.12);
+   309→}
+   310→
+   311→.nvx-trust-bar__grid {
+   312→        max-width: var(--nvx-section-max);
+   313→        margin: 0 auto;
+   314→        padding: 0 var(--nvx-section-pad);
+   315→        display: flex;
+   316→        flex-wrap: wrap;
+   317→        align-items: center;
+   318→        justify-content: space-between;
+   319→        gap: clamp(1.5rem, 3vw, 2.5rem);
+   320→}
+   321→
+   322→.nvx-trust-bar__certs {
+   323→        display: flex;
+   324→        flex-wrap: wrap;
+   325→        gap: clamp(1rem, 2vw, 2rem);
+   326→        align-items: center;
+   327→}
+   328→
+   329→.nvx-trust-badge {
+   330→        display: inline-flex;
+   331→        align-items: center;
+   332→        gap: 0.4rem;
+   333→        font-size: var(--wp--preset--font-size--nvx-xs);
+   334→        font-weight: 600;
+   335→        color: var(--wp--preset--color--nvx-primary);
+   336→        padding: 0.35rem 0.75rem;
+   337→        background: rgba(26, 107, 58, 0.06);
+   338→        border-radius: var(--nvx-radius-sm);
+   339→        border: 1px solid rgba(26, 107, 58, 0.12);
+   340→}
+   341→
+   342→.nvx-trust-badge__icon {
+   343→        font-size: 1rem;
+   344→}
+   345→
+   346→.nvx-trust-bar__items {
+   347→        display: flex;
+   348→        flex-wrap: wrap;
+   349→        gap: clamp(1.5rem, 3vw, 2.5rem);
+   350→        align-items: center;
+   351→}
+   352→
+   353→.nvx-trust-item {
+   354→        display: inline-flex;
+   355→        align-items: center;
+   356→        gap: 0.4rem;
+   357→        font-size: var(--wp--preset--font-size--nvx-sm);
+   358→        color: var(--wp--preset--color--nvx-primary);
+   359→}
+   360→
+   361→.nvx-trust-item__icon {
+   362→        font-size: 1.2rem;
+   363→}
+   364→
+   365→.nvx-trust-item strong {
+   366→        font-weight: 700;
+   367→}
+   368→
+   369→/* Counter */
+   370→.nvx-trust-bar__counter {
+   371→        text-align: center;
+   372→}
+   373→
+   374→.nvx-trust-bar__counter-number {
+   375→        display: block;
+   376→        font-family: var(--wp--preset--font-family--nvx-heading);
+   377→        font-size: clamp(1.5rem, 3vw, 2rem);
+   378→        font-weight: 700;
+   379→        color: var(--wp--preset--color--nvx-primary);
+   380→        line-height: 1;
+   381→}
+   382→
+   383→.nvx-trust-bar__counter-label {
+   384→        display: block;
+   385→        font-size: var(--wp--preset--font-size--nvx-xs);
+   386→        color: var(--wp--preset--color--nvx-gray);
+   387→        margin-top: 0.25rem;
+   388→        text-transform: uppercase;
+   389→        letter-spacing: 0.05em;
+   390→}
+   391→
+   392→@media (max-width: 768px) {
+   393→        .nvx-trust-bar__grid {
+   394→                justify-content: center;
+   395→                text-align: center;
+   396→        }
+   397→}
+   398→
+   399→
+   400→/* ═══════════════════════════════════════════════════════════════════════
+   401→   3. QUIZ RAPIDE (Onboarding)
+   402→   ═══════════════════════════════════════════════════════════════════════ */
+   403→
+   404→.nvx-quiz-section {
+   405→        background: linear-gradient(180deg, #fff 0%, var(--wp--preset--color--nvx-light) 100%);
+   406→}
+   407→
+   408→.nvx-quiz-section__header {
+   409→        text-align: center;
+   410→        max-width: 600px;
+   411→        margin: 0 auto 2rem;
+   412→}
+   413→
+   414→/* Form */
+   415→.nvx-quiz-mini__form {
+   416→        max-width: 700px;
+   417→        margin: 0 auto;
+   418→}
+   419→
+   420→/* Progress */
+   421→.nvx-quiz-mini__progress {
+   422→        display: flex;
+   423→        align-items: center;
+   424→        gap: 1rem;
+   425→        margin-bottom: 2rem;
+   426→}
+   427→
+   428→.nvx-quiz-mini__progress-bar {
+   429→        flex: 1;
+   430→        height: 6px;
+   431→        background: var(--wp--preset--color--nvx-light);
+   432→        border-radius: var(--nvx-radius-pill);
+   433→        overflow: hidden;
+   434→}
+   435→
+   436→.nvx-quiz-mini__progress-fill {
+   437→        height: 100%;
+   438→        background: linear-gradient(90deg, var(--wp--preset--color--nvx-primary), var(--wp--preset--color--nvx-secondary));
+   439→        border-radius: var(--nvx-radius-pill);
+   440→        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+   441→}
+   442→
+   443→.nvx-quiz-mini__progress-text {
+   444→        font-family: var(--wp--preset--font-family--nvx-mono);
+   445→        font-size: var(--wp--preset--font-size--nvx-xs);
+   446→        color: var(--wp--preset--color--nvx-gray);
+   447→        white-space: nowrap;
+   448→}
+   449→
+   450→/* Steps */
+   451→.nvx-quiz-mini__step:not([hidden]) {
+   452→        animation: nvx-fade-in-up 0.4s ease;
+   453→}
+   454→
+   455→@keyframes nvx-fade-in-up {
+   456→        from { opacity: 0; transform: translateY(16px); }
+   457→        to { opacity: 1; transform: translateY(0); }
+   458→}
+   459→
+   460→.nvx-quiz-mini__legend {
+   461→        font-family: var(--wp--preset--font-family--nvx-heading);
+   462→        font-size: var(--wp--preset--font-size--nvx-xl);
+   463→        font-weight: 600;
+   464→        color: var(--wp--preset--color--nvx-dark);
+   465→        margin-bottom: 1.5rem;
+   466→        text-align: center;
+   467→        border: none;
+   468→        padding: 0;
+   469→}
+   470→
+   471→fieldset {
+   472→        border: none;
+   473→        padding: 0;
+   474→        margin: 0;
+   475→}
+   476→
+   477→/* Option Cards */
+   478→.nvx-quiz-mini__option {
+   479→        display: block;
+   480→        margin-bottom: 0.75rem;
+   481→}
+   482→
+   483→.nvx-quiz-mini__option input {
+   484→        position: absolute;
+   485→        opacity: 0;
+   486→        width: 0;
+   487→        height: 0;
+   488→}
+   489→
+   490→.nvx-quiz-mini__option-card {
+   491→        display: flex;
+   492→        align-items: center;
+   493→        gap: 0.75rem;
+   494→        padding: 1rem 1.25rem;
+   495→        background: #fff;
+   496→        border: 2px solid var(--wp--preset--color--nvx-light);
+   497→        border-radius: var(--nvx-radius-md);
+   498→        cursor: pointer;
+   499→        transition: var(--nvx-transition);
+   500→}
+   501→
+   502→.nvx-quiz-mini__option-card:hover {
+   503→        border-color: var(--wp--preset--color--nvx-secondary);
+   504→        box-shadow: 0 2px 12px rgba(46, 204, 113, 0.12);
+   505→}
+   506→
+   507→.nvx-quiz-mini__option input:checked + .nvx-quiz-mini__option-card {
+   508→        border-color: var(--wp--preset--color--nvx-primary);
+   509→        background: rgba(26, 107, 58, 0.04);
+   510→        box-shadow: 0 0 0 3px rgba(26, 107, 58, 0.1);
+   511→}
+   512→
+   513→.nvx-quiz-mini__option input:focus-visible + .nvx-quiz-mini__option-card {
+   514→        outline: 2px solid var(--wp--preset--color--nvx-secondary);
+   515→        outline-offset: 2px;
+   516→}
+   517→
+   518→.nvx-quiz-mini__option-icon {
+   519→        font-size: 1.5rem;
+   520→        flex-shrink: 0;
+   521→}
+   522→
+   523→.nvx-quiz-mini__option-text {
+   524→        font-size: var(--wp--preset--font-size--nvx-md);
+   525→        font-weight: 500;
+   526→        color: var(--wp--preset--color--nvx-dark);
+   527→}
+   528→
+   529→/* Navigation */
+   530→.nvx-quiz-mini__nav {
+   531→        display: flex;
+   532→        justify-content: space-between;
+   533→        margin-top: 1.5rem;
+   534→}
+   535→
+   536→.nvx-quiz-mini__btn {
+   537→        display: inline-flex;
+   538→        align-items: center;
+   539→        gap: 0.5rem;
+   540→        padding: 0.85rem 1.75rem;
+   541→        font-family: var(--wp--preset--font-family--nvx-subheading);
+   542→        font-size: var(--wp--preset--font-size--nvx-sm);
+   543→        font-weight: 600;
+   544→        border: none;
+   545→        border-radius: var(--nvx-radius-md);
+   546→        cursor: pointer;
+   547→        transition: var(--nvx-transition);
+   548→}
+   549→
+   550→.nvx-quiz-mini__btn--prev {
+   551→        background: transparent;
+   552→        color: var(--wp--preset--color--nvx-gray);
+   553→}
+   554→
+   555→.nvx-quiz-mini__btn--prev:hover {
+   556→        color: var(--wp--preset--color--nvx-dark);
+   557→}
+   558→
+   559→.nvx-quiz-mini__btn--next,
+   560→.nvx-quiz-mini__btn--submit {
+   561→        background: var(--wp--preset--color--nvx-primary);
+   562→        color: #fff;
+   563→}
+   564→
+   565→.nvx-quiz-mini__btn--next:hover,
+   566→.nvx-quiz-mini__btn--submit:hover {
+   567→        background: var(--wp--preset--color--nvx-secondary);
+   568→        transform: translateY(-1px);
+   569→}
+   570→
+   571→
+   572→/* ═══════════════════════════════════════════════════════════════════════
+   573→   4. PRODUITS VEDETTES (Flip-Card 3D)
+   574→   ═══════════════════════════════════════════════════════════════════════ */
+   575→
+   576→.nvx-featured-grid {
+   577→        display: grid;
+   578→        grid-template-columns: repeat(3, 1fr);
+   579→        gap: clamp(1rem, 2vw, 1.5rem);
+   580→}
+   581→
+   582→@media (max-width: 1024px) {
+   583→        .nvx-featured-grid { grid-template-columns: repeat(2, 1fr); }
+   584→}
+   585→@media (max-width: 640px) {
+   586→        .nvx-featured-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+   587→}
+   588→
+   589→/* Flip Card */
+   590→.nvx-product-card {
+   591→        perspective: 1000px;
+   592→        height: 100%;
+   593→}
+   594→
+   595→.nvx-product-card__flipper {
+   596→        position: relative;
+   597→        width: 100%;
+   598→        height: 100%;
+   599→        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+   600→        transform-style: preserve-3d;
+   601→}
+   602→
+   603→.nvx-product-card:hover .nvx-product-card__flipper {
+   604→        transform: rotateY(180deg);
+   605→}
+   606→
+   607→.nvx-product-card__front,
+   608→.nvx-product-card__back {
+   609→        position: absolute;
+   610→        inset: 0;
+   611→        backface-visibility: hidden;
+   612→        -webkit-backface-visibility: hidden;
+   613→        background: #fff;
+   614→        border-radius: var(--nvx-radius-lg);
+   615→        border: 1px solid rgba(26, 107, 58, 0.08);
+   616→        overflow: hidden;
+   617→        display: flex;
+   618→        flex-direction: column;
+   619→}
+   620→
+   621→.nvx-product-card__back {
+   622→        transform: rotateY(180deg);
+   623→        padding: 1.5rem;
+   624→        display: flex;
+   625→        flex-direction: column;
+   626→        justify-content: center;
+   627→        background: linear-gradient(135deg, var(--wp--preset--color--nvx-dark) 0%, #1a3a4a 100%);
+   628→        color: #fff;
+   629→}
+   630→
+   631→.nvx-product-card__back-cta {
+   632→        margin-top: 1.5rem;
+   633→}
+   634→
+   635→.nvx-product-card__details-link {
+   636→        color: var(--wp--preset--color--nvx-accent);
+   637→        font-weight: 600;
+   638→        text-decoration: none;
+   639→        transition: var(--nvx-transition);
+   640→}
+   641→
+   642→.nvx-product-card__details-link:hover {
+   643→        color: #fff;
+   644→}
+   645→
+   646→/* Card Front Content */
+   647→.nvx-product-card__image-wrap {
+   648→        position: relative;
+   649→        aspect-ratio: 1;
+   650→        background: var(--wp--preset--color--nvx-light);
+   651→        overflow: hidden;
+   652→}
+   653→
+   654→.nvx-product-card__image {
+   655→        width: 100%;
+   656→        height: 100%;
+   657→        object-fit: cover;
+   658→        transition: transform var(--nvx-transition-slow);
+   659→}
+   660→
+   661→.nvx-product-card:hover .nvx-product-card__image {
+   662→        transform: scale(1.05);
+   663→}
+   664→
+   665→.nvx-product-card__image-wrap img {
+   666→        width: 100%;
+   667→        height: 100%;
+   668→        object-fit: cover;
+   669→}
+   670→
+   671→/* AI Badge */
+   672→.nvx-product-card__ai-badge {
+   673→        position: absolute;
+   674→        top: 0.75rem;
+   675→        right: 0.75rem;
+   676→        display: flex;
+   677→        flex-direction: column;
+   678→        align-items: center;
+   679→        gap: 0.15rem;
+   680→        padding: 0.4rem 0.6rem;
+   681→        background: linear-gradient(135deg, var(--wp--preset--color--nvx-accent), #e09100);
+   682→        border-radius: var(--nvx-radius-sm);
+   683→        color: var(--wp--preset--color--nvx-dark);
+   684→        box-shadow: 0 2px 8px rgba(244, 169, 0, 0.3);
+   685→        z-index: 2;
+   686→}
+   687→
+   688→.nvx-product-card__ai-score {
+   689→        font-family: var(--wp--preset--font-family--nvx-mono);
+   690→        font-size: 0.85rem;
+   691→        font-weight: 700;
+   692→        line-height: 1;
+   693→}
+   694→
+   695→.nvx-product-card__ai-label {
+   696→        font-size: 0.55rem;
+   697→        font-weight: 600;
+   698→        text-transform: uppercase;
+   699→        letter-spacing: 0.05em;
+   700→        opacity: 0.8;
+   701→}
+   702→
+   703→/* Card Body */
+   704→.nvx-product-card__body {
+   705→        padding: 1.25rem;
+   706→        flex: 1;
+   707→        display: flex;
+   708→        flex-direction: column;
+   709→        gap: 0.5rem;
+   710→}
+   711→
+   712→.nvx-product-card__title {
+   713→        font-family: var(--wp--preset--font-family--nvx-subheading);
+   714→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+   715→        font-weight: 600 !important;
+   716→        color: var(--wp--preset--color--nvx-dark) !important;
+   717→        text-decoration: none !important;
+   718→        margin: 0 !important;
+   719→}
+   720→
+   721→.nvx-product-card__title:hover {
+   722→        color: var(--wp--preset--color--nvx-primary) !important;
+   723→}
+   724→
+   725→.nvx-product-card__rating {
+   726→        display: flex;
+   727→        align-items: center;
+   728→        gap: 0.5rem;
+   729→        flex-wrap: wrap;
+   730→}
+   731→
+   732→.nvx-product-card__stars {
+   733→        color: var(--wp--preset--color--nvx-accent);
+   734→        font-size: 0.9rem;
+   735→        letter-spacing: 2px;
+   736→}
+   737→
+   738→.nvx-product-card__rating-count {
+   739→        font-size: var(--wp--preset--font-size--nvx-xs);
+   740→        color: var(--wp--preset--color--nvx-gray);
+   741→}
+   742→
+   743→.nvx-product-card__verified-icon {
+   744→        display: inline-flex;
+   745→        align-items: center;
+   746→        justify-content: center;
+   747→        width: 16px;
+   748→        height: 16px;
+   749→        font-size: 0.65rem;
+   750→        font-weight: 700;
+   751→        background: var(--wp--preset--color--nvx-secondary);
+   752→        color: #fff;
+   753→        border-radius: 50%;
+   754→}
+   755→
+   756→.nvx-product-card__price-row {
+   757→        margin-top: auto;
+   758→        padding-top: 0.5rem;
+   759→}
+   760→
+   761→.nvx-product-card__price {
+   762→        font-family: var(--wp--preset--font-family--nvx-heading);
+   763→        font-size: var(--wp--preset--font-size--nvx-xl);
+   764→        font-weight: 700;
+   765→        color: var(--wp--preset--color--nvx-primary);
+   766→}
+   767→
+   768→/* Cart Button */
+   769→.nvx-product-card__cart-btn {
+   770→        width: 100%;
+   771→        display: flex;
+   772→        align-items: center;
+   773→        justify-content: center;
+   774→        gap: 0.5rem;
+   775→        margin-top: 0.75rem;
+   776→        padding: 0.8rem;
+   777→        background: var(--wp--preset--color--nvx-primary);
+   778→        color: #fff;
+   779→        border: none;
+   780→        border-radius: var(--nvx-radius-md);
+   781→        font-family: var(--wp--preset--font-family--nvx-subheading);
+   782→        font-size: var(--wp--preset--font-size--nvx-sm);
+   783→        font-weight: 600;
+   784→        cursor: pointer;
+   785→        transition: var(--nvx-transition);
+   786→}
+   787→
+   788→.nvx-product-card__cart-btn:hover {
+   789→        background: var(--wp--preset--color--nvx-secondary);
+   790→        transform: translateY(-2px);
+   791→        box-shadow: 0 4px 16px rgba(46, 204, 113, 0.3);
+   792→}
+   793→
+   794→
+   795→/* ═══════════════════════════════════════════════════════════════════════
+   796→   5. PREUVE SOCIALE (Avis Clients)
+   797→   ═══════════════════════════════════════════════════════════════════════ */
+   798→
+   799→.nvx-social-proof {
+   800→        padding-left: var(--nvx-section-pad) !important;
+   801→        padding-right: var(--nvx-section-pad) !important;
+   802→}
+   803→
+   804→/* Aggregate Banner */
+   805→.nvx-social-proof__aggregate {
+   806→        display: flex;
+   807→        flex-wrap: wrap;
+   808→        align-items: center;
+   809→        justify-content: center;
+   810→        gap: 2rem;
+   811→        margin: 2rem auto 3rem;
+   812→        padding: 1.5rem 2rem;
+   813→        background: rgba(255, 255, 255, 0.05);
+   814→        border-radius: var(--nvx-radius-lg);
+   815→        border: 1px solid rgba(255, 255, 255, 0.08);
+   816→        max-width: 600px;
+   817→}
+   818→
+   819→.nvx-social-proof__aggregate-score {
+   820→        display: flex;
+   821→        flex-direction: column;
+   822→        align-items: center;
+   823→        gap: 0.25rem;
+   824→}
+   825→
+   826→.nvx-social-proof__aggregate-number {
+   827→        font-family: var(--wp--preset--font-family--nvx-heading);
+   828→        font-size: 2.5rem;
+   829→        font-weight: 700;
+   830→        color: var(--wp--preset--color--nvx-accent);
+   831→        line-height: 1;
+   832→}
+   833→
+   834→.nvx-social-proof__aggregate-stars {
+   835→        color: var(--wp--preset--color--nvx-accent);
+   836→        font-size: 1.2rem;
+   837→        letter-spacing: 3px;
+   838→}
+   839→
+   840→.nvx-social-proof__aggregate-count {
+   841→        font-size: var(--wp--preset--font-size--nvx-xs);
+   842→        color: rgba(255, 255, 255, 0.6);
+   843→}
+   844→
+   845→.nvx-social-proof__aggregate-sources {
+   846→        display: flex;
+   847→        gap: 1rem;
+   848→        align-items: center;
+   849→}
+   850→
+   851→.nvx-social-proof__source {
+   852→        display: inline-flex;
+   853→        align-items: center;
+   854→        gap: 0.4rem;
+   855→        font-size: var(--wp--preset--font-size--nvx-sm);
+   856→        color: rgba(255, 255, 255, 0.7);
+   857→}
+   858→
+   859→.nvx-social-proof__source-icon {
+   860→        display: inline-flex;
+   861→        align-items: center;
+   862→        justify-content: center;
+   863→        width: 24px;
+   864→        height: 24px;
+   865→        font-size: 0.75rem;
+   866→        font-weight: 700;
+   867→        border-radius: 4px;
+   868→        background: rgba(255, 255, 255, 0.1);
+   869→}
+   870→
+   871→/* Testimonials Grid */
+   872→.nvx-social-proof__grid {
+   873→        display: grid;
+   874→        grid-template-columns: repeat(3, 1fr);
+   875→        gap: 1.5rem;
+   876→        max-width: var(--nvx-section-max);
+   877→        margin: 0 auto;
+   878→}
+   879→
+   880→@media (max-width: 1024px) {
+   881→        .nvx-social-proof__grid { grid-template-columns: repeat(2, 1fr); }
+   882→}
+   883→@media (max-width: 640px) {
+   884→        .nvx-social-proof__grid { grid-template-columns: 1fr; }
+   885→}
+   886→
+   887→/* Testimonial Card */
+   888→.nvx-testimonial {
+   889→        padding: 2rem;
+   890→        background: rgba(255, 255, 255, 0.05);
+   891→        border-radius: var(--nvx-radius-lg);
+   892→        border: 1px solid rgba(255, 255, 255, 0.08);
+   893→        transition: var(--nvx-transition);
+   894→}
+   895→
+   896→.nvx-testimonial:hover {
+   897→        background: rgba(255, 255, 255, 0.08);
+   898→        border-color: rgba(46, 204, 113, 0.2);
+   899→}
+   900→
+   901→.nvx-testimonial--video {
+   902→        grid-column: span 2;
+   903→        display: grid;
+   904→        grid-template-columns: 1fr 1fr;
+   905→        gap: 1.5rem;
+   906→}
+   907→
+   908→@media (max-width: 768px) {
+   909→        .nvx-testimonial--video {
+   910→                grid-column: span 1;
+   911→                grid-template-columns: 1fr;
+   912→        }
+   913→}
+   914→
+   915→/* Video Placeholder */
+   916→.nvx-testimonial__video-placeholder {
+   917→        width: 100%;
+   918→        aspect-ratio: 16 / 9;
+   919→        background: linear-gradient(135deg, rgba(26, 107, 58, 0.3), rgba(18, 36, 58, 0.5));
+   920→        border-radius: var(--nvx-radius-md);
+   921→        display: flex;
+   922→        flex-direction: column;
+   923→        align-items: center;
+   924→        justify-content: center;
+   925→        gap: 0.75rem;
+   926→        cursor: pointer;
+   927→        transition: var(--nvx-transition);
+   928→}
+   929→
+   930→.nvx-testimonial__video-placeholder:hover {
+   931→        background: linear-gradient(135deg, rgba(26, 107, 58, 0.4), rgba(18, 36, 58, 0.6));
+   932→}
+   933→
+   934→.nvx-testimonial__play-btn {
+   935→        display: flex;
+   936→        align-items: center;
+   937→        justify-content: center;
+   938→        width: 56px;
+   939→        height: 56px;
+   940→        font-size: 1.25rem;
+   941→        background: var(--wp--preset--color--nvx-accent);
+   942→        color: var(--wp--preset--color--nvx-dark);
+   943→        border-radius: 50%;
+   944→        box-shadow: 0 4px 20px rgba(244, 169, 0, 0.3);
+   945→        transition: var(--nvx-transition);
+   946→}
+   947→
+   948→.nvx-testimonial__video-placeholder:hover .nvx-testimonial__play-btn {
+   949→        transform: scale(1.1);
+   950→        box-shadow: 0 6px 30px rgba(244, 169, 0, 0.4);
+   951→}
+   952→
+   953→.nvx-testimonial__video-label {
+   954→        font-size: var(--wp--preset--font-size--nvx-xs);
+   955→        color: rgba(255, 255, 255, 0.6);
+   956→        text-transform: uppercase;
+   957→        letter-spacing: 0.1em;
+   958→}
+   959→
+   960→/* Testimonial Content */
+   961→.nvx-testimonial__stars {
+   962→        color: var(--wp--preset--color--nvx-accent);
+   963→        font-size: 1rem;
+   964→        letter-spacing: 2px;
+   965→        margin-bottom: 1rem;
+   966→}
+   967→
+   968→.nvx-testimonial__quote {
+   969→        font-size: var(--wp--preset--font-size--nvx-md);
+   970→        line-height: 1.7;
+   971→        color: rgba(255, 255, 255, 0.85);
+   972→        font-style: italic;
+   973→        margin: 0 0 1.25rem;
+   974→}
+   975→
+   976→.nvx-testimonial__author {
+   977→        display: flex;
+   978→        align-items: center;
+   979→        gap: 0.75rem;
+   980→        flex-wrap: wrap;
+   981→}
+   982→
+   983→.nvx-testimonial__name {
+   984→        font-size: var(--wp--preset--font-size--nvx-sm);
+   985→        color: #fff;
+   986→}
+   987→
+   988→.nvx-testimonial__badge,
+   989→.nvx-testimonial__role {
+   990→        font-size: var(--wp--preset--font-size--nvx-xs);
+   991→        padding: 0.2rem 0.6rem;
+   992→        border-radius: var(--nvx-radius-sm);
+   993→}
+   994→
+   995→.nvx-testimonial__badge {
+   996→        background: rgba(46, 204, 113, 0.15);
+   997→        color: var(--wp--preset--color--nvx-secondary);
+   998→}
+   999→
+  1000→.nvx-testimonial__role {
+  1001→        color: rgba(255, 255, 255, 0.5);
+  1002→}
+  1003→
+  1004→/* Before / After */
+  1005→.nvx-social-proof__before-after {
+  1006→        margin-top: 3rem;
+  1007→        max-width: var(--nvx-section-max);
+  1008→        margin-left: auto;
+  1009→        margin-right: auto;
+  1010→}
+  1011→
+  1012→.nvx-social-proof__ba-title {
+  1013→        text-align: center;
+  1014→        color: rgba(255, 255, 255, 0.9);
+  1015→        margin-bottom: 1.5rem;
+  1016→}
+  1017→
+  1018→.nvx-social-proof__ba-grid {
+  1019→        display: grid;
+  1020→        grid-template-columns: repeat(2, 1fr);
+  1021→        gap: 1.5rem;
+  1022→}
+  1023→
+  1024→@media (max-width: 768px) {
+  1025→        .nvx-social-proof__ba-grid { grid-template-columns: 1fr; }
+  1026→}
+  1027→
+  1028→.nvx-ba-card {
+  1029→        border-radius: var(--nvx-radius-lg);
+  1030→        overflow: hidden;
+  1031→        background: rgba(255, 255, 255, 0.05);
+  1032→        border: 1px solid rgba(255, 255, 255, 0.08);
+  1033→}
+  1034→
+  1035→.nvx-ba-card__images {
+  1036→        display: grid;
+  1037→        grid-template-columns: 1fr 1fr;
+  1038→}
+  1039→
+  1040→.nvx-ba-card__image {
+  1041→        aspect-ratio: 3 / 4;
+  1042→        background: linear-gradient(135deg, rgba(26, 107, 58, 0.15), rgba(18, 36, 58, 0.25));
+  1043→        display: flex;
+  1044→        align-items: flex-end;
+  1045→        justify-content: center;
+  1046→        padding-bottom: 1rem;
+  1047→}
+  1048→
+  1049→.nvx-ba-card__image span {
+  1050→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1051→        font-weight: 600;
+  1052→        text-transform: uppercase;
+  1053→        letter-spacing: 0.1em;
+  1054→        color: rgba(255, 255, 255, 0.7);
+  1055→        padding: 0.3rem 0.8rem;
+  1056→        background: rgba(0, 0, 0, 0.3);
+  1057→        border-radius: var(--nvx-radius-pill);
+  1058→}
+  1059→
+  1060→.nvx-ba-card__caption {
+  1061→        padding: 1rem 1.25rem;
+  1062→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1063→        color: rgba(255, 255, 255, 0.7);
+  1064→}
+  1065→
+  1066→
+  1067→/* ═══════════════════════════════════════════════════════════════════════
+  1068→   6. UNIVERS PRODUITS (Navigation Thématique)
+  1069→   ═══════════════════════════════════════════════════════════════════════ */
+  1070→
+  1071→.nvx-univers {
+  1072→        text-align: center;
+  1073→}
+  1074→
+  1075→.nvx-univers__grid {
+  1076→        display: grid;
+  1077→        grid-template-columns: repeat(5, 1fr);
+  1078→        gap: clamp(1rem, 2vw, 1.5rem);
+  1079→        margin-top: 2.5rem;
+  1080→}
+  1081→
+  1082→@media (max-width: 1024px) {
+  1083→        .nvx-univers__grid { grid-template-columns: repeat(3, 1fr); }
+  1084→}
+  1085→@media (max-width: 640px) {
+  1086→        .nvx-univers__grid { grid-template-columns: repeat(2, 1fr); }
+  1087→}
+  1088→
+  1089→.nvx-univers-card {
+  1090→        display: flex;
+  1091→        flex-direction: column;
+  1092→        align-items: center;
+  1093→        text-align: center;
+  1094→        padding: clamp(1.5rem, 3vw, 2.5rem) 1.25rem;
+  1095→        background: var(--wp--preset--color--nvx-light);
+  1096→        border-radius: var(--nvx-radius-lg);
+  1097→        border: 2px solid transparent;
+  1098→        text-decoration: none !important;
+  1099→        transition: var(--nvx-transition);
+  1100→}
+  1101→
+  1102→.nvx-univers-card:hover {
+  1103→        border-color: var(--wp--preset--color--nvx-primary);
+  1104→        transform: translateY(-4px);
+  1105→        box-shadow: 0 8px 30px rgba(26, 107, 58, 0.12);
+  1106→}
+  1107→
+  1108→.nvx-univers-card__icon {
+  1109→        font-size: clamp(2rem, 4vw, 3rem);
+  1110→        margin-bottom: 1rem;
+  1111→        transition: transform var(--nvx-transition);
+  1112→}
+  1113→
+  1114→.nvx-univers-card:hover .nvx-univers-card__icon {
+  1115→        transform: scale(1.15);
+  1116→}
+  1117→
+  1118→.nvx-univers-card__title {
+  1119→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1120→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+  1121→        font-weight: 700 !important;
+  1122→        color: var(--wp--preset--color--nvx-dark) !important;
+  1123→        margin: 0 0 0.5rem !important;
+  1124→}
+  1125→
+  1126→.nvx-univers-card__desc {
+  1127→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1128→        color: var(--wp--preset--color--nvx-gray);
+  1129→        line-height: 1.6;
+  1130→        margin: 0 0 1rem;
+  1131→        flex: 1;
+  1132→}
+  1133→
+  1134→.nvx-univers-card__cta {
+  1135→        font-family: var(--wp--preset--font-family--nvx-subheading);
+  1136→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1137→        font-weight: 600;
+  1138→        color: var(--wp--preset--color--nvx-primary);
+  1139→}
+  1140→
+  1141→
+  1142→/* ═══════════════════════════════════════════════════════════════════════
+  1143→   7. TRANSPARENCE LAB (Timeline)
+  1144→   ═══════════════════════════════════════════════════════════════════════ */
+  1145→
+  1146→.nvx-lab-section {
+  1147→        text-align: center;
+  1148→}
+  1149→
+  1150→/* Timeline */
+  1151→.nvx-lab-timeline {
+  1152→        max-width: 800px;
+  1153→        margin: 3rem auto 0;
+  1154→        position: relative;
+  1155→        text-align: left;
+  1156→}
+  1157→
+  1158→.nvx-lab-timeline::before {
+  1159→        content: '';
+  1160→        position: absolute;
+  1161→        left: 24px;
+  1162→        top: 0;
+  1163→        bottom: 0;
+  1164→        width: 3px;
+  1165→        background: linear-gradient(
+  1166→                to bottom,
+  1167→                var(--wp--preset--color--nvx-primary),
+  1168→                var(--wp--preset--color--nvx-secondary)
+  1169→        );
+  1170→        border-radius: 2px;
+  1171→}
+  1172→
+  1173→.nvx-lab-timeline__item {
+  1174→        position: relative;
+  1175→        padding-left: 64px;
+  1176→        padding-bottom: 2.5rem;
+  1177→}
+  1178→
+  1179→.nvx-lab-timeline__item:last-child {
+  1180→        padding-bottom: 0;
+  1181→}
+  1182→
+  1183→.nvx-lab-timeline__marker {
+  1184→        position: absolute;
+  1185→        left: 6px;
+  1186→        top: 0;
+  1187→        display: flex;
+  1188→        align-items: center;
+  1189→        justify-content: center;
+  1190→        width: 40px;
+  1191→        height: 40px;
+  1192→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1193→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1194→        font-weight: 700;
+  1195→        color: #fff;
+  1196→        background: var(--wp--preset--color--nvx-primary);
+  1197→        border-radius: 50%;
+  1198→        box-shadow: 0 2px 8px rgba(26, 107, 58, 0.3);
+  1199→        z-index: 1;
+  1200→}
+  1201→
+  1202→.nvx-lab-timeline__title {
+  1203→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1204→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+  1205→        font-weight: 700 !important;
+  1206→        color: var(--wp--preset--color--nvx-dark) !important;
+  1207→        margin: 0 0 0.5rem !important;
+  1208→}
+  1209→
+  1210→.nvx-lab-timeline__desc {
+  1211→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1212→        color: var(--wp--preset--color--nvx-gray);
+  1213→        line-height: 1.7;
+  1214→        margin: 0;
+  1215→}
+  1216→
+  1217→.nvx-lab-timeline__link {
+  1218→        color: var(--wp--preset--color--nvx-primary);
+  1219→        font-weight: 600;
+  1220→        text-decoration: none;
+  1221→        transition: var(--nvx-transition);
+  1222→}
+  1223→
+  1224→.nvx-lab-timeline__link:hover {
+  1225→        color: var(--wp--preset--color--nvx-secondary);
+  1226→}
+  1227→
+  1228→/* Lab Photos */
+  1229→.nvx-lab-photos {
+  1230→        display: grid;
+  1231→        grid-template-columns: repeat(3, 1fr);
+  1232→        gap: 1.5rem;
+  1233→        max-width: var(--nvx-section-max);
+  1234→        margin: 3rem auto 0;
+  1235→}
+  1236→
+  1237→@media (max-width: 768px) {
+  1238→        .nvx-lab-photos { grid-template-columns: 1fr; }
+  1239→        .nvx-lab-timeline::before { left: 19px; }
+  1240→        .nvx-lab-timeline__item { padding-left: 50px; }
+  1241→        .nvx-lab-timeline__marker { left: 2px; width: 36px; height: 36px; }
+  1242→}
+  1243→
+  1244→.nvx-lab-photo__placeholder {
+  1245→        aspect-ratio: 4 / 3;
+  1246→        background: linear-gradient(135deg, var(--wp--preset--color--nvx-light), #e8f0eb);
+  1247→        border-radius: var(--nvx-radius-md);
+  1248→        display: flex;
+  1249→        flex-direction: column;
+  1250→        align-items: center;
+  1251→        justify-content: center;
+  1252→        gap: 0.5rem;
+  1253→        font-size: 2.5rem;
+  1254→        transition: var(--nvx-transition);
+  1255→}
+  1256→
+  1257→.nvx-lab-photo__placeholder:hover {
+  1258→        transform: scale(1.02);
+  1259→        box-shadow: 0 4px 20px rgba(26, 107, 58, 0.1);
+  1260→}
+  1261→
+  1262→.nvx-lab-photo__placeholder p {
+  1263→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1264→        font-weight: 600;
+  1265→        color: var(--wp--preset--color--nvx-gray);
+  1266→        margin: 0;
+  1267→        text-transform: uppercase;
+  1268→        letter-spacing: 0.05em;
+  1269→}
+  1270→
+  1271→
+  1272→/* ═══════════════════════════════════════════════════════════════════════
+  1273→   8. BLOG EXPERT
+  1274→   ═══════════════════════════════════════════════════════════════════════ */
+  1275→
+  1276→.nvx-blog-grid {
+  1277→        display: grid;
+  1278→        grid-template-columns: repeat(3, 1fr);
+  1279→        gap: clamp(1rem, 2vw, 1.5rem);
+  1280→        margin-top: 2.5rem;
+  1281→}
+  1282→
+  1283→@media (max-width: 1024px) {
+  1284→        .nvx-blog-grid { grid-template-columns: repeat(2, 1fr); }
+  1285→}
+  1286→@media (max-width: 640px) {
+  1287→        .nvx-blog-grid { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
+  1288→}
+  1289→
+  1290→.nvx-blog-card {
+  1291→        background: #fff;
+  1292→        border-radius: var(--nvx-radius-lg);
+  1293→        overflow: hidden;
+  1294→        border: 1px solid rgba(26, 107, 58, 0.06);
+  1295→        transition: var(--nvx-transition);
+  1296→        display: flex;
+  1297→        flex-direction: column;
+  1298→}
+  1299→
+  1300→.nvx-blog-card:hover {
+  1301→        transform: translateY(-4px);
+  1302→        box-shadow: 0 12px 40px rgba(26, 107, 58, 0.12);
+  1303→}
+  1304→
+  1305→.nvx-blog-card__image {
+  1306→        aspect-ratio: 16 / 9;
+  1307→        overflow: hidden;
+  1308→}
+  1309→
+  1310→.nvx-blog-card__image img {
+  1311→        width: 100%;
+  1312→        height: 100%;
+  1313→        object-fit: cover;
+  1314→        transition: transform var(--nvx-transition-slow);
+  1315→}
+  1316→
+  1317→.nvx-blog-card:hover .nvx-blog-card__image img {
+  1318→        transform: scale(1.05);
+  1319→}
+  1320→
+  1321→.nvx-blog-card__body {
+  1322→        padding: 1.5rem;
+  1323→        flex: 1;
+  1324→        display: flex;
+  1325→        flex-direction: column;
+  1326→}
+  1327→
+  1328→.nvx-blog-card__meta {
+  1329→        display: flex;
+  1330→        align-items: center;
+  1331→        justify-content: space-between;
+  1332→        gap: 0.5rem;
+  1333→        margin-bottom: 0.75rem;
+  1334→}
+  1335→
+  1336→.nvx-blog-card__category {
+  1337→        font-family: var(--wp--preset--font-family--nvx-mono);
+  1338→        font-size: 0.7rem;
+  1339→        font-weight: 600;
+  1340→        text-transform: uppercase;
+  1341→        letter-spacing: 0.08em;
+  1342→        color: var(--wp--preset--color--nvx-primary);
+  1343→        padding: 0.2rem 0.6rem;
+  1344→        background: rgba(26, 107, 58, 0.06);
+  1345→        border-radius: var(--nvx-radius-sm);
+  1346→}
+  1347→
+  1348→.nvx-blog-card__reading-time {
+  1349→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1350→        color: var(--wp--preset--color--nvx-gray);
+  1351→}
+  1352→
+  1353→.nvx-blog-card__title {
+  1354→        font-family: var(--wp--preset--font-family--nvx-heading);
+  1355→        font-size: var(--wp--preset--font-size--nvx-lg) !important;
+  1356→        font-weight: 700 !important;
+  1357→        color: var(--wp--preset--color--nvx-dark) !important;
+  1358→        line-height: 1.3 !important;
+  1359→        margin: 0 0 0.75rem !important;
+  1360→}
+  1361→
+  1362→.nvx-blog-card__title a {
+  1363→        text-decoration: none !important;
+  1364→}
+  1365→
+  1366→.nvx-blog-card__excerpt {
+  1367→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1368→        color: var(--wp--preset--color--nvx-gray);
+  1369→        line-height: 1.7;
+  1370→        flex: 1;
+  1371→        margin: 0 0 1.25rem;
+  1372→}
+  1373→
+  1374→.nvx-blog-card__author {
+  1375→        display: flex;
+  1376→        align-items: center;
+  1377→        gap: 0.5rem;
+  1378→        padding-top: 1rem;
+  1379→        border-top: 1px solid rgba(26, 107, 58, 0.06);
+  1380→}
+  1381→
+  1382→.nvx-blog-card__author-avatar {
+  1383→        font-size: 1.2rem;
+  1384→}
+  1385→
+  1386→.nvx-blog-card__author-name {
+  1387→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1388→        font-weight: 600;
+  1389→        color: var(--wp--preset--color--nvx-dark);
+  1390→}
+  1391→
+  1392→.nvx-blog-card__author-name a {
+  1393→        text-decoration: none !important;
+  1394→        color: inherit !important;
+  1395→}
+  1396→
+  1397→.nvx-blog-card__author-cred {
+  1398→        font-size: 0.65rem;
+  1399→        font-weight: 700;
+  1400→        color: var(--wp--preset--color--nvx-secondary);
+  1401→        padding: 0.1rem 0.4rem;
+  1402→        background: rgba(46, 204, 113, 0.1);
+  1403→        border-radius: var(--nvx-radius-sm);
+  1404→}
+  1405→
+  1406→
+  1407→/* ═══════════════════════════════════════════════════════════════════════
+  1408→   9. NEWSLETTER IA
+  1409→   ═══════════════════════════════════════════════════════════════════════ */
+  1410→
+  1411→.nvx-newsletter-section {
+  1412→        padding: 0 var(--nvx-section-pad);
+  1413→        margin-bottom: var(--nvx-section-pad);
+  1414→}
+  1415→
+  1416→.nvx-newsletter__inner {
+  1417→        max-width: 800px;
+  1418→        margin: 0 auto;
+  1419→        text-align: center;
+  1420→        position: relative;
+  1421→        overflow: hidden;
+  1422→}
+  1423→
+  1424→.nvx-newsletter__inner::before {
+  1425→        content: '';
+  1426→        position: absolute;
+  1427→        top: -50%;
+  1428→        right: -20%;
+  1429→        width: 400px;
+  1430→        height: 400px;
+  1431→        background: radial-gradient(circle, rgba(46, 204, 113, 0.15), transparent 70%);
+  1432→        pointer-events: none;
+  1433→}
+  1434→
+  1435→/* Form */
+  1436→.nvx-newsletter__form-row {
+  1437→        display: flex;
+  1438→        gap: 0.75rem;
+  1439→        max-width: 560px;
+  1440→        margin: 0 auto;
+  1441→}
+  1442→
+  1443→@media (max-width: 640px) {
+  1444→        .nvx-newsletter__form-row {
+  1445→                flex-direction: column;
+  1446→        }
+  1447→}
+  1448→
+  1449→.nvx-newsletter__input {
+  1450→        flex: 1;
+  1451→        padding: 0.9rem 1.25rem;
+  1452→        font-family: var(--wp--preset--font-family--nvx-body);
+  1453→        font-size: var(--wp--preset--font-size--nvx-md);
+  1454→        border: 2px solid rgba(255, 255, 255, 0.2);
+  1455→        border-radius: var(--nvx-radius-md);
+  1456→        background: rgba(255, 255, 255, 0.1);
+  1457→        color: #fff;
+  1458→        transition: var(--nvx-transition);
+  1459→}
+  1460→
+  1461→.nvx-newsletter__input::placeholder {
+  1462→        color: rgba(255, 255, 255, 0.5);
+  1463→}
+  1464→
+  1465→.nvx-newsletter__input:focus {
+  1466→        outline: none;
+  1467→        border-color: var(--wp--preset--color--nvx-accent);
+  1468→        background: rgba(255, 255, 255, 0.15);
+  1469→}
+  1470→
+  1471→.nvx-newsletter__btn {
+  1472→        display: inline-flex;
+  1473→        align-items: center;
+  1474→        gap: 0.5rem;
+  1475→        padding: 0.9rem 1.5rem;
+  1476→        background: var(--wp--preset--color--nvx-accent);
+  1477→        color: var(--wp--preset--color--nvx-dark);
+  1478→        border: none;
+  1479→        border-radius: var(--nvx-radius-md);
+  1480→        font-family: var(--wp--preset--font-family--nvx-subheading);
+  1481→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1482→        font-weight: 700;
+  1483→        cursor: pointer;
+  1484→        white-space: nowrap;
+  1485→        transition: var(--nvx-transition);
+  1486→}
+  1487→
+  1488→.nvx-newsletter__btn:hover {
+  1489→        background: #ffd966;
+  1490→        transform: translateY(-2px);
+  1491→        box-shadow: 0 4px 20px rgba(244, 169, 0, 0.4);
+  1492→}
+  1493→
+  1494→.nvx-newsletter__disclaimer {
+  1495→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1496→        color: rgba(255, 255, 255, 0.6);
+  1497→        margin-top: 1rem;
+  1498→}
+  1499→
+  1500→.nvx-newsletter__trust {
+  1501→        display: flex;
+  1502→        justify-content: center;
+  1503→        flex-wrap: wrap;
+  1504→        gap: 1.5rem;
+  1505→        margin-top: 1.5rem;
+  1506→        font-size: var(--wp--preset--font-size--nvx-xs);
+  1507→        color: rgba(255, 255, 255, 0.7);
+  1508→}
+  1509→
+  1510→
+  1511→/* ═══════════════════════════════════════════════════════════════════════
+  1512→   UTILITY CLASSES
+  1513→   ═══════════════════════════════════════════════════════════════════════ */
+  1514→
+  1515→/* Screen reader only */
+  1516→.screen-reader-text {
+  1517→        position: absolute !important;
+  1518→        width: 1px;
+  1519→        height: 1px;
+  1520→        padding: 0;
+  1521→        margin: -1px;
+  1522→        overflow: hidden;
+  1523→        clip: rect(0, 0, 0, 0);
+  1524→        white-space: nowrap;
+  1525→        border: 0;
+  1526→}
+  1527→
+  1528→/* Outline button variation */
+  1529→.is-style-nvx-outline.wp-block-button__link,
+  1530→a.is-style-nvx-outline {
+  1531→        border: 2px solid var(--wp--preset--color--nvx-primary) !important;
+  1532→        background: transparent !important;
+  1533→        color: var(--wp--preset--color--nvx-primary) !important;
+  1534→        border-radius: var(--nvx-radius-md) !important;
+  1535→        padding: 0.85rem 2rem !important;
+  1536→        font-weight: 600 !important;
+  1537→        transition: var(--nvx-transition);
+  1538→        display: inline-block;
+  1539→        text-decoration: none;
+  1540→}
+  1541→
+  1542→.is-style-nvx-outline:hover {
+  1543→        background: var(--wp--preset--color--nvx-primary) !important;
+  1544→        color: #fff !important;
+  1545→}
+  1546→
+  1547→/* Section Header (shared) */
+  1548→.nvx-section-header {
+  1549→        text-align: center;
+  1550→        max-width: 600px;
+  1551→        margin: 0 auto 2.5rem;
+  1552→}
+  1553→
+  1554→/* Reduced Motion */
+  1555→@media (prefers-reduced-motion: reduce) {
+  1556→        .nvx-particle,
+  1557→        .nvx-hero__scroll-line,
+  1558→        .nvx-product-card__flipper,
+  1559→        .nvx-quiz-mini__step {
+  1560→                animation: none !important;
+  1561→                transition: none !important;
+  1562→        }
+  1563→}
+  1564→
+  1565→
+  1566→/* ═══════════════════════════════════════════════════════════════════════
+  1567→   MEGA-FOOTER
+  1568→   ═══════════════════════════════════════════════════════════════════════ */
+  1569→
+  1570→.nvx-mega-footer {
+  1571→        background: linear-gradient(180deg, #0a1426 0%, #040a16 100%);
+  1572→        color: rgba(255, 255, 255, 0.7);
+  1573→}
+  1574→
+  1575→/* Accent Lines */
+  1576→.nvx-mega-footer__accent {
+  1577→        display: block;
+  1578→        line-height: 0;
+  1579→}
+  1580→
+  1581→.nvx-mega-footer__accent-line {
+  1582→        display: block;
+  1583→        width: 100%;
+  1584→}
+  1585→
+  1586→.nvx-mega-footer__accent-line--primary {
+  1587→        height: 2.5px;
+  1588→        background: linear-gradient(90deg, var(--wp--preset--color--nvx-primary), var(--wp--preset--color--nvx-secondary));
+  1589→}
+  1590→
+  1591→.nvx-mega-footer__accent-line--secondary {
+  1592→        height: 0.5px;
+  1593→        background: var(--wp--preset--color--nvx-secondary);
+  1594→        opacity: 0.4;
+  1595→}
+  1596→
+  1597→/* Main Grid */
+  1598→.nvx-mega-footer__main {
+  1599→        display: grid;
+  1600→        grid-template-columns: 1.2fr 0.8fr 0.8fr 0.9fr 1.1fr;
+  1601→        gap: clamp(2rem, 4vw, 4rem);
+  1602→        max-width: 1200px;
+  1603→        margin: 0 auto;
+  1604→        padding-left: var(--nvx-section-pad);
+  1605→        padding-right: var(--nvx-section-pad);
+  1606→}
+  1607→
+  1608→@media (max-width: 1024px) {
+  1609→        .nvx-mega-footer__main {
+  1610→                grid-template-columns: repeat(3, 1fr);
+  1611→        }
+  1612→        .nvx-footer-col--brand {
+  1613→                grid-column: span 3;
+  1614→        }
+  1615→}
+  1616→@media (max-width: 640px) {
+  1617→        .nvx-mega-footer__main {
+  1618→                grid-template-columns: 1fr;
+  1619→        }
+  1620→        .nvx-footer-col--brand {
+  1621→                grid-column: span 1;
+  1622→        }
+  1623→}
+  1624→
+  1625→/* Footer Columns */
+  1626→.nvx-footer-col {
+  1627→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1628→}
+  1629→
+  1630→/* Links */
+  1631→.nvx-footer-links {
+  1632→        list-style: none;
+  1633→        padding: 0;
+  1634→        margin: 0;
+  1635→}
+  1636→
+  1637→.nvx-footer-links li {
+  1638→        margin-bottom: 0.5rem;
+  1639→}
+  1640→
+  1641→.nvx-footer-links a {
+  1642→        color: var(--wp--preset--color--nvx-link-text, rgba(170, 180, 195, 0.9));
+  1643→        text-decoration: none;
+  1644→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1645→        transition: color 0.2s ease;
+  1646→        display: inline-flex;
+  1647→        align-items: center;
+  1648→        gap: 0.4rem;
+  1649→}
+  1650→
+  1651→.nvx-footer-links a::before {
+  1652→        content: '›';
+  1653→        color: var(--wp--preset--color--nvx-secondary);
+  1654→        font-weight: 700;
+  1655→        transition: transform 0.2s ease;
+  1656→}
+  1657→
+  1658→.nvx-footer-links a:hover {
+  1659→        color: #fff;
+  1660→}
+  1661→
+  1662→.nvx-footer-links a:hover::before {
+  1663→        transform: translateX(3px);
+  1664→}
+  1665→
+  1666→/* Social Icons */
+  1667→.nvx-footer-social {
+  1668→        display: flex;
+  1669→        gap: 0.6rem;
+  1670→        margin-top: 0.5rem;
+  1671→}
+  1672→
+  1673→.nvx-footer-social__link {
+  1674→        display: inline-flex;
+  1675→        align-items: center;
+  1676→        justify-content: center;
+  1677→        width: 36px;
+  1678→        height: 36px;
+  1679→        border: 1px solid rgba(255, 255, 255, 0.15);
+  1680→        border-radius: 50%;
+  1681→        color: var(--wp--preset--color--nvx-light-gray, rgba(229, 231, 235, 0.8));
+  1682→        text-decoration: none;
+  1683→        font-size: 0.8rem;
+  1684→        font-weight: 600;
+  1685→        transition: var(--nvx-transition);
+  1686→}
+  1687→
+  1688→.nvx-footer-social__link:hover {
+  1689→        border-color: var(--wp--preset--color--nvx-secondary);
+  1690→        color: var(--wp--preset--color--nvx-secondary);
+  1691→        background: rgba(46, 204, 113, 0.1);
+  1692→        transform: translateY(-2px);
+  1693→}
+  1694→
+  1695→/* Contact */
+  1696→.nvx-footer-contact {
+  1697→        list-style: none;
+  1698→        padding: 0;
+  1699→        margin: 0;
+  1700→}
+  1701→
+  1702→.nvx-footer-contact li {
+  1703→        display: flex;
+  1704→        align-items: flex-start;
+  1705→        gap: 0.5rem;
+  1706→        margin-bottom: 0.6rem;
+  1707→        font-size: var(--wp--preset--font-size--nvx-sm);
+  1708→}
+  1709→
+  1710→.nvx-footer-contact__icon {
+  1711→        color: var(--wp--preset--color--nvx-secondary);
+  1712→        flex-shrink: 0;
+  1713→        margin-top: 0.15rem;
+  1714→}
+  1715→
+  1716→.nvx-footer-contact a {
+  1717→        color: var(--wp--preset--color--nvx-link-text, rgba(170, 180, 195, 0.9));
+  1718→        text-decoration: none;
+  1719→        transition: color 0.2s ease;
+  1720→}
+  1721→
+  1722→.nvx-footer-contact a:hover {
+  1723→        color: #fff;
+  1724→}
+  1725→
+  1726→/* Certification Badges */
+  1727→.nvx-footer-certs {
+  1728→        margin-top: 1.25rem;
+  1729→}
+  1730→
+  1731→.nvx-footer-certs__label {
+  1732→        display: block;
+  1733→        font-size: 0.75rem;
+  1734→        color: var(--wp--preset--color--nvx-gray-dim, rgba(100, 108, 120, 1));
+  1735→        margin-bottom: 0.6rem;
+  1736→}
+  1737→
+  1738→.nvx-footer-certs__badges {
+  1739→        display: flex;
+  1740→        gap: 0.75rem;
+  1741→        flex-wrap: wrap;
+  1742→}
+  1743→
+  1744→.nvx-footer-cert-badge {
+  1745→        display: flex;
+  1746→        flex-direction: column;
+  1747→        align-items: center;
+  1748→        gap: 0.2rem;
+  1749→}
+  1750→
+  1751→.nvx-footer-cert-badge__check {
+  1752→        display: flex;
+  1753→        align-items: center;
+  1754→        justify-content: center;
+  1755→        width: 32px;
+  1756→        height: 32px;
+  1757→        font-size: 0.8rem;
+  1758→        font-weight: 700;
+  1759→        color: var(--wp--preset--color--nvx-secondary);
+  1760→        border: 2px solid var(--wp--preset--color--nvx-primary);
+  1761→        border-radius: 50%;
+  1762→        transition: var(--nvx-transition);
+  1763→}
+  1764→
+  1765→.nvx-footer-cert-badge:hover .nvx-footer-cert-badge__check {
+  1766→        background: rgba(46, 204, 113, 0.1);
+  1767→}
+  1768→
+  1769→.nvx-footer-cert-badge__text {
+  1770→        font-size: 0.65rem;
+  1771→        font-weight: 600;
+  1772→        color: var(--wp--preset--color--nvx-gray);
+  1773→        text-transform: uppercase;
+  1774→        letter-spacing: 0.05em;
+  1775→}
+  1776→
+  1777→/* Bottom Bar */
+  1778→.nvx-mega-footer__bottom {
+  1779→        border-top: 1px solid rgba(255, 255, 255, 0.06);
+  1780→        background: var(--wp--preset--color--nvx-dark, #040a16);
+  1781→}
+  1782→
+  1783→.nvx-mega-footer__bottom-inner {
+  1784→        max-width: 1200px;
+  1785→        margin: 0 auto;
+  1786→        padding-left: var(--nvx-section-pad);
+  1787→        padding-right: var(--nvx-section-pad);
+  1788→        display: flex;
+  1789→        align-items: center;
+  1790→        justify-content: space-between;
+  1791→        flex-wrap: wrap;
+  1792→        gap: 0.75rem;
+  1793→}
+  1794→
+  1795→.nvx-mega-footer__copy {
+  1796→        font-size: 0.7rem;
+  1797→        color: var(--wp--preset--color--nvx-subtle, rgba(80, 90, 105, 1));
+  1798→        margin: 0;
+  1799→}
+  1800→
+  1801→/* Payment Badges */
+  1802→.nvx-footer-payments {
+  1803→        display: flex;
+  1804→        gap: 0.5rem;
+  1805→        align-items: center;
+  1806→}
+  1807→
+  1808→.nvx-footer-payment {
+  1809→        display: inline-flex;
+  1810→        align-items: center;
+  1811→        justify-content: center;
+  1812→        padding: 0.25rem 0.6rem;
+  1813→        font-size: 0.55rem;
+  1814→        font-weight: 700;
+  1815→        color: #fff;
+  1816→        border-radius: 4px;
+  1817→        letter-spacing: 0.03em;
+  1818→        text-transform: uppercase;
+  1819→}
+  1820→
+  1821→.nvx-mega-footer__compat {
+  1822→        font-size: 0.65rem;
+  1823→        color: var(--wp--preset--color--nvx-subtle, rgba(80, 90, 105, 1));
+  1824→        margin: 0;
+  1825→}
+  1826→
+  1827→@media (max-width: 768px) {
+  1828→        .nvx-mega-footer__bottom-inner {
+  1829→                flex-direction: column;
+  1830→                text-align: center;
+  1831→        }
+  1832→        .nvx-footer-payments {
+  1833→                justify-content: center;
+  1834→        }
+  1835→}
+  1836→
+  1837→} /* @layer nvx-homepage */
