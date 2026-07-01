@@ -1,0 +1,1187 @@
+     1→     1→/**
+     2→     2→ * NutriVitaX Pro — Header Styles
+     3→     3→ * CSS Layer: nvx-header
+     4→     4→ *
+     5→     5→ * Implémente la spec complète du header BioLab Luxe:
+     6→     6→ * - Top Bar (desktop >1024px)
+     7→     7→ * - Header principal fixe avec scroll shrink/hide/show
+     8→     8→ * - Navigation avec Mega Menu "Produits"
+     9→     9→ * - Barre de recherche extensible
+    10→    10→ * - Icônes compte + panier + badge
+    11→    11→ * - Bouton CTA (desktop >1440px)
+    12→    12→ * - Menu mobile plein écran
+    13→    13→ * - 4 breakpoints: <768, 768-1024, 1024-1440, >1440
+    14→    14→ * - Accessibilité WCAG 2.2 AA
+    15→    15→ * - Animations GPU-accelerated
+    16→    16→ *
+    17→    17→ * @package NutriVitaX_Pro
+    18→    18→ * @since   0.2.0
+    19→    19→ */
+    20→    20→
+    21→    21→/* ─── Custom Properties ──────────────────────────────────────────────── */
+    22→    22→:root {
+    23→    23→        /* Header dimensions */
+    24→    24→        --nvx-header-height: 80px;
+    25→    25→        --nvx-header-height-scrolled: 64px;
+    26→    26→        --nvx-topbar-height: 32px;
+    27→    27→        --nvx-header-total-height: 112px;
+    28→    28→
+    29→    29→        /* Colors */
+    30→    30→        --nvx-header-bg: #FFFFFF;
+    31→    31→        --nvx-header-border: #E9ECEF;
+    32→    32→        --nvx-header-text: #212529;
+    33→    33→        --nvx-header-text-muted: #6C757D;
+    34→    34→        --nvx-header-text-hover: #1A6B3A;
+    35→    35→        --nvx-topbar-bg: #F8F9FA;
+    36→    36→        --nvx-topbar-text: #6C757D;
+    37→    37→        --nvx-topbar-text-hover: #1A6B3A;
+    38→    38→        --nvx-search-border: #E9ECEF;
+    39→    39→        --nvx-search-border-focus: #2ECC71;
+    40→    40→        --nvx-search-placeholder: #6C757D;
+    41→    41→        --nvx-cta-bg: #1A6B3A;
+    42→    42→        --nvx-cta-bg-hover: #165A30;
+    43→    43→        --nvx-cta-text: #FFFFFF;
+    44→    44→        --nvx-badge-bg: #F4A900;
+    45→    45→        --nvx-badge-text: #1A6B3A;
+    46→    46→        --nvx-mega-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    47→    47→        --nvx-mobile-overlay: rgba(0, 0, 0, 0.5);
+    48→    48→
+    49→    49→        /* Focus */
+    50→    50→        --nvx-focus-ring: 2px solid #2ECC71;
+    51→    51→        --nvx-focus-offset: 2px;
+    52→    52→
+    53→    53→        /* Transitions */
+    54→    54→        --nvx-transition-fast: 0.2s ease;
+    55→    55→        --nvx-transition-base: 0.3s ease;
+    56→    56→
+    57→    57→        /* Z-index layers */
+    58→    58→        --nvx-z-header: 1000;
+    59→    59→        --nvx-z-mega: 1001;
+    60→    60→        --nvx-z-mobile-overlay: 1999;
+    61→    61→        --nvx-z-mobile-menu: 2000;
+    62→    62→        --nvx-z-hamburger: 2001;
+    63→    63→}
+    64→    64→
+    65→    65→
+    66→    66→/* ═══════════════════════════════════════════════════════════════════════
+    67→    67→   1. SKIP LINK
+    68→    68→   ═══════════════════════════════════════════════════════════════════════ */
+    69→    69→.nvx-skip-link {
+    70→    70→        position: absolute;
+    71→    71→        top: -100%;
+    72→    72→        left: 16px;
+    73→    73→        z-index: 9999;
+    74→    74→        padding: 12px 24px;
+    75→    75→        background: var(--nvx-badge-bg);
+    76→    76→        color: var(--nvx-badge-text);
+    77→    77→        font-family: var(--wp--preset--font-family--nvx-subheading), 'Cabinet Grotesk', sans-serif;
+    78→    78→        font-weight: 600;
+    79→    79→        font-size: 0.875rem;
+    80→    80→        text-decoration: none;
+    81→    81→        border-radius: 0 0 8px 8px;
+    82→    82→        transition: top var(--nvx-transition-fast);
+    83→    83→}
+    84→    84→
+    85→    85→.nvx-skip-link:focus {
+    86→    86→        top: 0;
+    87→    87→        outline: 2px solid var(--nvx-badge-bg);
+    88→    88→        outline-offset: -2px;
+    89→    89→}
+    90→    90→
+    91→    91→
+    92→    92→/* ═══════════════════════════════════════════════════════════════════════
+    93→    93→   2. TOP BAR (Desktop >1024px)
+    94→    94→   ═══════════════════════════════════════════════════════════════════════ */
+    95→    95→.nvx-topbar {
+    96→    96→        display: none; /* hidden by default, shown at >1024px */
+    97→    97→        height: var(--nvx-topbar-height);
+    98→    98→        background: var(--nvx-topbar-bg);
+    99→    99→        padding: 0 24px;
+   100→   100→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+   101→   101→        font-size: 0.875rem;
+   102→   102→        font-weight: 400;
+   103→   103→        line-height: 1.5;
+   104→   104→        color: var(--nvx-topbar-text);
+   105→   105→}
+   106→   106→
+   107→   107→.nvx-topbar__inner {
+   108→   108→        display: flex;
+   109→   109→        justify-content: space-between;
+   110→   110→        align-items: center;
+   111→   111→        max-width: 1200px;
+   112→   112→        margin: 0 auto;
+   113→   113→        height: 100%;
+   114→   114→}
+   115→   115→
+   116→   116→.nvx-topbar__welcome {
+   117→   117→        font-weight: 500;
+   118→   118→        white-space: nowrap;
+   119→   119→}
+   120→   120→
+   121→   121→.nvx-topbar__nav {
+   122→   122→        display: flex;
+   123→   123→        align-items: center;
+   124→   124→        gap: 16px;
+   125→   125→}
+   126→   126→
+   127→   127→.nvx-topbar__nav a {
+   128→   128→        color: var(--nvx-topbar-text);
+   129→   129→        text-decoration: none;
+   130→   130→        transition: color var(--nvx-transition-fast);
+   131→   131→}
+   132→   132→
+   133→   133→.nvx-topbar__nav a:hover {
+   134→   134→        color: var(--nvx-topbar-text-hover);
+   135→   135→}
+   136→   136→
+   137→   137→.nvx-topbar__social {
+   138→   138→        display: flex;
+   139→   139→        align-items: center;
+   140→   140→        gap: 12px;
+   141→   141→}
+   142→   142→
+   143→   143→.nvx-topbar__social a {
+   144→   144→        display: inline-flex;
+   145→   145→        align-items: center;
+   146→   146→        justify-content: center;
+   147→   147→        width: 24px;
+   148→   148→        height: 24px;
+   149→   149→        color: var(--nvx-topbar-text);
+   150→   150→        text-decoration: none;
+   151→   151→        transition: color var(--nvx-transition-fast), transform var(--nvx-transition-fast);
+   152→   152→}
+   153→   153→
+   154→   154→.nvx-topbar__social a:hover {
+   155→   155→        color: var(--nvx-topbar-text-hover);
+   156→   156→        transform: scale(1.1);
+   157→   157→}
+   158→   158→
+   159→   159→.nvx-topbar__social svg {
+   160→   160→        width: 16px;
+   161→   161→        height: 16px;
+   162→   162→        fill: currentColor;
+   163→   163→}
+   164→   164→
+   165→   165→@media (min-width: 1024px) {
+   166→   166→        .nvx-topbar {
+   167→   167→                display: block;
+   168→   168→        }
+   169→   169→}
+   170→   170→
+   171→   171→.nvx-header--scrolled .nvx-topbar {
+   172→   172→        display: none !important;
+   173→   173→}
+   174→   174→
+   175→   175→
+   176→   176→/* ═══════════════════════════════════════════════════════════════════════
+   177→   177→   3. HEADER PRINCIPAL
+   178→   178→   ═══════════════════════════════════════════════════════════════════════ */
+   179→   179→.nvx-header {
+   180→   180→        position: fixed;
+   181→   181→        top: 0;
+   182→   182→        left: 0;
+   183→   183→        right: 0;
+   184→   184→        z-index: var(--nvx-z-header);
+   185→   185→        background: var(--nvx-header-bg);
+   186→   186→        border-bottom: 1px solid var(--nvx-header-border);
+   187→   187→        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+   188→   188→        transition:
+   189→   189→                height var(--nvx-transition-base),
+   190→   190→                box-shadow var(--nvx-transition-base),
+   191→   191→                transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+   192→   192→        will-change: transform, height;
+   193→   193→}
+   194→   194→
+   195→   195→/* Scrolled state */
+   196→   196→.nvx-header--scrolled {
+   197→   197→        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+   198→   198→}
+   199→   199→
+   200→   200→/* Hidden on scroll down */
+   201→   201→.nvx-header--hidden {
+   202→   202→        transform: translateY(-100%);
+   203→   203→}
+   204→   204→
+   205→   205→.nvx-header__inner {
+   206→   206→        display: flex;
+   207→   207→        align-items: center;
+   208→   208→        justify-content: space-between;
+   209→   209→        height: var(--nvx-header-height);
+   210→   210→        max-width: 1200px;
+   211→   211→        margin: 0 auto;
+   212→   212→        padding: 0 24px;
+   213→   213→        transition: height var(--nvx-transition-base);
+   214→   214→}
+   215→   215→
+   216→   216→.nvx-header--scrolled .nvx-header__inner {
+   217→   217→        height: var(--nvx-header-height-scrolled);
+   218→   218→}
+   219→   219→
+   220→   220→
+   221→   221→/* ═══════════════════════════════════════════════════════════════════════
+   222→   222→   4. LOGO
+   223→   223→   ═══════════════════════════════════════════════════════════════════════ */
+   224→   224→.nvx-logo {
+   225→   225→        display: flex;
+   226→   226→        align-items: center;
+   227→   227→        text-decoration: none;
+   228→   228→        flex-shrink: 0;
+   229→   229→}
+   230→   230→
+   231→   231→.nvx-logo__icon {
+   232→   232→        width: 40px;
+   233→   233→        height: 40px;
+   234→   234→        margin-right: 12px;
+   235→   235→        transition: width var(--nvx-transition-base), height var(--nvx-transition-base);
+   236→   236→}
+   237→   237→
+   238→   238→.nvx-header--scrolled .nvx-logo__icon {
+   239→   239→        width: 32px;
+   240→   240→        height: 32px;
+   241→   241→        margin-right: 10px;
+   242→   242→}
+   243→   243→
+   244→   244→.nvx-logo__text {
+   245→   245→        font-family: var(--wp--preset--font-family--nvx-heading), 'Clash Display', sans-serif;
+   246→   246→        font-weight: 700;
+   247→   247→        font-size: 1.5rem;
+   248→   248→        line-height: 1.1;
+   249→   249→        letter-spacing: -0.5px;
+   250→   250→        color: #1A6B3A;
+   251→   251→        transition: font-size var(--nvx-transition-base);
+   252→   252→}
+   253→   253→
+   254→   254→.nvx-header--scrolled .nvx-logo__text {
+   255→   255→        font-size: 1.25rem;
+   256→   256→}
+   257→   257→
+   258→   258→.nvx-logo__accent {
+   259→   259→        color: #F4A900;
+   260→   260→}
+   261→   261→
+   262→   262→/* Mobile: logo centered */
+   263→   263→@media (max-width: 767px) {
+   264→   264→        .nvx-logo__text {
+   265→   265→                font-size: 1.25rem;
+   266→   266→        }
+   267→   267→        .nvx-logo__icon {
+   268→   268→                width: 32px;
+   269→   269→                height: 32px;
+   270→   270→        }
+   271→   271→}
+   272→   272→
+   273→   273→
+   274→   274→/* ═══════════════════════════════════════════════════════════════════════
+   275→   275→   5. NAVIGATION PRINCIPALE
+   276→   276→   ═══════════════════════════════════════════════════════════════════════ */
+   277→   277→.nvx-nav {
+   278→   278→        display: none;
+   279→   279→        align-items: center;
+   280→   280→}
+   281→   281→
+   282→   282→.nvx-nav__list {
+   283→   283→        display: flex;
+   284→   284→        align-items: center;
+   285→   285→        gap: 24px;
+   286→   286→        list-style: none;
+   287→   287→        margin: 0;
+   288→   288→        padding: 0;
+   289→   289→}
+   290→   290→
+   291→   291→.nvx-nav__item {
+   292→   292→        position: relative;
+   293→   293→}
+   294→   294→
+   295→   295→.nvx-nav__link {
+   296→   296→        display: flex;
+   297→   297→        align-items: center;
+   298→   298→        gap: 6px;
+   299→   299→        font-family: var(--wp--preset--font-family--nvx-subheading), 'Cabinet Grotesk', sans-serif;
+   300→   300→        font-weight: 500;
+   301→   301→        font-size: 1rem;
+   302→   302→        line-height: 1.4;
+   303→   303→        color: var(--nvx-header-text);
+   304→   304→        text-decoration: none;
+   305→   305→        padding: 8px 0;
+   306→   306→        position: relative;
+   307→   307→        transition: color var(--nvx-transition-fast);
+   308→   308→}
+   309→   309→
+   310→   310→.nvx-nav__link::after {
+   311→   311→        content: '';
+   312→   312→        position: absolute;
+   313→   313→        bottom: 0;
+   314→   314→        left: 0;
+   315→   315→        width: 0;
+   316→   316→        height: 2px;
+   317→   317→        background: #1A6B3A;
+   318→   318→        transition: width var(--nvx-transition-base);
+   319→   319→}
+   320→   320→
+   321→   321→.nvx-nav__link:hover,
+   322→   322→.nvx-nav__link--active {
+   323→   323→        color: var(--nvx-header-text-hover);
+   324→   324→}
+   325→   325→
+   326→   326→.nvx-nav__link:hover::after,
+   327→   327→.nvx-nav__link--active::after {
+   328→   328→        width: 100%;
+   329→   329→}
+   330→   330→
+   331→   331→/* Arrow for dropdown items */
+   332→   332→.nvx-nav__arrow {
+   333→   333→        display: inline-flex;
+   334→   334→        width: 12px;
+   335→   335→        height: 12px;
+   336→   336→        margin-left: 4px;
+   337→   337→        transition: transform var(--nvx-transition-fast);
+   338→   338→}
+   339→   339→
+   340→   340→.nvx-nav__item--open > .nvx-nav__link .nvx-nav__arrow {
+   341→   341→        transform: rotate(180deg);
+   342→   342→}
+   343→   343→
+   344→   344→.nvx-nav__link svg {
+   345→   345→        width: 16px;
+   346→   346→        height: 16px;
+   347→   347→        fill: none;
+   348→   348→        stroke: currentColor;
+   349→   349→        stroke-width: 2;
+   350→   350→        stroke-linecap: round;
+   351→   351→        stroke-linejoin: round;
+   352→   352→}
+   353→   353→
+   354→   354→/* Show nav on tablet and up */
+   355→   355→@media (min-width: 768px) {
+   356→   356→        .nvx-nav {
+   357→   357→                display: flex;
+   358→   358→        }
+   359→   359→}
+   360→   360→
+   361→   361→/* Hide some items on tablet */
+   362→   362→@media (min-width: 768px) and (max-width: 1023px) {
+   363→   363→        .nvx-nav__list {
+   364→   364→                gap: 16px;
+   365→   365→        }
+   366→   366→        .nvx-nav__item--hide-tablet {
+   367→   367→                display: none;
+   368→   368→        }
+   369→   369→}
+   370→   370→
+   371→   371→
+   372→   372→/* ═══════════════════════════════════════════════════════════════════════
+   373→   373→   6. MEGA MENU "PRODUITS"
+   374→   374→   ═══════════════════════════════════════════════════════════════════════ */
+   375→   375→.nvx-mega {
+   376→   376→        position: absolute;
+   377→   377→        top: 100%;
+   378→   378→        left: 0;
+   379→   379→        right: 0;
+   380→   380→        background: var(--nvx-header-bg);
+   381→   381→        border: 1px solid var(--nvx-header-border);
+   382→   382→        border-top: none;
+   383→   383→        border-radius: 0 0 12px 12px;
+   384→   384→        box-shadow: var(--nvx-mega-shadow);
+   385→   385→        padding: 24px;
+   386→   386→        max-width: 1200px;
+   387→   387→        margin: 0 auto;
+   388→   388→        z-index: var(--nvx-z-mega);
+   389→   389→        opacity: 0;
+   390→   390→        visibility: hidden;
+   391→   391→        transform: translateY(-10px);
+   392→   392→        transition:
+   393→   393→                opacity var(--nvx-transition-base),
+   394→   394→                transform var(--nvx-transition-base),
+   395→   395→                visibility var(--nvx-transition-base);
+   396→   396→        pointer-events: none;
+   397→   397→}
+   398→   398→
+   399→   399→.nvx-nav__item--open > .nvx-mega {
+   400→   400→        opacity: 1;
+   401→   401→        visibility: visible;
+   402→   402→        transform: translateY(0);
+   403→   403→        pointer-events: auto;
+   404→   404→}
+   405→   405→
+   406→   406→.nvx-mega__grid {
+   407→   407→        display: grid;
+   408→   408→        grid-template-columns: 1fr 1fr 1fr;
+   409→   409→        gap: 32px;
+   410→   410→}
+   411→   411→
+   412→   412→.nvx-mega__column-title {
+   413→   413→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+   414→   414→        font-weight: 600;
+   415→   415→        font-size: 0.875rem;
+   416→   416→        line-height: 1.5;
+   417→   417→        letter-spacing: 0.5px;
+   418→   418→        text-transform: uppercase;
+   419→   419→        color: var(--nvx-header-text-muted);
+   420→   420→        margin-bottom: 16px;
+   421→   421→}
+   422→   422→
+   423→   423→.nvx-mega__list {
+   424→   424→        list-style: none;
+   425→   425→        margin: 0;
+   426→   426→        padding: 0;
+   427→   427→}
+   428→   428→
+   429→   429→.nvx-mega__list li {
+   430→   430→        margin-bottom: 8px;
+   431→   431→}
+   432→   432→
+   433→   433→.nvx-mega__list a {
+   434→   434→        display: flex;
+   435→   435→        align-items: center;
+   436→   436→        gap: 8px;
+   437→   437→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+   438→   438→        font-weight: 400;
+   439→   439→        font-size: 1rem;
+   440→   440→        line-height: 1.5;
+   441→   441→        color: var(--nvx-header-text);
+   442→   442→        text-decoration: none;
+   443→   443→        padding: 4px 0;
+   444→   444→        transition: color var(--nvx-transition-fast);
+   445→   445→}
+   446→   446→
+   447→   447→.nvx-mega__list a:hover {
+   448→   448→        color: var(--nvx-header-text-hover);
+   449→   449→}
+   450→   450→
+   451→   451→.nvx-mega__list a svg {
+   452→   452→        width: 14px;
+   453→   453→        height: 14px;
+   454→   454→        fill: none;
+   455→   455→        stroke: var(--nvx-header-text-muted);
+   456→   456→        stroke-width: 2;
+   457→   457→        flex-shrink: 0;
+   458→   458→        transition: stroke var(--nvx-transition-fast);
+   459→   459→}
+   460→   460→
+   461→   461→.nvx-mega__list a:hover svg {
+   462→   462→        stroke: var(--nvx-header-text-hover);
+   463→   463→}
+   464→   464→
+   465→   465→/* Featured products column */
+   466→   466→.nvx-mega__featured-item {
+   467→   467→        display: flex;
+   468→   468→        align-items: center;
+   469→   469→        gap: 12px;
+   470→   470→        padding: 10px 0;
+   471→   471→        border-bottom: 1px solid #F1F3F5;
+   472→   472→}
+   473→   473→
+   474→   474→.nvx-mega__featured-item:last-child {
+   475→   475→        border-bottom: none;
+   476→   476→}
+   477→   477→
+   478→   478→.nvx-mega__featured-img {
+   479→   479→        width: 48px;
+   480→   480→        height: 48px;
+   481→   481→        border-radius: 8px;
+   482→   482→        object-fit: cover;
+   483→   483→        background: var(--wp--preset--color--nvx-light);
+   484→   484→        flex-shrink: 0;
+   485→   485→}
+   486→   486→
+   487→   487→.nvx-mega__featured-info {
+   488→   488→        flex: 1;
+   489→   489→        min-width: 0;
+   490→   490→}
+   491→   491→
+   492→   492→.nvx-mega__featured-name {
+   493→   493→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+   494→   494→        font-weight: 500;
+   495→   495→        font-size: 0.875rem;
+   496→   496→        color: var(--nvx-header-text);
+   497→   497→        line-height: 1.3;
+   498→   498→        white-space: nowrap;
+   499→   499→        overflow: hidden;
+   500→   500→        text-overflow: ellipsis;
+   501→   501→}
+   502→   502→
+   503→   503→.nvx-mega__featured-price {
+   504→   504→        font-family: var(--wp--preset--font-family--nvx-mono), 'Space Mono', monospace;
+   505→   505→        font-weight: 700;
+   506→   506→        font-size: 0.875rem;
+   507→   507→        color: #1A6B3A;
+   508→   508→}
+   509→   509→
+   510→   510→.nvx-mega__footer {
+   511→   511→        grid-column: 1 / -1;
+   512→   512→        text-align: center;
+   513→   513→        margin-top: 16px;
+   514→   514→        padding-top: 16px;
+   515→   515→        border-top: 1px solid #E9ECEF;
+   516→   516→}
+   517→   517→
+   518→   518→.nvx-mega__footer a {
+   519→   519→        font-family: var(--wp--preset--font-family--nvx-subheading), 'Cabinet Grotesk', sans-serif;
+   520→   520→        font-weight: 600;
+   521→   521→        font-size: 0.9375rem;
+   522→   522→        color: #1A6B3A;
+   523→   523→        text-decoration: none;
+   524→   524→        transition: color var(--nvx-transition-fast);
+   525→   525→}
+   526→   526→
+   527→   527→.nvx-mega__footer a:hover {
+   528→   528→        color: var(--nvx-header-text-hover);
+   529→   529→}
+   530→   530→
+   531→   531→/* Tablet: 2 columns */
+   532→   532→@media (min-width: 768px) and (max-width: 1023px) {
+   533→   533→        .nvx-mega__grid {
+   534→   534→                grid-template-columns: 1fr 1fr;
+   535→   535→        }
+   536→   536→        .nvx-mega__featured {
+   537→   537→                display: none;
+   538→   538→        }
+   539→   539→}
+   540→   540→
+   541→   541→/* Mobile: mega menu not shown, replaced by submenu */
+   542→   542→@media (max-width: 767px) {
+   543→   543→        .nvx-mega {
+   544→   544→                display: none;
+   545→   545→        }
+   546→   546→}
+   547→   547→
+   548→   548→
+   549→   549→/* ═══════════════════════════════════════════════════════════════════════
+   550→   550→   7. HEADER ACTIONS
+   551→   551→   ═══════════════════════════════════════════════════════════════════════ */
+   552→   552→.nvx-actions {
+   553→   553→        display: flex;
+   554→   554→        align-items: center;
+   555→   555→        gap: 16px;
+   556→   556→        flex-shrink: 0;
+   557→   557→}
+   558→   558→
+   559→   559→
+   560→   560→/* ─── 7a. Search Bar ─────────────────────────────────────────────────── */
+   561→   561→.nvx-search {
+   562→   562→        display: none;
+   563→   563→        position: relative;
+   564→   564→}
+   565→   565→
+   566→   566→@media (min-width: 1024px) {
+   567→   567→        .nvx-search {
+   568→   568→                display: block;
+   569→   569→        }
+   570→   570→}
+   571→   571→
+   572→   572→.nvx-search__input-wrapper {
+   573→   573→        display: flex;
+   574→   574→        align-items: center;
+   575→   575→        height: 48px;
+   576→   576→        width: 320px;
+   577→   577→        background: var(--nvx-header-bg);
+   578→   578→        border: 1px solid var(--nvx-search-border);
+   579→   579→        border-radius: 8px;
+   580→   580→        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+   581→   581→        padding: 0 16px;
+   582→   582→        transition:
+   583→   583→                width var(--nvx-transition-base),
+   584→   584→                border-color var(--nvx-transition-fast),
+   585→   585→                box-shadow var(--nvx-transition-fast);
+   586→   586→}
+   587→   587→
+   588→   588→@media (min-width: 1440px) {
+   589→   589→        .nvx-search__input-wrapper {
+   590→   590→                width: 400px;
+   591→   591→        }
+   592→   592→}
+   593→   593→
+   594→   594→.nvx-search__input-wrapper:focus-within {
+   595→   595→        width: 400px;
+   596→   596→        border-color: var(--nvx-search-border-focus);
+   597→   597→        box-shadow: 0 2px 12px rgba(46, 204, 113, 0.2);
+   598→   598→}
+   599→   599→
+   600→   600→.nvx-search__input {
+   601→   601→        flex: 1;
+   602→   602→        border: none;
+   603→   603→        outline: none;
+   604→   604→        background: transparent;
+   605→   605→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+   606→   606→        font-size: 1rem;
+   607→   607→        line-height: 1.5;
+   608→   608→        color: var(--nvx-header-text);
+   609→   609→}
+   610→   610→
+   611→   611→.nvx-search__input::placeholder {
+   612→   612→        color: var(--nvx-search-placeholder);
+   613→   613→}
+   614→   614→
+   615→   615→.nvx-search__btn {
+   616→   616→        display: flex;
+   617→   617→        align-items: center;
+   618→   618→        justify-content: center;
+   619→   619→        width: 24px;
+   620→   620→        height: 24px;
+   621→   621→        padding: 0;
+   622→   622→        border: none;
+   623→   623→        background: transparent;
+   624→   624→        color: var(--nvx-header-text-muted);
+   625→   625→        cursor: pointer;
+   626→   626→        transition: color var(--nvx-transition-fast);
+   627→   627→}
+   628→   628→
+   629→   629→.nvx-search__btn:hover {
+   630→   630→        color: var(--nvx-header-text-hover);
+   631→   631→}
+   632→   632→
+   633→   633→.nvx-search__btn svg {
+   634→   634→        width: 18px;
+   635→   635→        height: 18px;
+   636→   636→        fill: none;
+   637→   637→        stroke: currentColor;
+   638→   638→        stroke-width: 2;
+   639→   639→        stroke-linecap: round;
+   640→   640→        stroke-linejoin: round;
+   641→   641→}
+   642→   642→
+   643→   643→/* Search results dropdown */
+   644→   644→.nvx-search__results {
+   645→   645→        position: absolute;
+   646→   646→        top: calc(100% + 4px);
+   647→   647→        left: 0;
+   648→   648→        right: 0;
+   649→   649→        background: var(--nvx-header-bg);
+   650→   650→        border: 1px solid var(--nvx-header-border);
+   651→   651→        border-radius: 8px;
+   652→   652→        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+   653→   653→        max-height: 400px;
+   654→   654→        overflow-y: auto;
+   655→   655→        z-index: var(--nvx-z-mega);
+   656→   656→        display: none;
+   657→   657→}
+   658→   658→
+   659→   659→.nvx-search__results--open {
+   660→   660→        display: block;
+   661→   661→}
+   662→   662→
+   663→   663→
+   664→   664→/* ─── 7b. Icon Buttons (Account, Cart) ────────────────────────────────── */
+   665→   665→.nvx-icon-btn {
+   666→   666→        display: flex;
+   667→   667→        flex-direction: column;
+   668→   668→        align-items: center;
+   669→   669→        gap: 2px;
+   670→   670→        text-decoration: none;
+   671→   671→        color: var(--nvx-header-text-muted);
+   672→   672→        padding: 8px;
+   673→   673→        border-radius: 8px;
+   674→   674→        transition: color var(--nvx-transition-fast);
+   675→   675→        position: relative;
+   676→   676→}
+   677→   677→
+   678→   678→.nvx-icon-btn:hover {
+   679→   679→        color: var(--nvx-header-text-hover);
+   680→   680→}
+   681→   681→
+   682→   682→.nvx-icon-btn svg {
+   683→   683→        width: 24px;
+   684→   684→        height: 24px;
+   685→   685→        fill: none;
+   686→   686→        stroke: currentColor;
+   687→   687→        stroke-width: 2;
+   688→   688→        stroke-linecap: round;
+   689→   689→        stroke-linejoin: round;
+   690→   690→}
+   691→   691→
+   692→   692→.nvx-icon-btn__label {
+   693→   693→        display: none;
+   694→   694→        font-family: var(--wp--preset--font-family--nvx-mono), 'Space Mono', monospace;
+   695→   695→        font-size: 0.75rem;
+   696→   696→        font-weight: 400;
+   697→   697→        letter-spacing: 0.5px;
+   698→   698→        text-transform: uppercase;
+   699→   699→        line-height: 1;
+   700→   700→}
+   701→   701→
+   702→   702→@media (min-width: 1024px) {
+   703→   703→        .nvx-icon-btn__label {
+   704→   704→                display: block;
+   705→   705→        }
+   706→   706→}
+   707→   707→
+   708→   708→/* Cart badge */
+   709→   709→.nvx-cart-badge {
+   710→   710→        position: absolute;
+   711→   711→        top: -2px;
+   712→   712→        right: -2px;
+   713→   713→        min-width: 18px;
+   714→   714→        height: 18px;
+   715→   715→        padding: 0 5px;
+   716→   716→        background: var(--nvx-badge-bg);
+   717→   717→        color: var(--nvx-badge-text);
+   718→   718→        font-family: var(--wp--preset--font-family--nvx-mono), 'Space Mono', monospace;
+   719→   719→        font-size: 0.75rem;
+   720→   720→        font-weight: 700;
+   721→   721→        line-height: 18px;
+   722→   722→        text-align: center;
+   723→   723→        border-radius: 9999px;
+   724→   724→        pointer-events: none;
+   725→   725→}
+   726→   726→
+   727→   727→@keyframes nvx-badge-bounce {
+   728→   728→        0%   { transform: scale(1); }
+   729→   729→        40%  { transform: scale(1.3); }
+   730→   730→        100% { transform: scale(1); }
+   731→   731→}
+   732→   732→
+   733→   733→.nvx-cart-badge--bounce {
+   734→   734→        animation: nvx-badge-bounce 0.5s ease;
+   735→   735→}
+   736→   736→
+   737→   737→
+   738→   738→/* ─── 7c. CTA Button ─────────────────────────────────────────────────── */
+   739→   739→.nvx-cta {
+   740→   740→        display: none;
+   741→   741→        align-items: center;
+   742→   742→        justify-content: center;
+   743→   743→        height: 40px;
+   744→   744→        padding: 0 24px;
+   745→   745→        background: var(--nvx-cta-bg);
+   746→   746→        color: var(--nvx-cta-text);
+   747→   747→        font-family: var(--wp--preset--font-family--nvx-subheading), 'Cabinet Grotesk', sans-serif;
+   748→   748→        font-weight: 600;
+   749→   749→        font-size: 0.875rem;
+   750→   750→        line-height: 1.3;
+   751→   751→        letter-spacing: 0.5px;
+   752→   752→        text-transform: uppercase;
+   753→   753→        text-decoration: none;
+   754→   754→        border-radius: 8px;
+   755→   755→        border: none;
+   756→   756→        cursor: pointer;
+   757→   757→        white-space: nowrap;
+   758→   758→        transition:
+   759→   759→                background var(--nvx-transition-fast),
+   760→   760→                transform var(--nvx-transition-fast),
+   761→   761→                box-shadow var(--nvx-transition-fast);
+   762→   762→}
+   763→   763→
+   764→   764→.nvx-cta:hover {
+   765→   765→        background: var(--nvx-cta-bg-hover);
+   766→   766→        transform: translateY(-2px);
+   767→   767→        box-shadow: 0 4px 12px rgba(26, 107, 58, 0.3);
+   768→   768→        color: var(--nvx-cta-text);
+   769→   769→        text-decoration: none;
+   770→   770→}
+   771→   771→
+   772→   772→/* Only show on large desktop */
+   773→   773→@media (min-width: 1440px) {
+   774→   774→        .nvx-cta {
+   775→   775→                display: inline-flex;
+   776→   776→        }
+   777→   777→}
+   778→   778→
+   779→   779→
+   780→   780→/* ═══════════════════════════════════════════════════════════════════════
+   781→   781→   8. HAMBURGER (Mobile <768px)
+   782→   782→   ═══════════════════════════════════════════════════════════════════════ */
+   783→   783→.nvx-hamburger {
+   784→   784→        display: none;
+   785→   785→        flex-direction: column;
+   786→   786→        justify-content: center;
+   787→   787→        align-items: center;
+   788→   788→        width: 40px;
+   789→   789→        height: 40px;
+   790→   790→        padding: 8px;
+   791→   791→        border: none;
+   792→   792→        background: transparent;
+   793→   793→        cursor: pointer;
+   794→   794→        gap: 6px;
+   795→   795→        z-index: var(--nvx-z-hamburger);
+   796→   796→}
+   797→   797→
+   798→   798→.nvx-hamburger__line {
+   799→   799→        display: block;
+   800→   800→        width: 24px;
+   801→   801→        height: 2px;
+   802→   802→        background: #1A6B3A;
+   803→   803→        border-radius: 2px;
+   804→   804→        transition:
+   805→   805→                transform var(--nvx-transition-base),
+   806→   806→                opacity var(--nvx-transition-fast);
+   807→   807→        origin: center;
+   808→   808→}
+   809→   809→
+   810→   810→/* Hamburger → X animation */
+   811→   811→.nvx-hamburger--open .nvx-hamburger__line:nth-child(1) {
+   812→   812→        transform: translateY(8px) rotate(45deg);
+   813→   813→}
+   814→   814→
+   815→   815→.nvx-hamburger--open .nvx-hamburger__line:nth-child(2) {
+   816→   816→        opacity: 0;
+   817→   817→}
+   818→   818→
+   819→   819→.nvx-hamburger--open .nvx-hamburger__line:nth-child(3) {
+   820→   820→        transform: translateY(-8px) rotate(-45deg);
+   821→   821→}
+   822→   822→
+   823→   823→@media (max-width: 767px) {
+   824→   824→        .nvx-hamburger {
+   825→   825→                display: flex;
+   826→   826→        }
+   827→   827→}
+   828→   828→
+   829→   829→
+   830→   830→/* ═══════════════════════════════════════════════════════════════════════
+   831→   831→   9. MOBILE MENU OVERLAY
+   832→   832→   ═══════════════════════════════════════════════════════════════════════ */
+   833→   833→.nvx-mobile-overlay {
+   834→   834→        position: fixed;
+   835→   835→        inset: 0;
+   836→   836→        background: var(--nvx-mobile-overlay);
+   837→   837→        z-index: var(--nvx-z-mobile-overlay);
+   838→   838→        opacity: 0;
+   839→   839→        visibility: hidden;
+   840→   840→        transition:
+   841→   841→                opacity var(--nvx-transition-base),
+   842→   842→                visibility var(--nvx-transition-base);
+   843→   843→}
+   844→   844→
+   845→   845→.nvx-mobile-overlay--open {
+   846→   846→        opacity: 1;
+   847→   847→        visibility: visible;
+   848→   848→}
+   849→   849→
+   850→   850→
+   851→   851→/* ═══════════════════════════════════════════════════════════════════════
+   852→   852→   10. MOBILE MENU
+   853→   853→   ═══════════════════════════════════════════════════════════════════════ */
+   854→   854→.nvx-mobile-menu {
+   855→   855→        position: fixed;
+   856→   856→        top: 0;
+   857→   857→        right: 0;
+   858→   858→        bottom: 0;
+   859→   859→        width: 100%;
+   860→   860→        max-width: 380px;
+   861→   861→        background: var(--nvx-header-bg);
+   862→   862→        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+   863→   863→        z-index: var(--nvx-z-mobile-menu);
+   864→   864→        transform: translateX(100%);
+   865→   865→        transition: transform var(--nvx-transition-base);
+   866→   866→        overflow-y: auto;
+   867→   867→        -webkit-overflow-scrolling: touch;
+   868→   868→        display: flex;
+   869→   869→        flex-direction: column;
+   870→   870→}
+   871→   871→
+   872→   872→.nvx-mobile-menu--open {
+   873→   873→        transform: translateX(0);
+   874→   874→}
+   875→   875→
+   876→   876→.nvx-mobile-menu__header {
+   877→   877→        display: flex;
+   878→   878→        align-items: center;
+   879→   879→        justify-content: space-between;
+   880→   880→        padding: 16px 24px;
+   881→   881→        border-bottom: 1px solid var(--nvx-header-border);
+   882→   882→        flex-shrink: 0;
+   883→   883→}
+   884→   884→
+   885→   885→.nvx-mobile-menu__close {
+   886→   886→        display: flex;
+   887→   887→        align-items: center;
+   888→   888→        justify-content: center;
+   889→   889→        width: 40px;
+   890→   890→        height: 40px;
+   891→   891→        border: none;
+   892→   892→        background: transparent;
+   893→   893→        color: var(--nvx-header-text-muted);
+   894→   894→        cursor: pointer;
+   895→   895→        border-radius: 8px;
+   896→   896→        transition: background var(--nvx-transition-fast), color var(--nvx-transition-fast);
+   897→   897→}
+   898→   898→
+   899→   899→.nvx-mobile-menu__close:hover {
+   900→   900→        background: #F8F9FA;
+   901→   901→        color: var(--nvx-header-text);
+   902→   902→}
+   903→   903→
+   904→   904→.nvx-mobile-menu__close svg {
+   905→   905→        width: 24px;
+   906→   906→        height: 24px;
+   907→   907→        stroke: currentColor;
+   908→   908→        stroke-width: 2;
+   909→   909→        stroke-linecap: round;
+   910→   910→        fill: none;
+   911→   911→}
+   912→   912→
+   913→   913→/* Mobile nav */
+   914→   914→.nvx-mobile-nav {
+   915→   915→        flex: 1;
+   916→   916→        padding: 0;
+   917→   917→}
+   918→   918→
+   919→   919→.nvx-mobile-nav__list {
+   920→   920→        list-style: none;
+   921→   921→        margin: 0;
+   922→   922→        padding: 0;
+   923→   923→}
+   924→   924→
+   925→   925→.nvx-mobile-nav__item {
+   926→   926→        border-bottom: 1px solid #F1F3F5;
+   927→   927→}
+   928→   928→
+   929→   929→.nvx-mobile-nav__link {
+   930→   930→        display: flex;
+   931→   931→        align-items: center;
+   932→   932→        justify-content: space-between;
+   933→   933→        padding: 16px 24px;
+   934→   934→        font-family: var(--wp--preset--font-family--nvx-subheading), 'Cabinet Grotesk', sans-serif;
+   935→   935→        font-weight: 500;
+   936→   936→        font-size: 1.125rem;
+   937→   937→        line-height: 1.4;
+   938→   938→        color: var(--nvx-header-text);
+   939→   939→        text-decoration: none;
+   940→   940→        transition: background var(--nvx-transition-fast), color var(--nvx-transition-fast);
+   941→   941→}
+   942→   942→
+   943→   943→.nvx-mobile-nav__link:hover {
+   944→   944→        background: #F8F9FA;
+   945→   945→        color: var(--nvx-header-text-hover);
+   946→   946→}
+   947→   947→
+   948→   948→.nvx-mobile-nav__link svg {
+   949→   949→        width: 20px;
+   950→   950→        height: 20px;
+   951→   951→        stroke: currentColor;
+   952→   952→        stroke-width: 2;
+   953→   953→        stroke-linecap: round;
+   954→   954→        stroke-linejoin: round;
+   955→   955→        fill: none;
+   956→   956→        flex-shrink: 0;
+   957→   957→        transition: transform var(--nvx-transition-fast);
+   958→   958→}
+   959→   959→
+   960→   960→.nvx-mobile-nav__item--open > .nvx-mobile-nav__link svg {
+   961→   961→        transform: rotate(180deg);
+   962→   962→}
+   963→   963→
+   964→   964→/* Mobile submenu */
+   965→   965→.nvx-mobile-submenu {
+   966→   966→        max-height: 0;
+   967→   967→        overflow: hidden;
+   968→   968→        transition: max-height var(--nvx-transition-base);
+   969→   969→}
+   970→   970→
+   971→   971→.nvx-mobile-submenu--open {
+   972→   972→        max-height: 500px;
+   973→   973→}
+   974→   974→
+   975→   975→.nvx-mobile-submenu__list {
+   976→   976→        list-style: none;
+   977→   977→        margin: 0;
+   978→   978→        padding: 0;
+   979→   979→}
+   980→   980→
+   981→   981→.nvx-mobile-submenu__item {
+   982→   982→        border-bottom: 1px solid #F1F3F5;
+   983→   983→}
+   984→   984→
+   985→   985→.nvx-mobile-submenu__link {
+   986→   986→        display: block;
+   987→   987→        padding: 12px 24px 12px 48px;
+   988→   988→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+   989→   989→        font-weight: 400;
+   990→   990→        font-size: 1rem;
+   991→   991→        line-height: 1.5;
+   992→   992→        color: var(--nvx-header-text-muted);
+   993→   993→        text-decoration: none;
+   994→   994→        transition: background var(--nvx-transition-fast), color var(--nvx-transition-fast);
+   995→   995→}
+   996→   996→
+   997→   997→.nvx-mobile-submenu__link:hover {
+   998→   998→        background: #F8F9FA;
+   999→   999→        color: var(--nvx-header-text-hover);
+  1000→  1000→}
+  1001→  1001→
+  1002→  1002→/* Mobile search */
+  1003→  1003→.nvx-mobile-search {
+  1004→  1004→        display: none;
+  1005→  1005→        padding: 16px 24px;
+  1006→  1006→        border-bottom: 1px solid var(--nvx-header-border);
+  1007→  1007→}
+  1008→  1008→
+  1009→  1009→@media (max-width: 1023px) {
+  1010→  1010→        .nvx-mobile-search {
+  1011→  1011→                display: block;
+  1012→  1012→        }
+  1013→  1013→}
+  1014→  1014→
+  1015→  1015→.nvx-mobile-search__input-wrapper {
+  1016→  1016→        display: flex;
+  1017→  1017→        align-items: center;
+  1018→  1018→        height: 48px;
+  1019→  1019→        width: 100%;
+  1020→  1020→        background: var(--nvx-header-bg);
+  1021→  1021→        border: 1px solid var(--nvx-search-border);
+  1022→  1022→        border-radius: 8px;
+  1023→  1023→        padding: 0 16px;
+  1024→  1024→}
+  1025→  1025→
+  1026→  1026→.nvx-mobile-search__input {
+  1027→  1027→        flex: 1;
+  1028→  1028→        border: none;
+  1029→  1029→        outline: none;
+  1030→  1030→        background: transparent;
+  1031→  1031→        font-family: var(--wp--preset--font-family--nvx-body), 'Inter Variable', sans-serif;
+  1032→  1032→        font-size: 1rem;
+  1033→  1033→        line-height: 1.5;
+  1034→  1034→        color: var(--nvx-header-text);
+  1035→  1035→}
+  1036→  1036→
+  1037→  1037→.nvx-mobile-search__input::placeholder {
+  1038→  1038→        color: var(--nvx-search-placeholder);
+  1039→  1039→}
+  1040→  1040→
+  1041→  1041→/* Mobile menu footer actions */
+  1042→  1042→.nvx-mobile-menu__footer {
+  1043→  1043→        display: flex;
+  1044→  1044→        flex-direction: column;
+  1045→  1045→        gap: 8px;
+  1046→  1046→        padding: 16px 24px;
+  1047→  1047→        border-top: 1px solid var(--nvx-header-border);
+  1048→  1048→        flex-shrink: 0;
+  1049→  1049→}
+  1050→  1050→
+  1051→  1051→.nvx-mobile-menu__action {
+  1052→  1052→        display: flex;
+  1053→  1053→        align-items: center;
+  1054→  1054→        justify-content: center;
+  1055→  1055→        gap: 8px;
+  1056→  1056→        height: 48px;
+  1057→  1057→        padding: 0 16px;
+  1058→  1058→        border-radius: 8px;
+  1059→  1059→        font-family: var(--wp--preset--font-family--nvx-subheading), 'Cabinet Grotesk', sans-serif;
+  1060→  1060→        font-weight: 500;
+  1061→  1061→        font-size: 1rem;
+  1062→  1062→        text-decoration: none;
+  1063→  1063→        transition: background var(--nvx-transition-fast);
+  1064→  1064→}
+  1065→  1065→
+  1066→  1066→.nvx-mobile-menu__action--login {
+  1067→  1067→        background: #F8F9FA;
+  1068→  1068→        color: var(--nvx-header-text);
+  1069→  1069→}
+  1070→  1070→
+  1071→  1071→.nvx-mobile-menu__action--login:hover {
+  1072→  1072→        background: #E9ECEF;
+  1073→  1073→}
+  1074→  1074→
+  1075→  1075→.nvx-mobile-menu__action--register {
+  1076→  1076→        background: #F8F9FA;
+  1077→  1077→        color: var(--nvx-header-text);
+  1078→  1078→}
+  1079→  1079→
+  1080→  1080→.nvx-mobile-menu__action--register:hover {
+  1081→  1081→        background: #E9ECEF;
+  1082→  1082→}
+  1083→  1083→
+  1084→  1084→.nvx-mobile-menu__action svg {
+  1085→  1085→        width: 20px;
+  1086→  1086→        height: 20px;
+  1087→  1087→        stroke: currentColor;
+  1088→  1088→        stroke-width: 2;
+  1089→  1089→        fill: none;
+  1090→  1090→}
+  1091→  1091→
+  1092→  1092→/* Hide mobile menu elements on desktop */
+  1093→  1093→@media (min-width: 768px) {
+  1094→  1094→        .nvx-mobile-menu,
+  1095→  1095→        .nvx-mobile-overlay {
+  1096→  1096→                display: none !important;
+  1097→  1097→        }
+  1098→  1098→}
+  1099→  1099→
+  1100→  1100→
+  1101→  1101→/* ═══════════════════════════════════════════════════════════════════════
+  1102→  1102→   11. BODY SCROLL LOCK
+  1103→  1103→   ═══════════════════════════════════════════════════════════════════════ */
+  1104→  1104→body.nvx-no-scroll {
+  1105→  1105→        overflow: hidden;
+  1106→  1106→}
+  1107→  1107→
+  1108→  1108→
+  1109→  1109→/* ═══════════════════════════════════════════════════════════════════════
+  1110→  1110→   12. CONTENT OFFSET (body padding for fixed header)
+  1111→  1111→   ═══════════════════════════════════════════════════════════════════════ */
+  1112→  1112→body .nvx-header-spacer {
+  1113→  1113→        /* Dynamic spacer, handled via JS inline style */
+  1114→  1114→        display: block;
+  1115→  1115→}
+  1116→  1116→
+  1117→  1117→
+  1118→  1118→/* ═══════════════════════════════════════════════════════════════════════
+  1119→  1119→   13. FOCUS STYLES (WCAG 2.2 AA)
+  1120→  1120→   ═══════════════════════════════════════════════════════════════════════ */
+  1121→  1121→
+  1122→  1122→/* Global focus for keyboard navigation */
+  1123→  1123→.nvx-keyboard-nav .nvx-nav__link:focus,
+  1124→  1124→.nvx-keyboard-nav .nvx-icon-btn:focus,
+  1125→  1125→.nvx-keyboard-nav .nvx-cta:focus,
+  1126→  1126→.nvx-keyboard-nav .nvx-hamburger:focus,
+  1127→  1127→.nvx-keyboard-nav .nvx-mobile-nav__link:focus,
+  1128→  1128→.nvx-keyboard-nav .nvx-mobile-menu__close:focus {
+  1129→  1129→        outline: var(--nvx-focus-ring);
+  1130→  1130→        outline-offset: var(--nvx-focus-offset);
+  1131→  1131→}
+  1132→  1132→
+  1133→  1133→.nvx-keyboard-nav .nvx-nav__link:focus {
+  1134→  1134→        outline-offset: -2px;
+  1135→  1135→        border-radius: 2px;
+  1136→  1136→}
+  1137→  1137→
+  1138→  1138→.nvx-keyboard-nav .nvx-search__input:focus {
+  1139→  1139→        box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.3);
+  1140→  1140→        outline: none;
+  1141→  1141→}
+  1142→  1142→
+  1143→  1143→.nvx-keyboard-nav .nvx-mobile-nav__link:focus {
+  1144→  1144→        outline-offset: -2px;
+  1145→  1145→        background: #F8F9FA;
+  1146→  1146→        border-radius: 4px;
+  1147→  1147→}
+  1148→  1148→
+  1149→  1149→/* Skip link focus */
+  1150→  1150→.nvx-skip-link:focus {
+  1151→  1151→        outline: 2px solid #F4A900;
+  1152→  1152→        outline-offset: -2px;
+  1153→  1153→}
+  1154→  1154→
+  1155→  1155→
+  1156→  1156→/* ═══════════════════════════════════════════════════════════════════════
+  1157→  1157→   14. ANIMATIONS
+  1158→  1158→   ═══════════════════════════════════════════════════════════════════════ */
+  1159→  1159→
+  1160→  1160→@keyframes nvx-fade-in {
+  1161→  1161→        from { opacity: 0; }
+  1162→  1162→        to   { opacity: 1; }
+  1163→  1163→}
+  1164→  1164→
+  1165→  1165→@keyframes nvx-fade-out {
+  1166→  1166→        from { opacity: 1; }
+  1167→  1167→        to   { opacity: 0; }
+  1168→  1168→}
+  1169→  1169→
+  1170→  1170→@keyframes nvx-slide-down {
+  1171→  1171→        from { transform: translateY(-10px); }
+  1172→  1172→        to   { transform: translateY(0); }
+  1173→  1173→}
+  1174→  1174→
+  1175→  1175→@keyframes nvx-slide-up {
+  1176→  1176→        from { transform: translateY(0); }
+  1177→  1177→        to   { transform: translateY(-10px); }
+  1178→  1178→}
+  1179→  1179→
+  1180→  1180→@keyframes nvx-pulse {
+  1181→  1181→        0%, 100% { transform: scale(1); }
+  1182→  1182→        50%      { transform: scale(1.05); }
+  1183→  1183→}
+  1184→  1184→
+  1185→  1185→.nvx-pulse {
+  1186→  1186→        animation: nvx-pulse 2s ease infinite;
+  1187→  1187→}
