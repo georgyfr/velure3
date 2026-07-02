@@ -71,12 +71,12 @@ a { text-decoration: none; color: inherit; }
 .trust-item-text span { font-size: 0.55rem; color: #888; }
 
 /* ═══ CATEGORIES ═══ */
-.categories { display: grid; grid-template-columns: repeat(4, 1fr); height: 100%; }
+.categories { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; height: 100%; }
 .cat-card { position: relative; overflow: hidden; }
 .cat-card img { width: 100%; height: 100%; object-fit: cover; }
-.cat-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.55)); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; color: #fff; }
-.cat-label { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.25rem; }
-.cat-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 500; }
+.cat-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgba(0,0,0,0.6)); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.7rem 0.65rem; color: #fff; }
+.cat-label { font-size: 0.42rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.15rem; }
+.cat-title { font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 500; line-height: 1.15; }
 
 /* ═══ PRODUCTS PREVIEW ═══ */
 .products-bar { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid #E5E0D8; }
@@ -182,7 +182,7 @@ a { text-decoration: none; color: inherit; }
   </div>
 </div>
 
-<!-- CATEGORIES -->
+<!-- CATEGORIES — 7 blocs -->
 <div class="categories">
   <div class="cat-card">
     <img src="https://sfile.chatglm.cn/images-ppt/18d4208c76f3.jpg" alt="Femme" />
@@ -193,12 +193,24 @@ a { text-decoration: none; color: inherit; }
     <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Homme</span></div>
   </div>
   <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/c5ac71282c69.jpg" alt="Accessoires" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Accessoires</span></div>
+  </div>
+  <div class="cat-card">
     <img src="https://sfile.chatglm.cn/images-ppt/cc28ec888277.png" alt="Chaussures" />
     <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Chaussures</span></div>
   </div>
   <div class="cat-card">
-    <img src="https://sfile.chatglm.cn/images-ppt/c5ac71282c69.jpg" alt="Accessoires" />
-    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Accessoires</span></div>
+    <img src="https://sfile.chatglm.cn/images-ppt/6a8d7a5c6d09.jpg" alt="Joaillerie" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Joaillerie</span></div>
+  </div>
+  <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/34ffdf0b4c6c.jpg" alt="Maroquinerie" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Maroquinerie</span></div>
+  </div>
+  <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/64175e67fca9.jpg" alt="Sportswear" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Sportswear</span></div>
   </div>
 </div>
 
