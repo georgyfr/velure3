@@ -1,0 +1,702 @@
+     1→<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+     2→
+     3→<!-- ========== 1. HERO SECTION — BANNIÈRE ASYMÉTRIQUE ========== -->
+     4→<!-- wp:html -->
+     5→<div class="hero-section">
+     6→
+     7→  <!-- Colonne A : Slider Émotionnel (50% gauche) -->
+     8→  <div class="hero-slider">
+     9→    <div class="hero-slides-track">
+    10→
+    11→      <!-- Slide 1 : Nouveautés -->
+    12→      <div class="hero-slide hero-slide--active" data-slide="0">
+    13→        <img src="/wp-content/themes/velure3/assets/images/hero.jpg" alt="Nouvelle Collection Automne 2026 — Veste en laine structurée" class="hero-slide-img" />
+    14→        <div class="hero-slide-overlay"></div>
+    15→        <div class="hero-slide-content">
+    16→          <span class="hero-eyebrow">Nouvelle Collection</span>
+    17→          <h1 class="hero-slide-title">L'Élégance<br/>Minimaliste</h1>
+    18→          <p class="hero-slide-subtitle">Nouvelle Collection Automne 2026</p>
+    19→          <a href="/boutique/" class="velure-btn velure-btn-primary">DÉCOUVRIR</a>
+    20→        </div>
+    21→      </div>
+    22→
+    23→      <!-- Slide 2 : Engagement -->
+    24→      <div class="hero-slide" data-slide="1">
+    25→        <img src="/wp-content/themes/velure3/assets/images/banner-collection.jpg" alt="Matières Durables — Tissus premium et éthiques" class="hero-slide-img" />
+    26→        <div class="hero-slide-overlay"></div>
+    27→        <div class="hero-slide-content">
+    28→          <span class="hero-eyebrow">Notre Engagement</span>
+    29→          <h2 class="hero-slide-title">Matières<br/>Durables</h2>
+    30→          <p class="hero-slide-subtitle">Vêtements éthiques conçus pour durer</p>
+    31→          <a href="/notre-engagement/" class="velure-btn velure-btn-primary">NOTRE ENGAGEMENT</a>
+    32→        </div>
+    33→      </div>
+    34→
+    35→    </div>
+    36→
+    37→    <!-- Slider Controls -->
+    38→    <div class="hero-slider-controls">
+    39→      <button class="hero-slider-dot hero-slider-dot--active" data-goto="0" aria-label="Slide 1"></button>
+    40→      <button class="hero-slider-dot" data-goto="1" aria-label="Slide 2"></button>
+    41→    </div>
+    42→
+    43→    <!-- Slider Progress Bar -->
+    44→    <div class="hero-slider-progress">
+    45→      <div class="hero-slider-progress-bar"></div>
+    46→    </div>
+    47→  </div>
+    48→
+    49→  <!-- Colonne B : Accès Rapides Statiques (50% droite) -->
+    50→  <div class="hero-static-blocks">
+    51→
+    52→    <!-- Bloc B1 : Best-Seller (haut) -->
+    53→    <section class="hero-block hero-block--bestseller">
+    54→      <div class="hero-block-visual">
+    55→        <img src="/wp-content/themes/velure3/assets/images/category-femme.jpg" alt="Sac Élégance en cuir minimaliste" class="hero-block-img" />
+    56→      </div>
+    57→      <div class="hero-block-content">
+    58→        <span class="hero-block-label">Best-Seller</span>
+    59→        <h3 class="hero-block-title">Sac Élégance</h3>
+    60→        <p class="hero-block-price">285,00 &euro;</p>
+    61→        <a href="/produit/sac-elegance/" class="velure-btn velure-btn-outline velure-btn-sm">VOIR LE PRODUIT</a>
+    62→      </div>
+    63→    </section>
+    64→
+    65→    <!-- Bloc B2 : Catégorie Capsule (bas) -->
+    66→    <section class="hero-block hero-block--category">
+    67→      <div class="hero-block-visual">
+    68→        <img src="/wp-content/themes/velure3/assets/images/category-accessoires.jpg" alt="Accessoires Essentiels — Lunettes et montres" class="hero-block-img" />
+    69→      </div>
+    70→      <div class="hero-block-content">
+    71→        <span class="hero-block-label">Capsule</span>
+    72→        <h3 class="hero-block-title">Les Accessoires Essentiels</h3>
+    73→        <a href="/categorie/accessoires/" class="hero-block-link">TOUT PARCOURIR &rarr;</a>
+    74→      </div>
+    75→    </section>
+    76→
+    77→  </div>
+    78→</div>
+    79→<!-- /wp:html -->
+    80→
+    81→<!-- ========== 2. TRUST / FEATURES BAR ========== -->
+    82→<!-- wp:group {"className":"velure-section velure-section-soft","layout":{"type":"constrained"}} -->
+    83→<div class="velure-section velure-section-soft">
+    84→  <div class="velure-container">
+    85→    <div class="velure-features">
+    86→      <!-- Feature 1: Livraison Express -->
+    87→      <div class="velure-feature">
+    88→        <div class="velure-feature-icon">
+    89→          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    90→            <rect x="1" y="3" width="15" height="13" rx="2" ry="2"/>
+    91→            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+    92→            <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+    93→          </svg>
+    94→        </div>
+    95→        <div class="velure-feature-text">
+    96→          <strong>Livraison Express</strong>
+    97→          <span>Sous 24-48h en France</span>
+    98→        </div>
+    99→      </div>
+   100→      <!-- Feature 2: Retours Gratuits -->
+   101→      <div class="velure-feature">
+   102→        <div class="velure-feature-icon">
+   103→          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+   104→            <polyline points="1 4 1 10 7 10"/>
+   105→            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+   106→          </svg>
+   107→        </div>
+   108→        <div class="velure-feature-text">
+   109→          <strong>Retours Gratuits</strong>
+   110→          <span>Sous 30 jours, sans frais</span>
+   111→        </div>
+   112→      </div>
+   113→      <!-- Feature 3: Paiement Securise -->
+   114→      <div class="velure-feature">
+   115→        <div class="velure-feature-icon">
+   116→          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+   117→            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+   118→            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+   119→          </svg>
+   120→        </div>
+   121→        <div class="velure-feature-text">
+   122→          <strong>Paiement Securise</strong>
+   123→          <span>SSL &amp; cryptage 256 bits</span>
+   124→        </div>
+   125→      </div>
+   126→      <!-- Feature 4: Service Client 7j/7 -->
+   127→      <div class="velure-feature">
+   128→        <div class="velure-feature-icon">
+   129→          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+   130→            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+   131→          </svg>
+   132→        </div>
+   133→        <div class="velure-feature-text">
+   134→          <strong>Service Client 7j/7</strong>
+   135→          <span>Par chat, email ou telephone</span>
+   136→        </div>
+   137→      </div>
+   138→    </div>
+   139→  </div>
+   140→</div>
+   141→<!-- /wp:group -->
+   142→
+   143→<!-- ========== 3. CATEGORIES CAROUSEL ========== -->
+   144→<!-- wp:html -->
+   145→<div class="velure-section">
+   146→  <div class="velure-container">
+   147→    <h2 class="velure-section-heading">Explorer par Univers</h2>
+   148→    <div class="velure-carousel" id="velure-category-carousel">
+   149→      <div class="velure-carousel-track">
+   150→        <a href="/categorie-femme/" class="velure-category-card">
+   151→          <img src="/wp-content/themes/velure3/assets/images/category-femme.jpg" alt="Collection Femme"/>
+   152→          <div class="velure-category-card-overlay">
+   153→            <span class="velure-category-card-label">Collection</span>
+   154→            <h3 class="velure-category-card-title">Femme</h3>
+   155→            <span class="velure-category-card-count">124 pieces</span>
+   156→          </div>
+   157→        </a>
+   158→        <a href="/categorie-homme/" class="velure-category-card">
+   159→          <img src="/wp-content/themes/velure3/assets/images/category-homme.jpg" alt="Collection Homme"/>
+   160→          <div class="velure-category-card-overlay">
+   161→            <span class="velure-category-card-label">Collection</span>
+   162→            <h3 class="velure-category-card-title">Homme</h3>
+   163→            <span class="velure-category-card-count">98 pieces</span>
+   164→          </div>
+   165→        </a>
+   166→        <a href="/categorie/accessoires/" class="velure-category-card">
+   167→          <img src="/wp-content/themes/velure3/assets/images/category-accessoires.jpg" alt="Collection Accessoires"/>
+   168→          <div class="velure-category-card-overlay">
+   169→            <span class="velure-category-card-label">Collection</span>
+   170→            <h3 class="velure-category-card-title">Accessoires</h3>
+   171→            <span class="velure-category-card-count">67 pieces</span>
+   172→          </div>
+   173→        </a>
+   174→        <a href="/categorie/chaussures/" class="velure-category-card">
+   175→          <img src="/wp-content/themes/velure3/assets/images/category-chaussures.jpg" alt="Collection Chaussures"/>
+   176→          <div class="velure-category-card-overlay">
+   177→            <span class="velure-category-card-label">Collection</span>
+   178→            <h3 class="velure-category-card-title">Chaussures</h3>
+   179→            <span class="velure-category-card-count">53 pieces</span>
+   180→          </div>
+   181→        </a>
+   182→        <a href="/categorie/joaillerie/" class="velure-category-card">
+   183→          <img src="/wp-content/themes/velure3/assets/images/category-joaillerie.jpg" alt="Collection Joaillerie"/>
+   184→          <div class="velure-category-card-overlay">
+   185→            <span class="velure-category-card-label">Collection</span>
+   186→            <h3 class="velure-category-card-title">Joaillerie</h3>
+   187→            <span class="velure-category-card-count">41 pieces</span>
+   188→          </div>
+   189→        </a>
+   190→        <a href="/categorie/maroquinerie/" class="velure-category-card">
+   191→          <img src="/wp-content/themes/velure3/assets/images/category-maroquinerie.jpg" alt="Collection Maroquinerie"/>
+   192→          <div class="velure-category-card-overlay">
+   193→            <span class="velure-category-card-label">Collection</span>
+   194→            <h3 class="velure-category-card-title">Maroquinerie</h3>
+   195→            <span class="velure-category-card-count">38 pieces</span>
+   196→          </div>
+   197→        </a>
+   198→        <a href="/categorie/sportswear/" class="velure-category-card">
+   199→          <img src="/wp-content/themes/velure3/assets/images/category-sportswear.jpg" alt="Collection Sportswear"/>
+   200→          <div class="velure-category-card-overlay">
+   201→            <span class="velure-category-card-label">Collection</span>
+   202→            <h3 class="velure-category-card-title">Sportswear</h3>
+   203→            <span class="velure-category-card-count">45 pieces</span>
+   204→          </div>
+   205→        </a>
+   206→      </div>
+   207→      <button class="velure-carousel-arrow velure-carousel-arrow--prev" aria-label="Precedent">
+   208→        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+   209→      </button>
+   210→      <button class="velure-carousel-arrow velure-carousel-arrow--next" aria-label="Suivant">
+   211→        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+   212→      </button>
+   213→    </div>
+   214→  </div>
+   215→</div>
+   216→<!-- /wp:html -->
+   217→
+   218→<!-- ========== 4. FEATURED PRODUCTS ========== -->
+   219→<!-- wp:group {"className":"velure-section velure-section-soft","layout":{"type":"constrained"}} -->
+   220→<div class="velure-section velure-section-soft">
+   221→  <div class="velure-container">
+   222→    <!-- wp:heading {"className":"velure-section-heading"} -->
+   223→    <h2 class="velure-section-heading">Pieces Vedettes</h2>
+   224→    <!-- /wp:heading -->
+   225→    <div class="velure-grid velure-grid-4">
+   226→      <!-- Product 1 -->
+   227→      <!-- wp:html -->
+   228→      <div class="velure-product-card">
+   229→        <div class="velure-product-card-image">
+   230→          <div style="background-color:#e2ddd6;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   231→            <img src="https://placehold.co/600x360/C8A97E/FFFFFF?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   232→          </div>
+   233→          <span class="velure-product-card-badge">Nouveau</span>
+   234→          <div class="velure-product-card-actions">
+   235→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   236→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   237→            </button>
+   238→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   239→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   240→            </button>
+   241→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   242→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   243→            </button>
+   244→          </div>
+   245→        </div>
+   246→        <div class="velure-product-card-info">
+   247→          <h3>Manteau Oversize Camel</h3>
+   248→          <div class="velure-product-card-price">
+   249→            <span class="sale-price">389,00 &euro;</span>
+   250→          </div>
+   251→        </div>
+   252→      </div>
+   253→      <!-- /wp:html -->
+   254→      <!-- Product 2 -->
+   255→      <!-- wp:html -->
+   256→      <div class="velure-product-card">
+   257→        <div class="velure-product-card-image">
+   258→          <div style="background-color:#d6d1ca;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   259→            <img src="https://placehold.co/600x360/2C2C2C/C8A97E?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   260→          </div>
+   261→          <span class="velure-product-card-badge">Nouveau</span>
+   262→          <div class="velure-product-card-actions">
+   263→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   264→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   265→            </button>
+   266→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   267→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   268→            </button>
+   269→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   270→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   271→            </button>
+   272→          </div>
+   273→        </div>
+   274→        <div class="velure-product-card-info">
+   275→          <h3>Robe Soie Midi Noire</h3>
+   276→          <div class="velure-product-card-price">
+   277→            <span class="sale-price">275,00 &euro;</span>
+   278→          </div>
+   279→        </div>
+   280→      </div>
+   281→      <!-- /wp:html -->
+   282→      <!-- Product 3 (Sale) -->
+   283→      <!-- wp:html -->
+   284→      <div class="velure-product-card">
+   285→        <div class="velure-product-card-image">
+   286→          <div style="background-color:#dfd9d2;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   287→            <img src="https://placehold.co/600x360/3D3D3D/FAFAF8?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   288→          </div>
+   289→          <span class="velure-product-card-badge" style="background-color:#c0392b;">-30%</span>
+   290→          <div class="velure-product-card-actions">
+   291→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   292→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   293→            </button>
+   294→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   295→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   296→            </button>
+   297→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   298→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   299→            </button>
+   300→          </div>
+   301→        </div>
+   302→        <div class="velure-product-card-info">
+   303→          <h3>Blazer Structure Ivoire</h3>
+   304→          <div class="velure-product-card-price">
+   305→            <span class="sale-price">189,00 &euro;</span>
+   306→            <span class="old-price">270,00 &euro;</span>
+   307→          </div>
+   308→        </div>
+   309→      </div>
+   310→      <!-- /wp:html -->
+   311→      <!-- Product 4 -->
+   312→      <!-- wp:html -->
+   313→      <div class="velure-product-card">
+   314→        <div class="velure-product-card-image">
+   315→          <div style="background-color:#d3cec8;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   316→            <img src="https://placehold.co/600x360/E8E4DE/1A1A1A?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   317→          </div>
+   318→          <div class="velure-product-card-actions">
+   319→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   320→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   321→            </button>
+   322→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   323→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   324→            </button>
+   325→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   326→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   327→            </button>
+   328→          </div>
+   329→        </div>
+   330→        <div class="velure-product-card-info">
+   331→          <h3>Pantalon Taille Haute Gris</h3>
+   332→          <div class="velure-product-card-price">
+   333→            <span class="sale-price">145,00 &euro;</span>
+   334→          </div>
+   335→        </div>
+   336→      </div>
+   337→      <!-- /wp:html -->
+   338→      <!-- Product 5 (Sale) -->
+   339→      <!-- wp:html -->
+   340→      <div class="velure-product-card">
+   341→        <div class="velure-product-card-image">
+   342→          <div style="background-color:#dbd5ce;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   343→            <img src="https://placehold.co/600x360/D4CFC9/1A1A1A?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   344→          </div>
+   345→          <span class="velure-product-card-badge" style="background-color:#c0392b;">-20%</span>
+   346→          <div class="velure-product-card-actions">
+   347→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   348→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   349→            </button>
+   350→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   351→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   352→            </button>
+   353→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   354→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   355→            </button>
+   356→          </div>
+   357→        </div>
+   358→        <div class="velure-product-card-info">
+   359→          <h3>Pull Cachemire Beige</h3>
+   360→          <div class="velure-product-card-price">
+   361→            <span class="sale-price">196,00 &euro;</span>
+   362→            <span class="old-price">245,00 &euro;</span>
+   363→          </div>
+   364→        </div>
+   365→      </div>
+   366→      <!-- /wp:html -->
+   367→      <!-- Product 6 -->
+   368→      <!-- wp:html -->
+   369→      <div class="velure-product-card">
+   370→        <div class="velure-product-card-image">
+   371→          <div style="background-color:#d9d3cb;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   372→            <img src="https://placehold.co/600x360/F5F0EB/1A1A1A?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   373→          </div>
+   374→          <span class="velure-product-card-badge">Nouveau</span>
+   375→          <div class="velure-product-card-actions">
+   376→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   377→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   378→            </button>
+   379→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   380→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   381→            </button>
+   382→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   383→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   384→            </button>
+   385→          </div>
+   386→        </div>
+   387→        <div class="velure-product-card-info">
+   388→          <h3>Sac Cuir Structure</h3>
+   389→          <div class="velure-product-card-price">
+   390→            <span class="sale-price">320,00 &euro;</span>
+   391→          </div>
+   392→        </div>
+   393→      </div>
+   394→      <!-- /wp:html -->
+   395→      <!-- Product 7 -->
+   396→      <!-- wp:html -->
+   397→      <div class="velure-product-card">
+   398→        <div class="velure-product-card-image">
+   399→          <div style="background-color:#e0dbd4;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   400→            <img src="https://placehold.co/600x360/C8A97E/FFFFFF?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   401→          </div>
+   402→          <div class="velure-product-card-actions">
+   403→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   404→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   405→            </button>
+   406→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   407→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   408→            </button>
+   409→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   410→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   411→            </button>
+   412→          </div>
+   413→        </div>
+   414→        <div class="velure-product-card-info">
+   415→          <h3>Chemise Lin Blanc</h3>
+   416→          <div class="velure-product-card-price">
+   417→            <span class="sale-price">125,00 &euro;</span>
+   418→          </div>
+   419→        </div>
+   420→      </div>
+   421→      <!-- /wp:html -->
+   422→      <!-- Product 8 (Sale) -->
+   423→      <!-- wp:html -->
+   424→      <div class="velure-product-card">
+   425→        <div class="velure-product-card-image">
+   426→          <div style="background-color:#d4cfc9;width:100%;height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   427→            <img src="https://placehold.co/600x360/2C2C2C/C8A97E?text=Produit" alt="Produit - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   428→          </div>
+   429→          <span class="velure-product-card-badge" style="background-color:#c0392b;">-25%</span>
+   430→          <div class="velure-product-card-actions">
+   431→            <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+   432→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   433→            </button>
+   434→            <button class="velure-product-card-action" aria-label="Apercu rapide">
+   435→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+   436→            </button>
+   437→            <button class="velure-product-card-action" aria-label="Ajouter au panier">
+   438→              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+   439→            </button>
+   440→          </div>
+   441→        </div>
+   442→        <div class="velure-product-card-info">
+   443→          <h3>Bottines Cuir Brun</h3>
+   444→          <div class="velure-product-card-price">
+   445→            <span class="sale-price">195,00 &euro;</span>
+   446→            <span class="old-price">260,00 &euro;</span>
+   447→          </div>
+   448→        </div>
+   449→      </div>
+   450→      <!-- /wp:html -->
+   451→    </div>
+   452→  </div>
+   453→</div>
+   454→<!-- /wp:group -->
+   455→
+   456→<!-- ========== 5. SPLIT BANNER ========== -->
+   457→<!-- wp:group {"className":"velure-section","layout":{"type":"constrained"}} -->
+   458→<div class="velure-section">
+   459→  <div class="velure-container">
+   460→    <div class="velure-grid velure-grid-2">
+   461→      <!-- Left Banner: La Nouvelle Collection -->
+   462→      <!-- wp:html -->
+   463→      <div style="position:relative;overflow:hidden;min-height:420px;display:flex;align-items:flex-end;">
+   464→        <img src="/wp-content/themes/velure3/assets/images/banner-collection.jpg" alt="Nouvelle Collection" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;"/>
+   465→        <div style="position:relative;z-index:1;padding:40px;width:100%;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 100%);">
+   466→          <span class="velure-eyebrow" style="color:rgba(255,255,255,0.8);">Collection AW25</span>
+   467→          <h2 style="color:#fff;font-size:2rem;margin:8px 0 12px;font-weight:300;letter-spacing:-0.01em;">La Nouvelle Collection</h2>
+   468→          <p style="color:rgba(255,255,255,0.75);margin-bottom:20px;font-size:0.95rem;line-height:1.6;">Des silhouettes audacieuses et des matieres nobles pour une saison inoubliable.</p>
+   469→          <a href="/new-collection/" class="velure-btn velure-btn-gold">Decouvrir</a>
+   470→        </div>
+   471→      </div>
+   472→      <!-- /wp:html -->
+   473→      <!-- Right Banner: Accessoires d'Exception -->
+   474→      <!-- wp:html -->
+   475→      <div style="position:relative;overflow:hidden;min-height:420px;display:flex;align-items:flex-end;">
+   476→        <img src="/wp-content/themes/velure3/assets/images/category-accessoires.jpg" alt="Accessoires d'Exception" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;"/>
+   477→        <div style="position:relative;z-index:1;padding:40px;width:100%;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 100%);">
+   478→          <span class="velure-eyebrow" style="color:rgba(255,255,255,0.8);">Edition Limitee</span>
+   479→          <h2 style="color:#fff;font-size:2rem;margin:8px 0 12px;font-weight:300;letter-spacing:-0.01em;">Accessoires d'Exception</h2>
+   480→          <p style="color:rgba(255,255,255,0.75);margin-bottom:20px;font-size:0.95rem;line-height:1.6;">Sacs, bijoux et ceintures signes par les meilleurs artisans.</p>
+   481→          <a href="/categorie/accessoires/" class="velure-btn velure-btn-outline" style="border-color:#fff;color:#fff;">Explorer</a>
+   482→        </div>
+   483→      </div>
+   484→      <!-- /wp:html -->
+   485→    </div>
+   486→  </div>
+   487→</div>
+   488→<!-- /wp:group -->
+   489→
+   490→<!-- ========== 6. TESTIMONIALS ========== -->
+   491→<!-- wp:group {"className":"velure-section velure-section-soft","layout":{"type":"constrained"}} -->
+   492→<div class="velure-section velure-section-soft">
+   493→  <div class="velure-container">
+   494→    <!-- wp:heading {"className":"velure-section-heading"} -->
+   495→    <h2 class="velure-section-heading">Ce Que Disent Nos Clients</h2>
+   496→    <!-- /wp:heading -->
+   497→    <div class="velure-grid velure-grid-3">
+   498→      <!-- Testimonial 1 -->
+   499→      <!-- wp:html -->
+   500→      <div class="velure-testimonial">
+   501→        <div class="velure-testimonial-stars">
+   502→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   503→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   504→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   505→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   506→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   507→        </div>
+   508→        <p class="velure-testimonial-text">&laquo; La qualite des matieres est exceptionnelle. Mon manteau en cachemire est devenu ma piece preferee. Le service client est aussi remarquable &mdash; toujours a l'ecoute. &raquo;</p>
+   509→        <p class="velure-testimonial-author">Camille D.</p>
+   510→        <p class="velure-testimonial-role">Cliente fid&egrave;le depuis 2023</p>
+   511→      </div>
+   512→      <!-- /wp:html -->
+   513→      <!-- Testimonial 2 -->
+   514→      <!-- wp:html -->
+   515→      <div class="velure-testimonial">
+   516→        <div class="velure-testimonial-stars">
+   517→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   518→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   519→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   520→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   521→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   522→        </div>
+   523→        <p class="velure-testimonial-text">&laquo; J'ai commande un blazer pour un evenement et j'ai ete bluffe par la coupe et la finition. La livraison etait rapide et l'emballage impeccable. Je recommande vivement. &raquo;</p>
+   524→        <p class="velure-testimonial-author">Antoine M.</p>
+   525→        <p class="velure-testimonial-role">Achat verifie</p>
+   526→      </div>
+   527→      <!-- /wp:html -->
+   528→      <!-- Testimonial 3 -->
+   529→      <!-- wp:html -->
+   530→      <div class="velure-testimonial">
+   531→        <div class="velure-testimonial-stars">
+   532→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   533→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   534→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   535→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   536→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+   537→        </div>
+   538→        <p class="velure-testimonial-text">&laquo; Velure est devenue ma reference mode. Les pieces sont intemporelles et la taille guide est tres fiable. Les retours sont faciles quand necessaire. Un concept store en ligne parfait. &raquo;</p>
+   539→        <p class="velure-testimonial-author">Sophie L.</p>
+   540→        <p class="velure-testimonial-role">Cliente Premium</p>
+   541→      </div>
+   542→      <!-- /wp:html -->
+   543→    </div>
+   544→  </div>
+   545→</div>
+   546→<!-- /wp:group -->
+   547→
+   548→<!-- ========== 7. BRAND MARQUEE ========== -->
+   549→<!-- wp:group {"className":"velure-section velure-section-dark","layout":{"type":"constrained"}} -->
+   550→<div class="velure-section velure-section-dark">
+   551→  <div class="velure-marquee">
+   552→    <div class="velure-marquee-track">
+   553→      <!-- First set -->
+   554→      <span class="velure-marquee-item">ELIE SAAB</span>
+   555→      <span class="velure-marquee-item">VALENTINO</span>
+   556→      <span class="velure-marquee-item">BOTTEGA VENETA</span>
+   557→      <span class="velure-marquee-item">SAINT LAURENT</span>
+   558→      <span class="velure-marquee-item">ACNE STUDIOS</span>
+   559→      <span class="velure-marquee-item">THE ROW</span>
+   560→      <span class="velure-marquee-item">LOEWE</span>
+   561→      <span class="velure-marquee-item">RICK OWENS</span>
+   562→      <!-- Second set (duplicate for infinite scroll) -->
+   563→      <span class="velure-marquee-item">ELIE SAAB</span>
+   564→      <span class="velure-marquee-item">VALENTINO</span>
+   565→      <span class="velure-marquee-item">BOTTEGA VENETA</span>
+   566→      <span class="velure-marquee-item">SAINT LAURENT</span>
+   567→      <span class="velure-marquee-item">ACNE STUDIOS</span>
+   568→      <span class="velure-marquee-item">THE ROW</span>
+   569→      <span class="velure-marquee-item">LOEWE</span>
+   570→      <span class="velure-marquee-item">RICK OWENS</span>
+   571→    </div>
+   572→  </div>
+   573→</div>
+   574→<!-- /wp:group -->
+   575→
+   576→<!-- ========== 8. BLOG / JOURNAL ========== -->
+   577→<!-- wp:group {"className":"velure-section","layout":{"type":"constrained"}} -->
+   578→<div class="velure-section">
+   579→  <div class="velure-container">
+   580→    <!-- wp:heading {"className":"velure-section-heading"} -->
+   581→    <h2 class="velure-section-heading">Le Journal</h2>
+   582→    <!-- /wp:heading -->
+   583→    <div class="velure-grid velure-grid-3">
+   584→      <!-- Blog Card 1 -->
+   585→      <!-- wp:html -->
+   586→      <article class="velure-blog-card">
+   587→        <div class="velure-blog-card-image">
+   588→          <div style="background-color:#dbd5cd;width:100%;height:240px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   589→            <img src="https://placehold.co/600x240/3D3D3D/FAFAF8?text=Blog" alt="Blog - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   590→          </div>
+   591→        </div>
+   592→        <div class="velure-blog-card-meta">
+   593→          <time datetime="2025-01-15">15 Jan 2025</time>
+   594→          <span style="margin:0 6px;opacity:0.4;">&bull;</span>
+   595→          <span>Tendances</span>
+   596→        </div>
+   597→        <h3 class="velure-blog-card-title">Les 10 Tendances Cle de l'Automne-Hiver 2025</h3>
+   598→        <p class="velure-blog-card-excerpt">Du retour du minimalisme chic aux teintes terreuses, decouvrez les tendances qui definiront la saison a venir et comment les adopter avec style.</p>
+   599→      </article>
+   600→      <!-- /wp:html -->
+   601→      <!-- Blog Card 2 -->
+   602→      <!-- wp:html -->
+   603→      <article class="velure-blog-card">
+   604→        <div class="velure-blog-card-image">
+   605→          <div style="background-color:#d4cec7;width:100%;height:240px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   606→            <img src="https://placehold.co/600x240/E8E4DE/1A1A1A?text=Blog" alt="Blog - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   607→          </div>
+   608→        </div>
+   609→        <div class="velure-blog-card-meta">
+   610→          <time datetime="2025-01-08">08 Jan 2025</time>
+   611→          <span style="margin:0 6px;opacity:0.4;">&bull;</span>
+   612→          <span>Guide</span>
+   613→        </div>
+   614→        <h3 class="velure-blog-card-title">Comment Entretenir Votre Cachemire : Le Guide Definitif</h3>
+   615→        <p class="velure-blog-card-excerpt">Nos experts partagent leurs secrets pour garder vos pieces en cachemire douces et elegantes saison apres saison.</p>
+   616→      </article>
+   617→      <!-- /wp:html -->
+   618→      <!-- Blog Card 3 -->
+   619→      <!-- wp:html -->
+   620→      <article class="velure-blog-card">
+   621→        <div class="velure-blog-card-image">
+   622→          <div style="background-color:#d8d2cb;width:100%;height:240px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   623→            <img src="https://placehold.co/600x240/D4CFC9/1A1A1A?text=Robe" alt="Robe - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   624→          </div>
+   625→        </div>
+   626→        <div class="velure-blog-card-meta">
+   627→          <time datetime="2024-12-20">20 Dec 2024</time>
+   628→          <span style="margin:0 6px;opacity:0.4;">&bull;</span>
+   629→          <span>Style</span>
+   630→        </div>
+   631→        <h3 class="velure-blog-card-title">Construire une Capsule Garderobe Intemporelle</h3>
+   632→        <p class="velure-blog-card-excerpt">Moins de vetements, plus de style. Apprenez a selectionner les pieces essentielles qui composeront une garde-robe versatile et elegante.</p>
+   633→      </article>
+   634→      <!-- /wp:html -->
+   635→    </div>
+   636→  </div>
+   637→</div>
+   638→<!-- /wp:group -->
+   639→
+   640→<!-- ========== 9. INSTAGRAM FEED ========== -->
+   641→<!-- wp:group {"className":"velure-section velure-section-soft","layout":{"type":"constrained"}} -->
+   642→<div class="velure-section velure-section-soft">
+   643→  <div class="velure-container">
+   644→    <!-- wp:heading {"className":"velure-section-heading"} -->
+   645→    <h2 class="velure-section-heading">@velure.paris</h2>
+   646→    <!-- /wp:heading -->
+   647→    <div class="velure-instagram-grid">
+   648→      <!-- Instagram 1 -->
+   649→      <!-- wp:html -->
+   650→      <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+   651→        <div style="background-color:#d6d0c8;width:100%;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   652→          <img src="https://placehold.co/600x280/F5F0EB/1A1A1A?text=Instagram" alt="Instagram - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   653→        </div>
+   654→      </a>
+   655→      <!-- /wp:html -->
+   656→      <!-- Instagram 2 -->
+   657→      <!-- wp:html -->
+   658→      <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+   659→        <div style="background-color:#cec8c0;width:100%;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   660→          <img src="https://placehold.co/600x280/C8A97E/FFFFFF?text=Instagram" alt="Instagram - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   661→        </div>
+   662→      </a>
+   663→      <!-- /wp:html -->
+   664→      <!-- Instagram 3 -->
+   665→      <!-- wp:html -->
+   666→      <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+   667→        <div style="background-color:#d2ccc5;width:100%;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   668→          <img src="https://placehold.co/600x280/2C2C2C/C8A97E?text=Instagram" alt="Instagram - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   669→        </div>
+   670→      </a>
+   671→      <!-- /wp:html -->
+   672→      <!-- Instagram 4 -->
+   673→      <!-- wp:html -->
+   674→      <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+   675→        <div style="background-color:#ded8d1;width:100%;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   676→          <img src="https://placehold.co/600x280/3D3D3D/FAFAF8?text=Instagram" alt="Instagram - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   677→        </div>
+   678→      </a>
+   679→      <!-- /wp:html -->
+   680→      <!-- Instagram 5 -->
+   681→      <!-- wp:html -->
+   682→      <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+   683→        <div style="background-color:#d0cac3;width:100%;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   684→          <img src="https://placehold.co/600x280/E8E4DE/1A1A1A?text=Instagram" alt="Instagram - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   685→        </div>
+   686→      </a>
+   687→      <!-- /wp:html -->
+   688→      <!-- Instagram 6 -->
+   689→      <!-- wp:html -->
+   690→      <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+   691→        <div style="background-color:#d5cfc8;width:100%;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+   692→          <img src="https://placehold.co/600x280/D4CFC9/1A1A1A?text=Instagram" alt="Instagram - Velure" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+   693→        </div>
+   694→      </a>
+   695→      <!-- /wp:html -->
+   696→    </div>
+   697→  </div>
+   698→</div>
+   699→<!-- /wp:group -->
+   700→
+   701→<!-- ========== 10. FOOTER ========== -->
+   702→<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
