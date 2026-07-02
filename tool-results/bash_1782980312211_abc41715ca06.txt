@@ -1,0 +1,365 @@
+LIGNE 387: SOLDE NEGATIF (-1)  |        </div>
+LIGNE 388: SOLDE NEGATIF (-1)  |        <!-- /wp:html -->
+LIGNE 389: SOLDE NEGATIF (-1)  |        <!-- Product 5 (Sale) -->
+LIGNE 390: SOLDE NEGATIF (-1)  |        <!-- wp:html -->
+LIGNE 410: SOLDE NEGATIF (-1)  |          </div>
+LIGNE 417: SOLDE NEGATIF (-1)  |          </div>
+LIGNE 418: SOLDE NEGATIF (-2)  |        </div>
+LIGNE 419: SOLDE NEGATIF (-2)  |        <!-- /wp:html -->
+LIGNE 420: SOLDE NEGATIF (-2)  |        <!-- Product 6 -->
+LIGNE 421: SOLDE NEGATIF (-2)  |        <!-- wp:html -->
+LIGNE 422: SOLDE NEGATIF (-1)  |        <div class="velure-product-card">
+LIGNE 428: SOLDE NEGATIF (-1)  |            </div>
+LIGNE 429: SOLDE NEGATIF (-1)  |            <span class="velure-product-card-badge">Nouveau</span>
+LIGNE 440: SOLDE NEGATIF (-1)  |            </div>
+LIGNE 441: SOLDE NEGATIF (-2)  |          </div>
+LIGNE 442: SOLDE NEGATIF (-1)  |          <div class="velure-product-card-info">
+LIGNE 443: SOLDE NEGATIF (-1)  |            <h3>Sac Cuir Structure</h3>
+LIGNE 446: SOLDE NEGATIF (-1)  |            </div>
+LIGNE 447: SOLDE NEGATIF (-2)  |          </div>
+LIGNE 448: SOLDE NEGATIF (-3)  |        </div>
+LIGNE 449: SOLDE NEGATIF (-3)  |        <!-- /wp:html -->
+LIGNE 450: SOLDE NEGATIF (-3)  |        <!-- Product 7 -->
+LIGNE 451: SOLDE NEGATIF (-3)  |        <!-- wp:html -->
+LIGNE 452: SOLDE NEGATIF (-2)  |        <div class="velure-product-card">
+LIGNE 453: SOLDE NEGATIF (-1)  |          <div class="velure-product-card-image">
+LIGNE 456: SOLDE NEGATIF (-1)  |            </div>
+LIGNE 457: SOLDE NEGATIF (-1)  |              <span style="color:#b3aca3;font-size:12px;">Chemise Lin Blanc</span>
+LIGNE 458: SOLDE NEGATIF (-2)  |            </div>
+LIGNE 459: SOLDE NEGATIF (-1)  |            <div class="velure-product-card-actions">
+LIGNE 460: SOLDE NEGATIF (-1)  |              <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+LIGNE 461: SOLDE NEGATIF (-1)  |                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path
+LIGNE 462: SOLDE NEGATIF (-1)  |              </button>
+LIGNE 463: SOLDE NEGATIF (-1)  |              <button class="velure-product-card-action" aria-label="Apercu rapide">
+LIGNE 464: SOLDE NEGATIF (-1)  |                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path
+LIGNE 465: SOLDE NEGATIF (-1)  |              </button>
+LIGNE 466: SOLDE NEGATIF (-1)  |              <button class="velure-product-card-action" aria-label="Ajouter au panier">
+LIGNE 467: SOLDE NEGATIF (-1)  |                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path
+LIGNE 468: SOLDE NEGATIF (-1)  |              </button>
+LIGNE 469: SOLDE NEGATIF (-2)  |            </div>
+LIGNE 470: SOLDE NEGATIF (-3)  |          </div>
+LIGNE 471: SOLDE NEGATIF (-2)  |          <div class="velure-product-card-info">
+LIGNE 472: SOLDE NEGATIF (-2)  |            <h3>Chemise Lin Blanc</h3>
+LIGNE 473: SOLDE NEGATIF (-1)  |            <div class="velure-product-card-price">
+LIGNE 474: SOLDE NEGATIF (-1)  |              <span class="sale-price">125,00 &euro;</span>
+LIGNE 475: SOLDE NEGATIF (-2)  |            </div>
+LIGNE 476: SOLDE NEGATIF (-3)  |          </div>
+LIGNE 477: SOLDE NEGATIF (-4)  |        </div>
+LIGNE 478: SOLDE NEGATIF (-4)  |        <!-- /wp:html -->
+LIGNE 479: SOLDE NEGATIF (-4)  |        <!-- Product 8 (Sale) -->
+LIGNE 480: SOLDE NEGATIF (-4)  |        <!-- wp:html -->
+LIGNE 481: SOLDE NEGATIF (-3)  |        <div class="velure-product-card">
+LIGNE 482: SOLDE NEGATIF (-2)  |          <div class="velure-product-card-image">
+LIGNE 483: SOLDE NEGATIF (-1)  |            <div style="background-color:#d4cfc9;width:100%;height:360px;display:flex;align-items:center;justify-content:c
+LIGNE 484: SOLDE NEGATIF (-1)  |              <img src="https://placehold.co/600x360/2C2C2C/C8A97E?text=Produit" alt="Produit - Velure" style="width:100%;
+LIGNE 485: SOLDE NEGATIF (-2)  |            </div>
+LIGNE 486: SOLDE NEGATIF (-2)  |              <span style="color:#a7a09a;font-size:12px;">Bottines Cuir Brun</span>
+LIGNE 487: SOLDE NEGATIF (-3)  |            </div>
+LIGNE 488: SOLDE NEGATIF (-3)  |            <span class="velure-product-card-badge" style="background-color:#c0392b;">-25%</span>
+LIGNE 489: SOLDE NEGATIF (-2)  |            <div class="velure-product-card-actions">
+LIGNE 490: SOLDE NEGATIF (-2)  |              <button class="velure-product-card-action" aria-label="Ajouter aux favoris">
+LIGNE 491: SOLDE NEGATIF (-2)  |                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path
+LIGNE 492: SOLDE NEGATIF (-2)  |              </button>
+LIGNE 493: SOLDE NEGATIF (-2)  |              <button class="velure-product-card-action" aria-label="Apercu rapide">
+LIGNE 494: SOLDE NEGATIF (-2)  |                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path
+LIGNE 495: SOLDE NEGATIF (-2)  |              </button>
+LIGNE 496: SOLDE NEGATIF (-2)  |              <button class="velure-product-card-action" aria-label="Ajouter au panier">
+LIGNE 497: SOLDE NEGATIF (-2)  |                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path
+LIGNE 498: SOLDE NEGATIF (-2)  |              </button>
+LIGNE 499: SOLDE NEGATIF (-3)  |            </div>
+LIGNE 500: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 501: SOLDE NEGATIF (-3)  |          <div class="velure-product-card-info">
+LIGNE 502: SOLDE NEGATIF (-3)  |            <h3>Bottines Cuir Brun</h3>
+LIGNE 503: SOLDE NEGATIF (-2)  |            <div class="velure-product-card-price">
+LIGNE 504: SOLDE NEGATIF (-2)  |              <span class="sale-price">195,00 &euro;</span>
+LIGNE 505: SOLDE NEGATIF (-2)  |              <span class="old-price">260,00 &euro;</span>
+LIGNE 506: SOLDE NEGATIF (-3)  |            </div>
+LIGNE 507: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 508: SOLDE NEGATIF (-5)  |        </div>
+LIGNE 509: SOLDE NEGATIF (-5)  |        <!-- /wp:html -->
+LIGNE 510: SOLDE NEGATIF (-6)  |      </div>
+LIGNE 511: SOLDE NEGATIF (-7)  |    </div>
+LIGNE 512: SOLDE NEGATIF (-8)  |  </div>
+LIGNE 513: SOLDE NEGATIF (-8)  |  <!-- /wp:group -->
+LIGNE 514: SOLDE NEGATIF (-8)  |  
+LIGNE 515: SOLDE NEGATIF (-8)  |  <!-- ========== 5. SPLIT BANNER ========== -->
+LIGNE 516: SOLDE NEGATIF (-8)  |  <!-- wp:group {"className":"velure-section","layout":{"type":"constrained"}} -->
+LIGNE 517: SOLDE NEGATIF (-7)  |  <div class="velure-section">
+LIGNE 518: SOLDE NEGATIF (-6)  |    <div class="velure-container">
+LIGNE 519: SOLDE NEGATIF (-5)  |      <div class="velure-grid velure-grid-2">
+LIGNE 520: SOLDE NEGATIF (-5)  |        <!-- Left Banner: La Nouvelle Collection -->
+LIGNE 521: SOLDE NEGATIF (-5)  |        <!-- wp:html -->
+LIGNE 522: SOLDE NEGATIF (-4)  |        <div style="position:relative;overflow:hidden;min-height:420px;display:flex;align-items:flex-end;">
+LIGNE 523: SOLDE NEGATIF (-4)  |          <img src="/wp-content/themes/velure3/assets/images/banner-collection.jpg" alt="Nouvelle Collection" style="posit
+LIGNE 524: SOLDE NEGATIF (-3)  |          <div style="position:relative;z-index:1;padding:40px;width:100%;background:linear-gradient(to top,rgba(0,0,0,0.6
+LIGNE 525: SOLDE NEGATIF (-3)  |            <span class="velure-eyebrow" style="color:rgba(255,255,255,0.8);">Collection AW25</span>
+LIGNE 526: SOLDE NEGATIF (-3)  |            <h2 style="color:#fff;font-size:2rem;margin:8px 0 12px;font-weight:300;letter-spacing:-0.01em;">La Nouvelle Co
+LIGNE 527: SOLDE NEGATIF (-3)  |            <p style="color:rgba(255,255,255,0.75);margin-bottom:20px;font-size:0.95rem;line-height:1.6;">Des silhouettes 
+LIGNE 528: SOLDE NEGATIF (-3)  |            <a href="/new-collection/" class="velure-btn velure-btn-gold">Decouvrir</a>
+LIGNE 529: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 530: SOLDE NEGATIF (-5)  |        </div>
+LIGNE 531: SOLDE NEGATIF (-5)  |        <!-- /wp:html -->
+LIGNE 532: SOLDE NEGATIF (-5)  |        <!-- Right Banner: Accessoires d'Exception -->
+LIGNE 533: SOLDE NEGATIF (-5)  |        <!-- wp:html -->
+LIGNE 534: SOLDE NEGATIF (-4)  |        <div style="position:relative;overflow:hidden;min-height:420px;display:flex;align-items:flex-end;">
+LIGNE 535: SOLDE NEGATIF (-4)  |          <img src="/wp-content/themes/velure3/assets/images/category-accessoires.jpg" alt="Accessoires d'Exception" style
+LIGNE 536: SOLDE NEGATIF (-3)  |          <div style="position:relative;z-index:1;padding:40px;width:100%;background:linear-gradient(to top,rgba(0,0,0,0.6
+LIGNE 537: SOLDE NEGATIF (-3)  |            <span class="velure-eyebrow" style="color:rgba(255,255,255,0.8);">Edition Limitee</span>
+LIGNE 538: SOLDE NEGATIF (-3)  |            <h2 style="color:#fff;font-size:2rem;margin:8px 0 12px;font-weight:300;letter-spacing:-0.01em;">Accessoires d'
+LIGNE 539: SOLDE NEGATIF (-3)  |            <p style="color:rgba(255,255,255,0.75);margin-bottom:20px;font-size:0.95rem;line-height:1.6;">Sacs, bijoux et 
+LIGNE 540: SOLDE NEGATIF (-3)  |            <a href="/categorie/accessoires/" class="velure-btn velure-btn-outline" style="border-color:#fff;color:#fff;">
+LIGNE 541: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 542: SOLDE NEGATIF (-5)  |        </div>
+LIGNE 543: SOLDE NEGATIF (-5)  |        <!-- /wp:html -->
+LIGNE 544: SOLDE NEGATIF (-6)  |      </div>
+LIGNE 545: SOLDE NEGATIF (-7)  |    </div>
+LIGNE 546: SOLDE NEGATIF (-8)  |  </div>
+LIGNE 547: SOLDE NEGATIF (-8)  |  <!-- /wp:group -->
+LIGNE 548: SOLDE NEGATIF (-8)  |  
+LIGNE 549: SOLDE NEGATIF (-8)  |  <!-- ========== 6. TESTIMONIALS ========== -->
+LIGNE 550: SOLDE NEGATIF (-8)  |  <!-- wp:group {"className":"velure-section velure-section-soft","layout":{"type":"constrained"}} -->
+LIGNE 551: SOLDE NEGATIF (-7)  |  <div class="velure-section velure-section-soft">
+LIGNE 552: SOLDE NEGATIF (-6)  |    <div class="velure-container">
+LIGNE 553: SOLDE NEGATIF (-6)  |      <!-- wp:heading {"className":"velure-section-heading"} -->
+LIGNE 554: SOLDE NEGATIF (-6)  |      <h2 class="velure-section-heading">Ce Que Disent Nos Clients</h2>
+LIGNE 555: SOLDE NEGATIF (-6)  |      <!-- /wp:heading -->
+LIGNE 556: SOLDE NEGATIF (-5)  |      <div class="velure-grid velure-grid-3">
+LIGNE 557: SOLDE NEGATIF (-5)  |        <!-- Testimonial 1 -->
+LIGNE 558: SOLDE NEGATIF (-5)  |        <!-- wp:html -->
+LIGNE 559: SOLDE NEGATIF (-4)  |        <div class="velure-testimonial">
+LIGNE 560: SOLDE NEGATIF (-3)  |          <div class="velure-testimonial-stars">
+LIGNE 561: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 562: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 563: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 564: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 565: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 566: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 567: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-text">&laquo; La qualite des matieres est exceptionnelle. Mon manteau en cachemire 
+LIGNE 568: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-author">Camille D.</p>
+LIGNE 569: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-role">Cliente fid&egrave;le depuis 2023</p>
+LIGNE 570: SOLDE NEGATIF (-5)  |        </div>
+LIGNE 571: SOLDE NEGATIF (-5)  |        <!-- /wp:html -->
+LIGNE 572: SOLDE NEGATIF (-5)  |        <!-- Testimonial 2 -->
+LIGNE 573: SOLDE NEGATIF (-5)  |        <!-- wp:html -->
+LIGNE 574: SOLDE NEGATIF (-4)  |        <div class="velure-testimonial">
+LIGNE 575: SOLDE NEGATIF (-3)  |          <div class="velure-testimonial-stars">
+LIGNE 576: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 577: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 578: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 579: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 580: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 581: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 582: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-text">&laquo; J'ai commande un blazer pour un evenement et j'ai ete bluffe par la c
+LIGNE 583: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-author">Antoine M.</p>
+LIGNE 584: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-role">Achat verifie</p>
+LIGNE 585: SOLDE NEGATIF (-5)  |        </div>
+LIGNE 586: SOLDE NEGATIF (-5)  |        <!-- /wp:html -->
+LIGNE 587: SOLDE NEGATIF (-5)  |        <!-- Testimonial 3 -->
+LIGNE 588: SOLDE NEGATIF (-5)  |        <!-- wp:html -->
+LIGNE 589: SOLDE NEGATIF (-4)  |        <div class="velure-testimonial">
+LIGNE 590: SOLDE NEGATIF (-3)  |          <div class="velure-testimonial-stars">
+LIGNE 591: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 592: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 593: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 594: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 595: SOLDE NEGATIF (-3)  |            <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+LIGNE 596: SOLDE NEGATIF (-4)  |          </div>
+LIGNE 597: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-text">&laquo; Velure est devenue ma reference mode. Les pieces sont intemporelles e
+LIGNE 598: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-author">Sophie L.</p>
+LIGNE 599: SOLDE NEGATIF (-4)  |          <p class="velure-testimonial-role">Cliente Premium</p>
+LIGNE 600: SOLDE NEGATIF (-5)  |        </div>
+LIGNE 601: SOLDE NEGATIF (-5)  |        <!-- /wp:html -->
+LIGNE 602: SOLDE NEGATIF (-6)  |      </div>
+LIGNE 603: SOLDE NEGATIF (-7)  |    </div>
+LIGNE 604: SOLDE NEGATIF (-8)  |  </div>
+LIGNE 605: SOLDE NEGATIF (-8)  |  <!-- /wp:group -->
+LIGNE 606: SOLDE NEGATIF (-8)  |  
+LIGNE 607: SOLDE NEGATIF (-8)  |  <!-- ========== 7. BRAND MARQUEE ========== -->
+LIGNE 608: SOLDE NEGATIF (-8)  |  <!-- wp:group {"className":"velure-section velure-section-dark","layout":{"type":"constrained"}} -->
+LIGNE 609: SOLDE NEGATIF (-7)  |  <div class="velure-section velure-section-dark">
+LIGNE 610: SOLDE NEGATIF (-6)  |    <div class="velure-marquee">
+LIGNE 611: SOLDE NEGATIF (-5)  |      <div class="velure-marquee-track">
+LIGNE 612: SOLDE NEGATIF (-5)  |        <!-- First set -->
+LIGNE 613: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">ELIE SAAB</span>
+LIGNE 614: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">VALENTINO</span>
+LIGNE 615: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">BOTTEGA VENETA</span>
+LIGNE 616: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">SAINT LAURENT</span>
+LIGNE 617: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">ACNE STUDIOS</span>
+LIGNE 618: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">THE ROW</span>
+LIGNE 619: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">LOEWE</span>
+LIGNE 620: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">RICK OWENS</span>
+LIGNE 621: SOLDE NEGATIF (-5)  |        <!-- Second set (duplicate for infinite scroll) -->
+LIGNE 622: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">ELIE SAAB</span>
+LIGNE 623: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">VALENTINO</span>
+LIGNE 624: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">BOTTEGA VENETA</span>
+LIGNE 625: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">SAINT LAURENT</span>
+LIGNE 626: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">ACNE STUDIOS</span>
+LIGNE 627: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">THE ROW</span>
+LIGNE 628: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">LOEWE</span>
+LIGNE 629: SOLDE NEGATIF (-5)  |        <span class="velure-marquee-item">RICK OWENS</span>
+LIGNE 630: SOLDE NEGATIF (-6)  |      </div>
+LIGNE 631: SOLDE NEGATIF (-7)  |    </div>
+LIGNE 632: SOLDE NEGATIF (-8)  |  </div>
+LIGNE 633: SOLDE NEGATIF (-8)  |  <!-- /wp:group -->
+LIGNE 634: SOLDE NEGATIF (-8)  |  
+LIGNE 635: SOLDE NEGATIF (-8)  |  <!-- ========== 8. BLOG / JOURNAL ========== -->
+LIGNE 636: SOLDE NEGATIF (-8)  |  <!-- wp:group {"className":"velure-section","layout":{"type":"constrained"}} -->
+LIGNE 637: SOLDE NEGATIF (-7)  |  <div class="velure-section">
+LIGNE 638: SOLDE NEGATIF (-6)  |    <div class="velure-container">
+LIGNE 639: SOLDE NEGATIF (-6)  |      <!-- wp:heading {"className":"velure-section-heading"} -->
+LIGNE 640: SOLDE NEGATIF (-6)  |      <h2 class="velure-section-heading">Le Journal</h2>
+LIGNE 641: SOLDE NEGATIF (-6)  |      <!-- /wp:heading -->
+LIGNE 642: SOLDE NEGATIF (-5)  |      <div class="velure-grid velure-grid-3">
+LIGNE 643: SOLDE NEGATIF (-5)  |        <!-- Blog Card 1 -->
+LIGNE 644: SOLDE NEGATIF (-5)  |        <!-- wp:html -->
+LIGNE 645: SOLDE NEGATIF (-5)  |        <article class="velure-blog-card">
+LIGNE 646: SOLDE NEGATIF (-4)  |          <div class="velure-blog-card-image">
+LIGNE 647: SOLDE NEGATIF (-3)  |            <div style="background-color:#dbd5cd;width:100%;height:240px;display:flex;align-items:center;justify-content:c
+LIGNE 648: SOLDE NEGATIF (-3)  |              <img src="https://placehold.co/600x240/3D3D3D/FAFAF8?text=Blog" alt="Blog - Velure" style="width:100%;height
+LIGNE 649: SOLDE NEGATIF (-4)  |            </div>
+LIGNE 650: SOLDE NEGATIF (-4)  |              <span style="color:#b0a89e;font-size:12px;">Tendances AW25</span>
+LIGNE 651: SOLDE NEGATIF (-5)  |            </div>
+LIGNE 652: SOLDE NEGATIF (-6)  |          </div>
+LIGNE 653: SOLDE NEGATIF (-5)  |          <div class="velure-blog-card-meta">
+LIGNE 654: SOLDE NEGATIF (-5)  |            <time datetime="2025-01-15">15 Jan 2025</time>
+LIGNE 655: SOLDE NEGATIF (-5)  |            <span style="margin:0 6px;opacity:0.4;">&bull;</span>
+LIGNE 656: SOLDE NEGATIF (-5)  |            <span>Tendances</span>
+LIGNE 657: SOLDE NEGATIF (-6)  |          </div>
+LIGNE 658: SOLDE NEGATIF (-6)  |          <h3 class="velure-blog-card-title">Les 10 Tendances Cle de l'Automne-Hiver 2025</h3>
+LIGNE 659: SOLDE NEGATIF (-6)  |          <p class="velure-blog-card-excerpt">Du retour du minimalisme chic aux teintes terreuses, decouvrez les tendances
+LIGNE 660: SOLDE NEGATIF (-6)  |        </article>
+LIGNE 661: SOLDE NEGATIF (-6)  |        <!-- /wp:html -->
+LIGNE 662: SOLDE NEGATIF (-6)  |        <!-- Blog Card 2 -->
+LIGNE 663: SOLDE NEGATIF (-6)  |        <!-- wp:html -->
+LIGNE 664: SOLDE NEGATIF (-6)  |        <article class="velure-blog-card">
+LIGNE 665: SOLDE NEGATIF (-5)  |          <div class="velure-blog-card-image">
+LIGNE 666: SOLDE NEGATIF (-4)  |            <div style="background-color:#d4cec7;width:100%;height:240px;display:flex;align-items:center;justify-content:c
+LIGNE 667: SOLDE NEGATIF (-4)  |              <img src="https://placehold.co/600x240/E8E4DE/1A1A1A?text=Blog" alt="Blog - Velure" style="width:100%;height
+LIGNE 668: SOLDE NEGATIF (-5)  |            </div>
+LIGNE 669: SOLDE NEGATIF (-5)  |              <span style="color:#a8a19a;font-size:12px;">Guide Cachemire</span>
+LIGNE 670: SOLDE NEGATIF (-6)  |            </div>
+LIGNE 671: SOLDE NEGATIF (-7)  |          </div>
+LIGNE 672: SOLDE NEGATIF (-6)  |          <div class="velure-blog-card-meta">
+LIGNE 673: SOLDE NEGATIF (-6)  |            <time datetime="2025-01-08">08 Jan 2025</time>
+LIGNE 674: SOLDE NEGATIF (-6)  |            <span style="margin:0 6px;opacity:0.4;">&bull;</span>
+LIGNE 675: SOLDE NEGATIF (-6)  |            <span>Guide</span>
+LIGNE 676: SOLDE NEGATIF (-7)  |          </div>
+LIGNE 677: SOLDE NEGATIF (-7)  |          <h3 class="velure-blog-card-title">Comment Entretenir Votre Cachemire : Le Guide Definitif</h3>
+LIGNE 678: SOLDE NEGATIF (-7)  |          <p class="velure-blog-card-excerpt">Nos experts partagent leurs secrets pour garder vos pieces en cachemire douc
+LIGNE 679: SOLDE NEGATIF (-7)  |        </article>
+LIGNE 680: SOLDE NEGATIF (-7)  |        <!-- /wp:html -->
+LIGNE 681: SOLDE NEGATIF (-7)  |        <!-- Blog Card 3 -->
+LIGNE 682: SOLDE NEGATIF (-7)  |        <!-- wp:html -->
+LIGNE 683: SOLDE NEGATIF (-7)  |        <article class="velure-blog-card">
+LIGNE 684: SOLDE NEGATIF (-6)  |          <div class="velure-blog-card-image">
+LIGNE 685: SOLDE NEGATIF (-5)  |            <div style="background-color:#d8d2cb;width:100%;height:240px;display:flex;align-items:center;justify-content:c
+LIGNE 686: SOLDE NEGATIF (-5)  |              <img src="https://placehold.co/600x240/D4CFC9/1A1A1A?text=Robe" alt="Robe - Velure" style="width:100%;height
+LIGNE 687: SOLDE NEGATIF (-6)  |            </div>
+LIGNE 688: SOLDE NEGATIF (-6)  |              <span style="color:#aba49b;font-size:12px;">Capsule Garderobe</span>
+LIGNE 689: SOLDE NEGATIF (-7)  |            </div>
+LIGNE 690: SOLDE NEGATIF (-8)  |          </div>
+LIGNE 691: SOLDE NEGATIF (-7)  |          <div class="velure-blog-card-meta">
+LIGNE 692: SOLDE NEGATIF (-7)  |            <time datetime="2024-12-20">20 Dec 2024</time>
+LIGNE 693: SOLDE NEGATIF (-7)  |            <span style="margin:0 6px;opacity:0.4;">&bull;</span>
+LIGNE 694: SOLDE NEGATIF (-7)  |            <span>Style</span>
+LIGNE 695: SOLDE NEGATIF (-8)  |          </div>
+LIGNE 696: SOLDE NEGATIF (-8)  |          <h3 class="velure-blog-card-title">Construire une Capsule Garderobe Intemporelle</h3>
+LIGNE 697: SOLDE NEGATIF (-8)  |          <p class="velure-blog-card-excerpt">Moins de vetements, plus de style. Apprenez a selectionner les pieces essent
+LIGNE 698: SOLDE NEGATIF (-8)  |        </article>
+LIGNE 699: SOLDE NEGATIF (-8)  |        <!-- /wp:html -->
+LIGNE 700: SOLDE NEGATIF (-9)  |      </div>
+LIGNE 701: SOLDE NEGATIF (-10)  |    </div>
+LIGNE 702: SOLDE NEGATIF (-11)  |  </div>
+LIGNE 703: SOLDE NEGATIF (-11)  |  <!-- /wp:group -->
+LIGNE 704: SOLDE NEGATIF (-11)  |  
+LIGNE 705: SOLDE NEGATIF (-11)  |  <!-- ========== 9. INSTAGRAM FEED ========== -->
+LIGNE 706: SOLDE NEGATIF (-11)  |  <!-- wp:group {"className":"velure-section velure-section-soft","layout":{"type":"constrained"}} -->
+LIGNE 707: SOLDE NEGATIF (-10)  |  <div class="velure-section velure-section-soft">
+LIGNE 708: SOLDE NEGATIF (-9)  |    <div class="velure-container">
+LIGNE 709: SOLDE NEGATIF (-9)  |      <!-- wp:heading {"className":"velure-section-heading"} -->
+LIGNE 710: SOLDE NEGATIF (-9)  |      <h2 class="velure-section-heading">@velure.paris</h2>
+LIGNE 711: SOLDE NEGATIF (-9)  |      <!-- /wp:heading -->
+LIGNE 712: SOLDE NEGATIF (-8)  |      <div class="velure-instagram-grid">
+LIGNE 713: SOLDE NEGATIF (-8)  |        <!-- Instagram 1 -->
+LIGNE 714: SOLDE NEGATIF (-8)  |        <!-- wp:html -->
+LIGNE 715: SOLDE NEGATIF (-8)  |        <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+LIGNE 716: SOLDE NEGATIF (-7)  |          <div style="background-color:#d6d0c8;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 717: SOLDE NEGATIF (-7)  |            <img src="https://placehold.co/600x280/F5F0EB/1A1A1A?text=Instagram" alt="Instagram - Velure" style="width:100
+LIGNE 718: SOLDE NEGATIF (-8)  |          </div>
+LIGNE 719: SOLDE NEGATIF (-8)  |            <span style="color:#b0a89e;font-size:12px;">Instagram 1</span>
+LIGNE 720: SOLDE NEGATIF (-9)  |          </div>
+LIGNE 721: SOLDE NEGATIF (-9)  |        </a>
+LIGNE 722: SOLDE NEGATIF (-9)  |        <!-- /wp:html -->
+LIGNE 723: SOLDE NEGATIF (-9)  |        <!-- Instagram 2 -->
+LIGNE 724: SOLDE NEGATIF (-9)  |        <!-- wp:html -->
+LIGNE 725: SOLDE NEGATIF (-9)  |        <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+LIGNE 726: SOLDE NEGATIF (-8)  |          <div style="background-color:#cec8c0;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 727: SOLDE NEGATIF (-8)  |            <img src="https://placehold.co/600x280/C8A97E/FFFFFF?text=Instagram" alt="Instagram - Velure" style="width:100
+LIGNE 728: SOLDE NEGATIF (-9)  |          </div>
+LIGNE 729: SOLDE NEGATIF (-9)  |            <span style="color:#a8a09a;font-size:12px;">Instagram 2</span>
+LIGNE 730: SOLDE NEGATIF (-10)  |          </div>
+LIGNE 731: SOLDE NEGATIF (-10)  |        </a>
+LIGNE 732: SOLDE NEGATIF (-10)  |        <!-- /wp:html -->
+LIGNE 733: SOLDE NEGATIF (-10)  |        <!-- Instagram 3 -->
+LIGNE 734: SOLDE NEGATIF (-10)  |        <!-- wp:html -->
+LIGNE 735: SOLDE NEGATIF (-10)  |        <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+LIGNE 736: SOLDE NEGATIF (-9)  |          <div style="background-color:#d2ccc5;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 737: SOLDE NEGATIF (-9)  |            <img src="https://placehold.co/600x280/2C2C2C/C8A97E?text=Instagram" alt="Instagram - Velure" style="width:100
+LIGNE 738: SOLDE NEGATIF (-10)  |          </div>
+LIGNE 739: SOLDE NEGATIF (-10)  |            <span style="color:#ada69e;font-size:12px;">Instagram 3</span>
+LIGNE 740: SOLDE NEGATIF (-11)  |          </div>
+LIGNE 741: SOLDE NEGATIF (-11)  |        </a>
+LIGNE 742: SOLDE NEGATIF (-11)  |        <!-- /wp:html -->
+LIGNE 743: SOLDE NEGATIF (-11)  |        <!-- Instagram 4 -->
+LIGNE 744: SOLDE NEGATIF (-11)  |        <!-- wp:html -->
+LIGNE 745: SOLDE NEGATIF (-11)  |        <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+LIGNE 746: SOLDE NEGATIF (-10)  |          <div style="background-color:#ded8d1;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 746: opens=1 closes=0 solde=-10  |          <div style="background-color:#ded8d1;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 747: SOLDE NEGATIF (-10)  |            <img src="https://placehold.co/600x280/3D3D3D/FAFAF8?text=Instagram" alt="Instagram - Velure" style="width:100
+LIGNE 748: SOLDE NEGATIF (-11)  |          </div>
+LIGNE 748: opens=0 closes=1 solde=-11  |          </div>
+LIGNE 749: SOLDE NEGATIF (-11)  |            <span style="color:#b2aba3;font-size:12px;">Instagram 4</span>
+LIGNE 750: SOLDE NEGATIF (-12)  |          </div>
+LIGNE 750: opens=0 closes=1 solde=-12  |          </div>
+LIGNE 751: SOLDE NEGATIF (-12)  |        </a>
+LIGNE 752: SOLDE NEGATIF (-12)  |        <!-- /wp:html -->
+LIGNE 753: SOLDE NEGATIF (-12)  |        <!-- Instagram 5 -->
+LIGNE 754: SOLDE NEGATIF (-12)  |        <!-- wp:html -->
+LIGNE 755: SOLDE NEGATIF (-12)  |        <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+LIGNE 756: SOLDE NEGATIF (-11)  |          <div style="background-color:#d0cac3;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 756: opens=1 closes=0 solde=-11  |          <div style="background-color:#d0cac3;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 757: SOLDE NEGATIF (-11)  |            <img src="https://placehold.co/600x280/E8E4DE/1A1A1A?text=Instagram" alt="Instagram - Velure" style="width:100
+LIGNE 758: SOLDE NEGATIF (-12)  |          </div>
+LIGNE 758: opens=0 closes=1 solde=-12  |          </div>
+LIGNE 759: SOLDE NEGATIF (-12)  |            <span style="color:#a5a098;font-size:12px;">Instagram 5</span>
+LIGNE 760: SOLDE NEGATIF (-13)  |          </div>
+LIGNE 760: opens=0 closes=1 solde=-13  |          </div>
+LIGNE 761: SOLDE NEGATIF (-13)  |        </a>
+LIGNE 762: SOLDE NEGATIF (-13)  |        <!-- /wp:html -->
+LIGNE 763: SOLDE NEGATIF (-13)  |        <!-- Instagram 6 -->
+LIGNE 764: SOLDE NEGATIF (-13)  |        <!-- wp:html -->
+LIGNE 765: SOLDE NEGATIF (-13)  |        <a href="https://instagram.com/" class="velure-instagram-item" target="_blank" rel="noopener">
+LIGNE 766: SOLDE NEGATIF (-12)  |          <div style="background-color:#d5cfc8;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 766: opens=1 closes=0 solde=-12  |          <div style="background-color:#d5cfc8;width:100%;height:280px;display:flex;align-items:center;justify-content:cen
+LIGNE 767: SOLDE NEGATIF (-12)  |            <img src="https://placehold.co/600x280/D4CFC9/1A1A1A?text=Instagram" alt="Instagram - Velure" style="width:100
+LIGNE 768: SOLDE NEGATIF (-13)  |          </div>
+LIGNE 768: opens=0 closes=1 solde=-13  |          </div>
+LIGNE 769: SOLDE NEGATIF (-13)  |            <span style="color:#afa89f;font-size:12px;">Instagram 6</span>
+LIGNE 770: SOLDE NEGATIF (-14)  |          </div>
+LIGNE 770: opens=0 closes=1 solde=-14  |          </div>
+LIGNE 771: SOLDE NEGATIF (-14)  |        </a>
+LIGNE 772: SOLDE NEGATIF (-14)  |        <!-- /wp:html -->
+LIGNE 773: SOLDE NEGATIF (-15)  |      </div>
+LIGNE 773: opens=0 closes=1 solde=-15  |      </div>
+LIGNE 774: SOLDE NEGATIF (-16)  |    </div>
+LIGNE 774: opens=0 closes=1 solde=-16  |    </div>
+LIGNE 775: SOLDE NEGATIF (-17)  |  </div>
+LIGNE 775: opens=0 closes=1 solde=-17  |  </div>
+LIGNE 776: SOLDE NEGATIF (-17)  |  <!-- /wp:group -->
+LIGNE 777: SOLDE NEGATIF (-17)  |  
+LIGNE 778: SOLDE NEGATIF (-17)  |  <!-- ========== 10. FOOTER ========== -->
+LIGNE 779: SOLDE NEGATIF (-17)  |  <!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
+
+Solde final: -17
+Si < 0: 17 </div> en trop
+Si > 0: -17 <div> non fermes
