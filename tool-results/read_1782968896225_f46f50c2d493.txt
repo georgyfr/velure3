@@ -1,0 +1,434 @@
+     1→<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+     2→
+     3→<!-- ========== 1. PAGE BANNER ========== -->
+     4→<!-- wp:group {"className":"velure-page-banner","layout":{"type":"constrained"}} -->
+     5→<div class="velure-page-banner" style="text-align:center;padding:80px 20px 60px;background-color:#f7f4f0;">
+     6→  <!-- wp:heading {"level":1} -->
+     7→  <h1 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:300;letter-spacing:0.05em;margin-bottom:16px;">Boutique</h1>
+     8→  <!-- /wp:heading -->
+     9→  <!-- wp:html -->
+    10→  <nav class="velure-breadcrumb" style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;color:#8a8278;margin-bottom:12px;">
+    11→    <a href="/" style="color:#8a8278;text-decoration:none;">Accueil</a>
+    12→    <span aria-hidden="true">/</span>
+    13→    <span style="color:#2c2c2c;font-weight:500;">Boutique</span>
+    14→  </nav>
+    15→  <!-- /wp:html -->
+    16→  <!-- wp:paragraph -->
+    17→  <p style="font-size:14px;color:#8a8278;">Affichage de 1-8 sur 24 produits</p>
+    18→  <!-- /wp:paragraph -->
+    19→</div>
+    20→<!-- /wp:group -->
+    21→
+    22→<!-- ========== 2. SHOP TOOLBAR ========== -->
+    23→<!-- wp:group {"className":"velure-container","layout":{"type":"constrained"}} -->
+    24→<div class="velure-container" style="margin-bottom:32px;">
+    25→  <!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","alignItems":"center"}} -->
+    26→  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid #e8e0d8;">
+    27→    <!-- Filter toggle (mobile) -->
+    28→    <!-- wp:html -->
+    29→    <button class="velure-btn velure-btn-outline" style="display:none;" id="velure-filter-toggle">
+    30→      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="11" y1="18" x2="13" y2="18"></line></svg>
+    31→      Filtrer
+    32→    </button>
+    33→    <!-- /wp:html -->
+    34→
+    35→    <!-- Result count -->
+    36→    <!-- wp:paragraph -->
+    37→    <p style="font-size:14px;color:#5a5550;margin:0;">24 produits</p>
+    38→    <!-- /wp:paragraph -->
+    39→
+    40→    <!-- Sort + View toggle -->
+    41→    <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","alignItems":"center","gap":"16px"}} -->
+    42→    <div style="display:flex;align-items:center;gap:16px;">
+    43→      <!-- Sort dropdown -->
+    44→      <!-- wp:html -->
+    45→      <div class="velure-form-group" style="display:flex;align-items:center;gap:8px;">
+    46→        <label for="velure-sort-select" class="velure-form-label" style="font-size:13px;color:#8a8278;white-space:nowrap;margin:0;">Trier par :</label>
+    47→        <select id="velure-sort-select" class="velure-form-input" style="padding:8px 32px 8px 12px;border:1px solid #e0d8cf;border-radius:4px;font-size:13px;background-color:#fff;color:#2c2c2c;cursor:pointer;appearance:auto;">
+    48→          <option value="pertinence">Pertinence</option>
+    49→          <option value="prix-croissant">Prix croissant</option>
+    50→          <option value="prix-decroissant">Prix decroissant</option>
+    51→          <option value="nouveautes">Nouveautes</option>
+    52→          <option value="meilleures-ventes">Meilleures ventes</option>
+    53→        </select>
+    54→      </div>
+    55→      <!-- /wp:html -->
+    56→
+    57→      <!-- View toggle -->
+    58→      <!-- wp:html -->
+    59→      <div style="display:flex;gap:4px;">
+    60→        <button class="velure-btn velure-btn-outline" style="padding:8px 10px;border-radius:4px;" data-view="grid" title="Vue grille">
+    61→          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+    62→        </button>
+    63→        <button class="velure-btn velure-btn-outline" style="padding:8px 10px;border-radius:4px;opacity:0.5;" data-view="list" title="Vue liste">
+    64→          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+    65→        </button>
+    66→      </div>
+    67→      <!-- /wp:html -->
+    68→    </div>
+    69→    <!-- /wp:group -->
+    70→  </div>
+    71→  <!-- /wp:group -->
+    72→</div>
+    73→<!-- /wp:group -->
+    74→
+    75→<!-- ========== 3. SIDEBAR + PRODUCTS LAYOUT ========== -->
+    76→<!-- wp:group {"className":"velure-container","layout":{"type":"constrained"}} -->
+    77→<div class="velure-container">
+    78→  <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","gap":"40px"}} -->
+    79→  <div style="display:flex;flex-wrap:nowrap;gap:40px;">
+    80→
+    81→    <!-- ===== LEFT SIDEBAR ===== -->
+    82→    <!-- wp:group {"className":"velure-shop-sidebar","layout":{"type":"constrained"}} -->
+    83→    <aside style="width:250px;min-width:250px;display:flex;flex-direction:column;gap:32px;">
+    84→
+    85→      <!-- Categories -->
+    86→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+    87→      <div>
+    88→        <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;color:#2c2c2c;">Categories</h3>
+    89→        <!-- wp:html -->
+    90→        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+    91→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Femme <span style="color:#b0a89e;">(12)</span></a></li>
+    92→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Homme <span style="color:#b0a89e;">(8)</span></a></li>
+    93→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Accessoires <span style="color:#b0a89e;">(3)</span></a></li>
+    94→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Chaussures <span style="color:#b0a89e;">(1)</span></a></li>
+    95→        </ul>
+    96→        <!-- /wp:html -->
+    97→      </div>
+    98→      <!-- /wp:group -->
+    99→
+   100→      <!-- Tailles -->
+   101→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   102→      <div>
+   103→        <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;color:#2c2c2c;">Tailles</h3>
+   104→        <!-- wp:html -->
+   105→        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+   106→          <button class="velure-btn velure-btn-outline" style="min-width:44px;padding:8px 12px;font-size:13px;border-radius:4px;">XS</button>
+   107→          <button class="velure-btn velure-btn-outline" style="min-width:44px;padding:8px 12px;font-size:13px;border-radius:4px;">S</button>
+   108→          <button class="velure-btn velure-btn-outline" style="min-width:44px;padding:8px 12px;font-size:13px;border-radius:4px;">M</button>
+   109→          <button class="velure-btn velure-btn-outline" style="min-width:44px;padding:8px 12px;font-size:13px;border-radius:4px;">L</button>
+   110→          <button class="velure-btn velure-btn-outline" style="min-width:44px;padding:8px 12px;font-size:13px;border-radius:4px;">XL</button>
+   111→        </div>
+   112→        <!-- /wp:html -->
+   113→      </div>
+   114→      <!-- /wp:group -->
+   115→
+   116→      <!-- Couleurs -->
+   117→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   118→      <div>
+   119→        <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;color:#2c2c2c;">Couleurs</h3>
+   120→        <!-- wp:html -->
+   121→        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+   122→          <button style="width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#1a1a1a;" title="Noir" aria-label="Noir"></button>
+   123→          <button style="width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#ffffff;border-color:#e0d8cf;" title="Blanc" aria-label="Blanc"></button>
+   124→          <button style="width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#d4c5a9;" title="Beige" aria-label="Beige"></button>
+   125→          <button style="width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#2b3a52;" title="Bleu Marine" aria-label="Bleu Marine"></button>
+   126→          <button style="width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#8b4b4b;" title="Bordeaux" aria-label="Bordeaux"></button>
+   127→          <button style="width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#6b7c5e;" title="Vert Olive" aria-label="Vert Olive"></button>
+   128→        </div>
+   129→        <!-- /wp:html -->
+   130→      </div>
+   131→      <!-- /wp:group -->
+   132→
+   133→      <!-- Prix -->
+   134→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   135→      <div>
+   136→        <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;color:#2c2c2c;">Prix</h3>
+   137→        <!-- wp:html -->
+   138→        <div style="padding:8px 0;">
+   139→          <div style="position:relative;height:6px;background-color:#e8e0d8;border-radius:3px;margin-bottom:12px;">
+   140→            <div style="position:absolute;left:10%;right:30%;height:6px;background-color:#2c2c2c;border-radius:3px;"></div>
+   141→            <div style="position:absolute;left:10%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background-color:#fff;border:2px solid #2c2c2c;border-radius:50%;cursor:pointer;"></div>
+   142→            <div style="position:absolute;left:70%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background-color:#fff;border:2px solid #2c2c2c;border-radius:50%;cursor:pointer;"></div>
+   143→          </div>
+   144→          <div style="display:flex;justify-content:space-between;font-size:13px;color:#8a8278;">
+   145→            <span>25 &euro;</span>
+   146→            <span>150 &euro;</span>
+   147→          </div>
+   148→        </div>
+   149→        <!-- /wp:html -->
+   150→      </div>
+   151→      <!-- /wp:group -->
+   152→
+   153→      <!-- Matieres -->
+   154→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   155→      <div>
+   156→        <h3 style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;color:#2c2c2c;">Matieres</h3>
+   157→        <!-- wp:html -->
+   158→        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+   159→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Coton <span style="color:#b0a89e;">(9)</span></a></li>
+   160→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Lin <span style="color:#b0a89e;">(6)</span></a></li>
+   161→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Soie <span style="color:#b0a89e;">(4)</span></a></li>
+   162→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Cachemire <span style="color:#b0a89e;">(3)</span></a></li>
+   163→          <li><a href="#" style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5a5550;text-decoration:none;padding:6px 0;border-bottom:1px solid #f0ebe5;">Laine <span style="color:#b0a89e;">(2)</span></a></li>
+   164→        </ul>
+   165→        <!-- /wp:html -->
+   166→      </div>
+   167→      <!-- /wp:group -->
+   168→
+   169→    </aside>
+   170→    <!-- /wp:group -->
+   171→
+   172→    <!-- ===== MAIN PRODUCTS GRID ===== -->
+   173→    <!-- wp:group {"layout":{"type":"constrained"}} -->
+   174→    <div style="flex:1;min-width:0;">
+   175→
+   176→      <!-- Products Grid (8 cards) -->
+   177→      <!-- wp:group {"className":"velure-grid","layout":{"type":"grid","columnCount":4}} -->
+   178→      <div class="velure-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:48px;">
+   179→
+   180→        <!-- Product Card 1 -->
+   181→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   182→        <div class="velure-product-card">
+   183→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   184→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   185→            <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#2c2c2c;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">NOUVEAU</span>
+   186→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   187→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   188→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   189→              </a>
+   190→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   191→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   192→              </a>
+   193→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   194→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   195→              </a>
+   196→            </div>
+   197→          </div>
+   198→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   199→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Chemises</p>
+   200→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Chemise en Lin Oversize</h3>
+   201→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   202→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">89,00 &euro;</span>
+   203→            </div>
+   204→          </div>
+   205→        </div>
+   206→        <!-- /wp:group -->
+   207→
+   208→        <!-- Product Card 2 (Sale) -->
+   209→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   210→        <div class="velure-product-card">
+   211→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   212→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   213→            <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#8b4b4b;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">-30%</span>
+   214→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   215→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   216→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   217→              </a>
+   218→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   219→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   220→              </a>
+   221→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   222→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   223→              </a>
+   224→            </div>
+   225→          </div>
+   226→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   227→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Robes</p>
+   228→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Robe Midi en Soie</h3>
+   229→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   230→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#8b4b4b;">139,00 &euro;</span>
+   231→              <span class="old-price" style="font-size:14px;color:#b0a89e;text-decoration:line-through;">199,00 &euro;</span>
+   232→            </div>
+   233→          </div>
+   234→        </div>
+   235→        <!-- /wp:group -->
+   236→
+   237→        <!-- Product Card 3 -->
+   238→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   239→        <div class="velure-product-card">
+   240→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   241→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   242→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   243→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   244→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   245→              </a>
+   246→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   247→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   248→              </a>
+   249→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   250→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   251→              </a>
+   252→            </div>
+   253→          </div>
+   254→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   255→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Pantalons</p>
+   256→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Pantalon Chino Coupe Droite</h3>
+   257→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   258→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">115,00 &euro;</span>
+   259→            </div>
+   260→          </div>
+   261→        </div>
+   262→        <!-- /wp:group -->
+   263→
+   264→        <!-- Product Card 4 (Bestseller) -->
+   265→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   266→        <div class="velure-product-card">
+   267→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   268→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   269→            <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#d4a853;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">BEST-SELLER</span>
+   270→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   271→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   272→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   273→              </a>
+   274→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   275→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   276→              </a>
+   277→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   278→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   279→              </a>
+   280→            </div>
+   281→          </div>
+   282→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   283→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Pulls</p>
+   284→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Pull Col Roulé Cachemire</h3>
+   285→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   286→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">195,00 &euro;</span>
+   287→            </div>
+   288→          </div>
+   289→        </div>
+   290→        <!-- /wp:group -->
+   291→
+   292→        <!-- Product Card 5 -->
+   293→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   294→        <div class="velure-product-card">
+   295→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   296→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   297→            <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#2c2c2c;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">NOUVEAU</span>
+   298→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   299→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   300→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   301→              </a>
+   302→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   303→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   304→              </a>
+   305→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   306→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   307→              </a>
+   308→            </div>
+   309→          </div>
+   310→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   311→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Vestes</p>
+   312→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Blazer Structure Bleu Marine</h3>
+   313→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   314→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">245,00 &euro;</span>
+   315→            </div>
+   316→          </div>
+   317→        </div>
+   318→        <!-- /wp:group -->
+   319→
+   320→        <!-- Product Card 6 (Sale) -->
+   321→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   322→        <div class="velure-product-card">
+   323→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   324→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   325→            <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#8b4b4b;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">-20%</span>
+   326→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   327→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   328→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   329→              </a>
+   330→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   331→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   332→              </a>
+   333→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   334→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   335→              </a>
+   336→            </div>
+   337→          </div>
+   338→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   339→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Accessoires</p>
+   340→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Echarpe en Cachemire</h3>
+   341→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   342→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#8b4b4b;">120,00 &euro;</span>
+   343→              <span class="old-price" style="font-size:14px;color:#b0a89e;text-decoration:line-through;">150,00 &euro;</span>
+   344→            </div>
+   345→          </div>
+   346→        </div>
+   347→        <!-- /wp:group -->
+   348→
+   349→        <!-- Product Card 7 -->
+   350→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   351→        <div class="velure-product-card">
+   352→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   353→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   354→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   355→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   356→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   357→              </a>
+   358→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   359→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   360→              </a>
+   361→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   362→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   363→              </a>
+   364→            </div>
+   365→          </div>
+   366→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   367→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Chaussures</p>
+   368→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Derby Cuir Patiné</h3>
+   369→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   370→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">210,00 &euro;</span>
+   371→            </div>
+   372→          </div>
+   373→        </div>
+   374→        <!-- /wp:group -->
+   375→
+   376→        <!-- Product Card 8 -->
+   377→        <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   378→        <div class="velure-product-card">
+   379→          <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   380→            <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   381→            <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#6b7c5e;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">ECO</span>
+   382→            <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   383→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   384→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   385→              </a>
+   386→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   387→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   388→              </a>
+   389→              <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   390→                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+   391→              </a>
+   392→            </div>
+   393→          </div>
+   394→          <div class="velure-product-card-info" style="padding:16px 4px;">
+   395→            <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">T-shirts</p>
+   396→            <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">T-shirt Bio Coton Organique</h3>
+   397→            <div class="velure-product-card-price" style="display:flex;align-items:center;gap:8px;">
+   398→              <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">45,00 &euro;</span>
+   399→            </div>
+   400→          </div>
+   401→        </div>
+   402→        <!-- /wp:group -->
+   403→
+   404→      </div>
+   405→      <!-- /wp:group -->
+   406→
+   407→      <!-- ========== 4. PAGINATION ========== -->
+   408→      <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"center","alignItems":"center","gap":"8px"}} -->
+   409→      <nav style="display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:8px;padding:24px 0 80px;" aria-label="Pagination">
+   410→        <!-- wp:html -->
+   411→        <a href="#" class="velure-btn velure-btn-outline" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:14px;" aria-label="Page precedente">
+   412→          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+   413→        </a>
+   414→        <a href="#" class="velure-btn velure-btn-primary" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:14px;">1</a>
+   415→        <a href="#" class="velure-btn velure-btn-outline" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:14px;">2</a>
+   416→        <a href="#" class="velure-btn velure-btn-outline" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:14px;">3</a>
+   417→        <span style="color:#b0a89e;font-size:14px;">...</span>
+   418→        <a href="#" class="velure-btn velure-btn-outline" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:14px;">6</a>
+   419→        <a href="#" class="velure-btn velure-btn-outline" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:14px;" aria-label="Page suivante">
+   420→          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+   421→        </a>
+   422→        <!-- /wp:html -->
+   423→      </nav>
+   424→      <!-- /wp:group -->
+   425→
+   426→    </div>
+   427→    <!-- /wp:group -->
+   428→
+   429→  </div>
+   430→  <!-- /wp:group -->
+   431→</div>
+   432→<!-- /wp:group -->
+   433→
+   434→<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

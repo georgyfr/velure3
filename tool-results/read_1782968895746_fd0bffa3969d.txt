@@ -1,0 +1,379 @@
+     1→<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+     2→
+     3→<!-- ========== 1. BREADCRUMB ========== -->
+     4→<!-- wp:group {"className":"velure-container","layout":{"type":"constrained"}} -->
+     5→<div class="velure-container" style="padding-top:24px;">
+     6→  <!-- wp:html -->
+     7→  <nav class="velure-breadcrumb" style="display:flex;align-items:center;gap:8px;font-size:14px;color:#8a8278;">
+     8→    <a href="/" style="color:#8a8278;text-decoration:none;">Accueil</a>
+     9→    <span aria-hidden="true">/</span>
+    10→    <a href="/boutique/" style="color:#8a8278;text-decoration:none;">Boutique</a>
+    11→    <span aria-hidden="true">/</span>
+    12→    <a href="/boutique/chemises/" style="color:#8a8278;text-decoration:none;">Chemises</a>
+    13→    <span aria-hidden="true">/</span>
+    14→    <span style="color:#2c2c2c;font-weight:500;">Chemise en Lin Oversize</span>
+    15→  </nav>
+    16→  <!-- /wp:html -->
+    17→</div>
+    18→<!-- /wp:group -->
+    19→
+    20→<!-- ========== 2. PRODUCT LAYOUT ========== -->
+    21→<!-- wp:group {"className":"velure-container","layout":{"type":"constrained"}} -->
+    22→<div class="velure-container">
+    23→  <!-- wp:group {"className":"velure-content-wrapper","layout":{"type":"flex","flexWrap":"nowrap","gap":"60px"}} -->
+    24→  <div class="velure-content-wrapper" style="display:flex;flex-wrap:nowrap;gap:60px;padding:40px 0 80px;">
+    25→
+    26→    <!-- ===== LEFT: PRODUCT GALLERY ===== -->
+    27→    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    28→    <div style="width:55%;min-width:0;">
+    29→
+    30→      <!-- Main Image -->
+    31→      <!-- wp:html -->
+    32→      <div style="position:relative;overflow:hidden;border-radius:12px;aspect-ratio:4/5;background-color:#f0ebe5;margin-bottom:16px;">
+    33→        <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);display:flex;align-items:center;justify-content:center;">
+    34→          <span style="color:#b0a89e;font-size:14px;letter-spacing:0.1em;">800 x 1000</span>
+    35→        </div>
+    36→      </div>
+    37→      <!-- /wp:html -->
+    38→
+    39→      <!-- Thumbnail Row -->
+    40→      <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","gap":"12px"}} -->
+    41→      <div style="display:flex;flex-wrap:nowrap;gap:12px;">
+    42→        <!-- wp:html -->
+    43→        <div style="width:80px;min-width:80px;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:2px solid #2c2c2c;background-color:#f0ebe5;">
+    44→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+    45→        </div>
+    46→        <div style="width:80px;min-width:80px;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:2px solid transparent;background-color:#f0ebe5;cursor:pointer;">
+    47→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e0d8cf 0%,#ebe5dd 50%,#e0d8cf 100%);"></div>
+    48→        </div>
+    49→        <div style="width:80px;min-width:80px;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:2px solid transparent;background-color:#f0ebe5;cursor:pointer;">
+    50→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#d8d0c5 0%,#e8e0d8 50%,#d8d0c5 100%);"></div>
+    51→        </div>
+    52→        <div style="width:80px;min-width:80px;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:2px solid transparent;background-color:#f0ebe5;cursor:pointer;">
+    53→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e5ddd5 0%,#f0ebe5 50%,#e5ddd5 100%);"></div>
+    54→        </div>
+    55→        <!-- /wp:html -->
+    56→      </div>
+    57→      <!-- /wp:group -->
+    58→
+    59→    </div>
+    60→    <!-- /wp:group -->
+    61→
+    62→    <!-- ===== RIGHT: PRODUCT INFO ===== -->
+    63→    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    64→    <div style="width:45%;min-width:0;display:flex;flex-direction:column;gap:24px;">
+    65→
+    66→      <!-- Category Label -->
+    67→      <!-- wp:paragraph {"className":"velure-eyebrow"} -->
+    68→      <p class="velure-eyebrow">Chemises</p>
+    69→      <!-- /wp:paragraph -->
+    70→
+    71→      <!-- Product Title -->
+    72→      <!-- wp:heading {"level":1} -->
+    73→      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:300;letter-spacing:0.02em;margin:0;line-height:1.2;">Chemise en Lin Oversize</h1>
+    74→      <!-- /wp:heading -->
+    75→
+    76→      <!-- Price -->
+    77→      <!-- wp:html -->
+    78→      <div style="display:flex;align-items:baseline;gap:12px;">
+    79→        <span style="font-size:24px;font-weight:600;color:#2c2c2c;">89,00 &euro;</span>
+    80→      </div>
+    81→      <!-- /wp:html -->
+    82→
+    83→      <!-- Star Rating + Reviews Count -->
+    84→      <!-- wp:html -->
+    85→      <div style="display:flex;align-items:center;gap:10px;">
+    86→        <div style="display:flex;gap:2px;" aria-label="Note 4 sur 5">
+    87→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#d4a853" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    88→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#d4a853" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    89→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#d4a853" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    90→          <svg width="16" height="16" viewBox="0 0 24 24" fill="#d4a853" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    91→          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4a853" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    92→        </div>
+    93→        <a href="#reviews" style="font-size:13px;color:#8a8278;text-decoration:none;">12 avis</a>
+    94→      </div>
+    95→      <!-- /wp:html -->
+    96→
+    97→      <!-- Short Description -->
+    98→      <!-- wp:paragraph -->
+    99→      <p style="font-size:15px;line-height:1.7;color:#5a5550;margin:0;">Chemise oversize en lin naturel, coupe decontractee et elegante. Tissu透气 léger idéal pour les beaux jours. Finitions soignées avec coutures française et boutons en nacre.</p>
+   100→      <!-- /wp:paragraph -->
+   101→
+   102→      <!-- Divider -->
+   103→      <!-- wp:html -->
+   104→      <hr style="border:none;border-top:1px solid #e8e0d8;margin:0;">
+   105→      <!-- /wp:html -->
+   106→
+   107→      <!-- Color Selector -->
+   108→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   109→      <div>
+   110→        <label class="velure-form-label" style="display:block;font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#2c2c2c;margin-bottom:12px;">Couleur : <span id="velure-color-name" style="color:#8a8278;font-weight:400;">Noir</span></label>
+   111→        <!-- wp:html -->
+   112→        <div style="display:flex;gap:12px;">
+   113→          <button style="width:36px;height:36px;border-radius:50%;border:2px solid #2c2c2c;cursor:pointer;background-color:#1a1a1a;position:relative;" title="Noir" aria-label="Noir" data-color="Noir">
+   114→            <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+   115→              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+   116→            </span>
+   117→          </button>
+   118→          <button style="width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#ffffff;border-color:#e0d8cf;" title="Blanc" aria-label="Blanc" data-color="Blanc"></button>
+   119→          <button style="width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#d4c5a9;" title="Beige" aria-label="Beige" data-color="Beige"></button>
+   120→          <button style="width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;background-color:#2b3a52;" title="Bleu Marine" aria-label="Bleu Marine" data-color="Bleu Marine"></button>
+   121→        </div>
+   122→        <!-- /wp:html -->
+   123→      </div>
+   124→      <!-- /wp:group -->
+   125→
+   126→      <!-- Size Selector -->
+   127→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   128→      <div>
+   129→        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+   130→          <label class="velure-form-label" style="font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#2c2c2c;">Taille</label>
+   131→          <a href="#" style="font-size:12px;color:#8a8278;text-decoration:none;text-decoration:underline;">Guide des tailles</a>
+   132→        </div>
+   133→        <!-- wp:html -->
+   134→        <div style="display:flex;gap:8px;">
+   135→          <button class="velure-btn velure-btn-outline" style="min-width:52px;padding:10px 16px;font-size:14px;border-radius:4px;">XS</button>
+   136→          <button class="velure-btn velure-btn-outline" style="min-width:52px;padding:10px 16px;font-size:14px;border-radius:4px;">S</button>
+   137→          <button class="velure-btn velure-btn-primary" style="min-width:52px;padding:10px 16px;font-size:14px;border-radius:4px;">M</button>
+   138→          <button class="velure-btn velure-btn-outline" style="min-width:52px;padding:10px 16px;font-size:14px;border-radius:4px;">L</button>
+   139→          <button class="velure-btn velure-btn-outline" style="min-width:52px;padding:10px 16px;font-size:14px;border-radius:4px;opacity:0.4;cursor:not-allowed;" disabled>XL</button>
+   140→        </div>
+   141→        <!-- /wp:html -->
+   142→      </div>
+   143→      <!-- /wp:group -->
+   144→
+   145→      <!-- Quantity Selector -->
+   146→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   147→      <div>
+   148→        <label class="velure-form-label" style="display:block;font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#2c2c2c;margin-bottom:12px;">Quantité</label>
+   149→        <!-- wp:html -->
+   150→        <div style="display:flex;align-items:center;border:1px solid #e0d8cf;border-radius:4px;overflow:hidden;width:fit-content;">
+   151→          <button style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#fff;border:none;cursor:pointer;font-size:18px;color:#2c2c2c;" aria-label="Diminuer la quantité">−</button>
+   152→          <input type="number" value="1" min="1" max="10" style="width:56px;height:44px;text-align:center;border:none;border-left:1px solid #e0d8cf;border-right:1px solid #e0d8cf;font-size:14px;color:#2c2c2c;font-family:inherit;" aria-label="Quantité">
+   153→          <button style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#fff;border:none;cursor:pointer;font-size:18px;color:#2c2c2c;" aria-label="Augmenter la quantité">+</button>
+   154→        </div>
+   155→        <!-- /wp:html -->
+   156→      </div>
+   157→      <!-- /wp:group -->
+   158→
+   159→      <!-- Add to Cart + Wishlist -->
+   160→      <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","gap":"12px"}} -->
+   161→      <div style="display:flex;flex-wrap:nowrap;gap:12px;">
+   162→        <!-- wp:html -->
+   163→        <button class="velure-btn velure-btn-primary" style="flex:1;padding:16px 32px;font-size:15px;letter-spacing:0.05em;border-radius:4px;">
+   164→          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;margin-right:8px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   165→          Ajouter au panier
+   166→        </button>
+   167→        <button class="velure-btn velure-btn-outline" style="width:56px;min-width:56px;padding:16px;display:flex;align-items:center;justify-content:center;border-radius:4px;" title="Ajouter aux favoris" aria-label="Ajouter aux favoris">
+   168→          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   169→        </button>
+   170→        <!-- /wp:html -->
+   171→      </div>
+   172→      <!-- /wp:group -->
+   173→
+   174→      <!-- Trust Icons Row -->
+   175→      <!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","gap":"32px"}} -->
+   176→      <div style="display:flex;flex-wrap:nowrap;gap:32px;padding:20px 0;border-top:1px solid #e8e0d8;border-bottom:1px solid #e8e0d8;">
+   177→        <!-- wp:html -->
+   178→        <div style="display:flex;align-items:center;gap:10px;">
+   179→          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+   180→          <span style="font-size:12px;color:#8a8278;line-height:1.3;">Livraison<br>gratuite dès 50&euro;</span>
+   181→        </div>
+   182→        <div style="display:flex;align-items:center;gap:10px;">
+   183→          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+   184→          <span style="font-size:12px;color:#8a8278;line-height:1.3;">Retours<br>gratuits 30 jours</span>
+   185→        </div>
+   186→        <div style="display:flex;align-items:center;gap:10px;">
+   187→          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a8278" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+   188→          <span style="font-size:12px;color:#8a8278;line-height:1.3;">Paiement<br>securise</span>
+   189→        </div>
+   190→        <!-- /wp:html -->
+   191→      </div>
+   192→      <!-- /wp:group -->
+   193→
+   194→      <!-- ===== ACCORDION: Description ===== -->
+   195→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   196→      <details style="border-bottom:1px solid #e8e0d8;" open>
+   197→        <summary style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;cursor:pointer;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#2c2c2c;list-style:none;">
+   198→          Description
+   199→          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+   200→        </summary>
+   201→        <div style="padding-bottom:16px;">
+   202→          <!-- wp:paragraph -->
+   203→          <p style="font-size:14px;line-height:1.8;color:#5a5550;margin:0;">Notre chemise en lin oversize incarne l'élégance décontractée à la française. Confectionnée à partir de lin européen certifié, elle offre un tombé fluide et naturel. La coupe oversize apporte un confort incomparable tout en conservant une silhouette structurée. Idéale pour les journées estivales ou pour superposer en demi-saison.</p>
+   204→          <!-- /wp:paragraph -->
+   205→          <!-- wp:paragraph -->
+   206→          <p style="font-size:14px;line-height:1.8;color:#5a5550;margin:12px 0 0;">Détails : col chemise italien, boutons en nacre authentique, ourlet arrondi, coutures françaises renforcées.</p>
+   207→          <!-- /wp:paragraph -->
+   208→        </div>
+   209→      </details>
+   210→      <!-- /wp:group -->
+   211→
+   212→      <!-- ===== ACCORDION: Composition & Entretien ===== -->
+   213→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   214→      <details style="border-bottom:1px solid #e8e0d8;">
+   215→        <summary style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;cursor:pointer;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#2c2c2c;list-style:none;">
+   216→          Composition &amp; Entretien
+   217→          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+   218→        </summary>
+   219→        <div style="padding-bottom:16px;">
+   220→          <!-- wp:html -->
+   221→          <div style="font-size:14px;line-height:1.8;color:#5a5550;">
+   222→            <p style="margin:0 0 8px;"><strong>Composition :</strong> 100% Lin européen certifié</p>
+   223→            <p style="margin:0 0 8px;"><strong>Poids :</strong> 160 g/m²</p>
+   224→            <p style="margin:0 0 8px;"><strong>Origine :</strong> Confectionné au Portugal</p>
+   225→            <p style="margin:0;"><strong>Entretien :</strong> Lavage en machine à 30°C, ne pas utiliser de javel, séchage en tambour modéré, repassage à température moyenne.</p>
+   226→          </div>
+   227→          <!-- /wp:html -->
+   228→        </div>
+   229→      </details>
+   230→      <!-- /wp:group -->
+   231→
+   232→      <!-- ===== ACCORDION: Livraison & Retours ===== -->
+   233→      <!-- wp:group {"layout":{"type":"constrained"}} -->
+   234→      <details style="border-bottom:1px solid #e8e0d8;">
+   235→        <summary style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;cursor:pointer;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#2c2c2c;list-style:none;">
+   236→          Livraison &amp; Retours
+   237→          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+   238→        </summary>
+   239→        <div style="padding-bottom:16px;">
+   240→          <!-- wp:html -->
+   241→          <div style="font-size:14px;line-height:1.8;color:#5a5550;">
+   242→            <p style="margin:0 0 8px;"><strong>Livraison standard :</strong> 3-5 jours ouvrés, gratuite dès 50€ d'achat</p>
+   243→            <p style="margin:0 0 8px;"><strong>Livraison express :</strong> 24-48h, 9,90€</p>
+   244→            <p style="margin:0 0 8px;"><strong>Retours :</strong> Gratuits sous 30 jours, article non porté avec étiquettes</p>
+   245→            <p style="margin:0;"><strong>Échanges :</strong> Contactez notre service client pour tout échange de taille ou de couleur.</p>
+   246→          </div>
+   247→          <!-- /wp:html -->
+   248→        </div>
+   249→      </details>
+   250→      <!-- /wp:group -->
+   251→
+   252→    </div>
+   253→    <!-- /wp:group -->
+   254→
+   255→  </div>
+   256→  <!-- /wp:group -->
+   257→</div>
+   258→<!-- /wp:group -->
+   259→
+   260→<!-- ========== 3. RELATED PRODUCTS ========== -->
+   261→<!-- wp:group {"className":"velure-section","layout":{"type":"constrained"}} -->
+   262→<section class="velure-section" style="padding:40px 0 80px;background-color:#faf8f5;">
+   263→  <!-- wp:group {"className":"velure-container","layout":{"type":"constrained"}} -->
+   264→  <div class="velure-container">
+   265→    <!-- wp:heading {"level":2,"className":"velure-section-heading"} -->
+   266→    <h2 class="velure-section-heading" style="text-align:center;font-size:clamp(1.5rem,3vw,2rem);font-weight:300;letter-spacing:0.05em;margin-bottom:48px;">Vous aimerez aussi</h2>
+   267→    <!-- /wp:heading -->
+   268→
+   269→    <!-- Related Products Grid (4 cards) -->
+   270→    <!-- wp:group {"className":"velure-grid velure-grid-4","layout":{"type":"grid","columnCount":4}} -->
+   271→    <div class="velure-grid velure-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+   272→
+   273→      <!-- Related Product 1 -->
+   274→      <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   275→      <div class="velure-product-card">
+   276→        <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   277→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   278→          <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   279→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   280→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   281→            </a>
+   282→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   283→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   284→            </a>
+   285→          </div>
+   286→        </div>
+   287→        <div class="velure-product-card-info" style="padding:16px 4px;">
+   288→          <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Chemises</p>
+   289→          <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Chemise Oxford Blanche</h3>
+   290→          <div class="velure-product-card-price">
+   291→            <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">79,00 &euro;</span>
+   292→          </div>
+   293→        </div>
+   294→      </div>
+   295→      <!-- /wp:group -->
+   296→
+   297→      <!-- Related Product 2 -->
+   298→      <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   299→      <div class="velure-product-card">
+   300→        <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   301→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   302→          <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#8b4b4b;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">-15%</span>
+   303→          <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   304→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   305→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   306→            </a>
+   307→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   308→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   309→            </a>
+   310→          </div>
+   311→        </div>
+   312→        <div class="velure-product-card-info" style="padding:16px 4px;">
+   313→          <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Chemises</p>
+   314→          <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Chemise en Coton Flammé</h3>
+   315→          <div class="velure-product-card-price">
+   316→            <span class="sale-price" style="font-size:16px;font-weight:600;color:#8b4b4b;">68,00 &euro;</span>
+   317→            <span class="old-price" style="font-size:14px;color:#b0a89e;text-decoration:line-through;">80,00 &euro;</span>
+   318→          </div>
+   319→        </div>
+   320→      </div>
+   321→      <!-- /wp:group -->
+   322→
+   323→      <!-- Related Product 3 -->
+   324→      <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   325→      <div class="velure-product-card">
+   326→        <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   327→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   328→          <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   329→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   330→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   331→            </a>
+   332→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   333→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   334→            </a>
+   335→          </div>
+   336→        </div>
+   337→        <div class="velure-product-card-info" style="padding:16px 4px;">
+   338→          <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Chemises</p>
+   339→          <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Chemise à Carreaux</h3>
+   340→          <div class="velure-product-card-price">
+   341→            <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">95,00 &euro;</span>
+   342→          </div>
+   343→        </div>
+   344→      </div>
+   345→      <!-- /wp:group -->
+   346→
+   347→      <!-- Related Product 4 -->
+   348→      <!-- wp:group {"className":"velure-product-card","layout":{"type":"constrained"}} -->
+   349→      <div class="velure-product-card">
+   350→        <div class="velure-product-card-image" style="position:relative;overflow:hidden;border-radius:8px;aspect-ratio:3/4;background-color:#f0ebe5;">
+   351→          <div class="velure-skeleton" style="width:100%;height:100%;background:linear-gradient(135deg,#e8e0d8 0%,#f0ebe5 50%,#e8e0d8 100%);"></div>
+   352→          <span class="velure-product-card-badge" style="position:absolute;top:12px;left:12px;background-color:#2c2c2c;color:#fff;font-size:11px;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">NOUVEAU</span>
+   353→          <div class="velure-product-card-actions" style="position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity 0.3s;">
+   354→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   355→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+   356→            </a>
+   357→            <a href="#" class="velure-product-card-action" style="width:36px;height:36px;background-color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+   358→              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+   359→            </a>
+   360→          </div>
+   361→        </div>
+   362→        <div class="velure-product-card-info" style="padding:16px 4px;">
+   363→          <p style="font-size:12px;color:#8a8278;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 4px;">Chemises</p>
+   364→          <h3 style="font-size:15px;font-weight:500;color:#2c2c2c;margin:0 0 8px;line-height:1.3;">Chemise en Popeline de Soie</h3>
+   365→          <div class="velure-product-card-price">
+   366→            <span class="sale-price" style="font-size:16px;font-weight:600;color:#2c2c2c;">165,00 &euro;</span>
+   367→          </div>
+   368→        </div>
+   369→      </div>
+   370→      <!-- /wp:group -->
+   371→
+   372→    </div>
+   373→    <!-- /wp:group -->
+   374→  </div>
+   375→  <!-- /wp:group -->
+   376→</section>
+   377→<!-- /wp:group -->
+   378→
+   379→<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
