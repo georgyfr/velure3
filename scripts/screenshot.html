@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Inter', sans-serif; color: #1A1A1A; background: #FAFAF8; overflow: hidden; width: 1200px; height: 900px; }
+img { display: block; max-width: 100%; height: auto; }
+a { text-decoration: none; color: inherit; }
+
+/* ═══ TOPBAR ═══ */
+.topbar { background: #1A1A1A; color: #FAFAF8; font-size: 0.65rem; letter-spacing: 0.05em; height: 28px; display: flex; align-items: center; justify-content: center; }
+.topbar span { opacity: 0.7; }
+
+/* ═══ NAVBAR ═══ */
+.navbar { height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; background: rgba(250,250,248,0.97); border-bottom: 1px solid #E5E0D8; }
+.logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #1A1A1A; }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #1A1A1A; }
+.nav-right { display: flex; gap: 1.25rem; align-items: center; }
+.nav-right svg { width: 18px; height: 18px; stroke: #1A1A1A; fill: none; stroke-width: 1.5; }
+
+/* ═══ HERO SECTION — ASYMMETRIC BANNER ═══ */
+.hero-section { display: grid; grid-template-columns: 1fr 1fr; height: 480px; overflow: hidden; }
+
+/* Slider */
+.hero-slider { position: relative; overflow: hidden; background: #0f0f0e; }
+.hero-slide { position: absolute; inset: 0; }
+.hero-slide--active { z-index: 2; }
+.hero-slide-img { width: 100%; height: 100%; object-fit: cover; }
+.hero-slide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,26,26,0.78) 0%, rgba(26,26,26,0.25) 45%, rgba(26,26,26,0.08) 100%); z-index: 1; }
+.hero-slide-content { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 2rem 2.5rem 2.5rem; }
+.hero-eyebrow { font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #C8A97E; margin-bottom: 0.5rem; display: block; }
+.hero-slide-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 400; line-height: 1.05; color: #FAFAF8; margin-bottom: 0.4rem; }
+.hero-slide-subtitle { font-size: 0.8rem; font-weight: 300; color: rgba(250,250,248,0.7); margin-bottom: 1.2rem; }
+.hero-btn { display: inline-block; padding: 0.7rem 1.8rem; font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; background: #FAFAF8; color: #1A1A1A; }
+
+/* Dots */
+.hero-slider-controls { position: absolute; bottom: 2.5rem; right: 2rem; z-index: 5; display: flex; gap: 0.5rem; }
+.hero-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid rgba(250,250,248,0.5); background: transparent; }
+.hero-dot--active { background: #FAFAF8; border-color: #FAFAF8; }
+
+/* Progress */
+.hero-progress { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(250,250,248,0.1); z-index: 5; }
+.hero-progress-bar { height: 100%; width: 60%; background: #C8A97E; }
+
+/* Static blocks */
+.hero-static-blocks { display: flex; flex-direction: column; }
+.hero-block { flex: 1; display: flex; overflow: hidden; }
+.hero-block--bestseller { background: #F5F0EB; border-bottom: 1px solid #E5E0D8; }
+.hero-block--category { background: #FFFFFF; }
+.hero-block-visual { width: 52%; height: 100%; overflow: hidden; }
+.hero-block-img { width: 100%; height: 100%; object-fit: cover; }
+.hero-block-content { flex: 1; padding: 1.5rem 1.5rem 1.5rem 1.2rem; display: flex; flex-direction: column; justify-content: center; }
+.hero-block-label { font-size: 0.55rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #C8A97E; margin-bottom: 0.4rem; }
+.hero-block-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 500; line-height: 1.2; color: #1A1A1A; margin-bottom: 0.3rem; }
+.hero-block-price { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+.hero-btn-outline { display: inline-block; padding: 0.55rem 1.2rem; font-size: 0.55rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; border: 1.5px solid #1A1A1A; color: #1A1A1A; }
+.hero-block-link { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #1A1A1A; border-bottom: 1px solid #1A1A1A; padding-bottom: 2px; display: inline-block; }
+
+/* ═══ TRUST BAR ═══ */
+.trust-bar { display: flex; justify-content: center; gap: 3.5rem; padding: 0.85rem 2rem; background: #F5F0EB; border-bottom: 1px solid #E5E0D8; }
+.trust-item { display: flex; align-items: center; gap: 0.5rem; }
+.trust-item svg { width: 18px; height: 18px; stroke: #1A1A1A; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+.trust-item-text { display: flex; flex-direction: column; }
+.trust-item-text strong { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.03em; }
+.trust-item-text span { font-size: 0.55rem; color: #888; }
+
+/* ═══ CATEGORIES ═══ */
+.categories { display: grid; grid-template-columns: repeat(4, 1fr); height: 100%; }
+.cat-card { position: relative; overflow: hidden; }
+.cat-card img { width: 100%; height: 100%; object-fit: cover; }
+.cat-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.55)); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; color: #fff; }
+.cat-label { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.25rem; }
+.cat-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 500; }
+
+/* ═══ PRODUCTS PREVIEW ═══ */
+.products-bar { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid #E5E0D8; }
+.prod-card { border-right: 1px solid #E5E0D8; }
+.prod-card:last-child { border-right: none; }
+.prod-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: #f0ece6; }
+.prod-info { padding: 0.6rem 0.7rem; }
+.prod-name { font-size: 0.65rem; font-weight: 500; margin-bottom: 0.15rem; }
+.prod-price { font-size: 0.65rem; color: #888; }
+
+/* ═══ FOOTER PREVIEW ═══ */
+.footer-strip { background: #1A1A1A; color: rgba(250,250,248,0.5); font-size: 0.55rem; padding: 0.7rem 3rem; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>Livraison gratuite a partir de 150EUR &mdash; Retours sous 30 jours</span>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">Velure</div>
+  <div class="nav-links">
+    <a href="#">Nouveautes</a>
+    <a href="#">Femme</a>
+    <a href="#">Homme</a>
+    <a href="#">Accessoires</a>
+    <a href="#">Collections</a>
+  </div>
+  <div class="nav-right">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero-section">
+  <!-- Slider -->
+  <div class="hero-slider">
+    <div class="hero-slide hero-slide--active">
+      <img class="hero-slide-img" src="https://sfile.chatglm.cn/images-ppt/983f8fdcfdd7.jpg" alt="Collection Automne 2026" />
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content">
+        <span class="hero-eyebrow">Nouvelle Collection</span>
+        <h1 class="hero-slide-title">L'&Eacute;l&eacute;gance<br/>Minimaliste</h1>
+        <p class="hero-slide-subtitle">Nouvelle Collection Automne 2026</p>
+        <a href="#" class="hero-btn">D&Eacute;COUVRIR</a>
+      </div>
+    </div>
+    <div class="hero-slider-controls">
+      <div class="hero-dot hero-dot--active"></div>
+      <div class="hero-dot"></div>
+    </div>
+    <div class="hero-progress"><div class="hero-progress-bar"></div></div>
+  </div>
+
+  <!-- Static Blocks -->
+  <div class="hero-static-blocks">
+    <div class="hero-block hero-block--bestseller">
+      <div class="hero-block-visual">
+        <img class="hero-block-img" src="https://sfile.chatglm.cn/images-ppt/02aefd254df3.jpg" alt="Sac Elegance" />
+      </div>
+      <div class="hero-block-content">
+        <span class="hero-block-label">Best-Seller</span>
+        <h3 class="hero-block-title">Sac &Eacute;l&eacute;gance</h3>
+        <p class="hero-block-price">285,00 &euro;</p>
+        <a href="#" class="hero-btn-outline">VOIR LE PRODUIT</a>
+      </div>
+    </div>
+    <div class="hero-block hero-block--category">
+      <div class="hero-block-visual">
+        <img class="hero-block-img" src="https://sfile.chatglm.cn/images-ppt/c5ac71282c69.jpg" alt="Accessoires" />
+      </div>
+      <div class="hero-block-content">
+        <span class="hero-block-label">Capsule</span>
+        <h3 class="hero-block-title">Les Accessoires<br/>Essentiels</h3>
+        <a href="#" class="hero-block-link" style="margin-top:0.5rem;">TOUT PARCOURIR &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <div class="trust-item-text"><strong>Livraison Express</strong><span>Sous 24-48h</span></div>
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    <div class="trust-item-text"><strong>Retours Gratuits</strong><span>Sous 30 jours</span></div>
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <div class="trust-item-text"><strong>Paiement S&eacute;curis&eacute;</strong><span>SSL 256 bits</span></div>
+  </div>
+  <div class="trust-item">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <div class="trust-item-text"><strong>Service Client 7j/7</strong><span>Chat, email, tel</span></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/18d4208c76f3.jpg" alt="Femme" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Femme</span></div>
+  </div>
+  <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/2750b4996bc2.png" alt="Homme" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Homme</span></div>
+  </div>
+  <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/cc28ec888277.png" alt="Chaussures" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Chaussures</span></div>
+  </div>
+  <div class="cat-card">
+    <img src="https://sfile.chatglm.cn/images-ppt/c5ac71282c69.jpg" alt="Accessoires" />
+    <div class="cat-overlay"><span class="cat-label">Collection</span><span class="cat-title">Accessoires</span></div>
+  </div>
+</div>
+
+<!-- PRODUCTS BAR -->
+<div class="products-bar">
+  <div class="prod-card">
+    <img class="prod-img" src="https://sfile.chatglm.cn/images-ppt/18d4208c76f3.jpg" alt="" />
+    <div class="prod-info"><div class="prod-name">Manteau Cashmere</div><div class="prod-price">450,00 &euro;</div></div>
+  </div>
+  <div class="prod-card">
+    <img class="prod-img" src="https://sfile.chatglm.cn/images-ppt/02aefd254df3.jpg" alt="" />
+    <div class="prod-info"><div class="prod-name">Sac Elegance</div><div class="prod-price">285,00 &euro;</div></div>
+  </div>
+  <div class="prod-card">
+    <img class="prod-img" src="https://sfile.chatglm.cn/images-ppt/cc28ec888277.png" alt="" />
+    <div class="prod-info"><div class="prod-name">Pantalon Structur&eacute;</div><div class="prod-price">195,00 &euro;</div></div>
+  </div>
+  <div class="prod-card">
+    <img class="prod-img" src="https://sfile.chatglm.cn/images-ppt/2750b4996bc2.png" alt="" />
+    <div class="prod-info"><div class="prod-name">Chemise Lin</div><div class="prod-price">145,00 &euro;</div></div>
+  </div>
+  <div class="prod-card">
+    <img class="prod-img" src="https://sfile.chatglm.cn/images-ppt/983f8fdcfdd7.jpg" alt="" />
+    <div class="prod-info"><div class="prod-name">Veste Laine</div><div class="prod-price">380,00 &euro;</div></div>
+  </div>
+</div>
+
+<!-- FOOTER STRIP -->
+<div class="footer-strip">
+  <span>VELURE &copy; 2026 &mdash; Tous droits r&eacute;serv&eacute;s</span>
+  <span>Instagram &middot; Pinterest &middot; TikTok</span>
+</div>
+
+</body>
+</html>
