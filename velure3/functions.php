@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         exit;
 }
 
-define( 'VELURE3_VERSION', '1.0.0' );
+define( 'VELURE3_VERSION', '1.3.0' );
 define( 'VELURE3_DIR', get_template_directory() );
 define( 'VELURE3_URI', get_template_directory_uri() );
 
@@ -117,4 +117,18 @@ function velure3_localize() {
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
                 'nonce'    => wp_create_nonce( 'velure3_nonce' ),
         ) );
+}
+
+/* ── Dynamic Content: CPT + ACF Fields + Helpers ── */
+require_once VELURE3_DIR . '/inc/dynamic-fields.php';
+
+/* ── Admin notice if ACF is not active ── */
+add_action( 'admin_notices', 'velure3_acf_notice' );
+function velure3_acf_notice() {
+        if ( function_exists( 'acf_add_options_page' ) ) return;
+        echo '<div class="notice notice-warning"><p>';
+        echo '<strong>Velure3 :</strong> Le plugin <em>Advanced Custom Fields</em> (ACF) n\'est pas actif. ';
+        echo 'La page d\'accueil utilisera le contenu par défaut. ';
+        echo '<a href="' . esc_url( admin_url( 'plugin-install.php?s=advanced+custom+fields&tab=search&type=term' ) ) . '">Installer ACF</a>';
+        echo '</p></div>';
 }
