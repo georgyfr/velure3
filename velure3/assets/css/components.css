@@ -16,8 +16,6 @@
   display: flex;
   align-items: center;
   width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
   position: relative;
   z-index: 1001;
 }
@@ -50,8 +48,6 @@
   border-bottom: 1px solid var(--v-color-border);
   transition: all var(--v-transition);
   width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 .velure-navbar.velure-scrolled {
@@ -716,8 +712,6 @@
   min-height: 500px;
   max-height: 720px;
   width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 /* ══════════════════════════════

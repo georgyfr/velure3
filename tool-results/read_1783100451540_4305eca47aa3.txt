@@ -1,0 +1,2002 @@
+     1→/* ═══════════════════════════════════════════
+     2→   VELURE3 — Components Styles
+     3→   ═══════════════════════════════════════════ */
+     4→
+     5→/* ────────────────────────────
+     6→   HEADER
+     7→   ──────────────────────────── */
+     8→
+     9→/* Top Bar */
+    10→.velure-topbar {
+    11→  background: var(--v-color-contrast);
+    12→  color: var(--v-color-base);
+    13→  font-size: 0.7rem;
+    14→  letter-spacing: 0.05em;
+    15→  height: var(--v-topbar-h);
+    16→  display: flex;
+    17→  align-items: center;
+    18→  width: 100%;
+    19→  margin: 0 !important;
+    20→  padding: 0 !important;
+    21→  position: relative;
+    22→  z-index: 1001;
+    23→}
+    24→
+    25→.velure-topbar-inner {
+    26→  display: flex;
+    27→  justify-content: space-between;
+    28→  align-items: center;
+    29→}
+    30→
+    31→.velure-topbar-text { opacity: 0.8; }
+    32→
+    33→.velure-topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
+    34→.velure-topbar-sep { opacity: 0.3; }
+    35→.velure-topbar-link { opacity: 0.8; transition: opacity var(--v-transition); }
+    36→.velure-topbar-link:hover { opacity: 1; }
+    37→
+    38→@media (max-width: 768px) {
+    39→  .velure-topbar-actions { display: none; }
+    40→}
+    41→
+    42→/* Navbar */
+    43→.velure-navbar {
+    44→  position: sticky;
+    45→  top: 0;
+    46→  z-index: 1000;
+    47→  background: rgba(250, 250, 248, 0.95);
+    48→  backdrop-filter: blur(20px);
+    49→  -webkit-backdrop-filter: blur(20px);
+    50→  border-bottom: 1px solid var(--v-color-border);
+    51→  transition: all var(--v-transition);
+    52→  width: 100%;
+    53→  margin: 0 !important;
+    54→  padding: 0 !important;
+    55→}
+    56→
+    57→.velure-navbar.velure-scrolled {
+    58→  box-shadow: 0 1px 20px rgba(0,0,0,0.05);
+    59→}
+    60→
+    61→.velure-navbar-inner {
+    62→  display: flex;
+    63→  align-items: center;
+    64→  justify-content: space-between;
+    65→  height: var(--v-header-h);
+    66→  gap: 2rem;
+    67→}
+    68→
+    69→/* Logo */
+    70→.velure-logo { display: flex; align-items: center; }
+    71→.velure-logo-text {
+    72→  font-family: var(--v-font-serif);
+    73→  font-size: 1.75rem;
+    74→  font-weight: 600;
+    75→  letter-spacing: 0.15em;
+    76→  text-transform: uppercase;
+    77→  color: var(--v-color-contrast);
+    78→}
+    79→
+    80→/* Desktop Nav */
+    81→.velure-nav { display: flex; align-items: center; }
+    82→
+    83→.velure-nav-list {
+    84→  display: flex;
+    85→  gap: 0;
+    86→  align-items: center;
+    87→}
+    88→
+    89→.velure-nav-item {
+    90→  position: relative;
+    91→}
+    92→
+    93→.velure-nav-link {
+    94→  display: block;
+    95→  padding: 0.5rem 1rem;
+    96→  font-size: 0.75rem;
+    97→  font-weight: 500;
+    98→  letter-spacing: 0.1em;
+    99→  text-transform: uppercase;
+   100→  color: var(--v-color-contrast);
+   101→  transition: color var(--v-transition);
+   102→}
+   103→
+   104→.velure-nav-link:hover {
+   105→  color: var(--v-color-accent);
+   106→}
+   107→
+   108→.velure-nav-highlight {
+   109→  color: var(--v-color-accent) !important;
+   110→  position: relative;
+   111→}
+   112→
+   113→.velure-nav-highlight::after {
+   114→  content: '';
+   115→  position: absolute;
+   116→  bottom: 0.25rem;
+   117→  left: 1rem;
+   118→  right: 1rem;
+   119→  height: 1px;
+   120→  background: var(--v-color-accent);
+   121→}
+   122→
+   123→/* Mega Menu */
+   124→.velure-mega-menu {
+   125→  position: absolute;
+   126→  top: 100%;
+   127→  left: 50%;
+   128→  transform: translateX(-50%);
+   129→  width: 100vw;
+   130→  background: var(--v-color-white);
+   131→  border-top: 1px solid var(--v-color-border);
+   132→  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+   133→  opacity: 0;
+   134→  visibility: hidden;
+   135→  transform: translateX(-50%) translateY(10px);
+   136→  transition: all 0.3s ease;
+   137→  padding: 2.5rem 0;
+   138→}
+   139→
+   140→.velure-nav-item:hover .velure-mega-menu {
+   141→  opacity: 1;
+   142→  visibility: visible;
+   143→  transform: translateX(-50%) translateY(0);
+   144→}
+   145→
+   146→.velure-mega-grid {
+   147→  display: grid;
+   148→  grid-template-columns: repeat(3, 1fr) 1.5fr;
+   149→  gap: 2rem;
+   150→  align-items: start;
+   151→}
+   152→
+   153→.velure-mega-title {
+   154→  font-family: var(--v-font-sans);
+   155→  font-size: 0.7rem;
+   156→  font-weight: 600;
+   157→  letter-spacing: 0.15em;
+   158→  text-transform: uppercase;
+   159→  margin-bottom: 1rem;
+   160→  color: var(--v-color-contrast);
+   161→}
+   162→
+   163→.velure-mega-links li { margin-bottom: 0.5rem; }
+   164→.velure-mega-links a {
+   165→  font-size: 0.875rem;
+   166→  color: #555;
+   167→  transition: color var(--v-transition);
+   168→}
+   169→.velure-mega-links a:hover { color: var(--v-color-accent); }
+   170→
+   171→.velure-mega-cta {
+   172→  display: flex;
+   173→  flex-direction: column;
+   174→  justify-content: flex-end;
+   175→  height: 100%;
+   176→  min-height: 200px;
+   177→  padding: 2rem;
+   178→  background: var(--v-color-soft);
+   179→  border-radius: 2px;
+   180→  transition: background var(--v-transition);
+   181→}
+   182→
+   183→.velure-mega-cta:hover { background: var(--v-color-muted); }
+   184→
+   185→.velure-mega-cta-label {
+   186→  font-size: 0.65rem;
+   187→  letter-spacing: 0.2em;
+   188→  text-transform: uppercase;
+   189→  color: var(--v-color-secondary);
+   190→  margin-bottom: 0.5rem;
+   191→}
+   192→
+   193→.velure-mega-cta-title {
+   194→  font-family: var(--v-font-serif);
+   195→  font-size: 1.25rem;
+   196→}
+   197→
+   198→/* Header Actions */
+   199→.velure-header-actions {
+   200→  display: flex;
+   201→  align-items: center;
+   202→  gap: 0.25rem;
+   203→}
+   204→
+   205→.velure-header-btn {
+   206→  display: flex;
+   207→  align-items: center;
+   208→  justify-content: center;
+   209→  width: 40px;
+   210→  height: 40px;
+   211→  border-radius: 50%;
+   212→  transition: background var(--v-transition);
+   213→  position: relative;
+   214→  color: var(--v-color-contrast);
+   215→}
+   216→
+   217→.velure-header-btn:hover {
+   218→  background: var(--v-color-muted);
+   219→}
+   220→
+   221→.velure-cart-count {
+   222→  position: absolute;
+   223→  top: 2px;
+   224→  right: 2px;
+   225→  width: 16px;
+   226→  height: 16px;
+   227→  background: var(--v-color-accent);
+   228→  color: #fff;
+   229→  font-size: 0.6rem;
+   230→  font-weight: 700;
+   231→  border-radius: 50%;
+   232→  display: flex;
+   233→  align-items: center;
+   234→  justify-content: center;
+   235→}
+   236→
+   237→/* Hamburger */
+   238→.velure-menu-toggle {
+   239→  display: none;
+   240→  flex-direction: column;
+   241→  gap: 5px;
+   242→  width: 24px;
+   243→  padding: 4px 0;
+   244→}
+   245→
+   246→.velure-menu-toggle span {
+   247→  display: block;
+   248→  height: 1.5px;
+   249→  background: var(--v-color-contrast);
+   250→  transition: all var(--v-transition);
+   251→  border-radius: 1px;
+   252→}
+   253→
+   254→/* Search Overlay */
+   255→.velure-search-overlay {
+   256→  position: fixed;
+   257→  top: 0; left: 0; right: 0; bottom: 0;
+   258→  background: rgba(250, 250, 248, 0.97);
+   259→  z-index: 2000;
+   260→  display: flex;
+   261→  align-items: flex-start;
+   262→  justify-content: center;
+   263→  padding-top: 15vh;
+   264→  opacity: 0;
+   265→  visibility: hidden;
+   266→  transition: all 0.3s ease;
+   267→}
+   268→
+   269→.velure-search-overlay.velure-active {
+   270→  opacity: 1;
+   271→  visibility: visible;
+   272→}
+   273→
+   274→.velure-search-form {
+   275→  width: 100%;
+   276→  max-width: 700px;
+   277→  padding: 0 2rem;
+   278→  display: flex;
+   279→  align-items: center;
+   280→  border-bottom: 2px solid var(--v-color-contrast);
+   281→  gap: 1rem;
+   282→}
+   283→
+   284→.velure-search-input {
+   285→  flex: 1;
+   286→  font-size: 1.5rem;
+   287→  font-family: var(--v-font-serif);
+   288→  padding: 0.75rem 0;
+   289→  background: transparent;
+   290→  color: var(--v-color-contrast);
+   291→}
+   292→
+   293→.velure-search-input::placeholder {
+   294→  color: #999;
+   295→}
+   296→
+   297→.velure-search-submit {
+   298→  color: var(--v-color-contrast);
+   299→  flex-shrink: 0;
+   300→}
+   301→
+   302→.velure-search-close {
+   303→  color: #999;
+   304→  flex-shrink: 0;
+   305→  transition: color var(--v-transition);
+   306→}
+   307→
+   308→.velure-search-close:hover { color: var(--v-color-contrast); }
+   309→
+   310→/* Mobile Menu */
+   311→.velure-mobile-overlay {
+   312→  position: fixed;
+   313→  top: 0; left: 0; right: 0; bottom: 0;
+   314→  background: rgba(0,0,0,0.4);
+   315→  z-index: 1500;
+   316→  opacity: 0;
+   317→  visibility: hidden;
+   318→  transition: all var(--v-transition);
+   319→}
+   320→
+   321→.velure-mobile-overlay.velure-active {
+   322→  opacity: 1;
+   323→  visibility: visible;
+   324→}
+   325→
+   326→.velure-mobile-menu {
+   327→  position: fixed;
+   328→  top: 0; left: 0; bottom: 0;
+   329→  width: 320px;
+   330→  max-width: 85vw;
+   331→  background: var(--v-color-white);
+   332→  z-index: 1600;
+   333→  transform: translateX(-100%);
+   334→  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   335→  display: flex;
+   336→  flex-direction: column;
+   337→  overflow-y: auto;
+   338→}
+   339→
+   340→.velure-mobile-menu.velure-active {
+   341→  transform: translateX(0);
+   342→}
+   343→
+   344→.velure-mobile-menu-header {
+   345→  display: flex;
+   346→  align-items: center;
+   347→  justify-content: space-between;
+   348→  padding: 1.25rem 1.5rem;
+   349→  border-bottom: 1px solid var(--v-color-border);
+   350→}
+   351→
+   352→.velure-mobile-close {
+   353→  width: 40px; height: 40px;
+   354→  display: flex; align-items: center; justify-content: center;
+   355→}
+   356→
+   357→.velure-mobile-nav-list {
+   358→  flex: 1;
+   359→  padding: 1.5rem;
+   360→}
+   361→
+   362→.velure-mobile-nav-list li {
+   363→  border-bottom: 1px solid var(--v-color-border);
+   364→}
+   365→
+   366→.velure-mobile-nav-list a {
+   367→  display: block;
+   368→  padding: 1rem 0;
+   369→  font-size: 1rem;
+   370→  font-weight: 500;
+   371→  letter-spacing: 0.02em;
+   372→}
+   373→
+   374→.velure-mobile-menu-footer {
+   375→  padding: 1.5rem;
+   376→  border-top: 1px solid var(--v-color-border);
+   377→  display: flex;
+   378→  gap: 1.5rem;
+   379→}
+   380→
+   381→.velure-mobile-menu-link {
+   382→  font-size: 0.8rem;
+   383→  letter-spacing: 0.05em;
+   384→  color: #888;
+   385→}
+   386→
+   387→/* Header Responsive */
+   388→@media (max-width: 1024px) {
+   389→  .velure-nav { display: none; }
+   390→  .velure-menu-toggle { display: flex; }
+   391→  .velure-mega-menu { display: none; }
+   392→}
+   393→
+   394→
+   395→/* ────────────────────────────
+   396→   FOOTER
+   397→   ──────────────────────────── */
+   398→
+   399→.velure-footer {
+   400→  margin-top: 5rem;
+   401→}
+   402→
+   403→/* Newsletter Band */
+   404→.velure-newsletter-band {
+   405→  background: var(--v-color-soft);
+   406→  padding: 3.5rem 0;
+   407→}
+   408→
+   409→.velure-newsletter-inner {
+   410→  display: flex;
+   411→  align-items: center;
+   412→  justify-content: space-between;
+   413→  gap: 2rem;
+   414→}
+   415→
+   416→.velure-newsletter-title {
+   417→  font-family: var(--v-font-serif);
+   418→  font-size: 1.5rem;
+   419→  margin-bottom: 0.25rem;
+   420→}
+   421→
+   422→.velure-newsletter-desc {
+   423→  font-size: 0.875rem;
+   424→  color: #666;
+   425→}
+   426→
+   427→.velure-newsletter-form {
+   428→  display: flex;
+   429→  gap: 0;
+   430→  flex-shrink: 0;
+   431→}
+   432→
+   433→.velure-newsletter-input {
+   434→  width: 300px;
+   435→  padding: 0.875rem 1.25rem;
+   436→  font-size: 0.875rem;
+   437→  background: var(--v-color-white);
+   438→  border: 1px solid var(--v-color-border);
+   439→  border-right: none;
+   440→}
+   441→
+   442→.velure-newsletter-btn {
+   443→  padding: 0.875rem 2rem;
+   444→  background: var(--v-color-contrast);
+   445→  color: var(--v-color-base);
+   446→  font-size: 0.7rem;
+   447→  font-weight: 600;
+   448→  letter-spacing: 0.15em;
+   449→  text-transform: uppercase;
+   450→  border: 1px solid var(--v-color-contrast);
+   451→  transition: all var(--v-transition);
+   452→}
+   453→
+   454→.velure-newsletter-btn:hover {
+   455→  background: #333;
+   456→}
+   457→
+   458→@media (max-width: 768px) {
+   459→  .velure-newsletter-inner { flex-direction: column; text-align: center; }
+   460→  .velure-newsletter-form { flex-direction: column; width: 100%; }
+   461→  .velure-newsletter-input { width: 100%; border-right: 1px solid var(--v-color-border); }
+   462→  .velure-newsletter-btn { width: 100%; }
+   463→}
+   464→
+   465→/* Main Footer */
+   466→.velure-footer-main {
+   467→  background: var(--v-color-contrast);
+   468→  color: rgba(255,255,255,0.7);
+   469→  padding: 4rem 0 3rem;
+   470→}
+   471→
+   472→.velure-footer-grid {
+   473→  display: grid;
+   474→  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+   475→  gap: 3rem;
+   476→}
+   477→
+   478→.velure-footer-brand { padding-right: 2rem; }
+   479→
+   480→.velure-footer-logo {
+   481→  display: inline-block;
+   482→  margin-bottom: 1.25rem;
+   483→}
+   484→
+   485→.velure-footer-logo .velure-logo-text {
+   486→  color: var(--v-color-base);
+   487→}
+   488→
+   489→.velure-footer-about {
+   490→  font-size: 0.85rem;
+   491→  line-height: 1.7;
+   492→  margin-bottom: 1.5rem;
+   493→  opacity: 0.7;
+   494→}
+   495→
+   496→.velure-footer-social {
+   497→  display: flex;
+   498→  gap: 0.75rem;
+   499→}
+   500→
+   501→.velure-social-link {
+   502→  width: 36px;
+   503→  height: 36px;
+   504→  border: 1px solid rgba(255,255,255,0.2);
+   505→  border-radius: 50%;
+   506→  display: flex;
+   507→  align-items: center;
+   508→  justify-content: center;
+   509→  color: rgba(255,255,255,0.7);
+   510→  transition: all var(--v-transition);
+   511→}
+   512→
+   513→.velure-social-link:hover {
+   514→  background: var(--v-color-secondary);
+   515→  border-color: var(--v-color-secondary);
+   516→  color: #fff;
+   517→}
+   518→
+   519→.velure-footer-heading {
+   520→  font-family: var(--v-font-sans);
+   521→  font-size: 0.7rem;
+   522→  font-weight: 600;
+   523→  letter-spacing: 0.15em;
+   524→  text-transform: uppercase;
+   525→  color: var(--v-color-base);
+   526→  margin-bottom: 1.5rem;
+   527→}
+   528→
+   529→.velure-footer-links li { margin-bottom: 0.75rem; }
+   530→
+   531→.velure-footer-links a {
+   532→  font-size: 0.85rem;
+   533→  color: rgba(255,255,255,0.6);
+   534→  transition: all var(--v-transition);
+   535→}
+   536→
+   537→.velure-footer-links a:hover {
+   538→  color: var(--v-color-secondary);
+   539→  padding-left: 4px;
+   540→}
+   541→
+   542→/* Footer Bottom */
+   543→.velure-footer-bottom {
+   544→  background: #111;
+   545→  padding: 1.25rem 0;
+   546→}
+   547→
+   548→.velure-footer-bottom-inner {
+   549→  display: flex;
+   550→  align-items: center;
+   551→  justify-content: space-between;
+   552→}
+   553→
+   554→.velure-copyright {
+   555→  font-size: 0.75rem;
+   556→  color: rgba(255,255,255,0.4);
+   557→}
+   558→
+   559→.velure-payments {
+   560→  display: flex;
+   561→  align-items: center;
+   562→  gap: 0.5rem;
+   563→}
+   564→
+   565→.velure-payment-label {
+   566→  font-size: 0.7rem;
+   567→  color: rgba(255,255,255,0.4);
+   568→}
+   569→
+   570→.velure-payment-icon {
+   571→  font-size: 0.65rem;
+   572→  font-weight: 600;
+   573→  color: rgba(255,255,255,0.5);
+   574→  padding: 0.25rem 0.5rem;
+   575→  border: 1px solid rgba(255,255,255,0.15);
+   576→  border-radius: 2px;
+   577→}
+   578→
+   579→@media (max-width: 768px) {
+   580→  .velure-footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+   581→  .velure-footer-brand { grid-column: 1 / -1; padding-right: 0; }
+   582→  .velure-footer-bottom-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
+   583→}
+   584→
+   585→@media (max-width: 480px) {
+   586→  .velure-footer-grid { grid-template-columns: 1fr; }
+   587→}
+   588→
+   589→
+   590→/* ────────────────────────────
+   591→   PRODUCT CARD
+   592→   ──────────────────────────── */
+   593→
+   594→.velure-product-card {
+   595→  position: relative;
+   596→  cursor: pointer;
+   597→}
+   598→
+   599→.velure-product-card-image {
+   600→  position: relative;
+   601→  overflow: hidden;
+   602→  aspect-ratio: 3/4;
+   603→  background: var(--v-color-soft);
+   604→  margin-bottom: 1rem;
+   605→}
+   606→
+   607→.velure-product-card-image img {
+   608→  width: 100%;
+   609→  height: 100%;
+   610→  object-fit: cover;
+   611→  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   612→}
+   613→
+   614→.velure-product-card:hover .velure-product-card-image img {
+   615→  transform: scale(1.05);
+   616→}
+   617→
+   618→.velure-product-card-badge {
+   619→  position: absolute;
+   620→  top: 0.75rem;
+   621→  left: 0.75rem;
+   622→  padding: 0.25rem 0.75rem;
+   623→  font-size: 0.6rem;
+   624→  font-weight: 700;
+   625→  letter-spacing: 0.1em;
+   626→  text-transform: uppercase;
+   627→  background: var(--v-color-contrast);
+   628→  color: var(--v-color-base);
+   629→}
+   630→
+   631→.velure-product-card-badge.sale {
+   632→  background: #C0392B;
+   633→  color: #fff;
+   634→}
+   635→
+   636→.velure-product-card-badge.new {
+   637→  background: var(--v-color-secondary);
+   638→  color: #fff;
+   639→}
+   640→
+   641→.velure-product-card-actions {
+   642→  position: absolute;
+   643→  bottom: 0;
+   644→  left: 0;
+   645→  right: 0;
+   646→  padding: 1rem;
+   647→  background: linear-gradient(transparent, rgba(0,0,0,0.5));
+   648→  display: flex;
+   649→  justify-content: center;
+   650→  gap: 0.5rem;
+   651→  opacity: 0;
+   652→  transform: translateY(10px);
+   653→  transition: all var(--v-transition);
+   654→}
+   655→
+   656→.velure-product-card:hover .velure-product-card-actions {
+   657→  opacity: 1;
+   658→  transform: translateY(0);
+   659→}
+   660→
+   661→.velure-product-card-action {
+   662→  width: 40px;
+   663→  height: 40px;
+   664→  background: rgba(255,255,255,0.9);
+   665→  border-radius: 50%;
+   666→  display: flex;
+   667→  align-items: center;
+   668→  justify-content: center;
+   669→  transition: all var(--v-transition);
+   670→}
+   671→
+   672→.velure-product-card-action:hover {
+   673→  background: var(--v-color-contrast);
+   674→  color: #fff;
+   675→}
+   676→
+   677→.velure-product-card-info h3 {
+   678→  font-family: var(--v-font-sans);
+   679→  font-size: 0.85rem;
+   680→  font-weight: 500;
+   681→  margin-bottom: 0.25rem;
+   682→  letter-spacing: 0.01em;
+   683→}
+   684→
+   685→.velure-product-card-price {
+   686→  font-size: 0.85rem;
+   687→  color: #555;
+   688→}
+   689→
+   690→.velure-product-card-price .sale-price {
+   691→  color: var(--v-color-contrast);
+   692→  font-weight: 600;
+   693→}
+   694→
+   695→.velure-product-card-price:has(.old-price) .sale-price {
+   696→  color: #C0392B;
+   697→}
+   698→
+   699→.velure-product-card-price .old-price {
+   700→  text-decoration: line-through;
+   701→  opacity: 0.5;
+   702→  margin-left: 0.5rem;
+   703→  font-size: 0.8rem;
+   704→}
+   705→
+   706→
+   707→/* ────────────────────────────
+   708→   HERO SECTION — BANNIÈRE ASYMÉTRIQUE
+   709→   ──────────────────────────── */
+   710→
+   711→/* Parent Grid : 2 colonnes */
+   712→.hero-section {
+   713→  display: grid;
+   714→  grid-template-columns: 1fr 1fr;
+   715→  height: 75vh;
+   716→  min-height: 500px;
+   717→  max-height: 720px;
+   718→  width: 100%;
+   719→  margin: 0 !important;
+   720→  padding: 0 !important;
+   721→}
+   722→
+   723→/* ══════════════════════════════
+   724→   COLONNE A — SLIDER ÉMOTIONNEL
+   725→   ══════════════════════════════ */
+   726→.hero-slider {
+   727→  position: relative;
+   728→  overflow: hidden;
+   729→  background: #0f0f0e;
+   730→}
+   731→
+   732→/* Track (conteneur des slides) */
+   733→.hero-slides-track {
+   734→  position: relative;
+   735→  width: 100%;
+   736→  height: 100%;
+   737→}
+   738→
+   739→/* Slide individuelle */
+   740→.hero-slide {
+   741→  position: absolute;
+   742→  inset: 0;
+   743→  opacity: 0;
+   744→  visibility: hidden;
+   745→  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+   746→              visibility 0s linear 1s;
+   747→  z-index: 1;
+   748→}
+   749→
+   750→.hero-slide--active {
+   751→  opacity: 1;
+   752→  visibility: visible;
+   753→  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+   754→              visibility 0s linear 0s;
+   755→  z-index: 2;
+   756→}
+   757→
+   758→/* Image du slide */
+   759→.hero-slide-img {
+   760→  width: 100%;
+   761→  height: 100%;
+   762→  object-fit: cover;
+   763→  display: block;
+   764→  transform: scale(1.03);
+   765→  transition: transform 6s ease-out;
+   766→}
+   767→
+   768→.hero-slide--active .hero-slide-img {
+   769→  transform: scale(1);
+   770→}
+   771→
+   772→/* Overlay gradient sur l'image */
+   773→.hero-slide-overlay {
+   774→  position: absolute;
+   775→  inset: 0;
+   776→  background: linear-gradient(
+   777→    to top,
+   778→    rgba(26, 26, 26, 0.75) 0%,
+   779→    rgba(26, 26, 26, 0.25) 45%,
+   780→    rgba(26, 26, 26, 0.10) 100%
+   781→  );
+   782→  z-index: 1;
+   783→}
+   784→
+   785→/* Contenu textuel du slide */
+   786→.hero-slide-content {
+   787→  position: absolute;
+   788→  bottom: 0;
+   789→  left: 0;
+   790→  right: 0;
+   791→  z-index: 2;
+   792→  padding: 2rem 2.5rem 2.5rem;
+   793→  display: flex;
+   794→  flex-direction: column;
+   795→  align-items: flex-start;
+   796→  max-width: 420px;
+   797→}
+   798→
+   799→/* Eyebrow */
+   800→.hero-eyebrow {
+   801→  font-family: var(--v-font-sans);
+   802→  font-size: 0.6rem;
+   803→  font-weight: 600;
+   804→  letter-spacing: 0.25em;
+   805→  text-transform: uppercase;
+   806→  color: var(--v-color-secondary);
+   807→  margin-bottom: 0.625rem;
+   808→  display: inline-block;
+   809→  opacity: 0;
+   810→  transform: translateY(15px);
+   811→  transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+   812→}
+   813→
+   814→.hero-slide--active .hero-eyebrow {
+   815→  opacity: 1;
+   816→  transform: translateY(0);
+   817→}
+   818→
+   819→/* Titre du slide */
+   820→.hero-slide-title {
+   821→  font-family: var(--v-font-serif);
+   822→  font-size: clamp(1.75rem, 3vw, 2.75rem);
+   823→  font-weight: 400;
+   824→  line-height: 1.1;
+   825→  letter-spacing: -0.01em;
+   826→  color: var(--v-color-base);
+   827→  margin-bottom: 0.5rem;
+   828→  opacity: 0;
+   829→  transform: translateY(25px);
+   830→  transition: opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
+   831→}
+   832→
+   833→.hero-slide--active .hero-slide-title {
+   834→  opacity: 1;
+   835→  transform: translateY(0);
+   836→}
+   837→
+   838→/* Sous-titre du slide */
+   839→.hero-slide-subtitle {
+   840→  font-family: var(--v-font-sans);
+   841→  font-size: 0.85rem;
+   842→  font-weight: 300;
+   843→  line-height: 1.5;
+   844→  color: rgba(250, 250, 248, 0.7);
+   845→  margin-bottom: 1.25rem;
+   846→  opacity: 0;
+   847→  transform: translateY(15px);
+   848→  transition: opacity 0.6s ease 0.7s, transform 0.6s ease 0.7s;
+   849→}
+   850→
+   851→.hero-slide--active .hero-slide-subtitle {
+   852→  opacity: 1;
+   853→  transform: translateY(0);
+   854→}
+   855→
+   856→/* Bouton CTA dans le slide */
+   857→.hero-slide-content .velure-btn {
+   858→  opacity: 0;
+   859→  transform: translateY(20px);
+   860→  transition: opacity 0.6s ease 0.9s, transform 0.6s ease 0.9s,
+   861→              background var(--v-transition), color var(--v-transition);
+   862→}
+   863→
+   864→.hero-slide--active .hero-slide-content .velure-btn {
+   865→  opacity: 1;
+   866→  transform: translateY(0);
+   867→}
+   868→
+   869→/* Navigation par dots */
+   870→.hero-slider-controls {
+   871→  position: absolute;
+   872→  bottom: 2.5rem;
+   873→  right: 2.5rem;
+   874→  z-index: 5;
+   875→  display: flex;
+   876→  gap: 0.5rem;
+   877→  align-items: center;
+   878→}
+   879→
+   880→.hero-slider-dot {
+   881→  width: 12px;
+   882→  height: 12px;
+   883→  border-radius: 50%;
+   884→  border: 1.5px solid rgba(250, 250, 248, 0.5);
+   885→  background: transparent;
+   886→  cursor: pointer;
+   887→  transition: all var(--v-transition);
+   888→  padding: 0;
+   889→}
+   890→
+   891→.hero-slider-dot:hover {
+   892→  border-color: rgba(250, 250, 248, 0.9);
+   893→}
+   894→
+   895→.hero-slider-dot--active {
+   896→  background: var(--v-color-base);
+   897→  border-color: var(--v-color-base);
+   898→}
+   899→
+   900→/* Barre de progression */
+   901→.hero-slider-progress {
+   902→  position: absolute;
+   903→  bottom: 0;
+   904→  left: 0;
+   905→  right: 0;
+   906→  height: 3px;
+   907→  background: rgba(250, 250, 248, 0.1);
+   908→  z-index: 5;
+   909→  overflow: hidden;
+   910→}
+   911→
+   912→.hero-slider-progress-bar {
+   913→  height: 100%;
+   914→  width: 0%;
+   915→  background: var(--v-color-secondary);
+   916→  transition: width 0.1s linear;
+   917→}
+   918→
+   919→/* Animation de la barre (gérée par JS) */
+   920→.hero-slider-progress-bar--running {
+   921→  transition: width 5s linear;
+   922→  width: 100% !important;
+   923→}
+   924→
+   925→/* ══════════════════════════════
+   926→   COLONNE B — BLOCS STATIQUES
+   927→   ══════════════════════════════ */
+   928→.hero-static-blocks {
+   929→  display: flex;
+   930→  flex-direction: column;
+   931→  height: 100%;
+   932→}
+   933→
+   934→/* Bloc générique */
+   935→.hero-block {
+   936→  position: relative;
+   937→  flex: 1 1 50%;
+   938→  overflow: hidden;
+   939→  display: flex;
+   940→  align-items: center;
+   941→  cursor: pointer;
+   942→  transition: background var(--v-transition);
+   943→}
+   944→
+   945→.hero-block:hover {
+   946→  background: var(--v-color-muted);
+   947→}
+   948→
+   949→/* B1 — Best-Seller : fond beige très clair */
+   950→.hero-block--bestseller {
+   951→  background: var(--v-color-soft);
+   952→  border-bottom: 1px solid var(--v-color-border);
+   953→}
+   954→
+   955→/* B2 — Catégorie : fond blanc cassé */
+   956→.hero-block--category {
+   957→  background: var(--v-color-white);
+   958→}
+   959→
+   960→/* Image du bloc */
+   961→.hero-block-visual {
+   962→  position: relative;
+   963→  width: 55%;
+   964→  height: 100%;
+   965→  overflow: hidden;
+   966→  flex-shrink: 0;
+   967→}
+   968→
+   969→.hero-block-img {
+   970→  width: 100%;
+   971→  height: 100%;
+   972→  object-fit: cover;
+   973→  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+   974→}
+   975→
+   976→.hero-block:hover .hero-block-img {
+   977→  transform: scale(1.04);
+   978→}
+   979→
+   980→/* Contenu du bloc */
+   981→.hero-block-content {
+   982→  flex: 1;
+   983→  padding: 1.75rem 2rem 1.75rem 1.5rem;
+   984→  display: flex;
+   985→  flex-direction: column;
+   986→  justify-content: center;
+   987→}
+   988→
+   989→/* Label du bloc (Best-Seller / Capsule) */
+   990→.hero-block-label {
+   991→  font-family: var(--v-font-sans);
+   992→  font-size: 0.6rem;
+   993→  font-weight: 600;
+   994→  letter-spacing: 0.25em;
+   995→  text-transform: uppercase;
+   996→  color: var(--v-color-secondary);
+   997→  margin-bottom: 0.625rem;
+   998→  display: block;
+   999→}
+  1000→
+  1001→/* Titre du bloc */
+  1002→.hero-block-title {
+  1003→  font-family: var(--v-font-serif);
+  1004→  font-size: clamp(1.1rem, 1.75vw, 1.5rem);
+  1005→  font-weight: 500;
+  1006→  line-height: 1.2;
+  1007→  color: var(--v-color-contrast);
+  1008→  margin-bottom: 0.375rem;
+  1009→}
+  1010→
+  1011→/* Prix du bloc */
+  1012→.hero-block-price {
+  1013→  font-family: var(--v-font-sans);
+  1014→  font-size: 0.95rem;
+  1015→  font-weight: 400;
+  1016→  color: #666;
+  1017→  margin-bottom: 1.5rem;
+  1018→}
+  1019→
+  1020→/* Lien TOUT PARCOURIR */
+  1021→.hero-block-link {
+  1022→  font-family: var(--v-font-sans);
+  1023→  font-size: 0.7rem;
+  1024→  font-weight: 600;
+  1025→  letter-spacing: 0.15em;
+  1026→  text-transform: uppercase;
+  1027→  color: var(--v-color-contrast);
+  1028→  text-decoration: none;
+  1029→  position: relative;
+  1030→  display: inline-block;
+  1031→  padding-bottom: 2px;
+  1032→  transition: color var(--v-transition);
+  1033→}
+  1034→
+  1035→.hero-block-link::after {
+  1036→  content: '';
+  1037→  position: absolute;
+  1038→  bottom: 0;
+  1039→  left: 0;
+  1040→  width: 100%;
+  1041→  height: 1px;
+  1042→  background: var(--v-color-contrast);
+  1043→  transition: width var(--v-transition);
+  1044→}
+  1045→
+  1046→.hero-block-link:hover {
+  1047→  color: var(--v-color-accent);
+  1048→}
+  1049→
+  1050→.hero-block-link:hover::after {
+  1051→  width: 60%;
+  1052→  background: var(--v-color-accent);
+  1053→}
+  1054→
+  1055→/* Bouton petit pour blocs statiques */
+  1056→.velure-btn-sm {
+  1057→  padding: 0.65rem 1.5rem;
+  1058→  font-size: 0.65rem;
+  1059→}
+  1060→
+  1061→/* ══════════════════════════════
+  1062→   RESPONSIVE — TABLETTE
+  1063→   ══════════════════════════════ */
+  1064→@media (max-width: 1024px) {
+  1065→  .hero-section {
+  1066→    height: 65vh;
+  1067→    min-height: 420px;
+  1068→    max-height: 600px;
+  1069→  }
+  1070→
+  1071→  .hero-slide-content {
+  1072→    padding: 1.75rem 2rem 2rem;
+  1073→    max-width: 360px;
+  1074→  }
+  1075→
+  1076→  .hero-slide-title {
+  1077→    font-size: clamp(1.5rem, 3vw, 2.25rem);
+  1078→  }
+  1079→
+  1080→  .hero-slider-controls {
+  1081→    bottom: 2rem;
+  1082→    right: 2rem;
+  1083→  }
+  1084→
+  1085→  .hero-block-visual {
+  1086→    width: 50%;
+  1087→  }
+  1088→
+  1089→  .hero-block-content {
+  1090→    padding: 1.5rem;
+  1091→  }
+  1092→}
+  1093→
+  1094→/* ══════════════════════════════
+  1095→   RESPONSIVE — MOBILE
+  1096→   ══════════════════════════════ */
+  1097→@media (max-width: 768px) {
+  1098→  .hero-section {
+  1099→    display: flex;
+  1100→    flex-direction: column;
+  1101→    height: auto;
+  1102→    min-height: auto;
+  1103→    max-height: none;
+  1104→  }
+  1105→
+  1106→  /* Slider prend 100% largeur mais hauteur limitée */
+  1107→  .hero-slider {
+  1108→    min-height: 40vh;
+  1109→    flex: 0 0 auto;
+  1110→  }
+  1111→
+  1112→  /* Blocs empilés */
+  1113→  .hero-static-blocks {
+  1114→    min-height: auto;
+  1115→    flex-direction: column;
+  1116→  }
+  1117→
+  1118→  .hero-block {
+  1119→    flex-direction: row;
+  1120→    min-height: 260px;
+  1121→  }
+  1122→
+  1123→  .hero-block {
+  1124→    position: relative;
+  1125→  }
+  1126→
+  1127→  .hero-block-visual {
+  1128→    width: 45%;
+  1129→    height: 100%;
+  1130→    position: absolute;
+  1131→    inset: 0;
+  1132→  }
+  1133→
+  1134→  .hero-block-content {
+  1135→    position: relative;
+  1136→    z-index: 2;
+  1137→    padding: 1.5rem;
+  1138→    min-width: 55%;
+  1139→    margin-left: auto;
+  1140→    background: linear-gradient(to right, rgba(250,250,248,0.85) 0%, rgba(250,250,248,0.95) 40%);
+  1141→    height: 100%;
+  1142→    justify-content: center;
+  1143→  }
+  1144→
+  1145→  .hero-block--bestseller {
+  1146→    border-bottom: 1px solid var(--v-color-border);
+  1147→  }
+  1148→
+  1149→  .hero-slide-content {
+  1150→    padding: 1.5rem 1.25rem 2rem;
+  1151→    max-width: 100%;
+  1152→  }
+  1153→
+  1154→  .hero-slide-title {
+  1155→    font-size: clamp(1.5rem, 6vw, 2.25rem);
+  1156→  }
+  1157→
+  1158→  .hero-slider-controls {
+  1159→    bottom: 2rem;
+  1160→    right: 1.25rem;
+  1161→  }
+  1162→}
+  1163→
+  1164→@media (max-width: 480px) {
+  1165→  .hero-slider {
+  1166→    min-height: 35vh;
+  1167→  }
+  1168→
+  1169→  .hero-block {
+  1170→    min-height: 160px;
+  1171→  }
+  1172→
+  1173→  .hero-block-visual {
+  1174→    width: 50%;
+  1175→  }
+  1176→
+  1177→  .hero-block-content {
+  1178→    min-width: 50%;
+  1179→    padding: 1rem;
+  1180→  }
+  1181→
+  1182→  .hero-block-title {
+  1183→    font-size: 1rem;
+  1184→  }
+  1185→}
+  1186→
+  1187→
+  1188→/* ────────────────────────────
+  1189→   CATEGORY CAROUSEL
+  1190→   ──────────────────────────── */
+  1191→
+  1192→/* Carousel wrapper */
+  1193→.velure-carousel {
+  1194→  position: relative;
+  1195→  overflow: hidden;
+  1196→}
+  1197→
+  1198→/* Scrollable track */
+  1199→.velure-carousel-track {
+  1200→  display: flex;
+  1201→  gap: 0.75rem;
+  1202→  overflow-x: auto;
+  1203→  scroll-behavior: smooth;
+  1204→  scroll-snap-type: x mandatory;
+  1205→  -webkit-overflow-scrolling: touch;
+  1206→  scrollbar-width: none;
+  1207→  padding: 0.25rem 0;
+  1208→}
+  1209→
+  1210→.velure-carousel-track::-webkit-scrollbar { display: none; }
+  1211→
+  1212→/* Each card snaps to start */
+  1213→.velure-carousel-track > * {
+  1214→  scroll-snap-align: start;
+  1215→  flex: 0 0 calc((100% - 1.5rem) / 4);  /* 4 visible by default */
+  1216→  min-width: 0;
+  1217→}
+  1218→
+  1219→/* Arrow buttons */
+  1220→.velure-carousel-arrow {
+  1221→  position: absolute;
+  1222→  top: 50%;
+  1223→  transform: translateY(-50%);
+  1224→  z-index: 10;
+  1225→  width: 36px;
+  1226→  height: 36px;
+  1227→  display: flex;
+  1228→  align-items: center;
+  1229→  justify-content: center;
+  1230→  background: var(--v-color-base);
+  1231→  border: 1px solid var(--v-color-border);
+  1232→  color: var(--v-color-contrast);
+  1233→  cursor: pointer;
+  1234→  transition: all var(--v-transition);
+  1235→  opacity: 0.7;
+  1236→  pointer-events: auto;
+  1237→  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  1238→}
+  1239→
+  1240→.velure-carousel:hover .velure-carousel-arrow {
+  1241→  opacity: 1;
+  1242→}
+  1243→
+  1244→.velure-carousel-arrow:hover {
+  1245→  background: var(--v-color-contrast);
+  1246→  color: var(--v-color-base);
+  1247→  border-color: var(--v-color-contrast);
+  1248→}
+  1249→
+  1250→.velure-carousel-arrow--prev { left: 0; border-radius: 0; }
+  1251→.velure-carousel-arrow--next { right: 0; border-radius: 0; }
+  1252→
+  1253→/* Responsive: show fewer cards */
+  1254→@media (max-width: 1024px) {
+  1255→  .velure-carousel-track > * {
+  1256→    flex: 0 0 calc((100% - 0.75rem) / 3);  /* 3 visible */
+  1257→  }
+  1258→}
+  1259→@media (max-width: 768px) {
+  1260→  .velure-carousel-track > * {
+  1261→    flex: 0 0 calc((100% - 0.75rem) / 2.5);  /* 2.5 visible (peek) */
+  1262→  }
+  1263→  .velure-carousel-arrow { display: none; }
+  1264→}
+  1265→@media (max-width: 480px) {
+  1266→  .velure-carousel-track > * {
+  1267→    flex: 0 0 calc((100% - 0.75rem) / 2);  /* 2 visible */
+  1268→  }
+  1269→}
+  1270→
+  1271→/* ── Category Card (used in carousel) ── */
+  1272→
+  1273→.velure-category-card {
+  1274→  position: relative;
+  1275→  overflow: hidden;
+  1276→  aspect-ratio: 3/4;
+  1277→  cursor: pointer;
+  1278→  display: block;
+  1279→  border-radius: 2px;
+  1280→}
+  1281→
+  1282→.velure-category-card img {
+  1283→  width: 100%;
+  1284→  height: 100%;
+  1285→  object-fit: cover;
+  1286→  transition: transform 0.6s ease;
+  1287→}
+  1288→
+  1289→.velure-category-card:hover img {
+  1290→  transform: scale(1.05);
+  1291→}
+  1292→
+  1293→.velure-category-card-overlay {
+  1294→  position: absolute;
+  1295→  inset: 0;
+  1296→  background: linear-gradient(transparent 40%, rgba(0,0,0,0.6));
+  1297→  display: flex;
+  1298→  flex-direction: column;
+  1299→  justify-content: flex-end;
+  1300→  padding: 1.25rem;
+  1301→  color: #fff;
+  1302→  transition: background var(--v-transition);
+  1303→}
+  1304→
+  1305→.velure-category-card:hover .velure-category-card-overlay {
+  1306→  background: linear-gradient(transparent 30%, rgba(0,0,0,0.7));
+  1307→}
+  1308→
+  1309→.velure-category-card-label {
+  1310→  font-size: 0.65rem;
+  1311→  letter-spacing: 0.2em;
+  1312→  text-transform: uppercase;
+  1313→  opacity: 0.8;
+  1314→  margin-bottom: 0.5rem;
+  1315→}
+  1316→
+  1317→.velure-category-card-title {
+  1318→  font-family: var(--v-font-serif);
+  1319→  font-size: 1.25rem;
+  1320→  font-weight: 500;
+  1321→  margin-bottom: 0.25rem;
+  1322→  letter-spacing: -0.01em;
+  1323→}
+  1324→
+  1325→
+  1326→
+  1327→.velure-category-card-count {
+  1328→  font-size: 0.8rem;
+  1329→  opacity: 0.8;
+  1330→}
+  1331→
+  1332→
+  1333→/* ────────────────────────────
+  1334→   TESTIMONIAL
+  1335→   ──────────────────────────── */
+  1336→
+  1337→.velure-testimonial {
+  1338→  text-align: center;
+  1339→  padding: 2rem;
+  1340→}
+  1341→
+  1342→.velure-testimonial-stars {
+  1343→  color: var(--v-color-secondary);
+  1344→  font-size: 1rem;
+  1345→  margin-bottom: 1.25rem;
+  1346→  letter-spacing: 0.15em;
+  1347→}
+  1348→
+  1349→.velure-testimonial-text {
+  1350→  font-family: var(--v-font-serif);
+  1351→  font-size: 1.25rem;
+  1352→  line-height: 1.6;
+  1353→  max-width: 600px;
+  1354→  margin: 0 auto 1.5rem;
+  1355→  font-style: italic;
+  1356→}
+  1357→
+  1358→.velure-testimonial-author {
+  1359→  font-size: 0.8rem;
+  1360→  font-weight: 600;
+  1361→  letter-spacing: 0.1em;
+  1362→  text-transform: uppercase;
+  1363→}
+  1364→
+  1365→.velure-testimonial-role {
+  1366→  font-size: 0.75rem;
+  1367→  color: #888;
+  1368→  margin-top: 0.25rem;
+  1369→}
+  1370→
+  1371→
+  1372→/* ────────────────────────────
+  1373→   BLOG CARD
+  1374→   ──────────────────────────── */
+  1375→
+  1376→.velure-blog-card {
+  1377→  cursor: pointer;
+  1378→}
+  1379→
+  1380→.velure-blog-card-image {
+  1381→  aspect-ratio: 4/3;
+  1382→  overflow: hidden;
+  1383→  margin-bottom: 1.25rem;
+  1384→  background: var(--v-color-soft);
+  1385→}
+  1386→
+  1387→.velure-blog-card-image img {
+  1388→  width: 100%;
+  1389→  height: 100%;
+  1390→  object-fit: cover;
+  1391→  transition: transform 0.6s ease;
+  1392→}
+  1393→
+  1394→.velure-blog-card:hover .velure-blog-card-image img {
+  1395→  transform: scale(1.05);
+  1396→}
+  1397→
+  1398→.velure-blog-card-meta {
+  1399→  font-size: 0.7rem;
+  1400→  letter-spacing: 0.1em;
+  1401→  text-transform: uppercase;
+  1402→  color: var(--v-color-secondary);
+  1403→  margin-bottom: 0.5rem;
+  1404→}
+  1405→
+  1406→.velure-blog-card-title {
+  1407→  font-family: var(--v-font-serif);
+  1408→  font-size: 1.25rem;
+  1409→  line-height: 1.3;
+  1410→  margin-bottom: 0.75rem;
+  1411→}
+  1412→
+  1413→.velure-blog-card-excerpt {
+  1414→  font-size: 0.875rem;
+  1415→  color: #666;
+  1416→  line-height: 1.6;
+  1417→  display: -webkit-box;
+  1418→  -webkit-line-clamp: 3;
+  1419→  -webkit-box-orient: vertical;
+  1420→  overflow: hidden;
+  1421→}
+  1422→
+  1423→
+  1424→/* ────────────────────────────
+  1425→   FEATURES BAR
+  1426→   ──────────────────────────── */
+  1427→
+  1428→.velure-section:has(.velure-features) {
+  1429→  padding: 0;
+  1430→}
+  1431→
+  1432→.velure-features {
+  1433→  display: grid;
+  1434→  grid-template-columns: repeat(4, 1fr);
+  1435→  gap: 0;
+  1436→  border-top: 1px solid var(--v-color-border);
+  1437→  border-bottom: 1px solid var(--v-color-border);
+  1438→}
+  1439→
+  1440→.velure-feature {
+  1441→  display: flex;
+  1442→  align-items: center;
+  1443→  justify-content: center;
+  1444→  gap: 0.75rem;
+  1445→  padding: 1.75rem 1rem;
+  1446→  text-align: center;
+  1447→}
+  1448→
+  1449→.velure-feature:not(:last-child) {
+  1450→  border-right: 1px solid var(--v-color-border);
+  1451→}
+  1452→
+  1453→.velure-feature-icon {
+  1454→  flex-shrink: 0;
+  1455→  width: 36px;
+  1456→  height: 36px;
+  1457→  display: flex;
+  1458→  align-items: center;
+  1459→  justify-content: center;
+  1460→  color: var(--v-color-accent);
+  1461→}
+  1462→
+  1463→.velure-feature-text h4 {
+  1464→  font-family: var(--v-font-sans);
+  1465→  font-size: 0.75rem;
+  1466→  font-weight: 600;
+  1467→  letter-spacing: 0.05em;
+  1468→  margin-bottom: 0.15rem;
+  1469→}
+  1470→
+  1471→.velure-feature-text p {
+  1472→  font-size: 0.7rem;
+  1473→  color: #888;
+  1474→}
+  1475→
+  1476→@media (max-width: 768px) {
+  1477→  .velure-features { grid-template-columns: repeat(2, 1fr); }
+  1478→  .velure-feature:nth-child(2) { border-right: none; }
+  1479→  .velure-feature { padding: 1.25rem 0.75rem; }
+  1480→}
+  1481→
+  1482→@media (max-width: 480px) {
+  1483→  .velure-features { grid-template-columns: 1fr; }
+  1484→  .velure-feature:not(:last-child) { border-right: none; border-bottom: 1px solid var(--v-color-border); }
+  1485→}
+  1486→
+  1487→
+  1488→/* ────────────────────────────
+  1489→   MARQUEE / BRAND BAR
+  1490→   ──────────────────────────── */
+  1491→
+  1492→.velure-marquee {
+  1493→  overflow: hidden;
+  1494→  padding: 2.5rem 0;
+  1495→  border-top: 1px solid var(--v-color-border);
+  1496→  border-bottom: 1px solid var(--v-color-border);
+  1497→}
+  1498→
+  1499→.velure-marquee-track {
+  1500→  display: flex;
+  1501→  gap: 4rem;
+  1502→  animation: velure-marquee-scroll 25s linear infinite;
+  1503→  width: max-content;
+  1504→}
+  1505→
+  1506→.velure-marquee-item {
+  1507→  font-family: var(--v-font-serif);
+  1508→  font-size: 1.25rem;
+  1509→  font-weight: 400;
+  1510→  letter-spacing: 0.08em;
+  1511→  color: #bbb;
+  1512→  white-space: nowrap;
+  1513→  text-transform: uppercase;
+  1514→}
+  1515→
+  1516→@keyframes velure-marquee-scroll {
+  1517→  0% { transform: translateX(0); }
+  1518→  100% { transform: translateX(-50%); }
+  1519→}
+  1520→
+  1521→
+  1522→/* ────────────────────────────
+  1523→   CONTACT FORM
+  1524→   ──────────────────────────── */
+  1525→
+  1526→.velure-contact-form {
+  1527→  max-width: 600px;
+  1528→}
+  1529→
+  1530→.velure-form-group {
+  1531→  margin-bottom: 1.5rem;
+  1532→}
+  1533→
+  1534→.velure-form-label {
+  1535→  display: block;
+  1536→  font-size: 0.7rem;
+  1537→  font-weight: 600;
+  1538→  letter-spacing: 0.1em;
+  1539→  text-transform: uppercase;
+  1540→  margin-bottom: 0.5rem;
+  1541→  color: var(--v-color-contrast);
+  1542→}
+  1543→
+  1544→.velure-form-input,
+  1545→.velure-form-textarea {
+  1546→  width: 100%;
+  1547→  padding: 0.875rem 1rem;
+  1548→  font-size: 0.875rem;
+  1549→  background: var(--v-color-white);
+  1550→  border: 1px solid var(--v-color-border);
+  1551→  transition: border-color var(--v-transition);
+  1552→  color: var(--v-color-contrast);
+  1553→}
+  1554→
+  1555→.velure-form-input:focus,
+  1556→.velure-form-textarea:focus {
+  1557→  border-color: var(--v-color-contrast);
+  1558→}
+  1559→
+  1560→.velure-form-textarea {
+  1561→  min-height: 150px;
+  1562→  resize: vertical;
+  1563→}
+  1564→
+  1565→.velure-form-row {
+  1566→  display: grid;
+  1567→  grid-template-columns: 1fr 1fr;
+  1568→  gap: 1.5rem;
+  1569→}
+  1570→
+  1571→@media (max-width: 480px) {
+  1572→  .velure-form-row { grid-template-columns: 1fr; }
+  1573→}
+  1574→
+  1575→
+  1576→/* ────────────────────────────
+  1577→   SIZE GUIDE TABLE
+  1578→   ──────────────────────────── */
+  1579→
+  1580→.velure-size-table {
+  1581→  width: 100%;
+  1582→  border-collapse: collapse;
+  1583→  font-size: 0.85rem;
+  1584→}
+  1585→
+  1586→.velure-size-table th,
+  1587→.velure-size-table td {
+  1588→  padding: 0.875rem 1rem;
+  1589→  text-align: left;
+  1590→  border-bottom: 1px solid var(--v-color-border);
+  1591→}
+  1592→
+  1593→.velure-size-table th {
+  1594→  font-family: var(--v-font-sans);
+  1595→  font-size: 0.7rem;
+  1596→  font-weight: 600;
+  1597→  letter-spacing: 0.1em;
+  1598→  text-transform: uppercase;
+  1599→  background: var(--v-color-soft);
+  1600→  color: var(--v-color-contrast);
+  1601→}
+  1602→
+  1603→.velure-size-table tbody tr:hover {
+  1604→  background: var(--v-color-soft);
+  1605→}
+  1606→
+  1607→
+  1608→/* ────────────────────────────
+  1609→   PAGE BANNER
+  1610→   ──────────────────────────── */
+  1611→
+  1612→.velure-page-banner {
+  1613→  padding: 4rem 0 3rem;
+  1614→  text-align: center;
+  1615→  background: var(--v-color-soft);
+  1616→}
+  1617→
+  1618→.velure-page-banner h1 {
+  1619→  font-size: clamp(2rem, 4vw, 3rem);
+  1620→  letter-spacing: -0.02em;
+  1621→  margin-bottom: 0.5rem;
+  1622→}
+  1623→
+  1624→.velure-page-banner p {
+  1625→  font-size: 0.9rem;
+  1626→  color: #666;
+  1627→}
+  1628→
+  1629→.velure-breadcrumb {
+  1630→  display: flex;
+  1631→  justify-content: center;
+  1632→  gap: 0.5rem;
+  1633→  margin-top: 1rem;
+  1634→  font-size: 0.75rem;
+  1635→  color: #888;
+  1636→}
+  1637→
+  1638→.velure-breadcrumb a {
+  1639→  color: #888;
+  1640→  transition: color var(--v-transition);
+  1641→}
+  1642→
+  1643→.velure-breadcrumb a:hover {
+  1644→  color: var(--v-color-accent);
+  1645→}
+  1646→
+  1647→.velure-breadcrumb .sep { opacity: 0.4; }
+  1648→
+  1649→
+  1650→/* ────────────────────────────
+  1651→   404 PAGE
+  1652→   ──────────────────────────── */
+  1653→
+  1654→.velure-404 {
+  1655→  min-height: 70vh;
+  1656→  display: flex;
+  1657→  align-items: center;
+  1658→  justify-content: center;
+  1659→  text-align: center;
+  1660→  padding: 4rem 2rem;
+  1661→}
+  1662→
+  1663→.velure-404-number {
+  1664→  font-family: var(--v-font-serif);
+  1665→  font-size: clamp(6rem, 15vw, 12rem);
+  1666→  font-weight: 300;
+  1667→  line-height: 1;
+  1668→  color: var(--v-color-muted);
+  1669→  margin-bottom: 1rem;
+  1670→}
+  1671→
+  1672→.velure-404 h1 {
+  1673→  font-size: 1.5rem;
+  1674→  margin-bottom: 1rem;
+  1675→}
+  1676→
+  1677→.velure-404 p {
+  1678→  font-size: 0.95rem;
+  1679→  color: #666;
+  1680→  margin-bottom: 2rem;
+  1681→  max-width: 400px;
+  1682→  margin-left: auto;
+  1683→  margin-right: auto;
+  1684→}
+  1685→
+  1686→
+  1687→/* ────────────────────────────
+  1688→   INSTAGRAM GRID
+  1689→   ──────────────────────────── */
+  1690→
+  1691→.velure-instagram-grid {
+  1692→  display: grid;
+  1693→  grid-template-columns: repeat(6, 1fr);
+  1694→  gap: 0;
+  1695→}
+  1696→
+  1697→.velure-instagram-item {
+  1698→  aspect-ratio: 1;
+  1699→  overflow: hidden;
+  1700→  position: relative;
+  1701→  cursor: pointer;
+  1702→}
+  1703→
+  1704→.velure-instagram-item img {
+  1705→  width: 100%;
+  1706→  height: 100%;
+  1707→  object-fit: cover;
+  1708→  transition: transform 0.4s ease;
+  1709→}
+  1710→
+  1711→.velure-instagram-item:hover img {
+  1712→  transform: scale(1.1);
+  1713→}
+  1714→
+  1715→.velure-instagram-item::after {
+  1716→  content: '';
+  1717→  position: absolute;
+  1718→  inset: 0;
+  1719→  background: rgba(0,0,0,0.3);
+  1720→  opacity: 0;
+  1721→  transition: opacity var(--v-transition);
+  1722→}
+  1723→
+  1724→.velure-instagram-item:hover::after {
+  1725→  opacity: 1;
+  1726→}
+  1727→
+  1728→@media (max-width: 768px) {
+  1729→  .velure-instagram-grid { grid-template-columns: repeat(3, 1fr); }
+  1730→}
+  1731→
+  1732→@media (max-width: 480px) {
+  1733→  .velure-instagram-grid { grid-template-columns: repeat(2, 1fr); }
+  1734→}
+  1735→
+  1736→
+  1737→/* ────────────────────────────
+  1738→   SHOP FILTER SIDEBAR
+  1739→   ──────────────────────────── */
+  1740→
+  1741→.velure-shop-layout {
+  1742→  display: flex;
+  1743→  gap: 2rem;
+  1744→  align-items: flex-start;
+  1745→}
+  1746→
+  1747→.velure-shop-sidebar {
+  1748→  width: 250px;
+  1749→  flex-shrink: 0;
+  1750→}
+  1751→
+  1752→.velure-shop-sidebar-section {
+  1753→  margin-bottom: 2rem;
+  1754→}
+  1755→
+  1756→.velure-shop-sidebar-title {
+  1757→  font-family: var(--v-font-sans);
+  1758→  font-size: 0.7rem;
+  1759→  font-weight: 600;
+  1760→  letter-spacing: 0.15em;
+  1761→  text-transform: uppercase;
+  1762→  margin-bottom: 1rem;
+  1763→  padding-bottom: 0.5rem;
+  1764→  border-bottom: 1px solid var(--v-color-border);
+  1765→}
+  1766→
+  1767→.velure-shop-sidebar-list li {
+  1768→  margin-bottom: 0.5rem;
+  1769→}
+  1770→
+  1771→.velure-shop-sidebar-list a,
+  1772→.velure-shop-sidebar-list label {
+  1773→  display: flex;
+  1774→  align-items: center;
+  1775→  gap: 0.5rem;
+  1776→  font-size: 0.85rem;
+  1777→  color: #555;
+  1778→  cursor: pointer;
+  1779→  transition: color var(--v-transition);
+  1780→}
+  1781→
+  1782→.velure-shop-sidebar-list a:hover,
+  1783→.velure-shop-sidebar-list label:hover {
+  1784→  color: var(--v-color-contrast);
+  1785→}
+  1786→
+  1787→.velure-shop-sidebar-list .count {
+  1788→  margin-left: auto;
+  1789→  font-size: 0.75rem;
+  1790→  color: #aaa;
+  1791→}
+  1792→
+  1793→.velure-color-swatch {
+  1794→  width: 18px;
+  1795→  height: 18px;
+  1796→  border-radius: 50%;
+  1797→  border: 1px solid var(--v-color-border);
+  1798→  display: inline-block;
+  1799→}
+  1800→
+  1801→.velure-size-btn {
+  1802→  display: inline-flex;
+  1803→  align-items: center;
+  1804→  justify-content: center;
+  1805→  width: 40px;
+  1806→  height: 40px;
+  1807→  font-size: 0.75rem;
+  1808→  font-weight: 500;
+  1809→  border: 1px solid var(--v-color-border);
+  1810→  margin: 0 0.25rem 0.5rem 0;
+  1811→  cursor: pointer;
+  1812→  transition: all var(--v-transition);
+  1813→}
+  1814→
+  1815→.velure-size-btn:hover,
+  1816→.velure-size-btn.active {
+  1817→  background: var(--v-color-contrast);
+  1818→  color: var(--v-color-base);
+  1819→  border-color: var(--v-color-contrast);
+  1820→}
+  1821→
+  1822→.velure-price-range {
+  1823→  width: 100%;
+  1824→  -webkit-appearance: none;
+  1825→  appearance: none;
+  1826→  height: 3px;
+  1827→  background: var(--v-color-border);
+  1828→  border-radius: 2px;
+  1829→  outline: none;
+  1830→  margin: 0.75rem 0;
+  1831→}
+  1832→
+  1833→.velure-price-range::-webkit-slider-thumb {
+  1834→  -webkit-appearance: none;
+  1835→  width: 16px;
+  1836→  height: 16px;
+  1837→  background: var(--v-color-contrast);
+  1838→  border-radius: 50%;
+  1839→  cursor: pointer;
+  1840→}
+  1841→
+  1842→.velure-shop-main {
+  1843→  flex: 1;
+  1844→  min-width: 0;
+  1845→}
+  1846→
+  1847→.velure-shop-toolbar {
+  1848→  display: flex;
+  1849→  align-items: center;
+  1850→  justify-content: space-between;
+  1851→  flex-wrap: wrap;
+  1852→  gap: 0.75rem;
+  1853→  padding: 1rem 0;
+  1854→  border-bottom: 1px solid var(--v-color-border);
+  1855→  margin-bottom: 1.5rem;
+  1856→}
+  1857→
+  1858→.velure-shop-sort {
+  1859→  padding: 0.5rem 1rem;
+  1860→  font-size: 0.8rem;
+  1861→  border: 1px solid var(--v-color-border);
+  1862→  background: var(--v-color-white);
+  1863→  color: var(--v-color-contrast);
+  1864→}
+  1865→
+  1866→.velure-shop-pagination {
+  1867→  display: flex;
+  1868→  align-items: center;
+  1869→  justify-content: center;
+  1870→  gap: 0.25rem;
+  1871→  margin-top: 3rem;
+  1872→  padding-top: 2rem;
+  1873→  border-top: 1px solid var(--v-color-border);
+  1874→}
+  1875→
+  1876→.velure-shop-pagination a,
+  1877→.velure-shop-pagination span {
+  1878→  display: inline-flex;
+  1879→  align-items: center;
+  1880→  justify-content: center;
+  1881→  min-width: 40px;
+  1882→  height: 40px;
+  1883→  font-size: 0.85rem;
+  1884→  border: 1px solid var(--v-color-border);
+  1885→  transition: all var(--v-transition);
+  1886→}
+  1887→
+  1888→.velure-shop-pagination a:hover,
+  1889→.velure-shop-pagination .current {
+  1890→  background: var(--v-color-contrast);
+  1891→  color: var(--v-color-base);
+  1892→  border-color: var(--v-color-contrast);
+  1893→}
+  1894→
+  1895→@media (max-width: 1024px) {
+  1896→  .velure-shop-sidebar { display: none; }
+  1897→  .velure-shop-sidebar.velure-open {
+  1898→    display: block;
+  1899→    position: fixed;
+  1900→    top: 0; left: 0; bottom: 0;
+  1901→    width: 300px;
+  1902→    max-width: 85vw;
+  1903→    background: var(--v-color-white);
+  1904→    z-index: 1500;
+  1905→    padding: 2rem 1.5rem;
+  1906→    overflow-y: auto;
+  1907→    box-shadow: 5px 0 30px rgba(0,0,0,0.1);
+  1908→  }
+  1909→  #velure-filter-toggle { display: inline-flex !important; }
+  1910→}
+  1911→
+  1912→
+  1913→/* ────────────────────────────
+  1914→   PRODUCT GALLERY (Single)
+  1915→   ──────────────────────────── */
+  1916→
+  1917→.velure-product-gallery {
+  1918→  position: relative;
+  1919→}
+  1920→
+  1921→.velure-product-gallery-main {
+  1922→  overflow: hidden;
+  1923→  border-radius: 2px;
+  1924→  margin-bottom: 1rem;
+  1925→  aspect-ratio: 4/5;
+  1926→  background: var(--v-color-soft);
+  1927→}
+  1928→
+  1929→.velure-product-gallery-main img {
+  1930→  width: 100%;
+  1931→  height: 100%;
+  1932→  object-fit: cover;
+  1933→}
+  1934→
+  1935→.velure-product-gallery-thumbs {
+  1936→  display: flex;
+  1937→  gap: 0.5rem;
+  1938→}
+  1939→
+  1940→.velure-product-gallery-thumb {
+  1941→  width: 80px;
+  1942→  height: 100px;
+  1943→  overflow: hidden;
+  1944→  border: 2px solid transparent;
+  1945→  cursor: pointer;
+  1946→  transition: border-color var(--v-transition);
+  1947→  background: var(--v-color-soft);
+  1948→}
+  1949→
+  1950→.velure-product-gallery-thumb.active,
+  1951→.velure-product-gallery-thumb:hover {
+  1952→  border-color: var(--v-color-contrast);
+  1953→}
+  1954→
+  1955→.velure-product-gallery-thumb img {
+  1956→  width: 100%;
+  1957→  height: 100%;
+  1958→  object-fit: cover;
+  1959→}
+  1960→
+  1961→.velure-product-detail { padding: 0; }
+  1962→
+  1963→.velure-product-colors,
+  1964→.velure-product-sizes {
+  1965→  display: flex;
+  1966→  gap: 0.5rem;
+  1967→  flex-wrap: wrap;
+  1968→  margin: 1rem 0;
+  1969→}
+  1970→
+  1971→.velure-color-option {
+  1972→  width: 28px;
+  1973→  height: 28px;
+  1974→  border-radius: 50%;
+  1975→  border: 2px solid transparent;
+  1976→  cursor: pointer;
+  1977→  position: relative;
+  1978→  transition: border-color var(--v-transition);
+  1979→}
+  1980→
+  1981→.velure-color-option.active {
+  1982→  border-color: var(--v-color-contrast);
+  1983→}
+  1984→
+  1985→.velure-product-qty {
+  1986→  display: inline-flex;
+  1987→  align-items: center;
+  1988→  border: 1px solid var(--v-color-border);
+  1989→}
+  1990→
+  1991→.velure-product-qty button {
+  1992→  width: 40px;
+  1993→  height: 40px;
+  1994→  display: flex;
+  1995→  align-items: center;
+  1996→  justify-content: center;
+  1997→  font-size: 1rem;
+  1998→  transition: background var(--v-transition);
+  1999→}
+  2000→
+
+[showing lines 1-2000 of 2222; use offset=2001 with limit to continue reading]

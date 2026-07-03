@@ -3,14 +3,14 @@
  * Velure3 Theme Functions
  *
  * @package Velure3
- * @version 1.6.0
+ * @version 2.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
         exit;
 }
 
-define( 'VELURE3_VERSION', '1.6.0' );
+define( 'VELURE3_VERSION', '2.0.0' );
 define( 'VELURE3_DIR', get_template_directory() );
 define( 'VELURE3_URI', get_template_directory_uri() );
 
@@ -22,8 +22,6 @@ function velure3_setup() {
         add_theme_support( 'post-thumbnails' );
         add_theme_support( 'responsive-embeds' );
         add_theme_support( 'align-wide' );
-        add_theme_support( 'wp-block-styles' );
-        add_theme_support( 'editor-styles' );
         add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' ) );
         add_theme_support( 'custom-logo', array(
                 'height'      => 60,
@@ -52,8 +50,15 @@ function velure3_setup() {
 /* ═══════════════════════════════════════════════
    2. ENQUEUE ASSETS
    ═══════════════════════════════════════════════ */
-add_action( 'wp_enqueue_scripts', 'velure3_assets' );
+add_action( 'wp_enqueue_scripts', 'velure3_assets', 20 );
 function velure3_assets() {
+        /* Dequeue WP block library & FSE global styles — this is a classic PHP theme */
+        wp_dequeue_style( 'wp-block-library' );
+        wp_dequeue_style( 'wp-block-library-theme' );
+        wp_dequeue_style( 'wp-block-library-css' );
+        wp_dequeue_style( 'global-styles' );
+        wp_dequeue_style( 'classic-theme-styles' );
+
         wp_enqueue_style( 'velure3-base', VELURE3_URI . '/assets/css/base.css', array(), VELURE3_VERSION );
         wp_enqueue_style( 'velure3-components', VELURE3_URI . '/assets/css/components.css', array( 'velure3-base' ), VELURE3_VERSION );
         wp_enqueue_script( 'velure3-theme', VELURE3_URI . '/assets/js/theme.js', array(), VELURE3_VERSION, true );

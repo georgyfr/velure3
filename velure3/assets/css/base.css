@@ -68,43 +68,6 @@ body {
   }
 }
 
-/* ── FSE / Block Editor Override ── */
-/* Prevent wp-site-blocks from adding padding that breaks full-width layout */
-.wp-site-blocks,
-.entry-content,
-.page-content,
-.site-content {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* Ensure all velure full-width sections break out correctly */
-.velure-header,
-.velure-topbar,
-.velure-navbar,
-.hero-section,
-.velure-newsletter-band,
-.velure-footer,
-.velure-footer-main,
-.velure-footer-bottom,
-.velure-section-dark,
-.velure-section-soft,
-.velure-section-muted {
-  box-sizing: border-box;
-}
-
-/* Remove any WP global padding on sections */
-.velure-section {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.velure-section .velure-container,
-.velure-section-soft .velure-container,
-.velure-section-dark .velure-container {
-  padding: 0 var(--v-gutter);
-}
-
 img { max-width: 100%; height: auto; display: block; }
 a { text-decoration: none; color: inherit; transition: color var(--v-transition); }
 ul, ol { list-style: none; }
@@ -214,22 +177,6 @@ p.velure-section-heading + p {
 .velure-section {
   padding: 5rem 0;
   width: 100%;
-}
-
-/* Ensure full-width elements break out of any inherited padding */
-.velure-topbar,
-.velure-navbar,
-.hero-section,
-.velure-newsletter-band,
-.velure-footer-main,
-.velure-footer-bottom,
-.velure-section-dark,
-.velure-section-soft,
-.velure-section-muted {
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 0;
-  padding-right: 0;
 }
 
 .velure-section-dark {
