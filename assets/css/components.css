@@ -1,0 +1,1128 @@
+/* ═══════════════════════════════════════════
+   VELURE3 — Components Styles
+   ═══════════════════════════════════════════ */
+
+/* ────────────────────────────
+   HEADER
+   ──────────────────────────── */
+
+/* Top Bar */
+.velure-topbar {
+  background: var(--v-color-contrast);
+  color: var(--v-color-base);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  height: var(--v-topbar-h);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1001;
+}
+.velure-topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.velure-topbar-text { opacity: 0.8; }
+.velure-topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
+.velure-topbar-sep { opacity: 0.3; }
+.velure-topbar-link { opacity: 0.8; transition: opacity var(--v-transition); }
+.velure-topbar-link:hover { opacity: 1; }
+@media (max-width: 768px) {
+  .velure-topbar-actions { display: none; }
+}
+
+/* Navbar */
+.velure-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(250, 250, 248, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--v-color-border);
+  transition: all var(--v-transition);
+  width: 100%;
+}
+.velure-navbar.velure-scrolled {
+  box-shadow: 0 1px 20px rgba(0,0,0,0.05);
+}
+.velure-navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--v-header-h);
+  gap: 2rem;
+}
+
+/* Logo */
+.velure-logo { display: flex; align-items: center; flex-shrink: 0; }
+.velure-logo-text {
+  font-family: var(--v-font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--v-color-contrast);
+}
+
+/* Desktop Nav */
+.velure-nav { display: flex; align-items: center; flex: 1; }
+.velure-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.velure-nav-item { position: relative; }
+.velure-nav-link {
+  font-family: var(--v-font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--v-color-contrast);
+  padding: 0.25rem 0;
+  position: relative;
+  transition: color var(--v-transition);
+}
+.velure-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--v-color-secondary);
+  transition: width var(--v-transition);
+}
+.velure-nav-link:hover::after { width: 100%; }
+.velure-nav-highlight { color: var(--v-color-secondary); }
+.velure-nav-highlight::after { background: var(--v-color-secondary); }
+
+/* Mega Menu */
+.velure-mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background: var(--v-color-white);
+  border-top: 1px solid var(--v-color-border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(10px);
+  transition: all 0.25s ease;
+  padding: 2.5rem 0;
+  z-index: 100;
+}
+.velure-nav-item:hover > .velure-mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.velure-mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+.velure-mega-col {}
+.velure-mega-title {
+  font-family: var(--v-font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--v-color-contrast);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-mega-links { list-style: none; padding: 0; margin: 0; }
+.velure-mega-links li { margin-bottom: 0.5rem; }
+.velure-mega-links a {
+  font-size: 0.85rem;
+  color: #666;
+  transition: color var(--v-transition);
+}
+.velure-mega-links a:hover { color: var(--v-color-contrast); }
+.velure-mega-visual {
+  background: var(--v-color-soft);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+.velure-mega-cta {
+  display: block;
+}
+.velure-mega-cta-label {
+  display: block;
+  font-family: var(--v-font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--v-color-secondary);
+  margin-bottom: 0.5rem;
+}
+.velure-mega-cta-title {
+  font-family: var(--v-font-serif);
+  font-size: 1.1rem;
+  color: var(--v-color-contrast);
+}
+
+/* Header Actions */
+.velure-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.velure-header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--v-color-contrast);
+  transition: color var(--v-transition);
+  position: relative;
+}
+.velure-header-btn:hover { color: var(--v-color-secondary); }
+.velure-cart-btn { position: relative; }
+.velure-cart-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--v-color-secondary);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Menu Toggle */
+.velure-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.velure-menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--v-color-contrast);
+  transition: all var(--v-transition);
+}
+
+/* Mobile Menu */
+.velure-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--v-transition);
+}
+.velure-mobile-overlay.velure-active {
+  opacity: 1;
+  visibility: visible;
+}
+.velure-mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background: var(--v-color-white);
+  z-index: 2001;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.velure-mobile-menu.velure-active { right: 0; }
+.velure-mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-mobile-close {
+  color: var(--v-color-contrast);
+}
+.velure-mobile-nav-list {
+  list-style: none;
+  padding: 1.5rem;
+  margin: 0;
+  flex: 1;
+}
+.velure-mobile-nav-list li {
+  margin-bottom: 0.25rem;
+}
+.velure-mobile-nav-list a {
+  display: block;
+  padding: 0.75rem 0;
+  font-family: var(--v-font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--v-color-contrast);
+  border-bottom: 1px solid var(--v-color-muted);
+}
+.velure-mobile-nav-list a.velure-nav-highlight { color: var(--v-color-secondary); }
+.velure-mobile-menu-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--v-color-border);
+}
+.velure-mobile-menu-link {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Search Overlay */
+.velure-search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,26,0.95);
+  z-index: 3000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--v-transition);
+}
+.velure-search-overlay.velure-active {
+  opacity: 1;
+  visibility: visible;
+}
+.velure-search-inner { width: 100%; max-width: 600px; padding: 0 1.5rem; }
+.velure-search-form { position: relative; }
+.velure-search-input {
+  width: 100%;
+  padding: 1rem 3.5rem 1rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-family: var(--v-font-serif);
+  font-size: 1.5rem;
+  outline: none;
+}
+.velure-search-input::placeholder { color: rgba(255,255,255,0.4); }
+.velure-search-submit {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.6);
+  padding: 0.5rem;
+}
+.velure-search-close {
+  position: absolute;
+  right: 1.5rem;
+  top: 2rem;
+  color: rgba(255,255,255,0.6);
+}
+
+@media (max-width: 1024px) {
+  .velure-nav { display: none; }
+  .velure-menu-toggle { display: flex; }
+}
+
+/* ────────────────────────────
+   HERO SLIDER
+   ──────────────────────────── */
+.v-hero-slider {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  min-height: 500px;
+  max-height: 720px;
+  overflow: hidden;
+  background: var(--v-color-soft);
+}
+.v-hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+}
+.v-hero-slide--active {
+  opacity: 1;
+  z-index: 2;
+}
+.v-hero-slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.v-hero-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(26,26,26,0.5) 0%, rgba(26,26,26,0.15) 60%, transparent 100%);
+}
+.v-hero-slide-content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4rem;
+  max-width: 650px;
+  color: #fff;
+}
+.v-hero-slide-content .velure-eyebrow {
+  color: var(--v-color-secondary);
+  margin-bottom: 1rem;
+}
+.v-hero-slide-content h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+.v-hero-slide-content h2 br { display: block; }
+.v-hero-slide-content .v-hero-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.v-hero-slide-content .v-hero-subtitle br { display: block; }
+
+/* Hero Dots */
+.v-hero-dots {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+.v-hero-dot {
+  width: 32px;
+  height: 3px;
+  background: rgba(255,255,255,0.4);
+  border: none;
+  cursor: pointer;
+  transition: all var(--v-transition);
+  padding: 0;
+}
+.v-hero-dot--active {
+  background: #fff;
+  width: 48px;
+}
+
+/* Hero Progress Bar */
+.v-hero-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  z-index: 10;
+}
+.v-hero-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--v-color-secondary);
+}
+.v-hero-progress-bar--running {
+  animation: v-hero-progress-anim 5s linear forwards;
+}
+@keyframes v-hero-progress-anim {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .v-hero-slider { height: 60vh; min-height: 400px; max-height: 600px; }
+  .v-hero-slide-content { padding: 0 1.5rem; }
+  .v-hero-slide-content h2 { font-size: 1.75rem; }
+}
+
+/* ────────────────────────────
+   FEATURES BAR
+   ──────────────────────────── */
+.velure-features {
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.velure-feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  gap: 0.75rem;
+}
+.velure-feature-item:not(:last-child) {
+  border-right: 1px solid var(--v-color-border);
+}
+.velure-feature-icon {
+  color: var(--v-color-secondary);
+  display: flex;
+}
+.velure-feature-title {
+  font-family: var(--v-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.velure-feature-desc {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .velure-features-grid { grid-template-columns: repeat(2, 1fr); }
+  .velure-feature-item:nth-child(2) { border-right: none; }
+}
+@media (max-width: 480px) {
+  .velure-features-grid { grid-template-columns: 1fr; }
+  .velure-feature-item { border-right: none !important; border-bottom: 1px solid var(--v-color-border); }
+  .velure-feature-item:last-child { border-bottom: none; }
+}
+
+/* ────────────────────────────
+   CATEGORY CAROUSEL
+   ──────────────────────────── */
+.velure-categories {}
+.velure-carousel {
+  position: relative;
+}
+.velure-carousel-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 1rem;
+}
+.velure-carousel-track::-webkit-scrollbar { display: none; }
+
+.velure-category-card {
+  flex: 0 0 200px;
+  scroll-snap-align: start;
+  text-decoration: none;
+  display: block;
+}
+.velure-category-card-img {
+  width: 200px;
+  height: 270px;
+  background: var(--v-color-muted);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+.velure-category-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-category-card:hover .velure-category-card-img img {
+  transform: scale(1.05);
+}
+.velure-category-card-name {
+  font-family: var(--v-font-serif);
+  font-size: 1.1rem;
+  color: var(--v-color-contrast);
+  text-align: center;
+}
+.velure-category-card-count {
+  font-size: 0.75rem;
+  color: #999;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.velure-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-70%);
+  width: 40px;
+  height: 40px;
+  background: var(--v-color-white);
+  border: 1px solid var(--v-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--v-transition);
+  color: var(--v-color-contrast);
+}
+.velure-carousel-arrow:hover {
+  background: var(--v-color-contrast);
+  color: var(--v-color-white);
+  border-color: var(--v-color-contrast);
+}
+.velure-carousel-arrow--prev { left: -20px; }
+.velure-carousel-arrow--next { right: -20px; }
+
+@media (max-width: 768px) {
+  .velure-carousel-arrow { display: none; }
+  .velure-category-card { flex: 0 0 160px; }
+  .velure-category-card-img { width: 160px; height: 216px; }
+}
+
+/* ────────────────────────────
+   PRODUCT CARDS
+   ──────────────────────────── */
+.velure-product-card {
+  position: relative;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.velure-product-card-img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--v-color-muted);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.velure-product-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-product-card:hover .velure-product-card-img img {
+  transform: scale(1.05);
+}
+.velure-product-card-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--v-font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.velure-product-card-badge.new {
+  background: var(--v-color-secondary);
+  color: #fff;
+}
+.velure-product-card-badge.sale {
+  background: var(--v-color-accent);
+  color: #fff;
+}
+.velure-product-card-name {
+  font-family: var(--v-font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--v-color-contrast);
+  margin-bottom: 0.25rem;
+}
+.velure-product-card-price {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* ────────────────────────────
+   SPLIT BANNER
+   ──────────────────────────── */
+.velure-split-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 500px;
+}
+.velure-split-side {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.velure-split-side-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.velure-split-side--dark .velure-split-side-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(26,26,26,0.45);
+}
+.velure-split-side--light .velure-split-side-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.25);
+}
+.velure-split-side-content {
+  position: relative;
+  z-index: 2;
+  padding: 3rem;
+  max-width: 420px;
+}
+.velure-split-side--dark .velure-split-side-content { color: #fff; }
+.velure-split-side--light .velure-split-side-content { color: var(--v-color-contrast); }
+.velure-split-side-content .velure-eyebrow { margin-bottom: 0.75rem; }
+.velure-split-side--dark .velure-split-side-content .velure-eyebrow { color: var(--v-color-secondary); }
+.velure-split-side-content h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin-bottom: 1rem;
+}
+.velure-split-side-content p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .velure-split-banner { grid-template-columns: 1fr; }
+  .velure-split-side { min-height: 350px; }
+  .velure-split-side-content { padding: 2rem; }
+}
+
+/* ────────────────────────────
+   BRAND MARQUEE
+   ──────────────────────────── */
+.velure-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 2rem 0;
+  border-top: 1px solid var(--v-color-border);
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-marquee-track {
+  display: inline-flex;
+  animation: velure-marquee-scroll 25s linear infinite;
+}
+.velure-marquee-item {
+  font-family: var(--v-font-serif);
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: var(--v-color-muted);
+  padding: 0 2rem;
+  white-space: nowrap;
+}
+@keyframes velure-marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ────────────────────────────
+   TESTIMONIALS
+   ──────────────────────────── */
+.velure-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.velure-testimonial-card {
+  background: var(--v-color-white);
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--v-color-border);
+}
+.velure-testimonial-stars {
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 1.25rem;
+}
+.velure-testimonial-text {
+  font-family: var(--v-font-elegant);
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--v-color-contrast);
+  margin-bottom: 1.5rem;
+}
+.velure-testimonial-author {
+  font-family: var(--v-font-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--v-color-contrast);
+}
+.velure-testimonial-role {
+  font-size: 0.78rem;
+  color: #999;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .velure-testimonials-grid { grid-template-columns: 1fr; }
+}
+
+/* ────────────────────────────
+   BLOG CARDS
+   ──────────────────────────── */
+.velure-blog-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.velure-blog-card-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: var(--v-color-muted);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.velure-blog-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-blog-card:hover .velure-blog-card-img img { transform: scale(1.05); }
+.velure-blog-card-meta {
+  font-size: 0.72rem;
+  color: var(--v-color-secondary);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.velure-blog-card-title {
+  font-family: var(--v-font-serif);
+  font-size: 1.15rem;
+  color: var(--v-color-contrast);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.velure-blog-card-excerpt {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* ────────────────────────────
+   INSTAGRAM FEED
+   ──────────────────────────── */
+.velure-instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.25rem;
+}
+.velure-instagram-item {
+  aspect-ratio: 1;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+.velure-instagram-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, opacity 0.3s ease;
+}
+.velure-instagram-item:hover img {
+  transform: scale(1.08);
+  opacity: 0.85;
+}
+.velure-instagram-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(26,26,26,0);
+  transition: background 0.3s ease;
+}
+.velure-instagram-item:hover::after {
+  background: rgba(26,26,26,0.15);
+}
+
+@media (max-width: 768px) {
+  .velure-instagram-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .velure-instagram-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ────────────────────────────
+   NEWSLETTER
+   ──────────────────────────── */
+.velure-newsletter-band {
+  background: var(--v-color-soft);
+  padding: 3.5rem 0;
+}
+.velure-newsletter-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.velure-newsletter-title {
+  font-family: var(--v-font-serif);
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+.velure-newsletter-desc {
+  font-size: 0.85rem;
+  color: #888;
+}
+.velure-newsletter-form {
+  display: flex;
+  gap: 0;
+  flex-shrink: 0;
+}
+.velure-newsletter-input {
+  padding: 0.875rem 1.25rem;
+  border: 1px solid var(--v-color-border);
+  border-right: none;
+  background: var(--v-color-white);
+  font-size: 0.85rem;
+  width: 280px;
+  color: var(--v-color-contrast);
+}
+.velure-newsletter-input::placeholder { color: #aaa; }
+.velure-newsletter-btn {
+  padding: 0.875rem 1.75rem;
+  background: var(--v-color-contrast);
+  color: var(--v-color-base);
+  font-family: var(--v-font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--v-color-contrast);
+  cursor: pointer;
+  transition: all var(--v-transition);
+}
+.velure-newsletter-btn:hover {
+  background: #333;
+  border-color: #333;
+}
+
+@media (max-width: 768px) {
+  .velure-newsletter-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .velure-newsletter-form { width: 100%; max-width: 400px; }
+  .velure-newsletter-input { flex: 1; width: auto; }
+}
+
+/* ────────────────────────────
+   FOOTER
+   ──────────────────────────── */
+.velure-footer {
+  background: var(--v-color-contrast);
+  color: var(--v-color-base);
+}
+.velure-footer-main {
+  padding: 4rem 0 3rem;
+}
+.velure-footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.velure-footer-brand .velure-footer-logo {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+.velure-footer-brand .velure-logo-text {
+  color: var(--v-color-base);
+}
+.velure-footer-about {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+.velure-footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+.velure-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+  transition: all var(--v-transition);
+}
+.velure-social-link:hover {
+  border-color: var(--v-color-secondary);
+  color: var(--v-color-secondary);
+}
+.velure-footer-heading {
+  font-family: var(--v-font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--v-color-base);
+  margin-bottom: 1.25rem;
+}
+.velure-footer-links { list-style: none; padding: 0; margin: 0; }
+.velure-footer-links li { margin-bottom: 0.5rem; }
+.velure-footer-links a {
+  font-size: 0.83rem;
+  color: rgba(255,255,255,0.6);
+  transition: color var(--v-transition);
+}
+.velure-footer-links a:hover { color: var(--v-color-secondary); }
+.velure-footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 1.25rem 0;
+}
+.velure-footer-bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.velure-copyright {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+}
+.velure-payments {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.velure-payment-label {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+}
+.velure-payment-icon {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.5);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .velure-footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .velure-footer-bottom-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
+}
+@media (max-width: 480px) {
+  .velure-footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ────────────────────────────
+   CONTENT WRAPPER (WooCommerce)
+   ──────────────────────────── */
+.velure-content-wrapper {
+  max-width: var(--v-container);
+  margin: 0 auto;
+  padding: 2rem var(--v-gutter);
+}
+
+/* ────────────────────────────
+   BLOG / PAGES
+   ──────────────────────────── */
+.velure-page-header {
+  padding: 3rem 0 2rem;
+  text-align: center;
+}
+.velure-page-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+.velure-page-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem var(--v-gutter) 4rem;
+}
+.velure-page-content p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+}
+.velure-post-card {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--v-color-border);
+  text-decoration: none;
+  color: inherit;
+}
+.velure-post-card-img {
+  aspect-ratio: 4/3;
+  background: var(--v-color-muted);
+  overflow: hidden;
+}
+.velure-post-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-post-card:hover .velure-post-card-img img { transform: scale(1.05); }
+.velure-post-card-content { display: flex; flex-direction: column; justify-content: center; }
+.velure-post-card-meta {
+  font-size: 0.72rem;
+  color: var(--v-color-secondary);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.velure-post-card-title {
+  font-family: var(--v-font-serif);
+  font-size: 1.3rem;
+  color: var(--v-color-contrast);
+  margin-bottom: 0.5rem;
+}
+.velure-post-card-excerpt {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .velure-post-card { grid-template-columns: 1fr; }
+}
+
+/* ────────────────────────────
+   404 PAGE
+   ──────────────────────────── */
+.velure-404 {
+  text-align: center;
+  padding: 6rem 1.5rem;
+}
+.velure-404 h1 {
+  font-family: var(--v-font-elegant);
+  font-size: 6rem;
+  color: var(--v-color-muted);
+  margin-bottom: 1rem;
+}
+.velure-404 p {
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 2rem;
+}
