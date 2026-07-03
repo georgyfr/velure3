@@ -140,6 +140,17 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--v-color-base);
 }
 
+.velure-btn-outline-light {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.6);
+}
+.velure-btn-outline-light:hover {
+  background: #fff;
+  color: var(--v-color-contrast);
+  border-color: #fff;
+}
+
 .velure-btn-gold {
   background: var(--v-color-secondary);
   color: #fff;

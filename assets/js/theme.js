@@ -111,9 +111,12 @@
     var slider = document.querySelector('.v-hero-slider');
     if (!slider) return;
 
-    var slides = slider.querySelectorAll('.v-hero-slide');
-    var dots = slider.querySelectorAll('.v-hero-dot');
-    var progressBar = slider.querySelector('.v-hero-progress-bar');
+    var main = slider.querySelector('.v-hero-main');
+    if (!main) return;
+
+    var slides = main.querySelectorAll('.v-hero-slide');
+    var dots = main.querySelectorAll('.v-hero-dot');
+    var progressBar = main.querySelector('.v-hero-progress-bar');
     if (slides.length < 2) {
       if (slides[0]) slides[0].classList.add('v-hero-slide--active');
       if (dots[0]) dots[0].classList.add('v-hero-dot--active');
