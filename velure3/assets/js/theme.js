@@ -136,16 +136,16 @@
   });
 
   /* ══════════════════════════════════════
-     HERO SLIDER — Asymmetrical Banner
-     Vanilla JS, zero dependency, ~60 lines
+     HERO SLIDER — Full-Width
+     Vanilla JS, zero dependency
      ══════════════════════════════════════ */
   (function initHeroSlider() {
-    var slider = document.querySelector('.hero-slider');
+    var slider = document.querySelector('.v-hero-slider');
     if (!slider) return;
 
-    var slides     = slider.querySelectorAll('.hero-slide');
-    var dots       = slider.querySelectorAll('.hero-slider-dot');
-    var progressBar = slider.querySelector('.hero-slider-progress-bar');
+    var slides      = slider.querySelectorAll('.v-hero-slide');
+    var dots        = slider.querySelectorAll('.v-hero-dot');
+    var progressBar = slider.querySelector('.v-hero-progress-bar');
     if (slides.length < 2) return;
 
     var current    = 0;
@@ -158,14 +158,14 @@
       if (idx === current) return;
 
       // Désactiver l'ancien
-      slides[current].classList.remove('hero-slide--active');
-      if (dots[current]) dots[current].classList.remove('hero-slider-dot--active');
+      slides[current].classList.remove('v-hero-slide--active');
+      if (dots[current]) dots[current].classList.remove('v-hero-dot--active');
 
       current = (idx + slides.length) % slides.length;
 
       // Activer le nouveau
-      slides[current].classList.add('hero-slide--active');
-      if (dots[current]) dots[current].classList.add('hero-slider-dot--active');
+      slides[current].classList.add('v-hero-slide--active');
+      if (dots[current]) dots[current].classList.add('v-hero-dot--active');
 
       // Relancer la barre de progression
       resetProgress();
@@ -183,7 +183,7 @@
       clearTimeout(timer);
 
       // Reset visuel immédiat
-      progressBar.classList.remove('hero-slider-progress-bar--running');
+      progressBar.classList.remove('v-hero-progress-bar--running');
       progressBar.style.width = '0%';
 
       // Forcer le reflow pour que le navigateur prenne en compte le reset
@@ -191,7 +191,7 @@
 
       // Lancer l'animation CSS
       requestAnimationFrame(function() {
-        progressBar.classList.add('hero-slider-progress-bar--running');
+        progressBar.classList.add('v-hero-progress-bar--running');
       });
 
       // Programmer le passage au slide suivant
