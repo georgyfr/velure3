@@ -708,7 +708,6 @@
   min-height: 320px;
   max-height: 480px;
   width: 100%;
-  background: var(--v-color-soft);
 }
 
 /* ══════════════════════════════
@@ -1415,6 +1414,10 @@
 /* ────────────────────────────
    FEATURES BAR
    ──────────────────────────── */
+
+.velure-section:has(.velure-features) {
+  padding: 0;
+}
 
 .velure-features {
   display: grid;
