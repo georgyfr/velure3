@@ -3,14 +3,14 @@
  * Velure3 Theme Functions
  *
  * @package Velure3
- * @version 1.4.0
+ * @version 1.6.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
         exit;
 }
 
-define( 'VELURE3_VERSION', '1.4.0' );
+define( 'VELURE3_VERSION', '1.6.0' );
 define( 'VELURE3_DIR', get_template_directory() );
 define( 'VELURE3_URI', get_template_directory_uri() );
 

@@ -42,6 +42,67 @@ body {
   color: var(--v-color-contrast);
   background: var(--v-color-base);
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── WordPress Admin Bar ── */
+#wpadminbar {
+  position: fixed !important;
+}
+
+.admin-bar .velure-navbar {
+  top: 32px;
+}
+
+.admin-bar .velure-search-overlay {
+  padding-top: calc(15vh + 32px);
+}
+
+@media (max-width: 782px) {
+  .admin-bar .velure-navbar {
+    top: 46px;
+  }
+  .admin-bar .velure-search-overlay {
+    padding-top: calc(15vh + 46px);
+  }
+}
+
+/* ── FSE / Block Editor Override ── */
+/* Prevent wp-site-blocks from adding padding that breaks full-width layout */
+.wp-site-blocks,
+.entry-content,
+.page-content,
+.site-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Ensure all velure full-width sections break out correctly */
+.velure-header,
+.velure-topbar,
+.velure-navbar,
+.hero-section,
+.velure-newsletter-band,
+.velure-footer,
+.velure-footer-main,
+.velure-footer-bottom,
+.velure-section-dark,
+.velure-section-soft,
+.velure-section-muted {
+  box-sizing: border-box;
+}
+
+/* Remove any WP global padding on sections */
+.velure-section {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.velure-section .velure-container,
+.velure-section-soft .velure-container,
+.velure-section-dark .velure-container {
+  padding: 0 var(--v-gutter);
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -56,6 +117,7 @@ input, textarea { font: inherit; border: none; outline: none; }
   max-width: var(--v-container);
   margin: 0 auto;
   padding: 0 var(--v-gutter);
+  box-sizing: border-box;
 }
 
 /* --- Typography --- */
@@ -151,6 +213,23 @@ p.velure-section-heading + p {
 /* --- Section Spacing --- */
 .velure-section {
   padding: 5rem 0;
+  width: 100%;
+}
+
+/* Ensure full-width elements break out of any inherited padding */
+.velure-topbar,
+.velure-navbar,
+.hero-section,
+.velure-newsletter-band,
+.velure-footer-main,
+.velure-footer-bottom,
+.velure-section-dark,
+.velure-section-soft,
+.velure-section-muted {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .velure-section-dark {

@@ -15,6 +15,11 @@
   height: var(--v-topbar-h);
   display: flex;
   align-items: center;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative;
+  z-index: 1001;
 }
 
 .velure-topbar-inner {
@@ -44,6 +49,9 @@
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--v-color-border);
   transition: all var(--v-transition);
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .velure-navbar.velure-scrolled {
@@ -704,10 +712,12 @@
 .hero-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 38vh;
-  min-height: 320px;
-  max-height: 480px;
+  height: 75vh;
+  min-height: 500px;
+  max-height: 720px;
   width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* ══════════════════════════════
@@ -1053,9 +1063,9 @@
    ══════════════════════════════ */
 @media (max-width: 1024px) {
   .hero-section {
-    height: 42vh;
-    min-height: 340px;
-    max-height: 480px;
+    height: 65vh;
+    min-height: 420px;
+    max-height: 600px;
   }
 
   .hero-slide-content {
