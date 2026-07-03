@@ -1,0 +1,1953 @@
+    50→    50→    50→  box-shadow: 0 1px 20px rgba(0,0,0,0.05);
+    51→    51→    51→}
+    52→    52→    52→
+    53→    53→    53→.velure-navbar-inner {
+    54→    54→    54→  display: flex;
+    55→    55→    55→  align-items: center;
+    56→    56→    56→  justify-content: space-between;
+    57→    57→    57→  height: var(--v-header-h);
+    58→    58→    58→  gap: 2rem;
+    59→    59→    59→}
+    60→    60→    60→
+    61→    61→    61→/* Logo */
+    62→    62→    62→.velure-logo { display: flex; align-items: center; }
+    63→    63→    63→.velure-logo-text {
+    64→    64→    64→  font-family: var(--v-font-serif);
+    65→    65→    65→  font-size: 1.75rem;
+    66→    66→    66→  font-weight: 600;
+    67→    67→    67→  letter-spacing: 0.15em;
+    68→    68→    68→  text-transform: uppercase;
+    69→    69→    69→  color: var(--v-color-contrast);
+    70→    70→    70→}
+    71→    71→    71→
+    72→    72→    72→/* Desktop Nav */
+    73→    73→    73→.velure-nav { display: flex; align-items: center; }
+    74→    74→    74→
+    75→    75→    75→.velure-nav-list {
+    76→    76→    76→  display: flex;
+    77→    77→    77→  gap: 0;
+    78→    78→    78→  align-items: center;
+    79→    79→    79→}
+    80→    80→    80→
+    81→    81→    81→.velure-nav-item {
+    82→    82→    82→  position: relative;
+    83→    83→    83→}
+    84→    84→    84→
+    85→    85→    85→.velure-nav-link {
+    86→    86→    86→  display: block;
+    87→    87→    87→  padding: 0.5rem 1rem;
+    88→    88→    88→  font-size: 0.75rem;
+    89→    89→    89→  font-weight: 500;
+    90→    90→    90→  letter-spacing: 0.1em;
+    91→    91→    91→  text-transform: uppercase;
+    92→    92→    92→  color: var(--v-color-contrast);
+    93→    93→    93→  transition: color var(--v-transition);
+    94→    94→    94→}
+    95→    95→    95→
+    96→    96→    96→.velure-nav-link:hover {
+    97→    97→    97→  color: var(--v-color-accent);
+    98→    98→    98→}
+    99→    99→    99→
+   100→   100→   100→.velure-nav-highlight {
+   101→   101→   101→  color: var(--v-color-accent) !important;
+   102→   102→   102→  position: relative;
+   103→   103→   103→}
+   104→   104→   104→
+   105→   105→   105→.velure-nav-highlight::after {
+   106→   106→   106→  content: '';
+   107→   107→   107→  position: absolute;
+   108→   108→   108→  bottom: 0.25rem;
+   109→   109→   109→  left: 1rem;
+   110→   110→   110→  right: 1rem;
+   111→   111→   111→  height: 1px;
+   112→   112→   112→  background: var(--v-color-accent);
+   113→   113→   113→}
+   114→   114→   114→
+   115→   115→   115→/* Mega Menu */
+   116→   116→   116→.velure-mega-menu {
+   117→   117→   117→  position: absolute;
+   118→   118→   118→  top: 100%;
+   119→   119→   119→  left: 50%;
+   120→   120→   120→  transform: translateX(-50%);
+   121→   121→   121→  width: 100vw;
+   122→   122→   122→  background: var(--v-color-white);
+   123→   123→   123→  border-top: 1px solid var(--v-color-border);
+   124→   124→   124→  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+   125→   125→   125→  opacity: 0;
+   126→   126→   126→  visibility: hidden;
+   127→   127→   127→  transform: translateX(-50%) translateY(10px);
+   128→   128→   128→  transition: all 0.3s ease;
+   129→   129→   129→  padding: 2.5rem 0;
+   130→   130→   130→}
+   131→   131→   131→
+   132→   132→   132→.velure-nav-item:hover .velure-mega-menu {
+   133→   133→   133→  opacity: 1;
+   134→   134→   134→  visibility: visible;
+   135→   135→   135→  transform: translateX(-50%) translateY(0);
+   136→   136→   136→}
+   137→   137→   137→
+   138→   138→   138→.velure-mega-grid {
+   139→   139→   139→  display: grid;
+   140→   140→   140→  grid-template-columns: repeat(3, 1fr) 1.5fr;
+   141→   141→   141→  gap: 2rem;
+   142→   142→   142→  align-items: start;
+   143→   143→   143→}
+   144→   144→   144→
+   145→   145→   145→.velure-mega-title {
+   146→   146→   146→  font-family: var(--v-font-sans);
+   147→   147→   147→  font-size: 0.7rem;
+   148→   148→   148→  font-weight: 600;
+   149→   149→   149→  letter-spacing: 0.15em;
+   150→   150→   150→  text-transform: uppercase;
+   151→   151→   151→  margin-bottom: 1rem;
+   152→   152→   152→  color: var(--v-color-contrast);
+   153→   153→   153→}
+   154→   154→   154→
+   155→   155→   155→.velure-mega-links li { margin-bottom: 0.5rem; }
+   156→   156→   156→.velure-mega-links a {
+   157→   157→   157→  font-size: 0.875rem;
+   158→   158→   158→  color: #555;
+   159→   159→   159→  transition: color var(--v-transition);
+   160→   160→   160→}
+   161→   161→   161→.velure-mega-links a:hover { color: var(--v-color-accent); }
+   162→   162→   162→
+   163→   163→   163→.velure-mega-cta {
+   164→   164→   164→  display: flex;
+   165→   165→   165→  flex-direction: column;
+   166→   166→   166→  justify-content: flex-end;
+   167→   167→   167→  height: 100%;
+   168→   168→   168→  min-height: 200px;
+   169→   169→   169→  padding: 2rem;
+   170→   170→   170→  background: var(--v-color-soft);
+   171→   171→   171→  border-radius: 2px;
+   172→   172→   172→  transition: background var(--v-transition);
+   173→   173→   173→}
+   174→   174→   174→
+   175→   175→   175→.velure-mega-cta:hover { background: var(--v-color-muted); }
+   176→   176→   176→
+   177→   177→   177→.velure-mega-cta-label {
+   178→   178→   178→  font-size: 0.65rem;
+   179→   179→   179→  letter-spacing: 0.2em;
+   180→   180→   180→  text-transform: uppercase;
+   181→   181→   181→  color: var(--v-color-secondary);
+   182→   182→   182→  margin-bottom: 0.5rem;
+   183→   183→   183→}
+   184→   184→   184→
+   185→   185→   185→.velure-mega-cta-title {
+   186→   186→   186→  font-family: var(--v-font-serif);
+   187→   187→   187→  font-size: 1.25rem;
+   188→   188→   188→}
+   189→   189→   189→
+   190→   190→   190→/* Header Actions */
+   191→   191→   191→.velure-header-actions {
+   192→   192→   192→  display: flex;
+   193→   193→   193→  align-items: center;
+   194→   194→   194→  gap: 0.25rem;
+   195→   195→   195→}
+   196→   196→   196→
+   197→   197→   197→.velure-header-btn {
+   198→   198→   198→  display: flex;
+   199→   199→   199→  align-items: center;
+   200→   200→   200→  justify-content: center;
+   201→   201→   201→  width: 40px;
+   202→   202→   202→  height: 40px;
+   203→   203→   203→  border-radius: 50%;
+   204→   204→   204→  transition: background var(--v-transition);
+   205→   205→   205→  position: relative;
+   206→   206→   206→  color: var(--v-color-contrast);
+   207→   207→   207→}
+   208→   208→   208→
+   209→   209→   209→.velure-header-btn:hover {
+   210→   210→   210→  background: var(--v-color-muted);
+   211→   211→   211→}
+   212→   212→   212→
+   213→   213→   213→.velure-cart-count {
+   214→   214→   214→  position: absolute;
+   215→   215→   215→  top: 2px;
+   216→   216→   216→  right: 2px;
+   217→   217→   217→  width: 16px;
+   218→   218→   218→  height: 16px;
+   219→   219→   219→  background: var(--v-color-accent);
+   220→   220→   220→  color: #fff;
+   221→   221→   221→  font-size: 0.6rem;
+   222→   222→   222→  font-weight: 700;
+   223→   223→   223→  border-radius: 50%;
+   224→   224→   224→  display: flex;
+   225→   225→   225→  align-items: center;
+   226→   226→   226→  justify-content: center;
+   227→   227→   227→}
+   228→   228→   228→
+   229→   229→   229→/* Hamburger */
+   230→   230→   230→.velure-menu-toggle {
+   231→   231→   231→  display: none;
+   232→   232→   232→  flex-direction: column;
+   233→   233→   233→  gap: 5px;
+   234→   234→   234→  width: 24px;
+   235→   235→   235→  padding: 4px 0;
+   236→   236→   236→}
+   237→   237→   237→
+   238→   238→   238→.velure-menu-toggle span {
+   239→   239→   239→  display: block;
+   240→   240→   240→  height: 1.5px;
+   241→   241→   241→  background: var(--v-color-contrast);
+   242→   242→   242→  transition: all var(--v-transition);
+   243→   243→   243→  border-radius: 1px;
+   244→   244→   244→}
+   245→   245→   245→
+   246→   246→   246→/* Search Overlay */
+   247→   247→   247→.velure-search-overlay {
+   248→   248→   248→  position: fixed;
+   249→   249→   249→  top: 0; left: 0; right: 0; bottom: 0;
+   250→   250→   250→  background: rgba(250, 250, 248, 0.97);
+   251→   251→   251→  z-index: 2000;
+   252→   252→   252→  display: flex;
+   253→   253→   253→  align-items: flex-start;
+   254→   254→   254→  justify-content: center;
+   255→   255→   255→  padding-top: 15vh;
+   256→   256→   256→  opacity: 0;
+   257→   257→   257→  visibility: hidden;
+   258→   258→   258→  transition: all 0.3s ease;
+   259→   259→   259→}
+   260→   260→   260→
+   261→   261→   261→.velure-search-overlay.velure-active {
+   262→   262→   262→  opacity: 1;
+   263→   263→   263→  visibility: visible;
+   264→   264→   264→}
+   265→   265→   265→
+   266→   266→   266→.velure-search-form {
+   267→   267→   267→  width: 100%;
+   268→   268→   268→  max-width: 700px;
+   269→   269→   269→  padding: 0 2rem;
+   270→   270→   270→  display: flex;
+   271→   271→   271→  align-items: center;
+   272→   272→   272→  border-bottom: 2px solid var(--v-color-contrast);
+   273→   273→   273→  gap: 1rem;
+   274→   274→   274→}
+   275→   275→   275→
+   276→   276→   276→.velure-search-input {
+   277→   277→   277→  flex: 1;
+   278→   278→   278→  font-size: 1.5rem;
+   279→   279→   279→  font-family: var(--v-font-serif);
+   280→   280→   280→  padding: 0.75rem 0;
+   281→   281→   281→  background: transparent;
+   282→   282→   282→  color: var(--v-color-contrast);
+   283→   283→   283→}
+   284→   284→   284→
+   285→   285→   285→.velure-search-input::placeholder {
+   286→   286→   286→  color: #999;
+   287→   287→   287→}
+   288→   288→   288→
+   289→   289→   289→.velure-search-submit {
+   290→   290→   290→  color: var(--v-color-contrast);
+   291→   291→   291→  flex-shrink: 0;
+   292→   292→   292→}
+   293→   293→   293→
+   294→   294→   294→.velure-search-close {
+   295→   295→   295→  color: #999;
+   296→   296→   296→  flex-shrink: 0;
+   297→   297→   297→  transition: color var(--v-transition);
+   298→   298→   298→}
+   299→   299→   299→
+   300→   300→   300→.velure-search-close:hover { color: var(--v-color-contrast); }
+   301→   301→   301→
+   302→   302→   302→/* Mobile Menu */
+   303→   303→   303→.velure-mobile-overlay {
+   304→   304→   304→  position: fixed;
+   305→   305→   305→  top: 0; left: 0; right: 0; bottom: 0;
+   306→   306→   306→  background: rgba(0,0,0,0.4);
+   307→   307→   307→  z-index: 1500;
+   308→   308→   308→  opacity: 0;
+   309→   309→   309→  visibility: hidden;
+   310→   310→   310→  transition: all var(--v-transition);
+   311→   311→   311→}
+   312→   312→   312→
+   313→   313→   313→.velure-mobile-overlay.velure-active {
+   314→   314→   314→  opacity: 1;
+   315→   315→   315→  visibility: visible;
+   316→   316→   316→}
+   317→   317→   317→
+   318→   318→   318→.velure-mobile-menu {
+   319→   319→   319→  position: fixed;
+   320→   320→   320→  top: 0; left: 0; bottom: 0;
+   321→   321→   321→  width: 320px;
+   322→   322→   322→  max-width: 85vw;
+   323→   323→   323→  background: var(--v-color-white);
+   324→   324→   324→  z-index: 1600;
+   325→   325→   325→  transform: translateX(-100%);
+   326→   326→   326→  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   327→   327→   327→  display: flex;
+   328→   328→   328→  flex-direction: column;
+   329→   329→   329→  overflow-y: auto;
+   330→   330→   330→}
+   331→   331→   331→
+   332→   332→   332→.velure-mobile-menu.velure-active {
+   333→   333→   333→  transform: translateX(0);
+   334→   334→   334→}
+   335→   335→   335→
+   336→   336→   336→.velure-mobile-menu-header {
+   337→   337→   337→  display: flex;
+   338→   338→   338→  align-items: center;
+   339→   339→   339→  justify-content: space-between;
+   340→   340→   340→  padding: 1.25rem 1.5rem;
+   341→   341→   341→  border-bottom: 1px solid var(--v-color-border);
+   342→   342→   342→}
+   343→   343→   343→
+   344→   344→   344→.velure-mobile-close {
+   345→   345→   345→  width: 40px; height: 40px;
+   346→   346→   346→  display: flex; align-items: center; justify-content: center;
+   347→   347→   347→}
+   348→   348→   348→
+   349→   349→   349→.velure-mobile-nav-list {
+   350→   350→   350→  flex: 1;
+   351→   351→   351→  padding: 1.5rem;
+   352→   352→   352→}
+   353→   353→   353→
+   354→   354→   354→.velure-mobile-nav-list li {
+   355→   355→   355→  border-bottom: 1px solid var(--v-color-border);
+   356→   356→   356→}
+   357→   357→   357→
+   358→   358→   358→.velure-mobile-nav-list a {
+   359→   359→   359→  display: block;
+   360→   360→   360→  padding: 1rem 0;
+   361→   361→   361→  font-size: 1rem;
+   362→   362→   362→  font-weight: 500;
+   363→   363→   363→  letter-spacing: 0.02em;
+   364→   364→   364→}
+   365→   365→   365→
+   366→   366→   366→.velure-mobile-menu-footer {
+   367→   367→   367→  padding: 1.5rem;
+   368→   368→   368→  border-top: 1px solid var(--v-color-border);
+   369→   369→   369→  display: flex;
+   370→   370→   370→  gap: 1.5rem;
+   371→   371→   371→}
+   372→   372→   372→
+   373→   373→   373→.velure-mobile-menu-link {
+   374→   374→   374→  font-size: 0.8rem;
+   375→   375→   375→  letter-spacing: 0.05em;
+   376→   376→   376→  color: #888;
+   377→   377→   377→}
+   378→   378→   378→
+   379→   379→   379→/* Header Responsive */
+   380→   380→   380→@media (max-width: 1024px) {
+   381→   381→   381→  .velure-nav { display: none; }
+   382→   382→   382→  .velure-menu-toggle { display: flex; }
+   383→   383→   383→  .velure-mega-menu { display: none; }
+   384→   384→   384→}
+   385→   385→   385→
+   386→   386→   386→
+   387→   387→   387→/* ────────────────────────────
+   388→   388→   388→   FOOTER
+   389→   389→   389→   ──────────────────────────── */
+   390→   390→   390→
+   391→   391→   391→.velure-footer {
+   392→   392→   392→  margin-top: 5rem;
+   393→   393→   393→}
+   394→   394→   394→
+   395→   395→   395→/* Newsletter Band */
+   396→   396→   396→.velure-newsletter-band {
+   397→   397→   397→  background: var(--v-color-soft);
+   398→   398→   398→  padding: 3.5rem 0;
+   399→   399→   399→}
+   400→   400→   400→
+   401→   401→   401→.velure-newsletter-inner {
+   402→   402→   402→  display: flex;
+   403→   403→   403→  align-items: center;
+   404→   404→   404→  justify-content: space-between;
+   405→   405→   405→  gap: 2rem;
+   406→   406→   406→}
+   407→   407→   407→
+   408→   408→   408→.velure-newsletter-title {
+   409→   409→   409→  font-family: var(--v-font-serif);
+   410→   410→   410→  font-size: 1.5rem;
+   411→   411→   411→  margin-bottom: 0.25rem;
+   412→   412→   412→}
+   413→   413→   413→
+   414→   414→   414→.velure-newsletter-desc {
+   415→   415→   415→  font-size: 0.875rem;
+   416→   416→   416→  color: #666;
+   417→   417→   417→}
+   418→   418→   418→
+   419→   419→   419→.velure-newsletter-form {
+   420→   420→   420→  display: flex;
+   421→   421→   421→  gap: 0;
+   422→   422→   422→  flex-shrink: 0;
+   423→   423→   423→}
+   424→   424→   424→
+   425→   425→   425→.velure-newsletter-input {
+   426→   426→   426→  width: 300px;
+   427→   427→   427→  padding: 0.875rem 1.25rem;
+   428→   428→   428→  font-size: 0.875rem;
+   429→   429→   429→  background: var(--v-color-white);
+   430→   430→   430→  border: 1px solid var(--v-color-border);
+   431→   431→   431→  border-right: none;
+   432→   432→   432→}
+   433→   433→   433→
+   434→   434→   434→.velure-newsletter-btn {
+   435→   435→   435→  padding: 0.875rem 2rem;
+   436→   436→   436→  background: var(--v-color-contrast);
+   437→   437→   437→  color: var(--v-color-base);
+   438→   438→   438→  font-size: 0.7rem;
+   439→   439→   439→  font-weight: 600;
+   440→   440→   440→  letter-spacing: 0.15em;
+   441→   441→   441→  text-transform: uppercase;
+   442→   442→   442→  border: 1px solid var(--v-color-contrast);
+   443→   443→   443→  transition: all var(--v-transition);
+   444→   444→   444→}
+   445→   445→   445→
+   446→   446→   446→.velure-newsletter-btn:hover {
+   447→   447→   447→  background: #333;
+   448→   448→   448→}
+   449→   449→   449→
+   450→   450→   450→@media (max-width: 768px) {
+   451→   451→   451→  .velure-newsletter-inner { flex-direction: column; text-align: center; }
+   452→   452→   452→  .velure-newsletter-form { flex-direction: column; width: 100%; }
+   453→   453→   453→  .velure-newsletter-input { width: 100%; border-right: 1px solid var(--v-color-border); }
+   454→   454→   454→  .velure-newsletter-btn { width: 100%; }
+   455→   455→   455→}
+   456→   456→   456→
+   457→   457→   457→/* Main Footer */
+   458→   458→   458→.velure-footer-main {
+   459→   459→   459→  background: var(--v-color-contrast);
+   460→   460→   460→  color: rgba(255,255,255,0.7);
+   461→   461→   461→  padding: 4rem 0 3rem;
+   462→   462→   462→}
+   463→   463→   463→
+   464→   464→   464→.velure-footer-grid {
+   465→   465→   465→  display: grid;
+   466→   466→   466→  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+   467→   467→   467→  gap: 3rem;
+   468→   468→   468→}
+   469→   469→   469→
+   470→   470→   470→.velure-footer-brand { padding-right: 2rem; }
+   471→   471→   471→
+   472→   472→   472→.velure-footer-logo {
+   473→   473→   473→  display: inline-block;
+   474→   474→   474→  margin-bottom: 1.25rem;
+   475→   475→   475→}
+   476→   476→   476→
+   477→   477→   477→.velure-footer-logo .velure-logo-text {
+   478→   478→   478→  color: var(--v-color-base);
+   479→   479→   479→}
+   480→   480→   480→
+   481→   481→   481→.velure-footer-about {
+   482→   482→   482→  font-size: 0.85rem;
+   483→   483→   483→  line-height: 1.7;
+   484→   484→   484→  margin-bottom: 1.5rem;
+   485→   485→   485→  opacity: 0.7;
+   486→   486→   486→}
+   487→   487→   487→
+   488→   488→   488→.velure-footer-social {
+   489→   489→   489→  display: flex;
+   490→   490→   490→  gap: 0.75rem;
+   491→   491→   491→}
+   492→   492→   492→
+   493→   493→   493→.velure-social-link {
+   494→   494→   494→  width: 36px;
+   495→   495→   495→  height: 36px;
+   496→   496→   496→  border: 1px solid rgba(255,255,255,0.2);
+   497→   497→   497→  border-radius: 50%;
+   498→   498→   498→  display: flex;
+   499→   499→   499→  align-items: center;
+   500→   500→   500→  justify-content: center;
+   501→   501→   501→  color: rgba(255,255,255,0.7);
+   502→   502→   502→  transition: all var(--v-transition);
+   503→   503→   503→}
+   504→   504→   504→
+   505→   505→   505→.velure-social-link:hover {
+   506→   506→   506→  background: var(--v-color-secondary);
+   507→   507→   507→  border-color: var(--v-color-secondary);
+   508→   508→   508→  color: #fff;
+   509→   509→   509→}
+   510→   510→   510→
+   511→   511→   511→.velure-footer-heading {
+   512→   512→   512→  font-family: var(--v-font-sans);
+   513→   513→   513→  font-size: 0.7rem;
+   514→   514→   514→  font-weight: 600;
+   515→   515→   515→  letter-spacing: 0.15em;
+   516→   516→   516→  text-transform: uppercase;
+   517→   517→   517→  color: var(--v-color-base);
+   518→   518→   518→  margin-bottom: 1.5rem;
+   519→   519→   519→}
+   520→   520→   520→
+   521→   521→   521→.velure-footer-links li { margin-bottom: 0.75rem; }
+   522→   522→   522→
+   523→   523→   523→.velure-footer-links a {
+   524→   524→   524→  font-size: 0.85rem;
+   525→   525→   525→  color: rgba(255,255,255,0.6);
+   526→   526→   526→  transition: all var(--v-transition);
+   527→   527→   527→}
+   528→   528→   528→
+   529→   529→   529→.velure-footer-links a:hover {
+   530→   530→   530→  color: var(--v-color-secondary);
+   531→   531→   531→  padding-left: 4px;
+   532→   532→   532→}
+   533→   533→   533→
+   534→   534→   534→/* Footer Bottom */
+   535→   535→   535→.velure-footer-bottom {
+   536→   536→   536→  background: #111;
+   537→   537→   537→  padding: 1.25rem 0;
+   538→   538→   538→}
+   539→   539→   539→
+   540→   540→   540→.velure-footer-bottom-inner {
+   541→   541→   541→  display: flex;
+   542→   542→   542→  align-items: center;
+   543→   543→   543→  justify-content: space-between;
+   544→   544→   544→}
+   545→   545→   545→
+   546→   546→   546→.velure-copyright {
+   547→   547→   547→  font-size: 0.75rem;
+   548→   548→   548→  color: rgba(255,255,255,0.4);
+   549→   549→   549→}
+   550→   550→   550→
+   551→   551→   551→.velure-payments {
+   552→   552→   552→  display: flex;
+   553→   553→   553→  align-items: center;
+   554→   554→   554→  gap: 0.5rem;
+   555→   555→   555→}
+   556→   556→   556→
+   557→   557→   557→.velure-payment-label {
+   558→   558→   558→  font-size: 0.7rem;
+   559→   559→   559→  color: rgba(255,255,255,0.4);
+   560→   560→   560→}
+   561→   561→   561→
+   562→   562→   562→.velure-payment-icon {
+   563→   563→   563→  font-size: 0.65rem;
+   564→   564→   564→  font-weight: 600;
+   565→   565→   565→  color: rgba(255,255,255,0.5);
+   566→   566→   566→  padding: 0.25rem 0.5rem;
+   567→   567→   567→  border: 1px solid rgba(255,255,255,0.15);
+   568→   568→   568→  border-radius: 2px;
+   569→   569→   569→}
+   570→   570→   570→
+   571→   571→   571→@media (max-width: 768px) {
+   572→   572→   572→  .velure-footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+   573→   573→   573→  .velure-footer-brand { grid-column: 1 / -1; padding-right: 0; }
+   574→   574→   574→  .velure-footer-bottom-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
+   575→   575→   575→}
+   576→   576→   576→
+   577→   577→   577→@media (max-width: 480px) {
+   578→   578→   578→  .velure-footer-grid { grid-template-columns: 1fr; }
+   579→   579→   579→}
+   580→   580→   580→
+   581→   581→   581→
+   582→   582→   582→/* ────────────────────────────
+   583→   583→   583→   PRODUCT CARD
+   584→   584→   584→   ──────────────────────────── */
+   585→   585→   585→
+   586→   586→   586→.velure-product-card {
+   587→   587→   587→  position: relative;
+   588→   588→   588→  cursor: pointer;
+   589→   589→   589→}
+   590→   590→   590→
+   591→   591→   591→.velure-product-card-image {
+   592→   592→   592→  position: relative;
+   593→   593→   593→  overflow: hidden;
+   594→   594→   594→  aspect-ratio: 3/4;
+   595→   595→   595→  background: var(--v-color-soft);
+   596→   596→   596→  margin-bottom: 1rem;
+   597→   597→   597→}
+   598→   598→   598→
+   599→   599→   599→.velure-product-card-image img {
+   600→   600→   600→  width: 100%;
+   601→   601→   601→  height: 100%;
+   602→   602→   602→  object-fit: cover;
+   603→   603→   603→  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+   604→   604→   604→}
+   605→   605→   605→
+   606→   606→   606→.velure-product-card:hover .velure-product-card-image img {
+   607→   607→   607→  transform: scale(1.05);
+   608→   608→   608→}
+   609→   609→   609→
+   610→   610→   610→.velure-product-card-badge {
+   611→   611→   611→  position: absolute;
+   612→   612→   612→  top: 0.75rem;
+   613→   613→   613→  left: 0.75rem;
+   614→   614→   614→  padding: 0.25rem 0.75rem;
+   615→   615→   615→  font-size: 0.6rem;
+   616→   616→   616→  font-weight: 700;
+   617→   617→   617→  letter-spacing: 0.1em;
+   618→   618→   618→  text-transform: uppercase;
+   619→   619→   619→  background: var(--v-color-contrast);
+   620→   620→   620→  color: var(--v-color-base);
+   621→   621→   621→}
+   622→   622→   622→
+   623→   623→   623→.velure-product-card-badge.sale {
+   624→   624→   624→  background: #C0392B;
+   625→   625→   625→  color: #fff;
+   626→   626→   626→}
+   627→   627→   627→
+   628→   628→   628→.velure-product-card-badge.new {
+   629→   629→   629→  background: var(--v-color-secondary);
+   630→   630→   630→  color: #fff;
+   631→   631→   631→}
+   632→   632→   632→
+   633→   633→   633→.velure-product-card-actions {
+   634→   634→   634→  position: absolute;
+   635→   635→   635→  bottom: 0;
+   636→   636→   636→  left: 0;
+   637→   637→   637→  right: 0;
+   638→   638→   638→  padding: 1rem;
+   639→   639→   639→  background: linear-gradient(transparent, rgba(0,0,0,0.5));
+   640→   640→   640→  display: flex;
+   641→   641→   641→  justify-content: center;
+   642→   642→   642→  gap: 0.5rem;
+   643→   643→   643→  opacity: 0;
+   644→   644→   644→  transform: translateY(10px);
+   645→   645→   645→  transition: all var(--v-transition);
+   646→   646→   646→}
+   647→   647→   647→
+   648→   648→   648→.velure-product-card:hover .velure-product-card-actions {
+   649→   649→   649→  opacity: 1;
+   650→   650→   650→  transform: translateY(0);
+   651→   651→   651→}
+   652→   652→   652→
+   653→   653→   653→.velure-product-card-action {
+   654→   654→   654→  width: 40px;
+   655→   655→   655→  height: 40px;
+   656→   656→   656→  background: rgba(255,255,255,0.9);
+   657→   657→   657→  border-radius: 50%;
+   658→   658→   658→  display: flex;
+   659→   659→   659→  align-items: center;
+   660→   660→   660→  justify-content: center;
+   661→   661→   661→  transition: all var(--v-transition);
+   662→   662→   662→}
+   663→   663→   663→
+   664→   664→   664→.velure-product-card-action:hover {
+   665→   665→   665→  background: var(--v-color-contrast);
+   666→   666→   666→  color: #fff;
+   667→   667→   667→}
+   668→   668→   668→
+   669→   669→   669→.velure-product-card-info h3 {
+   670→   670→   670→  font-family: var(--v-font-sans);
+   671→   671→   671→  font-size: 0.85rem;
+   672→   672→   672→  font-weight: 500;
+   673→   673→   673→  margin-bottom: 0.25rem;
+   674→   674→   674→  letter-spacing: 0.01em;
+   675→   675→   675→}
+   676→   676→   676→
+   677→   677→   677→.velure-product-card-price {
+   678→   678→   678→  font-size: 0.85rem;
+   679→   679→   679→  color: #555;
+   680→   680→   680→}
+   681→   681→   681→
+   682→   682→   682→.velure-product-card-price .sale-price {
+   683→   683→   683→  color: var(--v-color-contrast);
+   684→   684→   684→  font-weight: 600;
+   685→   685→   685→}
+   686→   686→   686→
+   687→   687→   687→.velure-product-card-price:has(.old-price) .sale-price {
+   688→   688→   688→  color: #C0392B;
+   689→   689→   689→}
+   690→   690→   690→
+   691→   691→   691→.velure-product-card-price .old-price {
+   692→   692→   692→  text-decoration: line-through;
+   693→   693→   693→  opacity: 0.5;
+   694→   694→   694→  margin-left: 0.5rem;
+   695→   695→   695→  font-size: 0.8rem;
+   696→   696→   696→}
+   697→   697→   697→
+   698→   698→   698→
+   699→   699→   699→/* ────────────────────────────
+   700→   700→   700→   HERO SECTION — BANNIÈRE ASYMÉTRIQUE
+   701→   701→   701→   ──────────────────────────── */
+   702→   702→   702→
+   703→   703→   703→/* Parent Grid : 2 colonnes */
+   704→   704→   704→.hero-section {
+   705→   705→   705→  display: grid;
+   706→   706→   706→  grid-template-columns: 1fr 1fr;
+   707→   707→   707→  height: 48vh;
+   708→   708→   708→  min-height: 380px;
+   709→   709→   709→  max-height: 560px;
+   710→   710→   710→  width: 100%;
+   711→   711→   711→  background: var(--v-color-soft);
+   712→   712→   712→}
+   713→   713→   713→
+   714→   714→   714→/* ══════════════════════════════
+   715→   715→   715→   COLONNE A — SLIDER ÉMOTIONNEL
+   716→   716→   716→   ══════════════════════════════ */
+   717→   717→   717→.hero-slider {
+   718→   718→   718→  position: relative;
+   719→   719→   719→  overflow: hidden;
+   720→   720→   720→  background: #0f0f0e;
+   721→   721→   721→}
+   722→   722→   722→
+   723→   723→   723→/* Track (conteneur des slides) */
+   724→   724→   724→.hero-slides-track {
+   725→   725→   725→  position: relative;
+   726→   726→   726→  width: 100%;
+   727→   727→   727→  height: 100%;
+   728→   728→   728→}
+   729→   729→   729→
+   730→   730→   730→/* Slide individuelle */
+   731→   731→   731→.hero-slide {
+   732→   732→   732→  position: absolute;
+   733→   733→   733→  inset: 0;
+   734→   734→   734→  opacity: 0;
+   735→   735→   735→  visibility: hidden;
+   736→   736→   736→  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+   737→   737→   737→              visibility 0s linear 1s;
+   738→   738→   738→  z-index: 1;
+   739→   739→   739→}
+   740→   740→   740→
+   741→   741→   741→.hero-slide--active {
+   742→   742→   742→  opacity: 1;
+   743→   743→   743→  visibility: visible;
+   744→   744→   744→  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+   745→   745→   745→              visibility 0s linear 0s;
+   746→   746→   746→  z-index: 2;
+   747→   747→   747→}
+   748→   748→   748→
+   749→   749→   749→/* Image du slide */
+   750→   750→   750→.hero-slide-img {
+   751→   751→   751→  width: 100%;
+   752→   752→   752→  height: 100%;
+   753→   753→   753→  object-fit: cover;
+   754→   754→   754→  display: block;
+   755→   755→   755→  transform: scale(1.03);
+   756→   756→   756→  transition: transform 6s ease-out;
+   757→   757→   757→}
+   758→   758→   758→
+   759→   759→   759→.hero-slide--active .hero-slide-img {
+   760→   760→   760→  transform: scale(1);
+   761→   761→   761→}
+   762→   762→   762→
+   763→   763→   763→/* Overlay gradient sur l'image */
+   764→   764→   764→.hero-slide-overlay {
+   765→   765→   765→  position: absolute;
+   766→   766→   766→  inset: 0;
+   767→   767→   767→  background: linear-gradient(
+   768→   768→   768→    to top,
+   769→   769→   769→    rgba(26, 26, 26, 0.75) 0%,
+   770→   770→   770→    rgba(26, 26, 26, 0.25) 45%,
+   771→   771→   771→    rgba(26, 26, 26, 0.10) 100%
+   772→   772→   772→  );
+   773→   773→   773→  z-index: 1;
+   774→   774→   774→}
+   775→   775→   775→
+   776→   776→   776→/* Contenu textuel du slide */
+   777→   777→   777→.hero-slide-content {
+   778→   778→   778→  position: absolute;
+   779→   779→   779→  bottom: 0;
+   780→   780→   780→  left: 0;
+   781→   781→   781→  right: 0;
+   782→   782→   782→  z-index: 2;
+   783→   783→   783→  padding: 2rem 2.5rem 2.5rem;
+   784→   784→   784→  display: flex;
+   785→   785→   785→  flex-direction: column;
+   786→   786→   786→  align-items: flex-start;
+   787→   787→   787→  max-width: 420px;
+   788→   788→   788→}
+   789→   789→   789→
+   790→   790→   790→/* Eyebrow */
+   791→   791→   791→.hero-eyebrow {
+   792→   792→   792→  font-family: var(--v-font-sans);
+   793→   793→   793→  font-size: 0.6rem;
+   794→   794→   794→  font-weight: 600;
+   795→   795→   795→  letter-spacing: 0.25em;
+   796→   796→   796→  text-transform: uppercase;
+   797→   797→   797→  color: var(--v-color-secondary);
+   798→   798→   798→  margin-bottom: 0.625rem;
+   799→   799→   799→  display: inline-block;
+   800→   800→   800→  opacity: 0;
+   801→   801→   801→  transform: translateY(15px);
+   802→   802→   802→  transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+   803→   803→   803→}
+   804→   804→   804→
+   805→   805→   805→.hero-slide--active .hero-eyebrow {
+   806→   806→   806→  opacity: 1;
+   807→   807→   807→  transform: translateY(0);
+   808→   808→   808→}
+   809→   809→   809→
+   810→   810→   810→/* Titre du slide */
+   811→   811→   811→.hero-slide-title {
+   812→   812→   812→  font-family: var(--v-font-serif);
+   813→   813→   813→  font-size: clamp(1.75rem, 3vw, 2.75rem);
+   814→   814→   814→  font-weight: 400;
+   815→   815→   815→  line-height: 1.1;
+   816→   816→   816→  letter-spacing: -0.01em;
+   817→   817→   817→  color: var(--v-color-base);
+   818→   818→   818→  margin-bottom: 0.5rem;
+   819→   819→   819→  opacity: 0;
+   820→   820→   820→  transform: translateY(25px);
+   821→   821→   821→  transition: opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
+   822→   822→   822→}
+   823→   823→   823→
+   824→   824→   824→.hero-slide--active .hero-slide-title {
+   825→   825→   825→  opacity: 1;
+   826→   826→   826→  transform: translateY(0);
+   827→   827→   827→}
+   828→   828→   828→
+   829→   829→   829→/* Sous-titre du slide */
+   830→   830→   830→.hero-slide-subtitle {
+   831→   831→   831→  font-family: var(--v-font-sans);
+   832→   832→   832→  font-size: 0.85rem;
+   833→   833→   833→  font-weight: 300;
+   834→   834→   834→  line-height: 1.5;
+   835→   835→   835→  color: rgba(250, 250, 248, 0.7);
+   836→   836→   836→  margin-bottom: 1.25rem;
+   837→   837→   837→  opacity: 0;
+   838→   838→   838→  transform: translateY(15px);
+   839→   839→   839→  transition: opacity 0.6s ease 0.7s, transform 0.6s ease 0.7s;
+   840→   840→   840→}
+   841→   841→   841→
+   842→   842→   842→.hero-slide--active .hero-slide-subtitle {
+   843→   843→   843→  opacity: 1;
+   844→   844→   844→  transform: translateY(0);
+   845→   845→   845→}
+   846→   846→   846→
+   847→   847→   847→/* Bouton CTA dans le slide */
+   848→   848→   848→.hero-slide-content .velure-btn {
+   849→   849→   849→  opacity: 0;
+   850→   850→   850→  transform: translateY(20px);
+   851→   851→   851→  transition: opacity 0.6s ease 0.9s, transform 0.6s ease 0.9s,
+   852→   852→   852→              background var(--v-transition), color var(--v-transition);
+   853→   853→   853→}
+   854→   854→   854→
+   855→   855→   855→.hero-slide--active .hero-slide-content .velure-btn {
+   856→   856→   856→  opacity: 1;
+   857→   857→   857→  transform: translateY(0);
+   858→   858→   858→}
+   859→   859→   859→
+   860→   860→   860→/* Navigation par dots */
+   861→   861→   861→.hero-slider-controls {
+   862→   862→   862→  position: absolute;
+   863→   863→   863→  bottom: 2.5rem;
+   864→   864→   864→  right: 2.5rem;
+   865→   865→   865→  z-index: 5;
+   866→   866→   866→  display: flex;
+   867→   867→   867→  gap: 0.5rem;
+   868→   868→   868→  align-items: center;
+   869→   869→   869→}
+   870→   870→   870→
+   871→   871→   871→.hero-slider-dot {
+   872→   872→   872→  width: 12px;
+   873→   873→   873→  height: 12px;
+   874→   874→   874→  border-radius: 50%;
+   875→   875→   875→  border: 1.5px solid rgba(250, 250, 248, 0.5);
+   876→   876→   876→  background: transparent;
+   877→   877→   877→  cursor: pointer;
+   878→   878→   878→  transition: all var(--v-transition);
+   879→   879→   879→  padding: 0;
+   880→   880→   880→}
+   881→   881→   881→
+   882→   882→   882→.hero-slider-dot:hover {
+   883→   883→   883→  border-color: rgba(250, 250, 248, 0.9);
+   884→   884→   884→}
+   885→   885→   885→
+   886→   886→   886→.hero-slider-dot--active {
+   887→   887→   887→  background: var(--v-color-base);
+   888→   888→   888→  border-color: var(--v-color-base);
+   889→   889→   889→}
+   890→   890→   890→
+   891→   891→   891→/* Barre de progression */
+   892→   892→   892→.hero-slider-progress {
+   893→   893→   893→  position: absolute;
+   894→   894→   894→  bottom: 0;
+   895→   895→   895→  left: 0;
+   896→   896→   896→  right: 0;
+   897→   897→   897→  height: 3px;
+   898→   898→   898→  background: rgba(250, 250, 248, 0.1);
+   899→   899→   899→  z-index: 5;
+   900→   900→   900→  overflow: hidden;
+   901→   901→   901→}
+   902→   902→   902→
+   903→   903→   903→.hero-slider-progress-bar {
+   904→   904→   904→  height: 100%;
+   905→   905→   905→  width: 0%;
+   906→   906→   906→  background: var(--v-color-secondary);
+   907→   907→   907→  transition: width 0.1s linear;
+   908→   908→   908→}
+   909→   909→   909→
+   910→   910→   910→/* Animation de la barre (gérée par JS) */
+   911→   911→   911→.hero-slider-progress-bar--running {
+   912→   912→   912→  transition: width 5s linear;
+   913→   913→   913→  width: 100% !important;
+   914→   914→   914→}
+   915→   915→   915→
+   916→   916→   916→/* ══════════════════════════════
+   917→   917→   917→   COLONNE B — BLOCS STATIQUES
+   918→   918→   918→   ══════════════════════════════ */
+   919→   919→   919→.hero-static-blocks {
+   920→   920→   920→  display: flex;
+   921→   921→   921→  flex-direction: column;
+   922→   922→   922→  height: 100%;
+   923→   923→   923→}
+   924→   924→   924→
+   925→   925→   925→/* Bloc générique */
+   926→   926→   926→.hero-block {
+   927→   927→   927→  position: relative;
+   928→   928→   928→  flex: 1 1 50%;
+   929→   929→   929→  overflow: hidden;
+   930→   930→   930→  display: flex;
+   931→   931→   931→  align-items: center;
+   932→   932→   932→  cursor: pointer;
+   933→   933→   933→  transition: background var(--v-transition);
+   934→   934→   934→}
+   935→   935→   935→
+   936→   936→   936→.hero-block:hover {
+   937→   937→   937→  background: var(--v-color-muted);
+   938→   938→   938→}
+   939→   939→   939→
+   940→   940→   940→/* B1 — Best-Seller : fond beige très clair */
+   941→   941→   941→.hero-block--bestseller {
+   942→   942→   942→  background: var(--v-color-soft);
+   943→   943→   943→  border-bottom: 1px solid var(--v-color-border);
+   944→   944→   944→}
+   945→   945→   945→
+   946→   946→   946→/* B2 — Catégorie : fond blanc cassé */
+   947→   947→   947→.hero-block--category {
+   948→   948→   948→  background: var(--v-color-white);
+   949→   949→   949→}
+   950→   950→   950→
+   951→   951→   951→/* Image du bloc */
+   952→   952→   952→.hero-block-visual {
+   953→   953→   953→  position: relative;
+   954→   954→   954→  width: 55%;
+   955→   955→   955→  height: 100%;
+   956→   956→   956→  overflow: hidden;
+   957→   957→   957→  flex-shrink: 0;
+   958→   958→   958→}
+   959→   959→   959→
+   960→   960→   960→.hero-block-img {
+   961→   961→   961→  width: 100%;
+   962→   962→   962→  height: 100%;
+   963→   963→   963→  object-fit: cover;
+   964→   964→   964→  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+   965→   965→   965→}
+   966→   966→   966→
+   967→   967→   967→.hero-block:hover .hero-block-img {
+   968→   968→   968→  transform: scale(1.04);
+   969→   969→   969→}
+   970→   970→   970→
+   971→   971→   971→/* Contenu du bloc */
+   972→   972→   972→.hero-block-content {
+   973→   973→   973→  flex: 1;
+   974→   974→   974→  padding: 1.75rem 2rem 1.75rem 1.5rem;
+   975→   975→   975→  display: flex;
+   976→   976→   976→  flex-direction: column;
+   977→   977→   977→  justify-content: center;
+   978→   978→   978→}
+   979→   979→   979→
+   980→   980→   980→/* Label du bloc (Best-Seller / Capsule) */
+   981→   981→   981→.hero-block-label {
+   982→   982→   982→  font-family: var(--v-font-sans);
+   983→   983→   983→  font-size: 0.6rem;
+   984→   984→   984→  font-weight: 600;
+   985→   985→   985→  letter-spacing: 0.25em;
+   986→   986→   986→  text-transform: uppercase;
+   987→   987→   987→  color: var(--v-color-secondary);
+   988→   988→   988→  margin-bottom: 0.625rem;
+   989→   989→   989→  display: block;
+   990→   990→   990→}
+   991→   991→   991→
+   992→   992→   992→/* Titre du bloc */
+   993→   993→   993→.hero-block-title {
+   994→   994→   994→  font-family: var(--v-font-serif);
+   995→   995→   995→  font-size: clamp(1.1rem, 1.75vw, 1.5rem);
+   996→   996→   996→  font-weight: 500;
+   997→   997→   997→  line-height: 1.2;
+   998→   998→   998→  color: var(--v-color-contrast);
+   999→   999→   999→  margin-bottom: 0.375rem;
+  1000→  1000→  1000→}
+  1001→  1001→  1001→
+  1002→  1002→  1002→/* Prix du bloc */
+  1003→  1003→  1003→.hero-block-price {
+  1004→  1004→  1004→  font-family: var(--v-font-sans);
+  1005→  1005→  1005→  font-size: 0.95rem;
+  1006→  1006→  1006→  font-weight: 400;
+  1007→  1007→  1007→  color: #666;
+  1008→  1008→  1008→  margin-bottom: 1.5rem;
+  1009→  1009→  1009→}
+  1010→  1010→  1010→
+  1011→  1011→  1011→/* Lien TOUT PARCOURIR */
+  1012→  1012→  1012→.hero-block-link {
+  1013→  1013→  1013→  font-family: var(--v-font-sans);
+  1014→  1014→  1014→  font-size: 0.7rem;
+  1015→  1015→  1015→  font-weight: 600;
+  1016→  1016→  1016→  letter-spacing: 0.15em;
+  1017→  1017→  1017→  text-transform: uppercase;
+  1018→  1018→  1018→  color: var(--v-color-contrast);
+  1019→  1019→  1019→  text-decoration: none;
+  1020→  1020→  1020→  position: relative;
+  1021→  1021→  1021→  display: inline-block;
+  1022→  1022→  1022→  padding-bottom: 2px;
+  1023→  1023→  1023→  transition: color var(--v-transition);
+  1024→  1024→  1024→}
+  1025→  1025→  1025→
+  1026→  1026→  1026→.hero-block-link::after {
+  1027→  1027→  1027→  content: '';
+  1028→  1028→  1028→  position: absolute;
+  1029→  1029→  1029→  bottom: 0;
+  1030→  1030→  1030→  left: 0;
+  1031→  1031→  1031→  width: 100%;
+  1032→  1032→  1032→  height: 1px;
+  1033→  1033→  1033→  background: var(--v-color-contrast);
+  1034→  1034→  1034→  transition: width var(--v-transition);
+  1035→  1035→  1035→}
+  1036→  1036→  1036→
+  1037→  1037→  1037→.hero-block-link:hover {
+  1038→  1038→  1038→  color: var(--v-color-accent);
+  1039→  1039→  1039→}
+  1040→  1040→  1040→
+  1041→  1041→  1041→.hero-block-link:hover::after {
+  1042→  1042→  1042→  width: 60%;
+  1043→  1043→  1043→  background: var(--v-color-accent);
+  1044→  1044→  1044→}
+  1045→  1045→  1045→
+  1046→  1046→  1046→/* Bouton petit pour blocs statiques */
+  1047→  1047→  1047→.velure-btn-sm {
+  1048→  1048→  1048→  padding: 0.65rem 1.5rem;
+  1049→  1049→  1049→  font-size: 0.65rem;
+  1050→  1050→  1050→}
+  1051→  1051→  1051→
+  1052→  1052→  1052→/* ══════════════════════════════
+  1053→  1053→  1053→   RESPONSIVE — TABLETTE
+  1054→  1054→  1054→   ══════════════════════════════ */
+  1055→  1055→  1055→@media (max-width: 1024px) {
+  1056→  1056→  1056→  .hero-section {
+  1057→  1057→  1057→    height: 42vh;
+  1058→  1058→  1058→    min-height: 340px;
+  1059→  1059→  1059→    max-height: 480px;
+  1060→  1060→  1060→  }
+  1061→  1061→  1061→
+  1062→  1062→  1062→  .hero-slide-content {
+  1063→  1063→  1063→    padding: 1.75rem 2rem 2rem;
+  1064→  1064→  1064→    max-width: 360px;
+  1065→  1065→  1065→  }
+  1066→  1066→  1066→
+  1067→  1067→  1067→  .hero-slide-title {
+  1068→  1068→  1068→    font-size: clamp(1.5rem, 3vw, 2.25rem);
+  1069→  1069→  1069→  }
+  1070→  1070→  1070→
+  1071→  1071→  1071→  .hero-slider-controls {
+  1072→  1072→  1072→    bottom: 2rem;
+  1073→  1073→  1073→    right: 2rem;
+  1074→  1074→  1074→  }
+  1075→  1075→  1075→
+  1076→  1076→  1076→  .hero-block-visual {
+  1077→  1077→  1077→    width: 50%;
+  1078→  1078→  1078→  }
+  1079→  1079→  1079→
+  1080→  1080→  1080→  .hero-block-content {
+  1081→  1081→  1081→    padding: 1.5rem;
+  1082→  1082→  1082→  }
+  1083→  1083→  1083→}
+  1084→  1084→  1084→
+  1085→  1085→  1085→/* ══════════════════════════════
+  1086→  1086→  1086→   RESPONSIVE — MOBILE
+  1087→  1087→  1087→   ══════════════════════════════ */
+  1088→  1088→  1088→@media (max-width: 768px) {
+  1089→  1089→  1089→  .hero-section {
+  1090→  1090→  1090→    display: flex;
+  1091→  1091→  1091→    flex-direction: column;
+  1092→  1092→  1092→    height: auto;
+  1093→  1093→  1093→    min-height: auto;
+  1094→  1094→  1094→    max-height: none;
+  1095→  1095→  1095→  }
+  1096→  1096→  1096→
+  1097→  1097→  1097→  /* Slider prend 100% largeur mais hauteur limitée */
+  1098→  1098→  1098→  .hero-slider {
+  1099→  1099→  1099→    min-height: 40vh;
+  1100→  1100→  1100→    flex: 0 0 auto;
+  1101→  1101→  1101→  }
+  1102→  1102→  1102→
+  1103→  1103→  1103→  /* Blocs empilés */
+  1104→  1104→  1104→  .hero-static-blocks {
+  1105→  1105→  1105→    min-height: auto;
+  1106→  1106→  1106→    flex-direction: column;
+  1107→  1107→  1107→  }
+  1108→  1108→  1108→
+  1109→  1109→  1109→  .hero-block {
+  1110→  1110→  1110→    flex-direction: row;
+  1111→  1111→  1111→    min-height: 260px;
+  1112→  1112→  1112→  }
+  1113→  1113→  1113→
+  1114→  1114→  1114→  .hero-block-visual {
+  1115→  1115→  1115→    width: 45%;
+  1116→  1116→  1116→    height: 100%;
+  1117→  1117→  1117→    position: absolute;
+  1118→  1118→  1118→    inset: 0;
+  1119→  1119→  1119→  }
+  1120→  1120→  1120→
+  1121→  1121→  1121→  .hero-block-content {
+  1122→  1122→  1122→    position: relative;
+  1123→  1123→  1123→    z-index: 2;
+  1124→  1124→  1124→    padding: 1.5rem;
+  1125→  1125→  1125→    min-width: 55%;
+  1126→  1126→  1126→    margin-left: auto;
+  1127→  1127→  1127→    background: linear-gradient(to right, rgba(250,250,248,0.85) 0%, rgba(250,250,248,0.95) 40%);
+  1128→  1128→  1128→    height: 100%;
+  1129→  1129→  1129→    justify-content: center;
+  1130→  1130→  1130→  }
+  1131→  1131→  1131→
+  1132→  1132→  1132→  .hero-block--bestseller {
+  1133→  1133→  1133→    border-bottom: 1px solid var(--v-color-border);
+  1134→  1134→  1134→  }
+  1135→  1135→  1135→
+  1136→  1136→  1136→  .hero-slide-content {
+  1137→  1137→  1137→    padding: 1.5rem 1.25rem 2rem;
+  1138→  1138→  1138→    max-width: 100%;
+  1139→  1139→  1139→  }
+  1140→  1140→  1140→
+  1141→  1141→  1141→  .hero-slide-title {
+  1142→  1142→  1142→    font-size: clamp(1.5rem, 6vw, 2.25rem);
+  1143→  1143→  1143→  }
+  1144→  1144→  1144→
+  1145→  1145→  1145→  .hero-slider-controls {
+  1146→  1146→  1146→    bottom: 2rem;
+  1147→  1147→  1147→    right: 1.25rem;
+  1148→  1148→  1148→  }
+  1149→  1149→  1149→}
+  1150→  1150→  1150→
+  1151→  1151→  1151→@media (max-width: 480px) {
+  1152→  1152→  1152→  .hero-slider {
+  1153→  1153→  1153→    min-height: 35vh;
+  1154→  1154→  1154→  }
+  1155→  1155→  1155→
+  1156→  1156→  1156→  .hero-block {
+  1157→  1157→  1157→    min-height: 160px;
+  1158→  1158→  1158→  }
+  1159→  1159→  1159→
+  1160→  1160→  1160→  .hero-block-visual {
+  1161→  1161→  1161→    width: 50%;
+  1162→  1162→  1162→  }
+  1163→  1163→  1163→
+  1164→  1164→  1164→  .hero-block-content {
+  1165→  1165→  1165→    min-width: 50%;
+  1166→  1166→  1166→    padding: 1rem;
+  1167→  1167→  1167→  }
+  1168→  1168→  1168→
+  1169→  1169→  1169→  .hero-block-title {
+  1170→  1170→  1170→    font-size: 1rem;
+  1171→  1171→  1171→  }
+  1172→  1172→  1172→}
+  1173→  1173→  1173→
+  1174→  1174→  1174→
+  1175→  1175→  1175→/* ────────────────────────────
+  1176→  1176→  1176→   CATEGORY CAROUSEL
+  1177→  1177→  1177→   ──────────────────────────── */
+  1178→  1178→  1178→
+  1179→  1179→  1179→/* Carousel wrapper */
+  1180→  1180→  1180→.velure-carousel {
+  1181→  1181→  1181→  position: relative;
+  1182→  1182→  1182→  overflow: hidden;
+  1183→  1183→  1183→}
+  1184→  1184→  1184→
+  1185→  1185→  1185→/* Scrollable track */
+  1186→  1186→  1186→.velure-carousel-track {
+  1187→  1187→  1187→  display: flex;
+  1188→  1188→  1188→  gap: 0.75rem;
+  1189→  1189→  1189→  overflow-x: auto;
+  1190→  1190→  1190→  scroll-behavior: smooth;
+  1191→  1191→  1191→  scroll-snap-type: x mandatory;
+  1192→  1192→  1192→  -webkit-overflow-scrolling: touch;
+  1193→  1193→  1193→  scrollbar-width: none;
+  1194→  1194→  1194→  padding: 0.25rem 0;
+  1195→  1195→  1195→}
+  1196→  1196→  1196→
+  1197→  1197→  1197→.velure-carousel-track::-webkit-scrollbar { display: none; }
+  1198→  1198→  1198→
+  1199→  1199→  1199→/* Each card snaps to start */
+  1200→  1200→  1200→.velure-carousel-track > * {
+  1201→  1201→  1201→  scroll-snap-align: start;
+  1202→  1202→  1202→  flex: 0 0 calc((100% - 1.5rem) / 4);  /* 4 visible by default */
+  1203→  1203→  1203→  min-width: 0;
+  1204→  1204→  1204→}
+  1205→  1205→  1205→
+  1206→  1206→  1206→/* Arrow buttons */
+  1207→  1207→  1207→.velure-carousel-arrow {
+  1208→  1208→  1208→  position: absolute;
+  1209→  1209→  1209→  top: 50%;
+  1210→  1210→  1210→  transform: translateY(-50%);
+  1211→  1211→  1211→  z-index: 10;
+  1212→  1212→  1212→  width: 36px;
+  1213→  1213→  1213→  height: 36px;
+  1214→  1214→  1214→  display: flex;
+  1215→  1215→  1215→  align-items: center;
+  1216→  1216→  1216→  justify-content: center;
+  1217→  1217→  1217→  background: var(--v-color-base);
+  1218→  1218→  1218→  border: 1px solid var(--v-color-border);
+  1219→  1219→  1219→  color: var(--v-color-contrast);
+  1220→  1220→  1220→  cursor: pointer;
+  1221→  1221→  1221→  transition: all var(--v-transition);
+  1222→  1222→  1222→  opacity: 0.7;
+  1223→  1223→  1223→  pointer-events: auto;
+  1224→  1224→  1224→  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  1225→  1225→  1225→}
+  1226→  1226→  1226→
+  1227→  1227→  1227→.velure-carousel:hover .velure-carousel-arrow {
+  1228→  1228→  1228→  opacity: 1;
+  1229→  1229→  1229→}
+  1230→  1230→  1230→
+  1231→  1231→  1231→.velure-carousel-arrow:hover {
+  1232→  1232→  1232→  background: var(--v-color-contrast);
+  1233→  1233→  1233→  color: var(--v-color-base);
+  1234→  1234→  1234→  border-color: var(--v-color-contrast);
+  1235→  1235→  1235→}
+  1236→  1236→  1236→
+  1237→  1237→  1237→.velure-carousel-arrow--prev { left: 0; border-radius: 0; }
+  1238→  1238→  1238→.velure-carousel-arrow--next { right: 0; border-radius: 0; }
+  1239→  1239→  1239→
+  1240→  1240→  1240→/* Responsive: show fewer cards */
+  1241→  1241→  1241→@media (max-width: 1024px) {
+  1242→  1242→  1242→  .velure-carousel-track > * {
+  1243→  1243→  1243→    flex: 0 0 calc((100% - 0.75rem) / 3);  /* 3 visible */
+  1244→  1244→  1244→  }
+  1245→  1245→  1245→}
+  1246→  1246→  1246→@media (max-width: 768px) {
+  1247→  1247→  1247→  .velure-carousel-track > * {
+  1248→  1248→  1248→    flex: 0 0 calc((100% - 0.75rem) / 2.5);  /* 2.5 visible (peek) */
+  1249→  1249→  1249→  }
+  1250→  1250→  1250→  .velure-carousel-arrow { display: none; }
+  1251→  1251→  1251→}
+  1252→  1252→  1252→@media (max-width: 480px) {
+  1253→  1253→  1253→  .velure-carousel-track > * {
+  1254→  1254→  1254→    flex: 0 0 calc((100% - 0.75rem) / 2);  /* 2 visible */
+  1255→  1255→  1255→  }
+  1256→  1256→  1256→}
+  1257→  1257→  1257→
+  1258→  1258→  1258→/* ── Category Card (used in carousel) ── */
+  1259→  1259→  1259→
+  1260→  1260→  1260→.velure-category-card {
+  1261→  1261→  1261→  position: relative;
+  1262→  1262→  1262→  overflow: hidden;
+  1263→  1263→  1263→  aspect-ratio: 3/4;
+  1264→  1264→  1264→  cursor: pointer;
+  1265→  1265→  1265→  display: block;
+  1266→  1266→  1266→  border-radius: 2px;
+  1267→  1267→  1267→}
+  1268→  1268→  1268→
+  1269→  1269→  1269→.velure-category-card img {
+  1270→  1270→  1270→  width: 100%;
+  1271→  1271→  1271→  height: 100%;
+  1272→  1272→  1272→  object-fit: cover;
+  1273→  1273→  1273→  transition: transform 0.6s ease;
+  1274→  1274→  1274→}
+  1275→  1275→  1275→
+  1276→  1276→  1276→.velure-category-card:hover img {
+  1277→  1277→  1277→  transform: scale(1.05);
+  1278→  1278→  1278→}
+  1279→  1279→  1279→
+  1280→  1280→  1280→.velure-category-card-overlay {
+  1281→  1281→  1281→  position: absolute;
+  1282→  1282→  1282→  inset: 0;
+  1283→  1283→  1283→  background: linear-gradient(transparent 40%, rgba(0,0,0,0.6));
+  1284→  1284→  1284→  display: flex;
+  1285→  1285→  1285→  flex-direction: column;
+  1286→  1286→  1286→  justify-content: flex-end;
+  1287→  1287→  1287→  padding: 1.25rem;
+  1288→  1288→  1288→  color: #fff;
+  1289→  1289→  1289→  transition: background var(--v-transition);
+  1290→  1290→  1290→}
+  1291→  1291→  1291→
+  1292→  1292→  1292→.velure-category-card:hover .velure-category-card-overlay {
+  1293→  1293→  1293→  background: linear-gradient(transparent 30%, rgba(0,0,0,0.7));
+  1294→  1294→  1294→}
+  1295→  1295→  1295→
+  1296→  1296→  1296→.velure-category-card-label {
+  1297→  1297→  1297→  font-size: 0.65rem;
+  1298→  1298→  1298→  letter-spacing: 0.2em;
+  1299→  1299→  1299→  text-transform: uppercase;
+  1300→  1300→  1300→  opacity: 0.8;
+  1301→  1301→  1301→  margin-bottom: 0.5rem;
+  1302→  1302→  1302→}
+  1303→  1303→  1303→
+  1304→  1304→  1304→.velure-category-card-title {
+  1305→  1305→  1305→  font-family: var(--v-font-serif);
+  1306→  1306→  1306→  font-size: 1.25rem;
+  1307→  1307→  1307→  font-weight: 500;
+  1308→  1308→  1308→  margin-bottom: 0.25rem;
+  1309→  1309→  1309→  letter-spacing: -0.01em;
+  1310→  1310→  1310→}
+  1311→  1311→  1311→
+  1312→  1312→  1312→
+  1313→  1313→  1313→
+  1314→  1314→  1314→.velure-category-card-count {
+  1315→  1315→  1315→  font-size: 0.8rem;
+  1316→  1316→  1316→  opacity: 0.8;
+  1317→  1317→  1317→}
+  1318→  1318→  1318→
+  1319→  1319→  1319→
+  1320→  1320→  1320→/* ────────────────────────────
+  1321→  1321→  1321→   TESTIMONIAL
+  1322→  1322→  1322→   ──────────────────────────── */
+  1323→  1323→  1323→
+  1324→  1324→  1324→.velure-testimonial {
+  1325→  1325→  1325→  text-align: center;
+  1326→  1326→  1326→  padding: 2rem;
+  1327→  1327→  1327→}
+  1328→  1328→  1328→
+  1329→  1329→  1329→.velure-testimonial-stars {
+  1330→  1330→  1330→  color: var(--v-color-secondary);
+  1331→  1331→  1331→  font-size: 1rem;
+  1332→  1332→  1332→  margin-bottom: 1.25rem;
+  1333→  1333→  1333→  letter-spacing: 0.15em;
+  1334→  1334→  1334→}
+  1335→  1335→  1335→
+  1336→  1336→  1336→.velure-testimonial-text {
+  1337→  1337→  1337→  font-family: var(--v-font-serif);
+  1338→  1338→  1338→  font-size: 1.25rem;
+  1339→  1339→  1339→  line-height: 1.6;
+  1340→  1340→  1340→  max-width: 600px;
+  1341→  1341→  1341→  margin: 0 auto 1.5rem;
+  1342→  1342→  1342→  font-style: italic;
+  1343→  1343→  1343→}
+  1344→  1344→  1344→
+  1345→  1345→  1345→.velure-testimonial-author {
+  1346→  1346→  1346→  font-size: 0.8rem;
+  1347→  1347→  1347→  font-weight: 600;
+  1348→  1348→  1348→  letter-spacing: 0.1em;
+  1349→  1349→  1349→  text-transform: uppercase;
+  1350→  1350→  1350→}
+  1351→  1351→  1351→
+  1352→  1352→  1352→.velure-testimonial-role {
+  1353→  1353→  1353→  font-size: 0.75rem;
+  1354→  1354→  1354→  color: #888;
+  1355→  1355→  1355→  margin-top: 0.25rem;
+  1356→  1356→  1356→}
+  1357→  1357→  1357→
+  1358→  1358→  1358→
+  1359→  1359→  1359→/* ────────────────────────────
+  1360→  1360→  1360→   BLOG CARD
+  1361→  1361→  1361→   ──────────────────────────── */
+  1362→  1362→  1362→
+  1363→  1363→  1363→.velure-blog-card {
+  1364→  1364→  1364→  cursor: pointer;
+  1365→  1365→  1365→}
+  1366→  1366→  1366→
+  1367→  1367→  1367→.velure-blog-card-image {
+  1368→  1368→  1368→  aspect-ratio: 4/3;
+  1369→  1369→  1369→  overflow: hidden;
+  1370→  1370→  1370→  margin-bottom: 1.25rem;
+  1371→  1371→  1371→  background: var(--v-color-soft);
+  1372→  1372→  1372→}
+  1373→  1373→  1373→
+  1374→  1374→  1374→.velure-blog-card-image img {
+  1375→  1375→  1375→  width: 100%;
+  1376→  1376→  1376→  height: 100%;
+  1377→  1377→  1377→  object-fit: cover;
+  1378→  1378→  1378→  transition: transform 0.6s ease;
+  1379→  1379→  1379→}
+  1380→  1380→  1380→
+  1381→  1381→  1381→.velure-blog-card:hover .velure-blog-card-image img {
+  1382→  1382→  1382→  transform: scale(1.05);
+  1383→  1383→  1383→}
+  1384→  1384→  1384→
+  1385→  1385→  1385→.velure-blog-card-meta {
+  1386→  1386→  1386→  font-size: 0.7rem;
+  1387→  1387→  1387→  letter-spacing: 0.1em;
+  1388→  1388→  1388→  text-transform: uppercase;
+  1389→  1389→  1389→  color: var(--v-color-secondary);
+  1390→  1390→  1390→  margin-bottom: 0.5rem;
+  1391→  1391→  1391→}
+  1392→  1392→  1392→
+  1393→  1393→  1393→.velure-blog-card-title {
+  1394→  1394→  1394→  font-family: var(--v-font-serif);
+  1395→  1395→  1395→  font-size: 1.25rem;
+  1396→  1396→  1396→  line-height: 1.3;
+  1397→  1397→  1397→  margin-bottom: 0.75rem;
+  1398→  1398→  1398→}
+  1399→  1399→  1399→
+  1400→  1400→  1400→.velure-blog-card-excerpt {
+  1401→  1401→  1401→  font-size: 0.875rem;
+  1402→  1402→  1402→  color: #666;
+  1403→  1403→  1403→  line-height: 1.6;
+  1404→  1404→  1404→  display: -webkit-box;
+  1405→  1405→  1405→  -webkit-line-clamp: 3;
+  1406→  1406→  1406→  -webkit-box-orient: vertical;
+  1407→  1407→  1407→  overflow: hidden;
+  1408→  1408→  1408→}
+  1409→  1409→  1409→
+  1410→  1410→  1410→
+  1411→  1411→  1411→/* ────────────────────────────
+  1412→  1412→  1412→   FEATURES BAR
+  1413→  1413→  1413→   ──────────────────────────── */
+  1414→  1414→  1414→
+  1415→  1415→  1415→.velure-features {
+  1416→  1416→  1416→  display: grid;
+  1417→  1417→  1417→  grid-template-columns: repeat(4, 1fr);
+  1418→  1418→  1418→  gap: 0;
+  1419→  1419→  1419→  border-top: 1px solid var(--v-color-border);
+  1420→  1420→  1420→  border-bottom: 1px solid var(--v-color-border);
+  1421→  1421→  1421→}
+  1422→  1422→  1422→
+  1423→  1423→  1423→.velure-feature {
+  1424→  1424→  1424→  display: flex;
+  1425→  1425→  1425→  align-items: center;
+  1426→  1426→  1426→  justify-content: center;
+  1427→  1427→  1427→  gap: 0.75rem;
+  1428→  1428→  1428→  padding: 1.75rem 1rem;
+  1429→  1429→  1429→  text-align: center;
+  1430→  1430→  1430→}
+  1431→  1431→  1431→
+  1432→  1432→  1432→.velure-feature:not(:last-child) {
+  1433→  1433→  1433→  border-right: 1px solid var(--v-color-border);
+  1434→  1434→  1434→}
+  1435→  1435→  1435→
+  1436→  1436→  1436→.velure-feature-icon {
+  1437→  1437→  1437→  flex-shrink: 0;
+  1438→  1438→  1438→  width: 36px;
+  1439→  1439→  1439→  height: 36px;
+  1440→  1440→  1440→  display: flex;
+  1441→  1441→  1441→  align-items: center;
+  1442→  1442→  1442→  justify-content: center;
+  1443→  1443→  1443→  color: var(--v-color-accent);
+  1444→  1444→  1444→}
+  1445→  1445→  1445→
+  1446→  1446→  1446→.velure-feature-text h4 {
+  1447→  1447→  1447→  font-family: var(--v-font-sans);
+  1448→  1448→  1448→  font-size: 0.75rem;
+  1449→  1449→  1449→  font-weight: 600;
+  1450→  1450→  1450→  letter-spacing: 0.05em;
+  1451→  1451→  1451→  margin-bottom: 0.15rem;
+  1452→  1452→  1452→}
+  1453→  1453→  1453→
+  1454→  1454→  1454→.velure-feature-text p {
+  1455→  1455→  1455→  font-size: 0.7rem;
+  1456→  1456→  1456→  color: #888;
+  1457→  1457→  1457→}
+  1458→  1458→  1458→
+  1459→  1459→  1459→@media (max-width: 768px) {
+  1460→  1460→  1460→  .velure-features { grid-template-columns: repeat(2, 1fr); }
+  1461→  1461→  1461→  .velure-feature:nth-child(2) { border-right: none; }
+  1462→  1462→  1462→  .velure-feature { padding: 1.25rem 0.75rem; }
+  1463→  1463→  1463→}
+  1464→  1464→  1464→
+  1465→  1465→  1465→@media (max-width: 480px) {
+  1466→  1466→  1466→  .velure-features { grid-template-columns: 1fr; }
+  1467→  1467→  1467→  .velure-feature:not(:last-child) { border-right: none; border-bottom: 1px solid var(--v-color-border); }
+  1468→  1468→  1468→}
+  1469→  1469→  1469→
+  1470→  1470→  1470→
+  1471→  1471→  1471→/* ────────────────────────────
+  1472→  1472→  1472→   MARQUEE / BRAND BAR
+  1473→  1473→  1473→   ──────────────────────────── */
+  1474→  1474→  1474→
+  1475→  1475→  1475→.velure-marquee {
+  1476→  1476→  1476→  overflow: hidden;
+  1477→  1477→  1477→  padding: 2.5rem 0;
+  1478→  1478→  1478→  border-top: 1px solid var(--v-color-border);
+  1479→  1479→  1479→  border-bottom: 1px solid var(--v-color-border);
+  1480→  1480→  1480→}
+  1481→  1481→  1481→
+  1482→  1482→  1482→.velure-marquee-track {
+  1483→  1483→  1483→  display: flex;
+  1484→  1484→  1484→  gap: 4rem;
+  1485→  1485→  1485→  animation: velure-marquee-scroll 25s linear infinite;
+  1486→  1486→  1486→  width: max-content;
+  1487→  1487→  1487→}
+  1488→  1488→  1488→
+  1489→  1489→  1489→.velure-marquee-item {
+  1490→  1490→  1490→  font-family: var(--v-font-serif);
+  1491→  1491→  1491→  font-size: 1.25rem;
+  1492→  1492→  1492→  font-weight: 400;
+  1493→  1493→  1493→  letter-spacing: 0.08em;
+  1494→  1494→  1494→  color: #bbb;
+  1495→  1495→  1495→  white-space: nowrap;
+  1496→  1496→  1496→  text-transform: uppercase;
+  1497→  1497→  1497→}
+  1498→  1498→  1498→
+  1499→  1499→  1499→@keyframes velure-marquee-scroll {
+  1500→  1500→  1500→  0% { transform: translateX(0); }
+  1501→  1501→  1501→  100% { transform: translateX(-50%); }
+  1502→  1502→  1502→}
+  1503→  1503→  1503→
+  1504→  1504→  1504→
+  1505→  1505→  1505→/* ────────────────────────────
+  1506→  1506→  1506→   CONTACT FORM
+  1507→  1507→  1507→   ──────────────────────────── */
+  1508→  1508→  1508→
+  1509→  1509→  1509→.velure-contact-form {
+  1510→  1510→  1510→  max-width: 600px;
+  1511→  1511→  1511→}
+  1512→  1512→  1512→
+  1513→  1513→  1513→.velure-form-group {
+  1514→  1514→  1514→  margin-bottom: 1.5rem;
+  1515→  1515→  1515→}
+  1516→  1516→  1516→
+  1517→  1517→  1517→.velure-form-label {
+  1518→  1518→  1518→  display: block;
+  1519→  1519→  1519→  font-size: 0.7rem;
+  1520→  1520→  1520→  font-weight: 600;
+  1521→  1521→  1521→  letter-spacing: 0.1em;
+  1522→  1522→  1522→  text-transform: uppercase;
+  1523→  1523→  1523→  margin-bottom: 0.5rem;
+  1524→  1524→  1524→  color: var(--v-color-contrast);
+  1525→  1525→  1525→}
+  1526→  1526→  1526→
+  1527→  1527→  1527→.velure-form-input,
+  1528→  1528→  1528→.velure-form-textarea {
+  1529→  1529→  1529→  width: 100%;
+  1530→  1530→  1530→  padding: 0.875rem 1rem;
+  1531→  1531→  1531→  font-size: 0.875rem;
+  1532→  1532→  1532→  background: var(--v-color-white);
+  1533→  1533→  1533→  border: 1px solid var(--v-color-border);
+  1534→  1534→  1534→  transition: border-color var(--v-transition);
+  1535→  1535→  1535→  color: var(--v-color-contrast);
+  1536→  1536→  1536→}
+  1537→  1537→  1537→
+  1538→  1538→  1538→.velure-form-input:focus,
+  1539→  1539→  1539→.velure-form-textarea:focus {
+  1540→  1540→  1540→  border-color: var(--v-color-contrast);
+  1541→  1541→  1541→}
+  1542→  1542→  1542→
+  1543→  1543→  1543→.velure-form-textarea {
+  1544→  1544→  1544→  min-height: 150px;
+  1545→  1545→  1545→  resize: vertical;
+  1546→  1546→  1546→}
+  1547→  1547→  1547→
+  1548→  1548→  1548→.velure-form-row {
+  1549→  1549→  1549→  display: grid;
+  1550→  1550→  1550→  grid-template-columns: 1fr 1fr;
+  1551→  1551→  1551→  gap: 1.5rem;
+  1552→  1552→  1552→}
+  1553→  1553→  1553→
+  1554→  1554→  1554→@media (max-width: 480px) {
+  1555→  1555→  1555→  .velure-form-row { grid-template-columns: 1fr; }
+  1556→  1556→  1556→}
+  1557→  1557→  1557→
+  1558→  1558→  1558→
+  1559→  1559→  1559→/* ────────────────────────────
+  1560→  1560→  1560→   SIZE GUIDE TABLE
+  1561→  1561→  1561→   ──────────────────────────── */
+  1562→  1562→  1562→
+  1563→  1563→  1563→.velure-size-table {
+  1564→  1564→  1564→  width: 100%;
+  1565→  1565→  1565→  border-collapse: collapse;
+  1566→  1566→  1566→  font-size: 0.85rem;
+  1567→  1567→  1567→}
+  1568→  1568→  1568→
+  1569→  1569→  1569→.velure-size-table th,
+  1570→  1570→  1570→.velure-size-table td {
+  1571→  1571→  1571→  padding: 0.875rem 1rem;
+  1572→  1572→  1572→  text-align: left;
+  1573→  1573→  1573→  border-bottom: 1px solid var(--v-color-border);
+  1574→  1574→  1574→}
+  1575→  1575→  1575→
+  1576→  1576→  1576→.velure-size-table th {
+  1577→  1577→  1577→  font-family: var(--v-font-sans);
+  1578→  1578→  1578→  font-size: 0.7rem;
+  1579→  1579→  1579→  font-weight: 600;
+  1580→  1580→  1580→  letter-spacing: 0.1em;
+  1581→  1581→  1581→  text-transform: uppercase;
+  1582→  1582→  1582→  background: var(--v-color-soft);
+  1583→  1583→  1583→  color: var(--v-color-contrast);
+  1584→  1584→  1584→}
+  1585→  1585→  1585→
+  1586→  1586→  1586→.velure-size-table tbody tr:hover {
+  1587→  1587→  1587→  background: var(--v-color-soft);
+  1588→  1588→  1588→}
+  1589→  1589→  1589→
+  1590→  1590→  1590→
+  1591→  1591→  1591→/* ────────────────────────────
+  1592→  1592→  1592→   PAGE BANNER
+  1593→  1593→  1593→   ──────────────────────────── */
+  1594→  1594→  1594→
+  1595→  1595→  1595→.velure-page-banner {
+  1596→  1596→  1596→  padding: 4rem 0 3rem;
+  1597→  1597→  1597→  text-align: center;
+  1598→  1598→  1598→  background: var(--v-color-soft);
+  1599→  1599→  1599→}
+  1600→  1600→  1600→
+  1601→  1601→  1601→.velure-page-banner h1 {
+  1602→  1602→  1602→  font-size: clamp(2rem, 4vw, 3rem);
+  1603→  1603→  1603→  letter-spacing: -0.02em;
+  1604→  1604→  1604→  margin-bottom: 0.5rem;
+  1605→  1605→  1605→}
+  1606→  1606→  1606→
+  1607→  1607→  1607→.velure-page-banner p {
+  1608→  1608→  1608→  font-size: 0.9rem;
+  1609→  1609→  1609→  color: #666;
+  1610→  1610→  1610→}
+  1611→  1611→  1611→
+  1612→  1612→  1612→.velure-breadcrumb {
+  1613→  1613→  1613→  display: flex;
+  1614→  1614→  1614→  justify-content: center;
+  1615→  1615→  1615→  gap: 0.5rem;
+  1616→  1616→  1616→  margin-top: 1rem;
+  1617→  1617→  1617→  font-size: 0.75rem;
+  1618→  1618→  1618→  color: #888;
+  1619→  1619→  1619→}
+  1620→  1620→  1620→
+  1621→  1621→  1621→.velure-breadcrumb a {
+  1622→  1622→  1622→  color: #888;
+  1623→  1623→  1623→  transition: color var(--v-transition);
+  1624→  1624→  1624→}
+  1625→  1625→  1625→
+  1626→  1626→  1626→.velure-breadcrumb a:hover {
+  1627→  1627→  1627→  color: var(--v-color-accent);
+  1628→  1628→  1628→}
+  1629→  1629→  1629→
+  1630→  1630→  1630→.velure-breadcrumb .sep { opacity: 0.4; }
+  1631→  1631→  1631→
+  1632→  1632→  1632→
+  1633→  1633→  1633→/* ────────────────────────────
+  1634→  1634→  1634→   404 PAGE
+  1635→  1635→  1635→   ──────────────────────────── */
+  1636→  1636→  1636→
+  1637→  1637→  1637→.velure-404 {
+  1638→  1638→  1638→  min-height: 70vh;
+  1639→  1639→  1639→  display: flex;
+  1640→  1640→  1640→  align-items: center;
+  1641→  1641→  1641→  justify-content: center;
+  1642→  1642→  1642→  text-align: center;
+  1643→  1643→  1643→  padding: 4rem 2rem;
+  1644→  1644→  1644→}
+  1645→  1645→  1645→
+  1646→  1646→  1646→.velure-404-number {
+  1647→  1647→  1647→  font-family: var(--v-font-serif);
+  1648→  1648→  1648→  font-size: clamp(6rem, 15vw, 12rem);
+  1649→  1649→  1649→  font-weight: 300;
+  1650→  1650→  1650→  line-height: 1;
+  1651→  1651→  1651→  color: var(--v-color-muted);
+  1652→  1652→  1652→  margin-bottom: 1rem;
+  1653→  1653→  1653→}
+  1654→  1654→  1654→
+  1655→  1655→  1655→.velure-404 h1 {
+  1656→  1656→  1656→  font-size: 1.5rem;
+  1657→  1657→  1657→  margin-bottom: 1rem;
+  1658→  1658→  1658→}
+  1659→  1659→  1659→
+  1660→  1660→  1660→.velure-404 p {
+  1661→  1661→  1661→  font-size: 0.95rem;
+  1662→  1662→  1662→  color: #666;
+  1663→  1663→  1663→  margin-bottom: 2rem;
+  1664→  1664→  1664→  max-width: 400px;
+  1665→  1665→  1665→  margin-left: auto;
+  1666→  1666→  1666→  margin-right: auto;
+  1667→  1667→  1667→}
+  1668→  1668→  1668→
+  1669→  1669→  1669→
+  1670→  1670→  1670→/* ────────────────────────────
+  1671→  1671→  1671→   INSTAGRAM GRID
+  1672→  1672→  1672→   ──────────────────────────── */
+  1673→  1673→  1673→
+  1674→  1674→  1674→.velure-instagram-grid {
+  1675→  1675→  1675→  display: grid;
+  1676→  1676→  1676→  grid-template-columns: repeat(6, 1fr);
+  1677→  1677→  1677→  gap: 0;
+  1678→  1678→  1678→}
+  1679→  1679→  1679→
+  1680→  1680→  1680→.velure-instagram-item {
+  1681→  1681→  1681→  aspect-ratio: 1;
+  1682→  1682→  1682→  overflow: hidden;
+  1683→  1683→  1683→  position: relative;
+  1684→  1684→  1684→  cursor: pointer;
+  1685→  1685→  1685→}
+  1686→  1686→  1686→
+  1687→  1687→  1687→.velure-instagram-item img {
+  1688→  1688→  1688→  width: 100%;
+  1689→  1689→  1689→  height: 100%;
+  1690→  1690→  1690→  object-fit: cover;
+  1691→  1691→  1691→  transition: transform 0.4s ease;
+  1692→  1692→  1692→}
+  1693→  1693→  1693→
+  1694→  1694→  1694→.velure-instagram-item:hover img {
+  1695→  1695→  1695→  transform: scale(1.1);
+  1696→  1696→  1696→}
+  1697→  1697→  1697→
+  1698→  1698→  1698→.velure-instagram-item::after {
+  1699→  1699→  1699→  content: '';
+  1700→  1700→  1700→  position: absolute;
+  1701→  1701→  1701→  inset: 0;
+  1702→  1702→  1702→  background: rgba(0,0,0,0.3);
+  1703→  1703→  1703→  opacity: 0;
+  1704→  1704→  1704→  transition: opacity var(--v-transition);
+  1705→  1705→  1705→}
+  1706→  1706→  1706→
+  1707→  1707→  1707→.velure-instagram-item:hover::after {
+  1708→  1708→  1708→  opacity: 1;
+  1709→  1709→  1709→}
+  1710→  1710→  1710→
+  1711→  1711→  1711→@media (max-width: 768px) {
+  1712→  1712→  1712→  .velure-instagram-grid { grid-template-columns: repeat(3, 1fr); }
+  1713→  1713→  1713→}
+  1714→  1714→  1714→
+  1715→  1715→  1715→@media (max-width: 480px) {
+  1716→  1716→  1716→  .velure-instagram-grid { grid-template-columns: repeat(2, 1fr); }
+  1717→  1717→  1717→}
+  1718→  1718→  1718→
+  1719→  1719→  1719→
+  1720→  1720→  1720→/* ────────────────────────────
+  1721→  1721→  1721→   SHOP FILTER SIDEBAR
+  1722→  1722→  1722→   ──────────────────────────── */
+  1723→  1723→  1723→
+  1724→  1724→  1724→.velure-shop-layout {
+  1725→  1725→  1725→  display: flex;
+  1726→  1726→  1726→  gap: 2rem;
+  1727→  1727→  1727→  align-items: flex-start;
+  1728→  1728→  1728→}
+  1729→  1729→  1729→
+  1730→  1730→  1730→.velure-shop-sidebar {
+  1731→  1731→  1731→  width: 250px;
+  1732→  1732→  1732→  flex-shrink: 0;
+  1733→  1733→  1733→}
+  1734→  1734→  1734→
+  1735→  1735→  1735→.velure-shop-sidebar-section {
+  1736→  1736→  1736→  margin-bottom: 2rem;
+  1737→  1737→  1737→}
+  1738→  1738→  1738→
+  1739→  1739→  1739→.velure-shop-sidebar-title {
+  1740→  1740→  1740→  font-family: var(--v-font-sans);
+  1741→  1741→  1741→  font-size: 0.7rem;
+  1742→  1742→  1742→  font-weight: 600;
+  1743→  1743→  1743→  letter-spacing: 0.15em;
+  1744→  1744→  1744→  text-transform: uppercase;
+  1745→  1745→  1745→  margin-bottom: 1rem;
+  1746→  1746→  1746→  padding-bottom: 0.5rem;
+  1747→  1747→  1747→  border-bottom: 1px solid var(--v-color-border);
+  1748→  1748→  1748→}
+  1749→  1749→  1749→
+  1750→  1750→  1750→.velure-shop-sidebar-list li {
+  1751→  1751→  1751→  margin-bottom: 0.5rem;
+  1752→  1752→  1752→}
+  1753→  1753→  1753→
+  1754→  1754→  1754→.velure-shop-sidebar-list a,
+  1755→  1755→  1755→.velure-shop-sidebar-list label {
+  1756→  1756→  1756→  display: flex;
+  1757→  1757→  1757→  align-items: center;
+  1758→  1758→  1758→  gap: 0.5rem;
+  1759→  1759→  1759→  font-size: 0.85rem;
+  1760→  1760→  1760→  color: #555;
+  1761→  1761→  1761→  cursor: pointer;
+  1762→  1762→  1762→  transition: color var(--v-transition);
+  1763→  1763→  1763→}
+  1764→  1764→  1764→
+  1765→  1765→  1765→.velure-shop-sidebar-list a:hover,
+  1766→  1766→  1766→.velure-shop-sidebar-list label:hover {
+  1767→  1767→  1767→  color: var(--v-color-contrast);
+  1768→  1768→  1768→}
+  1769→  1769→  1769→
+  1770→  1770→  1770→.velure-shop-sidebar-list .count {
+  1771→  1771→  1771→  margin-left: auto;
+  1772→  1772→  1772→  font-size: 0.75rem;
+  1773→  1773→  1773→  color: #aaa;
+  1774→  1774→  1774→}
+  1775→  1775→  1775→
+  1776→  1776→  1776→.velure-color-swatch {
+  1777→  1777→  1777→  width: 18px;
+  1778→  1778→  1778→  height: 18px;
+  1779→  1779→  1779→  border-radius: 50%;
+  1780→  1780→  1780→  border: 1px solid var(--v-color-border);
+  1781→  1781→  1781→  display: inline-block;
+  1782→  1782→  1782→}
+  1783→  1783→  1783→
+  1784→  1784→  1784→.velure-size-btn {
+  1785→  1785→  1785→  display: inline-flex;
+  1786→  1786→  1786→  align-items: center;
+  1787→  1787→  1787→  justify-content: center;
+  1788→  1788→  1788→  width: 40px;
+  1789→  1789→  1789→  height: 40px;
+  1790→  1790→  1790→  font-size: 0.75rem;
+  1791→  1791→  1791→  font-weight: 500;
+  1792→  1792→  1792→  border: 1px solid var(--v-color-border);
+  1793→  1793→  1793→  margin: 0 0.25rem 0.5rem 0;
+  1794→  1794→  1794→  cursor: pointer;
+  1795→  1795→  1795→  transition: all var(--v-transition);
+  1796→  1796→  1796→}
+  1797→  1797→  1797→
+  1798→  1798→  1798→.velure-size-btn:hover,
+  1799→  1799→  1799→.velure-size-btn.active {
+  1800→  1800→  1800→  background: var(--v-color-contrast);
+  1801→  1801→  1801→  color: var(--v-color-base);
+  1802→  1802→  1802→  border-color: var(--v-color-contrast);
+  1803→  1803→  1803→}
+  1804→  1804→  1804→
+  1805→  1805→  1805→.velure-price-range {
+  1806→  1806→  1806→  width: 100%;
+  1807→  1807→  1807→  -webkit-appearance: none;
+  1808→  1808→  1808→  appearance: none;
+  1809→  1809→  1809→  height: 3px;
+  1810→  1810→  1810→  background: var(--v-color-border);
+  1811→  1811→  1811→  border-radius: 2px;
+  1812→  1812→  1812→  outline: none;
+  1813→  1813→  1813→  margin: 0.75rem 0;
+  1814→  1814→  1814→}
+  1815→  1815→  1815→
+  1816→  1816→  1816→.velure-price-range::-webkit-slider-thumb {
+  1817→  1817→  1817→  -webkit-appearance: none;
+  1818→  1818→  1818→  width: 16px;
+  1819→  1819→  1819→  height: 16px;
+  1820→  1820→  1820→  background: var(--v-color-contrast);
+  1821→  1821→  1821→  border-radius: 50%;
+  1822→  1822→  1822→  cursor: pointer;
+  1823→  1823→  1823→}
+  1824→  1824→  1824→
+  1825→  1825→  1825→.velure-shop-main {
+  1826→  1826→  1826→  flex: 1;
+  1827→  1827→  1827→  min-width: 0;
+  1828→  1828→  1828→}
+  1829→  1829→  1829→
+  1830→  1830→  1830→.velure-shop-toolbar {
+  1831→  1831→  1831→  display: flex;
+  1832→  1832→  1832→  align-items: center;
+  1833→  1833→  1833→  justify-content: space-between;
+  1834→  1834→  1834→  flex-wrap: wrap;
+  1835→  1835→  1835→  gap: 0.75rem;
+  1836→  1836→  1836→  padding: 1rem 0;
+  1837→  1837→  1837→  border-bottom: 1px solid var(--v-color-border);
+  1838→  1838→  1838→  margin-bottom: 1.5rem;
+  1839→  1839→  1839→}
+  1840→  1840→  1840→
+  1841→  1841→  1841→.velure-shop-sort {
+  1842→  1842→  1842→  padding: 0.5rem 1rem;
+  1843→  1843→  1843→  font-size: 0.8rem;
+  1844→  1844→  1844→  border: 1px solid var(--v-color-border);
+  1845→  1845→  1845→  background: var(--v-color-white);
+  1846→  1846→  1846→  color: var(--v-color-contrast);
+  1847→  1847→  1847→}
+  1848→  1848→  1848→
+  1849→  1849→  1849→.velure-shop-pagination {
+  1850→  1850→  1850→  display: flex;
+  1851→  1851→  1851→  align-items: center;
+  1852→  1852→  1852→  justify-content: center;
+  1853→  1853→  1853→  gap: 0.25rem;
+  1854→  1854→  1854→  margin-top: 3rem;
+  1855→  1855→  1855→  padding-top: 2rem;
+  1856→  1856→  1856→  border-top: 1px solid var(--v-color-border);
+  1857→  1857→  1857→}
+  1858→  1858→  1858→
+  1859→  1859→  1859→.velure-shop-pagination a,
+  1860→  1860→  1860→.velure-shop-pagination span {
+  1861→  1861→  1861→  display: inline-flex;
+  1862→  1862→  1862→  align-items: center;
+  1863→  1863→  1863→  justify-content: center;
+  1864→  1864→  1864→  min-width: 40px;
+  1865→  1865→  1865→  height: 40px;
+  1866→  1866→  1866→  font-size: 0.85rem;
+  1867→  1867→  1867→  border: 1px solid var(--v-color-border);
+  1868→  1868→  1868→  transition: all var(--v-transition);
+  1869→  1869→  1869→}
+  1870→  1870→  1870→
+  1871→  1871→  1871→.velure-shop-pagination a:hover,
+  1872→  1872→  1872→.velure-shop-pagination .current {
+  1873→  1873→  1873→  background: var(--v-color-contrast);
+  1874→  1874→  1874→  color: var(--v-color-base);
+  1875→  1875→  1875→  border-color: var(--v-color-contrast);
+  1876→  1876→  1876→}
+  1877→  1877→  1877→
+  1878→  1878→  1878→@media (max-width: 1024px) {
+  1879→  1879→  1879→  .velure-shop-sidebar { display: none; }
+  1880→  1880→  1880→  .velure-shop-sidebar.velure-open {
+  1881→  1881→  1881→    display: block;
+  1882→  1882→  1882→    position: fixed;
+  1883→  1883→  1883→    top: 0; left: 0; bottom: 0;
+  1884→  1884→  1884→    width: 300px;
+  1885→  1885→  1885→    max-width: 85vw;
+  1886→  1886→  1886→    background: var(--v-color-white);
+  1887→  1887→  1887→    z-index: 1500;
+  1888→  1888→  1888→    padding: 2rem 1.5rem;
+  1889→  1889→  1889→    overflow-y: auto;
+  1890→  1890→  1890→    box-shadow: 5px 0 30px rgba(0,0,0,0.1);
+  1891→  1891→  1891→  }
+  1892→  1892→  1892→  #velure-filter-toggle { display: inline-flex !important; }
+  1893→  1893→  1893→}
+  1894→  1894→  1894→
+  1895→  1895→  1895→
+  1896→  1896→  1896→/* ────────────────────────────
+  1897→  1897→  1897→   PRODUCT GALLERY (Single)
+  1898→  1898→  1898→   ──────────────────────────── */
+  1899→  1899→  1899→
+  1900→  1900→  1900→.velure-product-gallery {
+  1901→  1901→  1901→  position: relative;
+  1902→  1902→  1902→}
+  1903→  1903→  1903→
+  1904→  1904→  1904→.velure-product-gallery-main {
+  1905→  1905→  1905→  overflow: hidden;
+  1906→  1906→  1906→  border-radius: 2px;
+  1907→  1907→  1907→  margin-bottom: 1rem;
+  1908→  1908→  1908→  aspect-ratio: 4/5;
+  1909→  1909→  1909→  background: var(--v-color-soft);
+  1910→  1910→  1910→}
+  1911→  1911→  1911→
+  1912→  1912→  1912→.velure-product-gallery-main img {
+  1913→  1913→  1913→  width: 100%;
+  1914→  1914→  1914→  height: 100%;
+  1915→  1915→  1915→  object-fit: cover;
+  1916→  1916→  1916→}
+  1917→  1917→  1917→
+  1918→  1918→  1918→.velure-product-gallery-thumbs {
+  1919→  1919→  1919→  display: flex;
+  1920→  1920→  1920→  gap: 0.5rem;
+  1921→  1921→  1921→}
+  1922→  1922→  1922→
+  1923→  1923→  1923→.velure-product-gallery-thumb {
+  1924→  1924→  1924→  width: 80px;
+  1925→  1925→  1925→  height: 100px;
+  1926→  1926→  1926→  overflow: hidden;
+  1927→  1927→  1927→  border: 2px solid transparent;
+  1928→  1928→  1928→  cursor: pointer;
+  1929→  1929→  1929→  transition: border-color var(--v-transition);
+  1930→  1930→  1930→  background: var(--v-color-soft);
+  1931→  1931→  1931→}
+  1932→  1932→  1932→
+  1933→  1933→  1933→.velure-product-gallery-thumb.active,
+  1934→  1934→  1934→.velure-product-gallery-thumb:hover {
+  1935→  1935→  1935→  border-color: var(--v-color-contrast);
+  1936→  1936→  1936→}
+  1937→  1937→  1937→
+  1938→  1938→  1938→.velure-product-gallery-thumb img {
+  1939→  1939→  1939→  width: 100%;
+  1940→  1940→  1940→  height: 100%;
+  1941→  1941→  1941→  object-fit: cover;
+  1942→  1942→  1942→}
+  1943→  1943→  1943→
+  1944→  1944→  1944→.velure-product-detail { padding: 0; }
+  1945→  1945→  1945→
+  1946→  1946→  1946→.velure-product-colors,
+  1947→  1947→  1947→.velure-product-sizes {
+  1948→  1948→  1948→  display: flex;
+  1949→  1949→  1949→  gap: 0.5rem;
+  1950→  1950→  1950→  flex-wrap: wrap;
+  1951→  1951→  1951→  margin: 1rem 0;
+  1952→  1952→  1952→}
+  1953→  1953→  1953→
+  1954→  1954→  1954→.velure-color-option {
+  1955→  1955→  1955→  width: 28px;
+  1956→  1956→  1956→  height: 28px;
+  1957→  1957→  1957→  border-radius: 50%;
+  1958→  1958→  1958→  border: 2px solid transparent;
+  1959→  1959→  1959→  cursor: pointer;
+  1960→  1960→  1960→  position: relative;
+  1961→  1961→  1961→  transition: border-color var(--v-transition);
+  1962→  1962→  1962→}
+  1963→  1963→  1963→
+  1964→  1964→  1964→.velure-color-option.active {
+  1965→  1965→  1965→  border-color: var(--v-color-contrast);
+  1966→  1966→  1966→}
+  1967→  1967→  1967→
+  1968→  1968→  1968→.velure-product-qty {
+  1969→  1969→  1969→  display: inline-flex;
+  1970→  1970→  1970→  align-items: center;
+  1971→  1971→  1971→  border: 1px solid var(--v-color-border);
+  1972→  1972→  1972→}
+  1973→  1973→  1973→
+  1974→  1974→  1974→.velure-product-qty button {
+  1975→  1975→  1975→  width: 40px;
+  1976→  1976→  1976→  height: 40px;
+  1977→  1977→  1977→  display: flex;
+  1978→  1978→  1978→  align-items: center;
+  1979→  1979→  1979→  justify-content: center;
+  1980→  1980→  1980→  font-size: 1rem;
+  1981→  1981→  1981→  transition: background var(--v-transition);
+  1982→  1982→  1982→}
+  1983→  1983→  1983→
+  1984→  1984→  1984→.velure-product-qty button:hover {
+  1985→  1985→  1985→  background: var(--v-color-soft);
+  1986→  1986→  1986→}
+  1987→  1987→  1987→
+  1988→  1988→  1988→.velure-product-qty input {
+  1989→  1989→  1989→  width: 50px;
+  1990→  1990→  1990→  height: 40px;
+  1991→  1991→  1991→  text-align: center;
+  1992→  1992→  1992→  font-size: 0.875rem;
+  1993→  1993→  1993→  border-left: 1px solid var(--v-color-border);
+  1994→  1994→  1994→  border-right: 1px solid var(--v-color-border);
+  1995→  1995→  1995→}
+  1996→  1996→  1996→
+  1997→  1997→  1997→.velure-product-accordion {
+  1998→  1998→  1998→  border-top: 1px solid var(--v-color-border);
+  1999→  1999→  1999→  margin-top: 2rem;
+  2000→  2000→  2000→}
+  2001→
+  2002→[showing lines 1-2000 of 2002; use offset=2001 with limit to continue reading]
