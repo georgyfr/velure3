@@ -1,21 +1,26 @@
 {
-  "$schema": "https://schemas.wp.org/wp/6.0/theme.json",
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
   "version": 1,
   "settings": {
     "color": {
       "palette": [
-        { "slug": "base", "color": "#FAFAF8", "name": "Base" },
-        { "slug": "contrast", "color": "#1A1A1A", "name": "Contrast" },
-        { "slug": "secondary", "color": "#C8A97E", "name": "Secondary / Gold" },
-        { "slug": "accent", "color": "#8B5E3C", "name": "Accent / Cognac" }
+        { "slug": "base",      "color": "#FAFAF8", "name": "Base" },
+        { "slug": "contrast",  "color": "#1A1A1A", "name": "Contrast" },
+        { "slug": "secondary", "color": "#C8A97E", "name": "Secondary" },
+        { "slug": "accent",    "color": "#8B5E3C", "name": "Accent" },
+        { "slug": "muted",     "color": "#E8E4DE", "name": "Muted" },
+        { "slug": "soft",      "color": "#F5F0EB", "name": "Soft" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        { "fontFamily": "'Inter', sans-serif", "slug": "sans" },
+        { "fontFamily": "'Playfair Display', serif", "slug": "serif" },
+        { "fontFamily": "'Cormorant Garamond', serif", "slug": "elegant" }
       ]
     },
     "spacing": {
-      "units": [ "px", "rem", "em", "%", "vw", "vh" ]
-    },
-    "layout": {
-      "contentSize": "1200px",
-      "wideSize": "1400px"
+      "units": [ "px", "rem", "em", "%" ]
     }
   }
 }

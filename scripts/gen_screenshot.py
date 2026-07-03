@@ -1,98 +1,79 @@
 #!/usr/bin/env python3
-"""Generate a simple screenshot.png for the NutriVitaX Pro theme."""
+"""Generate Velure3 theme screenshot.png (1200x900)"""
+
 from PIL import Image, ImageDraw, ImageFont
+import os
 
 W, H = 1200, 900
-img = Image.new('RGB', (W, H), '#FFFFFF')
-d = ImageDraw.Draw(img)
+img = Image.new('RGB', (W, H), '#FAFAF8')
+draw = ImageDraw.Draw(img)
 
-# Background gradient effect
-for y in range(H):
-    r = int(255 - (y / H) * 15)
-    g = int(255 - (y / H) * 5)
-    b = int(255 - (y / H) * 5)
-    d.line([(0, y), (W, y)], fill=(r, g, b))
+try:
+    font_serif = ImageFont.truetype('/usr/share/fonts/truetype/english/Tinos-Bold.ttf', 42)
+    font_sans = ImageFont.truetype('/usr/share/fonts/truetype/english/Carlito-Bold.ttf', 14)
+    font_sans_sm = ImageFont.truetype('/usr/share/fonts/truetype/english/Carlito.ttf', 12)
+except:
+    font_serif = ImageFont.load_default()
+    font_sans = font_serif
+    font_sans_sm = font_serif
 
 # Top bar
-d.rectangle([0, 0, W, 40], fill='#F8F9FA')
-d.line([(0, 40), (W, 40)], fill='#E9ECEF', width=1)
+draw.rectangle([(0, 0), (W, 32)], fill='#1A1A1A')
+draw.text((W//2 - 200, 8), "Livraison gratuite a partir de 75 EUR  |  Retours sous 30 jours", fill='#FAFAF8', font=font_sans_sm)
 
-# Header bar
-d.rectangle([0, 40, W, 110], fill='#FFFFFF')
-d.line([(0, 110), (W, 110)], fill='#E9ECEF', width=1)
+# Navbar
+draw.rectangle([(0, 32), (W, 100)], fill='#FAFAF8')
+draw.line([(0, 100), (W, 100)], fill='#E5E0D8', width=1)
 
-# Logo area
-d.ellipse([50, 55, 85, 90], fill='#F0F9F4', outline='#1A6B3A', width=2)
-d.text((62, 62), "N", fill='#1A6B3A')
-try:
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
-    font_sm = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14)
-    font_md = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 16)
-    font_lg = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 32)
-    font_xl = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 42)
-except:
-    font = font_sm = font_md = font_lg = font_xl = ImageFont.load_default()
-
-d.text((95, 62), "NutriVitaX", fill='#12243A', font=font)
-d.text((240, 66), "Pro", fill='#F4A900', font=font)
-
-# Nav items
-nav_items = ['Accueil', 'Produits', 'Quiz', 'Blog', 'Contact']
-x = 500
-for item in nav_items:
-    d.text((x, 68), item, fill='#12243A', font=font_md)
-    x += 100
+# Logo
+draw.text((W//2 - 60, 52), "VELURE", fill='#1A1A1A', font=font_serif)
 
 # Hero section
-d.rectangle([0, 110, W, 500], fill='#12243A')
-# Overlay gradient
-for y in range(110, 500):
-    alpha = int((y - 110) / 390 * 80)
-    d.line([(0, y), (W, y)], fill=(26, 107 + alpha // 3, 58 + alpha // 5))
+hero_top = 180
+hero_bottom = 620
+draw.rectangle([(0, hero_top), (W, hero_bottom)], fill='#E8E4DE')
+draw.rectangle([(0, hero_top), (500, hero_bottom)], fill='#1A1A1A')
 
-# Hero content
-d.text((W//2 - 280, 180), "NUTRACEUTIQUE PREMIUM", fill='#2ECC71', font=font_md)
-d.text((W//2 - 350, 230), "Optimisez votre", fill='#FFFFFF', font=font_xl)
-d.text((W//2 - 280, 290), "sant\u00e9 naturelle", fill='#FFFFFF', font=font_xl)
-d.text((W//2 - 340, 360), "Compl\u00e9ments alimentaires formul\u00e9s par des chercheurs,", fill='#CCCCCC', font=font_md)
-d.text((W//2 - 280, 385), "test\u00e9s en laboratoire, d\u00e9livr\u00e9s chez vous.", fill='#CCCCCC', font=font_md)
+draw.text((60, hero_top + 40), "NOUVELLE COLLECTION", fill='#C8A97E', font=font_sans)
 
-# CTA button
-d.rounded_rectangle([W//2 - 180, 430, W//2 + 20, 475], radius=12, fill='#F4A900')
-d.text((W//2 - 160, 445), "COMMENCER LE QUIZ", fill='#12243A', font=font_md)
-d.rounded_rectangle([W//2 + 40, 430, W//2 + 230, 475], radius=12, outline='#FFFFFF', width=2)
-d.text((W//2 + 60, 445), "BOUTIQUE", fill='#FFFFFF', font=font_md)
+try:
+    font_title = ImageFont.truetype('/usr/share/fonts/truetype/english/Tinos-Bold.ttf', 52)
+except:
+    font_title = font_serif
 
-# Trust bar
-d.rectangle([0, 500, W, 560], fill='#F0F9F4')
-trusts = ['Certifi\u00e9 Bio', 'GMP', 'ISO 22000', 'HACCP', 'Livraison 50\u20ac+', 'Retour 30 jours']
-x = 80
-for t in trusts:
-    d.text((x, 525), "\u2713 " + t, fill='#1A6B3A', font=font_sm)
-    x += 185
+draw.text((60, hero_top + 75), "L'Elegance", fill='#FAFAF8', font=font_title)
+draw.text((60, hero_top + 140), "Minimaliste", fill='#FAFAF8', font=font_title)
 
-# Counter
-d.text((W - 250, 520), "15 847", fill='#1A6B3A', font=font_lg)
-d.text((W - 230, 545), "clients satisfaits", fill='#6B7280', font=font_sm)
+draw.rectangle([(60, hero_top + 220), (260, hero_top + 265)], fill='#1A1A1A')
+draw.text((85, hero_top + 232), "DECOUVRIR", fill='#FAFAF8', font=font_sans)
 
-# Product cards section
-d.text((W//2 - 200, 590), "Nos Formulations Vedettes", fill='#12243A', font=font_lg)
+# Features bar
+fy = 630
+draw.rectangle([(0, fy), (W, fy + 70)], fill='#FAFAF8')
+draw.line([(0, fy), (W, fy)], fill='#E5E0D8', width=1)
+draw.line([(0, fy + 70), (W, fy + 70)], fill='#E5E0D8', width=1)
 
-# 3 product cards
-cards = [
-    ('W', 'Whey Prot\u00e9ine', '49,99 \u20ac', '#F0F9F4'),
-    ('C', 'Cr\u00e9atine', '24,99 \u20ac', '#E8F8F0'),
-    ('P', 'Pre-Workout', '39,99 \u20ac', '#FFF8E1'),
-]
-for i, (letter, name, price, bg) in enumerate(cards):
-    cx = 120 + i * 350
-    d.rounded_rectangle([cx, 640, cx + 300, 850], radius=16, fill=bg, outline='#E9ECEF')
-    d.ellipse([cx + 100, 660, cx + 200, 760], fill=bg)
-    d.text((cx + 140, 690), letter, fill='#1A6B3A', font=font_xl)
-    d.text((cx + 90, 775), name, fill='#12243A', font=font_md)
-    d.text((cx + 100, 805), price, fill='#1A6B3A', font=font)
-    # Stars
-    d.text((cx + 100, 825), '\u2605\u2605\u2605\u2605\u2605 (124 avis)', fill='#F4A900', font=font_sm)
+features = ["Livraison Express", "Retours Gratuits", "Paiement Securise", "Service Client 7j/7"]
+descs = ["Sous 24-48h en France", "Sous 30 jours, sans frais", "SSL & cryptage 256 bits", "Par chat, email ou tel"]
+for i in range(4):
+    x = 60 + i * 280
+    draw.text((x, fy + 12), features[i], fill='#1A1A1A', font=font_sans)
+    draw.text((x, fy + 35), descs[i], fill='#888888', font=font_sans_sm)
+    if i < 3:
+        draw.line([(x + 260, fy + 15), (x + 260, fy + 60)], fill='#E5E0D8', width=1)
 
-img.save('/home/z/my-project/lampstack-wordpress/wordpress/wp-content/themes/nutrivitax-pro/screenshot.png')
-print("screenshot.png created (1200x900)")
+# Product section
+py = 730
+draw.text((W//2 - 60, py), "Pieces Vedettes", fill='#1A1A1A', font=font_sans)
+
+card_y = py + 35
+for i in range(4):
+    x = 60 + i * 270
+    draw.rectangle([(x, card_y), (x + 240, card_y + 100)], fill='#E8E4DE')
+    draw.text((x + 10, card_y + 108), "Nom du produit", fill='#1A1A1A', font=font_sans_sm)
+    draw.text((x + 10, card_y + 126), "195,00 EUR", fill='#888888', font=font_sans_sm)
+
+output_path = '/home/z/my-project/velure3/screenshot.png'
+img.save(output_path, 'PNG')
+print(f"Screenshot saved: {output_path}")
+print(f"Size: {os.path.getsize(output_path)} bytes")

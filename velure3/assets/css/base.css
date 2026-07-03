@@ -2,7 +2,6 @@
    VELURE3 — Base Styles
    ═══════════════════════════════════════════ */
 
-/* --- CSS Custom Properties --- */
 :root {
   --v-color-base: #FAFAF8;
   --v-color-contrast: #1A1A1A;
@@ -26,7 +25,6 @@
   --v-gutter: 1.5rem;
 }
 
-/* --- Reset & Base --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
@@ -46,26 +44,12 @@ body {
   padding: 0;
 }
 
-/* ── WordPress Admin Bar ── */
-#wpadminbar {
-  position: fixed !important;
-}
-
-.admin-bar .velure-navbar {
-  top: 32px;
-}
-
-.admin-bar .velure-search-overlay {
-  padding-top: calc(15vh + 32px);
-}
-
+#wpadminbar { position: fixed !important; }
+.admin-bar .velure-navbar { top: 32px; }
+.admin-bar .velure-search-overlay { padding-top: calc(15vh + 32px); }
 @media (max-width: 782px) {
-  .admin-bar .velure-navbar {
-    top: 46px;
-  }
-  .admin-bar .velure-search-overlay {
-    padding-top: calc(15vh + 46px);
-  }
+  .admin-bar .velure-navbar { top: 46px; }
+  .admin-bar .velure-search-overlay { padding-top: calc(15vh + 46px); }
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -74,7 +58,6 @@ ul, ol { list-style: none; }
 button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 input, textarea { font: inherit; border: none; outline: none; }
 
-/* --- Container --- */
 .velure-container {
   width: 100%;
   max-width: var(--v-container);
@@ -83,7 +66,6 @@ input, textarea { font: inherit; border: none; outline: none; }
   box-sizing: border-box;
 }
 
-/* --- Typography --- */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--v-font-serif);
   font-weight: 500;
@@ -96,15 +78,13 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 3rem;
 }
 
-.velure-section-heading h2,
-h2.velure-section-heading {
+.velure-section-heading h2 {
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: -0.02em;
   margin-bottom: 0.75rem;
 }
 
-.velure-section-heading p,
-p.velure-section-heading + p {
+.velure-section-heading p {
   font-size: 0.95rem;
   color: #666;
   max-width: 500px;
@@ -123,7 +103,6 @@ p.velure-section-heading + p {
   display: block;
 }
 
-/* --- Buttons --- */
 .velure-btn {
   display: inline-flex;
   align-items: center;
@@ -145,7 +124,6 @@ p.velure-section-heading + p {
   background: var(--v-color-contrast);
   color: var(--v-color-base);
 }
-
 .velure-btn-primary:hover {
   background: #333;
   color: var(--v-color-base);
@@ -157,7 +135,6 @@ p.velure-section-heading + p {
   color: var(--v-color-contrast);
   border: 1.5px solid var(--v-color-contrast);
 }
-
 .velure-btn-outline:hover {
   background: var(--v-color-contrast);
   color: var(--v-color-base);
@@ -167,13 +144,11 @@ p.velure-section-heading + p {
   background: var(--v-color-secondary);
   color: #fff;
 }
-
 .velure-btn-gold:hover {
   background: #b8955f;
   color: #fff;
 }
 
-/* --- Section Spacing --- */
 .velure-section {
   padding: 5rem 0;
   width: 100%;
@@ -183,64 +158,43 @@ p.velure-section-heading + p {
   background: var(--v-color-contrast);
   color: var(--v-color-base);
 }
-
 .velure-section-dark h2,
 .velure-section-dark h3 {
   color: var(--v-color-base);
 }
 
-.velure-section-soft {
-  background: var(--v-color-soft);
-}
+.velure-section-soft { background: var(--v-color-soft); }
+.velure-section-muted { background: var(--v-color-muted); }
 
-.velure-section-muted {
-  background: var(--v-color-muted);
-}
-
-/* --- Grid Utilities --- */
-.velure-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
+.velure-grid { display: grid; gap: 1.5rem; }
 .velure-grid-2 { grid-template-columns: repeat(2, 1fr); }
 .velure-grid-3 { grid-template-columns: repeat(3, 1fr); }
 .velure-grid-4 { grid-template-columns: repeat(4, 1fr); }
-.velure-grid-7 { grid-template-columns: repeat(7, 1fr); gap: 0.75rem; }
 
-@media (max-width: 1200px) {
-  .velure-grid-7 { grid-template-columns: repeat(4, 1fr); }
-}
 @media (max-width: 1024px) {
   .velure-grid-4 { grid-template-columns: repeat(3, 1fr); }
-  .velure-grid-7 { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 768px) {
   .velure-grid-2,
   .velure-grid-3,
   .velure-grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .velure-grid-7 { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 }
 @media (max-width: 480px) {
   .velure-grid-2,
   .velure-grid-3,
-  .velure-grid-4,
-  .velure-grid-7 { grid-template-columns: 1fr; }
+  .velure-grid-4 { grid-template-columns: 1fr; }
 }
 
-/* --- Selection --- */
 ::selection {
   background: var(--v-color-secondary);
   color: #fff;
 }
 
-/* --- Scrollbar --- */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--v-color-base); }
 ::-webkit-scrollbar-thumb { background: var(--v-color-muted); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--v-color-secondary); }
 
-/* --- Loading Skeleton --- */
 @keyframes velure-shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -251,4 +205,14 @@ p.velure-section-heading + p {
   background-size: 200% 100%;
   animation: velure-shimmer 1.5s infinite;
   border-radius: var(--v-radius);
+}
+
+.velure-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.velure-animate.velure-visible {
+  opacity: 1;
+  transform: translateY(0);
 }

@@ -19,20 +19,16 @@
   position: relative;
   z-index: 1001;
 }
-
 .velure-topbar-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .velure-topbar-text { opacity: 0.8; }
-
 .velure-topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
 .velure-topbar-sep { opacity: 0.3; }
 .velure-topbar-link { opacity: 0.8; transition: opacity var(--v-transition); }
 .velure-topbar-link:hover { opacity: 1; }
-
 @media (max-width: 768px) {
   .velure-topbar-actions { display: none; }
 }
@@ -49,11 +45,9 @@
   transition: all var(--v-transition);
   width: 100%;
 }
-
 .velure-navbar.velure-scrolled {
   box-shadow: 0 1px 20px rgba(0,0,0,0.05);
 }
-
 .velure-navbar-inner {
   display: flex;
   align-items: center;
@@ -63,58 +57,50 @@
 }
 
 /* Logo */
-.velure-logo { display: flex; align-items: center; }
+.velure-logo { display: flex; align-items: center; flex-shrink: 0; }
 .velure-logo-text {
   font-family: var(--v-font-serif);
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 600;
   letter-spacing: 0.15em;
-  text-transform: uppercase;
   color: var(--v-color-contrast);
 }
 
 /* Desktop Nav */
-.velure-nav { display: flex; align-items: center; }
-
+.velure-nav { display: flex; align-items: center; flex: 1; }
 .velure-nav-list {
   display: flex;
-  gap: 0;
   align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-
-.velure-nav-item {
-  position: relative;
-}
-
+.velure-nav-item { position: relative; }
 .velure-nav-link {
-  display: block;
-  padding: 0.5rem 1rem;
+  font-family: var(--v-font-sans);
   font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--v-color-contrast);
+  padding: 0.25rem 0;
+  position: relative;
   transition: color var(--v-transition);
 }
-
-.velure-nav-link:hover {
-  color: var(--v-color-accent);
-}
-
-.velure-nav-highlight {
-  color: var(--v-color-accent) !important;
-  position: relative;
-}
-
-.velure-nav-highlight::after {
+.velure-nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0.25rem;
-  left: 1rem;
-  right: 1rem;
+  bottom: -2px;
+  left: 0;
+  width: 0;
   height: 1px;
-  background: var(--v-color-accent);
+  background: var(--v-color-secondary);
+  transition: width var(--v-transition);
 }
+.velure-nav-link:hover::after { width: 100%; }
+.velure-nav-highlight { color: var(--v-color-secondary); }
+.velure-nav-highlight::after { background: var(--v-color-secondary); }
 
 /* Mega Menu */
 .velure-mega-menu {
@@ -125,102 +111,95 @@
   width: 100vw;
   background: var(--v-color-white);
   border-top: 1px solid var(--v-color-border);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
   opacity: 0;
   visibility: hidden;
   transform: translateX(-50%) translateY(10px);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   padding: 2.5rem 0;
+  z-index: 100;
 }
-
-.velure-nav-item:hover .velure-mega-menu {
+.velure-nav-item:hover > .velure-mega-menu {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
-
 .velure-mega-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) 1.5fr;
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
 }
-
+.velure-mega-col {}
 .velure-mega-title {
   font-family: var(--v-font-sans);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
   color: var(--v-color-contrast);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--v-color-border);
 }
-
+.velure-mega-links { list-style: none; padding: 0; margin: 0; }
 .velure-mega-links li { margin-bottom: 0.5rem; }
 .velure-mega-links a {
-  font-size: 0.875rem;
-  color: #555;
+  font-size: 0.85rem;
+  color: #666;
   transition: color var(--v-transition);
 }
-.velure-mega-links a:hover { color: var(--v-color-accent); }
-
-.velure-mega-cta {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 100%;
-  min-height: 200px;
-  padding: 2rem;
+.velure-mega-links a:hover { color: var(--v-color-contrast); }
+.velure-mega-visual {
   background: var(--v-color-soft);
-  border-radius: 2px;
-  transition: background var(--v-transition);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
 }
-
-.velure-mega-cta:hover { background: var(--v-color-muted); }
-
+.velure-mega-cta {
+  display: block;
+}
 .velure-mega-cta-label {
+  display: block;
+  font-family: var(--v-font-sans);
   font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--v-color-secondary);
   margin-bottom: 0.5rem;
 }
-
 .velure-mega-cta-title {
   font-family: var(--v-font-serif);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  color: var(--v-color-contrast);
 }
 
 /* Header Actions */
 .velure-header-actions {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
-
 .velure-header-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  transition: background var(--v-transition);
-  position: relative;
   color: var(--v-color-contrast);
+  transition: color var(--v-transition);
+  position: relative;
 }
-
-.velure-header-btn:hover {
-  background: var(--v-color-muted);
-}
-
+.velure-header-btn:hover { color: var(--v-color-secondary); }
+.velure-cart-btn { position: relative; }
 .velure-cart-count {
   position: absolute;
   top: 2px;
   right: 2px;
   width: 16px;
   height: 16px;
-  background: var(--v-color-accent);
+  background: var(--v-color-secondary);
   color: #fff;
   font-size: 0.6rem;
   font-weight: 700;
@@ -230,1859 +209,920 @@
   justify-content: center;
 }
 
-/* Hamburger */
+/* Mobile Menu Toggle */
 .velure-menu-toggle {
   display: none;
   flex-direction: column;
   gap: 5px;
-  width: 24px;
-  padding: 4px 0;
+  padding: 4px;
 }
-
 .velure-menu-toggle span {
   display: block;
-  height: 1.5px;
+  width: 22px;
+  height: 2px;
   background: var(--v-color-contrast);
   transition: all var(--v-transition);
-  border-radius: 1px;
+}
+
+/* Mobile Menu */
+.velure-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--v-transition);
+}
+.velure-mobile-overlay.velure-active {
+  opacity: 1;
+  visibility: visible;
+}
+.velure-mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100%;
+  background: var(--v-color-white);
+  z-index: 2001;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.velure-mobile-menu.velure-active { right: 0; }
+.velure-mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-mobile-close {
+  color: var(--v-color-contrast);
+}
+.velure-mobile-nav-list {
+  list-style: none;
+  padding: 1.5rem;
+  margin: 0;
+  flex: 1;
+}
+.velure-mobile-nav-list li {
+  margin-bottom: 0.25rem;
+}
+.velure-mobile-nav-list a {
+  display: block;
+  padding: 0.75rem 0;
+  font-family: var(--v-font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--v-color-contrast);
+  border-bottom: 1px solid var(--v-color-muted);
+}
+.velure-mobile-nav-list a.velure-nav-highlight { color: var(--v-color-secondary); }
+.velure-mobile-menu-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--v-color-border);
+}
+.velure-mobile-menu-link {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  color: #666;
 }
 
 /* Search Overlay */
 .velure-search-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(250, 250, 248, 0.97);
-  z-index: 2000;
+  inset: 0;
+  background: rgba(26,26,26,0.95);
+  z-index: 3000;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   padding-top: 15vh;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: all var(--v-transition);
 }
-
 .velure-search-overlay.velure-active {
   opacity: 1;
   visibility: visible;
 }
-
-.velure-search-form {
-  width: 100%;
-  max-width: 700px;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  border-bottom: 2px solid var(--v-color-contrast);
-  gap: 1rem;
-}
-
+.velure-search-inner { width: 100%; max-width: 600px; padding: 0 1.5rem; }
+.velure-search-form { position: relative; }
 .velure-search-input {
-  flex: 1;
-  font-size: 1.5rem;
-  font-family: var(--v-font-serif);
-  padding: 0.75rem 0;
+  width: 100%;
+  padding: 1rem 3.5rem 1rem 0;
   background: transparent;
-  color: var(--v-color-contrast);
+  border: none;
+  border-bottom: 2px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-family: var(--v-font-serif);
+  font-size: 1.5rem;
+  outline: none;
 }
-
-.velure-search-input::placeholder {
-  color: #999;
-}
-
+.velure-search-input::placeholder { color: rgba(255,255,255,0.4); }
 .velure-search-submit {
-  color: var(--v-color-contrast);
-  flex-shrink: 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.6);
+  padding: 0.5rem;
 }
-
 .velure-search-close {
-  color: #999;
-  flex-shrink: 0;
-  transition: color var(--v-transition);
+  position: absolute;
+  right: 1.5rem;
+  top: 2rem;
+  color: rgba(255,255,255,0.6);
 }
 
-.velure-search-close:hover { color: var(--v-color-contrast); }
-
-/* Mobile Menu */
-.velure-mobile-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: 1500;
-  opacity: 0;
-  visibility: hidden;
-  transition: all var(--v-transition);
-}
-
-.velure-mobile-overlay.velure-active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.velure-mobile-menu {
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: 320px;
-  max-width: 85vw;
-  background: var(--v-color-white);
-  z-index: 1600;
-  transform: translateX(-100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.velure-mobile-menu.velure-active {
-  transform: translateX(0);
-}
-
-.velure-mobile-menu-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-mobile-close {
-  width: 40px; height: 40px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.velure-mobile-nav-list {
-  flex: 1;
-  padding: 1.5rem;
-}
-
-.velure-mobile-nav-list li {
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-mobile-nav-list a {
-  display: block;
-  padding: 1rem 0;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.velure-mobile-menu-footer {
-  padding: 1.5rem;
-  border-top: 1px solid var(--v-color-border);
-  display: flex;
-  gap: 1.5rem;
-}
-
-.velure-mobile-menu-link {
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  color: #888;
-}
-
-/* Header Responsive */
 @media (max-width: 1024px) {
   .velure-nav { display: none; }
   .velure-menu-toggle { display: flex; }
-  .velure-mega-menu { display: none; }
 }
-
 
 /* ────────────────────────────
-   FOOTER
+   HERO SLIDER
    ──────────────────────────── */
+.v-hero-slider {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  min-height: 500px;
+  max-height: 720px;
+  overflow: hidden;
+  background: var(--v-color-soft);
+}
+.v-hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+}
+.v-hero-slide--active {
+  opacity: 1;
+  z-index: 2;
+}
+.v-hero-slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.v-hero-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(26,26,26,0.5) 0%, rgba(26,26,26,0.15) 60%, transparent 100%);
+}
+.v-hero-slide-content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4rem;
+  max-width: 650px;
+  color: #fff;
+}
+.v-hero-slide-content .velure-eyebrow {
+  color: var(--v-color-secondary);
+  margin-bottom: 1rem;
+}
+.v-hero-slide-content h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+.v-hero-slide-content h2 br { display: block; }
+.v-hero-slide-content .v-hero-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+.v-hero-slide-content .v-hero-subtitle br { display: block; }
 
-.velure-footer {
-  margin-top: 5rem;
+/* Hero Dots */
+.v-hero-dots {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+.v-hero-dot {
+  width: 32px;
+  height: 3px;
+  background: rgba(255,255,255,0.4);
+  border: none;
+  cursor: pointer;
+  transition: all var(--v-transition);
+  padding: 0;
+}
+.v-hero-dot--active {
+  background: #fff;
+  width: 48px;
 }
 
-/* Newsletter Band */
+/* Hero Progress Bar */
+.v-hero-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  z-index: 10;
+}
+.v-hero-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--v-color-secondary);
+}
+.v-hero-progress-bar--running {
+  animation: v-hero-progress-anim 5s linear forwards;
+}
+@keyframes v-hero-progress-anim {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .v-hero-slider { height: 60vh; min-height: 400px; max-height: 600px; }
+  .v-hero-slide-content { padding: 0 1.5rem; }
+  .v-hero-slide-content h2 { font-size: 1.75rem; }
+}
+
+/* ────────────────────────────
+   FEATURES BAR
+   ──────────────────────────── */
+.velure-features {
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.velure-feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  gap: 0.75rem;
+}
+.velure-feature-item:not(:last-child) {
+  border-right: 1px solid var(--v-color-border);
+}
+.velure-feature-icon {
+  color: var(--v-color-secondary);
+  display: flex;
+}
+.velure-feature-title {
+  font-family: var(--v-font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.velure-feature-desc {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .velure-features-grid { grid-template-columns: repeat(2, 1fr); }
+  .velure-feature-item:nth-child(2) { border-right: none; }
+}
+@media (max-width: 480px) {
+  .velure-features-grid { grid-template-columns: 1fr; }
+  .velure-feature-item { border-right: none !important; border-bottom: 1px solid var(--v-color-border); }
+  .velure-feature-item:last-child { border-bottom: none; }
+}
+
+/* ────────────────────────────
+   CATEGORY CAROUSEL
+   ──────────────────────────── */
+.velure-categories {}
+.velure-carousel {
+  position: relative;
+}
+.velure-carousel-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 1rem;
+}
+.velure-carousel-track::-webkit-scrollbar { display: none; }
+
+.velure-category-card {
+  flex: 0 0 200px;
+  scroll-snap-align: start;
+  text-decoration: none;
+  display: block;
+}
+.velure-category-card-img {
+  width: 200px;
+  height: 270px;
+  background: var(--v-color-muted);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+.velure-category-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-category-card:hover .velure-category-card-img img {
+  transform: scale(1.05);
+}
+.velure-category-card-name {
+  font-family: var(--v-font-serif);
+  font-size: 1.1rem;
+  color: var(--v-color-contrast);
+  text-align: center;
+}
+.velure-category-card-count {
+  font-size: 0.75rem;
+  color: #999;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.velure-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-70%);
+  width: 40px;
+  height: 40px;
+  background: var(--v-color-white);
+  border: 1px solid var(--v-color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all var(--v-transition);
+  color: var(--v-color-contrast);
+}
+.velure-carousel-arrow:hover {
+  background: var(--v-color-contrast);
+  color: var(--v-color-white);
+  border-color: var(--v-color-contrast);
+}
+.velure-carousel-arrow--prev { left: -20px; }
+.velure-carousel-arrow--next { right: -20px; }
+
+@media (max-width: 768px) {
+  .velure-carousel-arrow { display: none; }
+  .velure-category-card { flex: 0 0 160px; }
+  .velure-category-card-img { width: 160px; height: 216px; }
+}
+
+/* ────────────────────────────
+   PRODUCT CARDS
+   ──────────────────────────── */
+.velure-product-card {
+  position: relative;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.velure-product-card-img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--v-color-muted);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.velure-product-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-product-card:hover .velure-product-card-img img {
+  transform: scale(1.05);
+}
+.velure-product-card-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--v-font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.velure-product-card-badge.new {
+  background: var(--v-color-secondary);
+  color: #fff;
+}
+.velure-product-card-badge.sale {
+  background: var(--v-color-accent);
+  color: #fff;
+}
+.velure-product-card-name {
+  font-family: var(--v-font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--v-color-contrast);
+  margin-bottom: 0.25rem;
+}
+.velure-product-card-price {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* ────────────────────────────
+   SPLIT BANNER
+   ──────────────────────────── */
+.velure-split-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 500px;
+}
+.velure-split-side {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.velure-split-side-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.velure-split-side--dark .velure-split-side-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(26,26,26,0.45);
+}
+.velure-split-side--light .velure-split-side-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.25);
+}
+.velure-split-side-content {
+  position: relative;
+  z-index: 2;
+  padding: 3rem;
+  max-width: 420px;
+}
+.velure-split-side--dark .velure-split-side-content { color: #fff; }
+.velure-split-side--light .velure-split-side-content { color: var(--v-color-contrast); }
+.velure-split-side-content .velure-eyebrow { margin-bottom: 0.75rem; }
+.velure-split-side--dark .velure-split-side-content .velure-eyebrow { color: var(--v-color-secondary); }
+.velure-split-side-content h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  margin-bottom: 1rem;
+}
+.velure-split-side-content p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .velure-split-banner { grid-template-columns: 1fr; }
+  .velure-split-side { min-height: 350px; }
+  .velure-split-side-content { padding: 2rem; }
+}
+
+/* ────────────────────────────
+   BRAND MARQUEE
+   ──────────────────────────── */
+.velure-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 2rem 0;
+  border-top: 1px solid var(--v-color-border);
+  border-bottom: 1px solid var(--v-color-border);
+}
+.velure-marquee-track {
+  display: inline-flex;
+  animation: velure-marquee-scroll 25s linear infinite;
+}
+.velure-marquee-item {
+  font-family: var(--v-font-serif);
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: var(--v-color-muted);
+  padding: 0 2rem;
+  white-space: nowrap;
+}
+@keyframes velure-marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ────────────────────────────
+   TESTIMONIALS
+   ──────────────────────────── */
+.velure-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.velure-testimonial-card {
+  background: var(--v-color-white);
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--v-color-border);
+}
+.velure-testimonial-stars {
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 1.25rem;
+}
+.velure-testimonial-text {
+  font-family: var(--v-font-elegant);
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--v-color-contrast);
+  margin-bottom: 1.5rem;
+}
+.velure-testimonial-author {
+  font-family: var(--v-font-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--v-color-contrast);
+}
+.velure-testimonial-role {
+  font-size: 0.78rem;
+  color: #999;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .velure-testimonials-grid { grid-template-columns: 1fr; }
+}
+
+/* ────────────────────────────
+   BLOG CARDS
+   ──────────────────────────── */
+.velure-blog-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.velure-blog-card-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: var(--v-color-muted);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.velure-blog-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-blog-card:hover .velure-blog-card-img img { transform: scale(1.05); }
+.velure-blog-card-meta {
+  font-size: 0.72rem;
+  color: var(--v-color-secondary);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.velure-blog-card-title {
+  font-family: var(--v-font-serif);
+  font-size: 1.15rem;
+  color: var(--v-color-contrast);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.velure-blog-card-excerpt {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* ────────────────────────────
+   INSTAGRAM FEED
+   ──────────────────────────── */
+.velure-instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.25rem;
+}
+.velure-instagram-item {
+  aspect-ratio: 1;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+.velure-instagram-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, opacity 0.3s ease;
+}
+.velure-instagram-item:hover img {
+  transform: scale(1.08);
+  opacity: 0.85;
+}
+.velure-instagram-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(26,26,26,0);
+  transition: background 0.3s ease;
+}
+.velure-instagram-item:hover::after {
+  background: rgba(26,26,26,0.15);
+}
+
+@media (max-width: 768px) {
+  .velure-instagram-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .velure-instagram-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ────────────────────────────
+   NEWSLETTER
+   ──────────────────────────── */
 .velure-newsletter-band {
   background: var(--v-color-soft);
   padding: 3.5rem 0;
 }
-
 .velure-newsletter-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
 }
-
 .velure-newsletter-title {
   font-family: var(--v-font-serif);
   font-size: 1.5rem;
   margin-bottom: 0.25rem;
 }
-
 .velure-newsletter-desc {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.85rem;
+  color: #888;
 }
-
 .velure-newsletter-form {
   display: flex;
   gap: 0;
   flex-shrink: 0;
 }
-
 .velure-newsletter-input {
-  width: 300px;
   padding: 0.875rem 1.25rem;
-  font-size: 0.875rem;
-  background: var(--v-color-white);
   border: 1px solid var(--v-color-border);
   border-right: none;
+  background: var(--v-color-white);
+  font-size: 0.85rem;
+  width: 280px;
+  color: var(--v-color-contrast);
 }
-
+.velure-newsletter-input::placeholder { color: #aaa; }
 .velure-newsletter-btn {
-  padding: 0.875rem 2rem;
+  padding: 0.875rem 1.75rem;
   background: var(--v-color-contrast);
   color: var(--v-color-base);
+  font-family: var(--v-font-sans);
   font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   border: 1px solid var(--v-color-contrast);
+  cursor: pointer;
   transition: all var(--v-transition);
 }
-
 .velure-newsletter-btn:hover {
   background: #333;
+  border-color: #333;
 }
 
 @media (max-width: 768px) {
-  .velure-newsletter-inner { flex-direction: column; text-align: center; }
-  .velure-newsletter-form { flex-direction: column; width: 100%; }
-  .velure-newsletter-input { width: 100%; border-right: 1px solid var(--v-color-border); }
-  .velure-newsletter-btn { width: 100%; }
+  .velure-newsletter-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .velure-newsletter-form { width: 100%; max-width: 400px; }
+  .velure-newsletter-input { flex: 1; width: auto; }
 }
 
-/* Main Footer */
-.velure-footer-main {
+/* ────────────────────────────
+   FOOTER
+   ──────────────────────────── */
+.velure-footer {
   background: var(--v-color-contrast);
-  color: rgba(255,255,255,0.7);
+  color: var(--v-color-base);
+}
+.velure-footer-main {
   padding: 4rem 0 3rem;
 }
-
 .velure-footer-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr;
   gap: 3rem;
 }
-
-.velure-footer-brand { padding-right: 2rem; }
-
-.velure-footer-logo {
+.velure-footer-brand .velure-footer-logo {
   display: inline-block;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
-
-.velure-footer-logo .velure-logo-text {
+.velure-footer-brand .velure-logo-text {
   color: var(--v-color-base);
 }
-
 .velure-footer-about {
   font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
   line-height: 1.7;
   margin-bottom: 1.5rem;
-  opacity: 0.7;
 }
-
 .velure-footer-social {
   display: flex;
   gap: 0.75rem;
 }
-
 .velure-social-link {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.2);
   color: rgba(255,255,255,0.7);
   transition: all var(--v-transition);
 }
-
 .velure-social-link:hover {
-  background: var(--v-color-secondary);
   border-color: var(--v-color-secondary);
-  color: #fff;
+  color: var(--v-color-secondary);
 }
-
 .velure-footer-heading {
   font-family: var(--v-font-sans);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--v-color-base);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
-
-.velure-footer-links li { margin-bottom: 0.75rem; }
-
+.velure-footer-links { list-style: none; padding: 0; margin: 0; }
+.velure-footer-links li { margin-bottom: 0.5rem; }
 .velure-footer-links a {
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   color: rgba(255,255,255,0.6);
-  transition: all var(--v-transition);
+  transition: color var(--v-transition);
 }
-
-.velure-footer-links a:hover {
-  color: var(--v-color-secondary);
-  padding-left: 4px;
-}
-
-/* Footer Bottom */
+.velure-footer-links a:hover { color: var(--v-color-secondary); }
 .velure-footer-bottom {
-  background: #111;
+  border-top: 1px solid rgba(255,255,255,0.1);
   padding: 1.25rem 0;
 }
-
 .velure-footer-bottom-inner {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
-
 .velure-copyright {
   font-size: 0.75rem;
   color: rgba(255,255,255,0.4);
 }
-
 .velure-payments {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
-
 .velure-payment-label {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: rgba(255,255,255,0.4);
 }
-
 .velure-payment-icon {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
   color: rgba(255,255,255,0.5);
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.5rem;
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 2px;
 }
 
 @media (max-width: 768px) {
   .velure-footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-  .velure-footer-brand { grid-column: 1 / -1; padding-right: 0; }
   .velure-footer-bottom-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
 }
-
 @media (max-width: 480px) {
   .velure-footer-grid { grid-template-columns: 1fr; }
 }
 
-
 /* ────────────────────────────
-   PRODUCT CARD
+   CONTENT WRAPPER (WooCommerce)
    ──────────────────────────── */
-
-.velure-product-card {
-  position: relative;
-  cursor: pointer;
-}
-
-.velure-product-card-image {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 3/4;
-  background: var(--v-color-soft);
-  margin-bottom: 1rem;
-}
-
-.velure-product-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.velure-product-card:hover .velure-product-card-image img {
-  transform: scale(1.05);
-}
-
-.velure-product-card-badge {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: var(--v-color-contrast);
-  color: var(--v-color-base);
-}
-
-.velure-product-card-badge.sale {
-  background: #C0392B;
-  color: #fff;
-}
-
-.velure-product-card-badge.new {
-  background: var(--v-color-secondary);
-  color: #fff;
-}
-
-.velure-product-card-actions {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1rem;
-  background: linear-gradient(transparent, rgba(0,0,0,0.5));
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all var(--v-transition);
-}
-
-.velure-product-card:hover .velure-product-card-actions {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.velure-product-card-action {
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.9);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--v-transition);
-}
-
-.velure-product-card-action:hover {
-  background: var(--v-color-contrast);
-  color: #fff;
-}
-
-.velure-product-card-info h3 {
-  font-family: var(--v-font-sans);
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  letter-spacing: 0.01em;
-}
-
-.velure-product-card-price {
-  font-size: 0.85rem;
-  color: #555;
-}
-
-.velure-product-card-price .sale-price {
-  color: var(--v-color-contrast);
-  font-weight: 600;
-}
-
-.velure-product-card-price:has(.old-price) .sale-price {
-  color: #C0392B;
-}
-
-.velure-product-card-price .old-price {
-  text-decoration: line-through;
-  opacity: 0.5;
-  margin-left: 0.5rem;
-  font-size: 0.8rem;
-}
-
-
-/* ────────────────────────────
-   HERO SECTION — PLEINE LARGEUR
-   ──────────────────────────── */
-
-.v-hero {
-  position: relative;
-  width: 100%;
-  height: 85vh;
-  min-height: 550px;
-  max-height: 800px;
-  overflow: hidden;
-  background: #0f0f0e;
-}
-
-.v-hero-slider {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* ── Slide individuelle ── */
-.v-hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-              visibility 0s linear 1.2s;
-  z-index: 1;
-}
-
-.v-hero-slide--active {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-              visibility 0s linear 0s;
-  z-index: 2;
-}
-
-/* ── Image de fond du slide ── */
-.v-hero-slide-bg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transform: scale(1.04);
-  transition: transform 7s ease-out;
-}
-
-.v-hero-slide--active .v-hero-slide-bg {
-  transform: scale(1);
-}
-
-/* ── Overlay gradient ── */
-.v-hero-slide-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(15, 15, 14, 0.8) 0%,
-    rgba(15, 15, 14, 0.3) 40%,
-    rgba(15, 15, 14, 0.05) 100%
-  );
-  z-index: 1;
-}
-
-/* ── Contenu centré verticalement ── */
-.v-hero-slide-inner {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 2rem;
-  max-width: 700px;
+.velure-content-wrapper {
+  max-width: var(--v-container);
   margin: 0 auto;
+  padding: 2rem var(--v-gutter);
 }
-
-/* ── Eyebrow ── */
-.v-hero-eyebrow {
-  font-family: var(--v-font-sans);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--v-color-secondary);
-  margin-bottom: 1rem;
-  opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
-}
-
-.v-hero-slide--active .v-hero-eyebrow {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Titre ── */
-.v-hero-title {
-  font-family: var(--v-font-serif);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--v-color-base);
-  margin-bottom: 0.75rem;
-  opacity: 0;
-  transform: translateY(25px);
-  transition: opacity 0.7s ease 0.5s, transform 0.7s ease 0.5s;
-}
-
-.v-hero-slide--active .v-hero-title {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Sous-titre ── */
-.v-hero-subtitle {
-  font-family: var(--v-font-sans);
-  font-size: 1rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: rgba(250, 250, 248, 0.7);
-  margin-bottom: 1.75rem;
-  opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.6s ease 0.7s, transform 0.6s ease 0.7s;
-}
-
-.v-hero-slide--active .v-hero-subtitle {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── CTA ── */
-.v-hero-slide-inner .velure-btn {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease 0.9s, transform 0.6s ease 0.9s,
-              background var(--v-transition), color var(--v-transition);
-}
-
-.v-hero-slide--active .v-hero-slide-inner .velure-btn {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Dots ── */
-.v-hero-dots {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  display: flex;
-  gap: 0.625rem;
-  align-items: center;
-}
-
-.v-hero-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(250, 250, 248, 0.5);
-  background: transparent;
-  cursor: pointer;
-  transition: all var(--v-transition);
-  padding: 0;
-}
-
-.v-hero-dot:hover {
-  border-color: rgba(250, 250, 248, 0.9);
-}
-
-.v-hero-dot--active {
-  background: var(--v-color-base);
-  border-color: var(--v-color-base);
-}
-
-/* ── Progress bar ── */
-.v-hero-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: rgba(250, 250, 248, 0.1);
-  z-index: 5;
-  overflow: hidden;
-}
-
-.v-hero-progress-bar {
-  height: 100%;
-  width: 0%;
-  background: var(--v-color-secondary);
-  transition: width 0.1s linear;
-}
-
-.v-hero-progress-bar--running {
-  transition: width 5s linear;
-  width: 100% !important;
-}
-
-/* ── Scroll indicator ── */
-.v-hero-scroll {
-  position: absolute;
-  bottom: 2.5rem;
-  right: 2.5rem;
-  z-index: 5;
-  color: rgba(250, 250, 248, 0.5);
- animation: v-hero-bounce 2s ease-in-out infinite;
-}
-
-@keyframes v-hero-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
-}
-
-/* ── Responsive Hero ── */
-@media (max-width: 1024px) {
-  .v-hero {
-    height: 70vh;
-    min-height: 450px;
-    max-height: 650px;
-  }
-  .v-hero-title {
-    font-size: clamp(1.75rem, 4vw, 2.75rem);
-  }
-}
-
-@media (max-width: 768px) {
-  .v-hero {
-    height: 60vh;
-    min-height: 380px;
-    max-height: 520px;
-  }
-  .v-hero-slide-inner {
-    padding: 0 1.25rem;
-  }
-  .v-hero-title {
-    font-size: clamp(1.5rem, 7vw, 2.25rem);
-  }
-  .v-hero-subtitle {
-    font-size: 0.875rem;
-    margin-bottom: 1.25rem;
-  }
-  .v-hero-dots {
-    bottom: 2rem;
-  }
-  .v-hero-scroll {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .v-hero {
-    height: 55vh;
-    min-height: 320px;
-  }
-}
-
 
 /* ────────────────────────────
-   SPLIT BANNER CARD
+   BLOG / PAGES
    ──────────────────────────── */
-
-.v-split-card {
-  position: relative;
-  overflow: hidden;
-  min-height: 360px;
-  display: flex;
-  align-items: flex-end;
-  border-radius: var(--v-radius);
-}
-
-.v-split-card-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.v-split-card:hover .v-split-card-img {
-  transform: scale(1.04);
-}
-
-.v-split-card-content {
-  position: relative;
-  z-index: 1;
-  padding: 2.5rem;
-  width: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
-}
-
-.v-split-card-title {
-  color: #fff;
-  font-size: 1.75rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  margin: 0.5rem 0 0.75rem;
-}
-
-.v-split-card-desc {
-  color: rgba(255,255,255,0.75);
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.v-split-card .velure-btn {
-  font-size: 0.65rem;
-  padding: 0.75rem 1.75rem;
-}
-
-/* Split outline button on dark bg */
-.v-split-card .velure-btn-outline {
-  border-color: rgba(255,255,255,0.6);
-  color: #fff;
-}
-
-.v-split-card .velure-btn-outline:hover {
-  background: #fff;
-  color: var(--v-color-contrast);
-  border-color: #fff;
-}
-
-@media (max-width: 768px) {
-  .v-split-card {
-    min-height: 280px;
-  }
-  .v-split-card-content {
-    padding: 1.5rem;
-  }
-  .v-split-card-title {
-    font-size: 1.35rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .v-split-card {
-    min-height: 240px;
-  }
-}
-
-
-/* ────────────────────────────
-   CATEGORY CAROUSEL
-   ──────────────────────────── */
-
-/* Carousel wrapper */
-.velure-carousel {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Scrollable track */
-.velure-carousel-track {
-  display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 0.25rem 0;
-}
-
-.velure-carousel-track::-webkit-scrollbar { display: none; }
-
-/* Each card snaps to start */
-.velure-carousel-track > * {
-  scroll-snap-align: start;
-  flex: 0 0 calc((100% - 1.5rem) / 4);  /* 4 visible by default */
-  min-width: 0;
-}
-
-/* Arrow buttons */
-.velure-carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--v-color-base);
-  border: 1px solid var(--v-color-border);
-  color: var(--v-color-contrast);
-  cursor: pointer;
-  transition: all var(--v-transition);
-  opacity: 0.7;
-  pointer-events: auto;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-}
-
-.velure-carousel:hover .velure-carousel-arrow {
-  opacity: 1;
-}
-
-.velure-carousel-arrow:hover {
-  background: var(--v-color-contrast);
-  color: var(--v-color-base);
-  border-color: var(--v-color-contrast);
-}
-
-.velure-carousel-arrow--prev { left: 0; border-radius: 0; }
-.velure-carousel-arrow--next { right: 0; border-radius: 0; }
-
-/* Responsive: show fewer cards */
-@media (max-width: 1024px) {
-  .velure-carousel-track > * {
-    flex: 0 0 calc((100% - 0.75rem) / 3);  /* 3 visible */
-  }
-}
-@media (max-width: 768px) {
-  .velure-carousel-track > * {
-    flex: 0 0 calc((100% - 0.75rem) / 2.5);  /* 2.5 visible (peek) */
-  }
-  .velure-carousel-arrow { display: none; }
-}
-@media (max-width: 480px) {
-  .velure-carousel-track > * {
-    flex: 0 0 calc((100% - 0.75rem) / 2);  /* 2 visible */
-  }
-}
-
-/* ── Category Card (used in carousel) ── */
-
-.velure-category-card {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 3/4;
-  cursor: pointer;
-  display: block;
-  border-radius: 2px;
-}
-
-.velure-category-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
-}
-
-.velure-category-card:hover img {
-  transform: scale(1.05);
-}
-
-.velure-category-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(transparent 40%, rgba(0,0,0,0.6));
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1.25rem;
-  color: #fff;
-  transition: background var(--v-transition);
-}
-
-.velure-category-card:hover .velure-category-card-overlay {
-  background: linear-gradient(transparent 30%, rgba(0,0,0,0.7));
-}
-
-.velure-category-card-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.8;
-  margin-bottom: 0.5rem;
-}
-
-.velure-category-card-title {
-  font-family: var(--v-font-serif);
-  font-size: 1.25rem;
-  font-weight: 500;
-  margin-bottom: 0.25rem;
-  letter-spacing: -0.01em;
-}
-
-
-
-.velure-category-card-count {
-  font-size: 0.8rem;
-  opacity: 0.8;
-}
-
-
-/* ────────────────────────────
-   TESTIMONIAL
-   ──────────────────────────── */
-
-.velure-testimonial {
-  text-align: center;
-  padding: 2rem;
-}
-
-.velure-testimonial-stars {
-  color: var(--v-color-secondary);
-  font-size: 1rem;
-  margin-bottom: 1.25rem;
-  letter-spacing: 0.15em;
-}
-
-.velure-testimonial-text {
-  font-family: var(--v-font-serif);
-  font-size: 1.25rem;
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-  font-style: italic;
-}
-
-.velure-testimonial-author {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.velure-testimonial-role {
-  font-size: 0.75rem;
-  color: #888;
-  margin-top: 0.25rem;
-}
-
-
-/* ────────────────────────────
-   BLOG CARD
-   ──────────────────────────── */
-
-.velure-blog-card {
-  cursor: pointer;
-}
-
-.velure-blog-card-image {
-  aspect-ratio: 4/3;
-  overflow: hidden;
-  margin-bottom: 1.25rem;
-  background: var(--v-color-soft);
-}
-
-.velure-blog-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
-}
-
-.velure-blog-card:hover .velure-blog-card-image img {
-  transform: scale(1.05);
-}
-
-.velure-blog-card-meta {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--v-color-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.velure-blog-card-title {
-  font-family: var(--v-font-serif);
-  font-size: 1.25rem;
-  line-height: 1.3;
-  margin-bottom: 0.75rem;
-}
-
-.velure-blog-card-excerpt {
-  font-size: 0.875rem;
-  color: #666;
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-
-/* ────────────────────────────
-   FEATURES BAR
-   ──────────────────────────── */
-
-.velure-section:has(.velure-features) {
-  padding: 0;
-}
-
-.velure-features {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--v-color-border);
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-feature {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1.75rem 1rem;
+.velure-page-header {
+  padding: 3rem 0 2rem;
   text-align: center;
 }
-
-.velure-feature:not(:last-child) {
-  border-right: 1px solid var(--v-color-border);
-}
-
-.velure-feature-icon {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--v-color-accent);
-}
-
-.velure-feature-text h4 {
-  font-family: var(--v-font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.15rem;
-}
-
-.velure-feature-text p {
-  font-size: 0.7rem;
-  color: #888;
-}
-
-@media (max-width: 768px) {
-  .velure-features { grid-template-columns: repeat(2, 1fr); }
-  .velure-feature:nth-child(2) { border-right: none; }
-  .velure-feature { padding: 1.25rem 0.75rem; }
-}
-
-@media (max-width: 480px) {
-  .velure-features { grid-template-columns: 1fr; }
-  .velure-feature:not(:last-child) { border-right: none; border-bottom: 1px solid var(--v-color-border); }
-}
-
-
-/* ────────────────────────────
-   MARQUEE / BRAND BAR
-   ──────────────────────────── */
-
-.velure-marquee {
-  overflow: hidden;
-  padding: 2.5rem 0;
-  border-top: 1px solid var(--v-color-border);
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-marquee-track {
-  display: flex;
-  gap: 4rem;
-  animation: velure-marquee-scroll 25s linear infinite;
-  width: max-content;
-}
-
-.velure-marquee-item {
-  font-family: var(--v-font-serif);
-  font-size: 1.25rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: #bbb;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-
-@keyframes velure-marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-
-/* ────────────────────────────
-   CONTACT FORM
-   ──────────────────────────── */
-
-.velure-contact-form {
-  max-width: 600px;
-}
-
-.velure-form-group {
-  margin-bottom: 1.5rem;
-}
-
-.velure-form-label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  color: var(--v-color-contrast);
-}
-
-.velure-form-input,
-.velure-form-textarea {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  font-size: 0.875rem;
-  background: var(--v-color-white);
-  border: 1px solid var(--v-color-border);
-  transition: border-color var(--v-transition);
-  color: var(--v-color-contrast);
-}
-
-.velure-form-input:focus,
-.velure-form-textarea:focus {
-  border-color: var(--v-color-contrast);
-}
-
-.velure-form-textarea {
-  min-height: 150px;
-  resize: vertical;
-}
-
-.velure-form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-@media (max-width: 480px) {
-  .velure-form-row { grid-template-columns: 1fr; }
-}
-
-
-/* ────────────────────────────
-   SIZE GUIDE TABLE
-   ──────────────────────────── */
-
-.velure-size-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-.velure-size-table th,
-.velure-size-table td {
-  padding: 0.875rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-size-table th {
-  font-family: var(--v-font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: var(--v-color-soft);
-  color: var(--v-color-contrast);
-}
-
-.velure-size-table tbody tr:hover {
-  background: var(--v-color-soft);
-}
-
-
-/* ────────────────────────────
-   PAGE BANNER
-   ──────────────────────────── */
-
-.velure-page-banner {
-  padding: 4rem 0 3rem;
-  text-align: center;
-  background: var(--v-color-soft);
-}
-
-.velure-page-banner h1 {
+.velure-page-header h1 {
   font-size: clamp(2rem, 4vw, 3rem);
-  letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
 }
-
-.velure-page-banner p {
-  font-size: 0.9rem;
-  color: #666;
+.velure-page-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem var(--v-gutter) 4rem;
 }
-
-.velure-breadcrumb {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  font-size: 0.75rem;
+.velure-page-content p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+}
+.velure-post-card {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--v-color-border);
+  text-decoration: none;
+  color: inherit;
+}
+.velure-post-card-img {
+  aspect-ratio: 4/3;
+  background: var(--v-color-muted);
+  overflow: hidden;
+}
+.velure-post-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.velure-post-card:hover .velure-post-card-img img { transform: scale(1.05); }
+.velure-post-card-content { display: flex; flex-direction: column; justify-content: center; }
+.velure-post-card-meta {
+  font-size: 0.72rem;
+  color: var(--v-color-secondary);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.velure-post-card-title {
+  font-family: var(--v-font-serif);
+  font-size: 1.3rem;
+  color: var(--v-color-contrast);
+  margin-bottom: 0.5rem;
+}
+.velure-post-card-excerpt {
+  font-size: 0.85rem;
   color: #888;
+  line-height: 1.6;
 }
 
-.velure-breadcrumb a {
-  color: #888;
-  transition: color var(--v-transition);
+@media (max-width: 768px) {
+  .velure-post-card { grid-template-columns: 1fr; }
 }
-
-.velure-breadcrumb a:hover {
-  color: var(--v-color-accent);
-}
-
-.velure-breadcrumb .sep { opacity: 0.4; }
-
 
 /* ────────────────────────────
    404 PAGE
    ──────────────────────────── */
-
 .velure-404 {
-  min-height: 70vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 6rem 1.5rem;
 }
-
-.velure-404-number {
-  font-family: var(--v-font-serif);
-  font-size: clamp(6rem, 15vw, 12rem);
-  font-weight: 300;
-  line-height: 1;
+.velure-404 h1 {
+  font-family: var(--v-font-elegant);
+  font-size: 6rem;
   color: var(--v-color-muted);
   margin-bottom: 1rem;
 }
-
-.velure-404 h1 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
 .velure-404 p {
-  font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 2rem;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-/* ────────────────────────────
-   INSTAGRAM GRID
-   ──────────────────────────── */
-
-.velure-instagram-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 0;
-}
-
-.velure-instagram-item {
-  aspect-ratio: 1;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-}
-
-.velure-instagram-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.velure-instagram-item:hover img {
-  transform: scale(1.1);
-}
-
-.velure-instagram-item::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.3);
-  opacity: 0;
-  transition: opacity var(--v-transition);
-}
-
-.velure-instagram-item:hover::after {
-  opacity: 1;
-}
-
-@media (max-width: 768px) {
-  .velure-instagram-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (max-width: 480px) {
-  .velure-instagram-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-
-/* ────────────────────────────
-   SHOP FILTER SIDEBAR
-   ──────────────────────────── */
-
-.velure-shop-layout {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
-.velure-shop-sidebar {
-  width: 250px;
-  flex-shrink: 0;
-}
-
-.velure-shop-sidebar-section {
-  margin-bottom: 2rem;
-}
-
-.velure-shop-sidebar-title {
-  font-family: var(--v-font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-shop-sidebar-list li {
-  margin-bottom: 0.5rem;
-}
-
-.velure-shop-sidebar-list a,
-.velure-shop-sidebar-list label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: #555;
-  cursor: pointer;
-  transition: color var(--v-transition);
-}
-
-.velure-shop-sidebar-list a:hover,
-.velure-shop-sidebar-list label:hover {
-  color: var(--v-color-contrast);
-}
-
-.velure-shop-sidebar-list .count {
-  margin-left: auto;
-  font-size: 0.75rem;
-  color: #aaa;
-}
-
-.velure-color-swatch {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid var(--v-color-border);
-  display: inline-block;
-}
-
-.velure-size-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border: 1px solid var(--v-color-border);
-  margin: 0 0.25rem 0.5rem 0;
-  cursor: pointer;
-  transition: all var(--v-transition);
-}
-
-.velure-size-btn:hover,
-.velure-size-btn.active {
-  background: var(--v-color-contrast);
-  color: var(--v-color-base);
-  border-color: var(--v-color-contrast);
-}
-
-.velure-price-range {
-  width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 3px;
-  background: var(--v-color-border);
-  border-radius: 2px;
-  outline: none;
-  margin: 0.75rem 0;
-}
-
-.velure-price-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  background: var(--v-color-contrast);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.velure-shop-main {
-  flex: 1;
-  min-width: 0;
-}
-
-.velure-shop-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--v-color-border);
-  margin-bottom: 1.5rem;
-}
-
-.velure-shop-sort {
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  border: 1px solid var(--v-color-border);
-  background: var(--v-color-white);
-  color: var(--v-color-contrast);
-}
-
-.velure-shop-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--v-color-border);
-}
-
-.velure-shop-pagination a,
-.velure-shop-pagination span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  font-size: 0.85rem;
-  border: 1px solid var(--v-color-border);
-  transition: all var(--v-transition);
-}
-
-.velure-shop-pagination a:hover,
-.velure-shop-pagination .current {
-  background: var(--v-color-contrast);
-  color: var(--v-color-base);
-  border-color: var(--v-color-contrast);
-}
-
-@media (max-width: 1024px) {
-  .velure-shop-sidebar { display: none; }
-  .velure-shop-sidebar.velure-open {
-    display: block;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    width: 300px;
-    max-width: 85vw;
-    background: var(--v-color-white);
-    z-index: 1500;
-    padding: 2rem 1.5rem;
-    overflow-y: auto;
-    box-shadow: 5px 0 30px rgba(0,0,0,0.1);
-  }
-  #velure-filter-toggle { display: inline-flex !important; }
-}
-
-
-/* ────────────────────────────
-   PRODUCT GALLERY (Single)
-   ──────────────────────────── */
-
-.velure-product-gallery {
-  position: relative;
-}
-
-.velure-product-gallery-main {
-  overflow: hidden;
-  border-radius: 2px;
-  margin-bottom: 1rem;
-  aspect-ratio: 4/5;
-  background: var(--v-color-soft);
-}
-
-.velure-product-gallery-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.velure-product-gallery-thumbs {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.velure-product-gallery-thumb {
-  width: 80px;
-  height: 100px;
-  overflow: hidden;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: border-color var(--v-transition);
-  background: var(--v-color-soft);
-}
-
-.velure-product-gallery-thumb.active,
-.velure-product-gallery-thumb:hover {
-  border-color: var(--v-color-contrast);
-}
-
-.velure-product-gallery-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.velure-product-detail { padding: 0; }
-
-.velure-product-colors,
-.velure-product-sizes {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  margin: 1rem 0;
-}
-
-.velure-color-option {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  position: relative;
-  transition: border-color var(--v-transition);
-}
-
-.velure-color-option.active {
-  border-color: var(--v-color-contrast);
-}
-
-.velure-product-qty {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--v-color-border);
-}
-
-.velure-product-qty button {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1rem;
-  transition: background var(--v-transition);
-}
-
-.velure-product-qty button:hover {
-  background: var(--v-color-soft);
-}
-
-.velure-product-qty input {
-  width: 50px;
-  height: 40px;
-  text-align: center;
-  font-size: 0.875rem;
-  border-left: 1px solid var(--v-color-border);
-  border-right: 1px solid var(--v-color-border);
-}
-
-.velure-product-accordion {
-  border-top: 1px solid var(--v-color-border);
-  margin-top: 2rem;
-}
-
-.velure-product-accordion-item {
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-product-accordion-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 0;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.85rem;
-}
-
-.velure-product-accordion-body {
-  padding-bottom: 1rem;
-  font-size: 0.85rem;
-  color: #666;
-  line-height: 1.7;
-}
-
-.velure-trust-row {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--v-color-border);
-}
-
-.velure-trust-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
   color: #888;
-}
-
-.velure-trust-item svg {
-  flex-shrink: 0;
-  color: var(--v-color-accent);
-}
-
-
-/* ────────────────────────────
-   ANIMATIONS (Scroll reveal)
-   ──────────────────────────── */
-
-.velure-animate {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.velure-animate.velure-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.velure-animate-delay-1 { transition-delay: 0.1s; }
-.velure-animate-delay-2 { transition-delay: 0.2s; }
-.velure-animate-delay-3 { transition-delay: 0.3s; }
-
-
-/* ────────────────────────────
-   SIZE GUIDE TABS
-   ──────────────────────────── */
-
-.velure-tabs {
-  display: flex;
-  gap: 0;
-  border-bottom: 2px solid var(--v-color-contrast);
   margin-bottom: 2rem;
-}
-
-.velure-tab-btn {
-  padding: 0.875rem 2rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: all var(--v-transition);
-  color: #888;
-}
-
-.velure-tab-btn.active {
-  border-bottom-color: var(--v-color-contrast);
-  color: var(--v-color-contrast);
-}
-
-.velure-tab-panel { display: none; }
-.velure-tab-panel.active { display: block; }
-
-.velure-size-tips {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-
-.velure-size-tip {
-  text-align: center;
-  padding: 2rem 1.5rem;
-  border: 1px solid var(--v-color-border);
-}
-
-.velure-size-tip-icon {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--v-color-accent);
-}
-
-.velure-size-tip h4 {
-  font-family: var(--v-font-sans);
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.velure-size-tip p {
-  font-size: 0.8rem;
-  color: #888;
-  line-height: 1.6;
-}
-
-@media (max-width: 768px) {
-  .velure-size-tips { grid-template-columns: 1fr; }
-}
-
-
-/* ────────────────────────────
-   LEGAL PAGE (Sticky TOC)
-   ──────────────────────────── */
-
-.velure-legal-layout {
-  display: flex;
-  gap: 3rem;
-  align-items: flex-start;
-}
-
-.velure-legal-toc {
-  width: 260px;
-  flex-shrink: 0;
-  position: sticky;
-  top: calc(var(--v-header-h) + var(--v-topbar-h) + 2rem);
-}
-
-.velure-legal-toc-title {
-  font-family: var(--v-font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 1.25rem;
-}
-
-.velure-legal-toc a {
-  display: block;
-  padding: 0.4rem 0 0.4rem 1rem;
-  font-size: 0.85rem;
-  color: #888;
-  border-left: 2px solid var(--v-color-border);
-  transition: all var(--v-transition);
-  margin-bottom: 0.25rem;
-}
-
-.velure-legal-toc a:hover,
-.velure-legal-toc a.active {
-  color: var(--v-color-contrast);
-  border-left-color: var(--v-color-accent);
-}
-
-.velure-legal-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.velure-legal-content h2 {
-  font-size: 1.5rem;
-  margin: 2.5rem 0 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--v-color-border);
-}
-
-.velure-legal-content h3 {
-  font-size: 1.1rem;
-  margin: 1.5rem 0 0.75rem;
-}
-
-.velure-legal-content p {
-  font-size: 0.9rem;
-  line-height: 1.8;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 1024px) {
-  .velure-legal-toc { display: none; }
 }
