@@ -1,0 +1,663 @@
+     1→     1→<?php
+     2→     2→/**
+     3→     3→ * Velure3 — Dynamic Content Fields
+     4→     4→ * Registers CPT, ACF Options Page, and ACF Field Groups
+     5→     5→ * for the database-driven front page.
+     6→     6→ *
+     7→     7→ * @package Velure3
+     8→     8→ * @version 1.3.0
+     9→     9→ */
+    10→    10→
+    11→    11→if ( ! defined( 'ABSPATH' ) ) exit;
+    12→    12→
+    13→    13→/* ═══════════════════════════════════════════════
+    14→    14→   1. TESTIMONIAL CPT
+    15→    15→   ═══════════════════════════════════════════════ */
+    16→    16→add_action( 'init', 'velure3_register_testimonial_cpt' );
+    17→    17→function velure3_register_testimonial_cpt() {
+    18→    18→        register_post_type( 'velure_testimonial', array(
+    19→    19→                'labels' => array(
+    20→    20→                        'name'               => 'Témoignages',
+    21→    21→                        'singular_name'      => 'Témoignage',
+    22→    22→                        'menu_name'          => 'Témoignages',
+    23→    23→                        'add_new'            => 'Ajouter un témoignage',
+    24→    24→                        'add_new_item'       => 'Ajouter un témoignage',
+    25→    25→                        'edit_item'          => 'Modifier le témoignage',
+    26→    26→                        'view_item'          => 'Voir le témoignage',
+    27→    27→                        'all_items'          => 'Tous les témoignages',
+    28→    28→                        'search_items'       => 'Rechercher des témoignages',
+    29→    29→                ),
+    30→    30→                'public'       => false,
+    31→    31→                'show_ui'      => true,
+    32→    32→                'show_in_menu' => true,
+    33→    33→                'supports'     => array( 'title', 'editor' ),
+    34→    34→                'menu_icon'    => 'dashicons-format-quote',
+    35→    35→                'capability_type' => 'post',
+    36→    36→        ) );
+    37→    37→}
+    38→    38→
+    39→    39→/* Testimonial meta fields (native — no ACF needed) */
+    40→    40→add_action( 'add_meta_boxes', 'velure3_testimonial_meta_boxes' );
+    41→    41→function velure3_testimonial_meta_boxes() {
+    42→    42→        add_meta_box( 'velure_testimonial_details', 'Détails du témoignage', 'velure3_testimonial_meta_box_callback', 'velure_testimonial', 'normal', 'high' );
+    43→    43→}
+    44→    44→
+    45→    45→function velure3_testimonial_meta_box_callback( $post ) {
+    46→    46→        wp_nonce_field( 'velure3_testimonial_nonce', 'velure3_testimonial_nonce_field' );
+    47→    47→        $stars  = get_post_meta( $post->ID, '_velure_stars', true ) ?: 5;
+    48→    48→        $role   = get_post_meta( $post->ID, '_velure_role', true );
+    49→    49→        ?>
+    50→    50→        <p>
+    51→    51→                <label><strong>Note (étoiles) :</strong></label><br/>
+    52→    52→                <select name="_velure_stars" style="width:100%;max-width:120px;margin-top:4px;">
+    53→    53→                        <?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+    54→    54→                                <option value="<?php echo $i; ?>" <?php selected( $stars, $i ); ?>><?php echo $i; ?> étoile<?php echo $i > 1 ? 's' : ''; ?></option>
+    55→    55→                        <?php endfor; ?>
+    56→    56→                </select>
+    57→    57→        </p>
+    58→    58→        <p>
+    59→    59→                <label><strong>Rôle / Statut :</strong></label><br/>
+    60→    60→                <input type="text" name="_velure_role" value="<?php echo esc_attr( $role ); ?>" style="width:100%;margin-top:4px;" placeholder="Ex : Cliente fidèle depuis 2023" />
+    61→    61→        </p>
+    62→    62→        <?php
+    63→    63→}
+    64→    64→
+    65→    65→add_action( 'save_post_velure_testimonial', 'velure3_save_testimonial_meta', 10, 2 );
+    66→    66→function velure3_save_testimonial_meta( $post_id, $post ) {
+    67→    67→        if ( ! isset( $_POST['velure3_testimonial_nonce_field'] ) || ! wp_verify_nonce( $_POST['velure3_testimonial_nonce_field'], 'velure3_testimonial_nonce' ) ) return;
+    68→    68→        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+    69→    69→        if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+    70→    70→
+    71→    71→        $fields = array( '_velure_stars', '_velure_role' );
+    72→    72→        foreach ( $fields as $field ) {
+    73→    73→                if ( isset( $_POST[ $field ] ) ) {
+    74→    74→                        update_post_meta( $post_id, $field, sanitize_text_field( $_POST[ $field ] ) );
+    75→    75→                }
+    76→    76→        }
+    77→    77→}
+    78→    78→
+    79→    79→
+    80→    80→/* ═══════════════════════════════════════════════
+    81→    81→   2. ACF OPTIONS PAGE
+    82→    82→   ═══════════════════════════════════════════════ */
+    83→    83→add_action( 'acf/init', 'velure3_acf_options_page' );
+    84→    84→function velure3_acf_options_page() {
+    85→    85→        if ( ! function_exists( 'acf_add_options_page' ) ) return;
+    86→    86→        acf_add_options_page( array(
+    87→    87→                'page_title'  => 'Velure — Page d\'accueil',
+    88→    88→                'menu_title'  => 'Velure Accueil',
+    89→    89→                'menu_slug'   => 'velure-front-page',
+    90→    90→                'capability'  => 'edit_theme_options',
+    91→    91→                'parent_slug' => 'themes.php',
+    92→    92→                'position'    => 2,
+    93→    93→                'icon_url'    => 'dashicons-layout',
+    94→    94→        ) );
+    95→    95→}
+    96→    96→
+    97→    97→
+    98→    98→/* ═══════════════════════════════════════════════
+    99→    99→   3. ACF FIELD GROUPS (local PHP registration)
+   100→   100→   ═══════════════════════════════════════════════ */
+   101→   101→add_action( 'acf/init', 'velure3_register_acf_field_groups' );
+   102→   102→function velure3_register_acf_field_groups() {
+   103→   103→        if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+   104→   104→
+   105→   105→        /* ── 3A. Hero Slides ── */
+   106→   106→        acf_add_local_field_group( array(
+   107→   107→                'key'      => 'group_velure_hero_slides',
+   108→   108→                'title'    => 'Hero — Slides',
+   109→   109→                'fields'   => array(
+   110→   110→                        array(
+   111→   111→                                'key'          => 'field_velure_hero_slides_repeater',
+   112→   112→                                'label'        => 'Slides du slider',
+   113→   113→                                'name'         => 'hero_slides',
+   114→   114→                                'type'         => 'repeater',
+   115→   115→                                'layout'       => 'row',
+   116→   116→                                'button_label' => 'Ajouter un slide',
+   117→   117→                                'min'          => 1,
+   118→   118→                                'max'          => 6,
+   119→   119→                                'sub_fields'   => array(
+   120→   120→                                        array(
+   121→   121→                                                'key'   => 'field_hero_slide_image',
+   122→   122→                                                'label' => 'Image du slide',
+   123→   123→                                                'name'  => 'image',
+   124→   124→                                                'type'  => 'image',
+   125→   125→                                                'return_format' => 'array',
+   126→   126→                                                'preview_size'  => 'medium',
+   127→   127→                                                'required' => 1,
+   128→   128→                                        ),
+   129→   129→                                        array(
+   130→   130→                                                'key'   => 'field_hero_slide_eyebrow',
+   131→   131→                                                'label' => 'Eyebrow (texte au-dessus)',
+   132→   132→                                                'name'  => 'eyebrow',
+   133→   133→                                                'type'  => 'text',
+   134→   134→                                                'placeholder' => 'Nouvelle Collection',
+   135→   135→                                                'required' => 1,
+   136→   136→                                        ),
+   137→   137→                                        array(
+   138→   138→                                                'key'   => 'field_hero_slide_title',
+   139→   139→                                                'label' => 'Titre (autorise <br/>)',
+   140→   140→                                                'name'  => 'title',
+   141→   141→                                                'type'  => 'text',
+   142→   142→                                                'placeholder' => "L'Élégance<br/>Minimaliste",
+   143→   143→                                                'required' => 1,
+   144→   144→                                        ),
+   145→   145→                                        array(
+   146→   146→                                                'key'   => 'field_hero_slide_subtitle',
+   147→   147→                                                'label' => 'Sous-titre',
+   148→   148→                                                'name'  => 'subtitle',
+   149→   149→                                                'type'  => 'text',
+   150→   150→                                        ),
+   151→   151→                                        array(
+   152→   152→                                                'key'   => 'field_hero_slide_cta_text',
+   153→   153→                                                'label' => 'Texte du bouton CTA',
+   154→   154→                                                'name'  => 'cta_text',
+   155→   155→                                                'type'  => 'text',
+   156→   156→                                                'placeholder' => 'DÉCOUVRIR',
+   157→   157→                                        ),
+   158→   158→                                        array(
+   159→   159→                                                'key'   => 'field_hero_slide_cta_link',
+   160→   160→                                                'label' => 'Lien du bouton CTA',
+   161→   161→                                                'name'  => 'cta_link',
+   162→   162→                                                'type'  => 'url',
+   163→   163→                                                'placeholder' => '/boutique/',
+   164→   164→                                        ),
+   165→   165→                                ),
+   166→   166→                        ),
+   167→   167→                ),
+   168→   168→                'location' => array(
+   169→   169→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   170→   170→                ),
+   171→   171→        ) );
+   172→   172→
+   173→   173→        /* ── 3B. Hero Static Blocks ── */
+   174→   174→        acf_add_local_field_group( array(
+   175→   175→                'key'      => 'group_velure_hero_static',
+   176→   176→                'title'    => 'Hero — Blocs Statiques',
+   177→   177→                'fields'   => array(
+   178→   178→                        // Best-Seller block
+   179→   179→                        array( 'key' => 'field_hs_bestseller_tab', 'label' => 'Bloc Best-Seller (haut droite)', 'name' => '', 'type' => 'tab' ),
+   180→   180→                        array( 'key' => 'field_hs_bs_image', 'label' => 'Image', 'name' => 'hs_bestseller_image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ),
+   181→   181→                        array( 'key' => 'field_hs_bs_label', 'label' => 'Label', 'name' => 'hs_bestseller_label', 'type' => 'text', 'default_value' => 'Best-Seller' ),
+   182→   182→                        array( 'key' => 'field_hs_bs_title', 'label' => 'Titre', 'name' => 'hs_bestseller_title', 'type' => 'text', 'default_value' => 'Sac Élégance' ),
+   183→   183→                        array( 'key' => 'field_hs_bs_price', 'label' => 'Prix affiché', 'name' => 'hs_bestseller_price', 'type' => 'text', 'default_value' => '285,00 €' ),
+   184→   184→                        array( 'key' => 'field_hs_bs_cta', 'label' => 'Texte bouton', 'name' => 'hs_bestseller_cta_text', 'type' => 'text', 'default_value' => 'VOIR LE PRODUIT' ),
+   185→   185→                        array( 'key' => 'field_hs_bs_link', 'label' => 'Lien', 'name' => 'hs_bestseller_cta_link', 'type' => 'url' ),
+   186→   186→                        // Category block
+   187→   187→                        array( 'key' => 'field_hs_category_tab', 'label' => 'Bloc Catégorie (bas droite)', 'name' => '', 'type' => 'tab' ),
+   188→   188→                        array( 'key' => 'field_hs_cat_image', 'label' => 'Image', 'name' => 'hs_category_image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ),
+   189→   189→                        array( 'key' => 'field_hs_cat_label', 'label' => 'Label', 'name' => 'hs_category_label', 'type' => 'text', 'default_value' => 'Capsule' ),
+   190→   190→                        array( 'key' => 'field_hs_cat_title', 'label' => 'Titre', 'name' => 'hs_category_title', 'type' => 'text', 'default_value' => 'Les Accessoires Essentiels' ),
+   191→   191→                        array( 'key' => 'field_hs_cat_link', 'label' => 'Lien', 'name' => 'hs_category_cta_link', 'type' => 'url' ),
+   192→   192→                ),
+   193→   193→                'location' => array(
+   194→   194→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   195→   195→                ),
+   196→   196→        ) );
+   197→   197→
+   198→   198→        /* ── 3C. Features / Trust Bar ── */
+   199→   199→        acf_add_local_field_group( array(
+   200→   200→                'key'      => 'group_velure_features',
+   201→   201→                'title'    => 'Barre de Confiance',
+   202→   202→                'fields'   => array(
+   203→   203→                        array(
+   204→   204→                                'key'          => 'field_velure_features_repeater',
+   205→   205→                                'label'        => 'Éléments de confiance',
+   206→   206→                                'name'         => 'trust_features',
+   207→   207→                                'type'         => 'repeater',
+   208→   208→                                'layout'       => 'table',
+   209→   209→                                'button_label' => 'Ajouter un élément',
+   210→   210→                                'min'          => 2,
+   211→   211→                                'max'          => 6,
+   212→   212→                                'sub_fields'   => array(
+   213→   213→                                        array(
+   214→   214→                                                'key'   => 'field_feat_icon',
+   215→   215→                                                'label' => 'Icône SVG (code SVG brut)',
+   216→   216→                                                'name'  => 'icon_svg',
+   217→   217→                                                'type'  => 'textarea',
+   218→   218→                                                'rows'  => 3,
+   219→   219→                                                'instructions' => 'Collez le code <svg>...</svg> de l\'icône',
+   220→   220→                                        ),
+   221→   221→                                        array(
+   222→   222→                                                'key'   => 'field_feat_title',
+   223→   223→                                                'label' => 'Titre',
+   224→   224→                                                'name'  => 'title',
+   225→   225→                                                'type'  => 'text',
+   226→   226→                                                'required' => 1,
+   227→   227→                                        ),
+   228→   228→                                        array(
+   229→   229→                                                'key'   => 'field_feat_desc',
+   230→   230→                                                'label' => 'Description',
+   231→   231→                                                'name'  => 'description',
+   232→   232→                                                'type'  => 'text',
+   233→   233→                                        ),
+   234→   234→                                ),
+   235→   235→                        ),
+   236→   236→                ),
+   237→   237→                'location' => array(
+   238→   238→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   239→   239→                ),
+   240→   240→        ) );
+   241→   241→
+   242→   242→        /* ── 3D. Split Banner ── */
+   243→   243→        acf_add_local_field_group( array(
+   244→   244→                'key'      => 'group_velure_split_banner',
+   245→   245→                'title'    => 'Bannière Séparée (split)',
+   246→   246→                'fields'   => array(
+   247→   247→                        // Left side
+   248→   248→                        array( 'key' => 'field_sb_left_tab', 'label' => 'Bannière Gauche', 'name' => '', 'type' => 'tab' ),
+   249→   249→                        array( 'key' => 'field_sb_left_image', 'label' => 'Image', 'name' => 'sb_left_image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ),
+   250→   250→                        array( 'key' => 'field_sb_left_eyebrow', 'label' => 'Eyebrow', 'name' => 'sb_left_eyebrow', 'type' => 'text' ),
+   251→   251→                        array( 'key' => 'field_sb_left_title', 'label' => 'Titre', 'name' => 'sb_left_title', 'type' => 'text' ),
+   252→   252→                        array( 'key' => 'field_sb_left_desc', 'label' => 'Description', 'name' => 'sb_left_desc', 'type' => 'textarea', 'rows' => 2 ),
+   253→   253→                        array( 'key' => 'field_sb_left_cta_text', 'label' => 'Texte bouton', 'name' => 'sb_left_cta_text', 'type' => 'text' ),
+   254→   254→                        array( 'key' => 'field_sb_left_cta_link', 'label' => 'Lien', 'name' => 'sb_left_cta_link', 'type' => 'url' ),
+   255→   255→                        array( 'key' => 'field_sb_left_cta_style', 'label' => 'Style bouton', 'name' => 'sb_left_cta_style', 'type' => 'select', 'choices' => array( 'gold' => 'Or (velure-btn-gold)', 'primary' => 'Sombre (velure-btn-primary)', 'outline' => 'Contour (velure-btn-outline)' ), 'default_value' => 'gold' ),
+   256→   256→                        // Right side
+   257→   257→                        array( 'key' => 'field_sb_right_tab', 'label' => 'Bannière Droite', 'name' => '', 'type' => 'tab' ),
+   258→   258→                        array( 'key' => 'field_sb_right_image', 'label' => 'Image', 'name' => 'sb_right_image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ),
+   259→   259→                        array( 'key' => 'field_sb_right_eyebrow', 'label' => 'Eyebrow', 'name' => 'sb_right_eyebrow', 'type' => 'text' ),
+   260→   260→                        array( 'key' => 'field_sb_right_title', 'label' => 'Titre', 'name' => 'sb_right_title', 'type' => 'text' ),
+   261→   261→                        array( 'key' => 'field_sb_right_desc', 'label' => 'Description', 'name' => 'sb_right_desc', 'type' => 'textarea', 'rows' => 2 ),
+   262→   262→                        array( 'key' => 'field_sb_right_cta_text', 'label' => 'Texte bouton', 'name' => 'sb_right_cta_text', 'type' => 'text' ),
+   263→   263→                        array( 'key' => 'field_sb_right_cta_link', 'label' => 'Lien', 'name' => 'sb_right_cta_link', 'type' => 'url' ),
+   264→   264→                        array( 'key' => 'field_sb_right_cta_style', 'label' => 'Style bouton', 'name' => 'sb_right_cta_style', 'type' => 'select', 'choices' => array( 'gold' => 'Or (velure-btn-gold)', 'primary' => 'Sombre (velure-btn-primary)', 'outline' => 'Contour (velure-btn-outline)' ), 'default_value' => 'outline' ),
+   265→   265→                ),
+   266→   266→                'location' => array(
+   267→   267→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   268→   268→                ),
+   269→   269→        ) );
+   270→   270→
+   271→   271→        /* ── 3E. Brand Marquee ── */
+   272→   272→        acf_add_local_field_group( array(
+   273→   273→                'key'      => 'group_velure_marquee',
+   274→   274→                'title'    => 'Marque — Bande défilante',
+   275→   275→                'fields'   => array(
+   276→   276→                        array(
+   277→   277→                                'key'          => 'field_velure_brands_repeater',
+   278→   278→                                'label'        => 'Marques',
+   279→   279→                                'name'         => 'brand_names',
+   280→   280→                                'type'         => 'repeater',
+   281→   281→                                'layout'       => 'row',
+   282→   282→                                'button_label' => 'Ajouter une marque',
+   283→   283→                                'sub_fields'   => array(
+   284→   284→                                        array(
+   285→   285→                                                'key'   => 'field_brand_name',
+   286→   286→                                                'label' => 'Nom de la marque',
+   287→   287→                                                'name'  => 'name',
+   288→   288→                                                'type'  => 'text',
+   289→   289→                                                'required' => 1,
+   290→   290→                                        ),
+   291→   291→                                ),
+   292→   292→                        ),
+   293→   293→                ),
+   294→   294→                'location' => array(
+   295→   295→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   296→   296→                ),
+   297→   297→        ) );
+   298→   298→
+   299→   299→        /* ── 3F. Instagram ── */
+   300→   300→        acf_add_local_field_group( array(
+   301→   301→                'key'      => 'group_velure_instagram',
+   302→   302→                'title'    => 'Instagram Feed',
+   303→   303→                'fields'   => array(
+   304→   304→                        array( 'key' => 'field_ig_handle', 'label' => 'Handle Instagram', 'name' => 'instagram_handle', 'type' => 'text', 'placeholder' => '@velure.paris', 'instructions' => 'Affiché comme titre de section' ),
+   305→   305→                        array(
+   306→   306→                                'key'          => 'field_ig_images',
+   307→   307→                                'label'        => 'Images Instagram',
+   308→   308→                                'name'         => 'instagram_images',
+   309→   309→                                'type'         => 'repeater',
+   310→   310→                                'layout'       => 'row',
+   311→   311→                                'button_label' => 'Ajouter une image',
+   312→   312→                                'max'          => 6,
+   313→   313→                                'sub_fields'   => array(
+   314→   314→                                        array( 'key' => 'field_ig_img', 'label' => 'Image', 'name' => 'image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'thumbnail', 'required' => 1 ),
+   315→   315→                                        array( 'key' => 'field_ig_link', 'label' => 'Lien (URL)', 'name' => 'link', 'type' => 'url' ),
+   316→   316→                                ),
+   317→   317→                        ),
+   318→   318→                ),
+   319→   319→                'location' => array(
+   320→   320→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   321→   321→                ),
+   322→   322→        ) );
+   323→   323→
+   324→   324→        /* ── 3G. Section Titles ── */
+   325→   325→        acf_add_local_field_group( array(
+   326→   326→                'key'      => 'group_velure_section_titles',
+   327→   327→                'title'    => 'Titres de Section',
+   328→   328→                'fields'   => array(
+   329→   329→                        array( 'key' => 'field_st_categories', 'label' => 'Titre section Catégories', 'name' => 'section_title_categories', 'type' => 'text', 'default_value' => 'Explorer par Univers' ),
+   330→   330→                        array( 'key' => 'field_st_products', 'label' => 'Titre section Produits', 'name' => 'section_title_products', 'type' => 'text', 'default_value' => 'Pièces Vedettes' ),
+   331→   331→                        array( 'key' => 'field_st_testimonials', 'label' => 'Titre section Témoignages', 'name' => 'section_title_testimonials', 'type' => 'text', 'default_value' => 'Ce Que Disent Nos Clients' ),
+   332→   332→                        array( 'key' => 'field_st_blog', 'label' => 'Titre section Blog', 'name' => 'section_title_blog', 'type' => 'text', 'default_value' => 'Le Journal' ),
+   333→   333→                        array( 'key' => 'field_st_products_count', 'label' => 'Nombre de produits vedettes', 'name' => 'featured_products_count', 'type' => 'number', 'default_value' => 8, 'min' => 4, 'max' => 12 ),
+   334→   334→                        array( 'key' => 'field_st_blog_count', 'label' => 'Nombre d\'articles blog', 'name' => 'blog_posts_count', 'type' => 'number', 'default_value' => 3, 'min' => 2, 'max' => 6 ),
+   335→   335→                        array( 'key' => 'field_st_testimonials_count', 'label' => 'Nombre de témoignages', 'name' => 'testimonials_count', 'type' => 'number', 'default_value' => 3, 'min' => 1, 'max' => 6 ),
+   336→   336→                ),
+   337→   337→                'location' => array(
+   338→   338→                        array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ),
+   339→   339→                ),
+   340→   340→        ) );
+   341→   341→}
+   342→   342→
+   343→   343→
+   344→   344→/* ═══════════════════════════════════════════════
+   345→   345→   4. HELPER FUNCTIONS — Data with defaults
+   346→   346→   ═══════════════════════════════════════════════ */
+   347→   347→
+   348→   348→/**
+   349→   349→ * Get image URL from ACF field (handles array/url/ID formats)
+   350→   350→ */
+   351→   351→function velure3_get_image_url( $img, $fallback = '' ) {
+   352→   352→        if ( empty( $img ) ) return $fallback;
+   353→   353→        if ( is_array( $img ) ) return isset( $img['url'] ) ? $img['url'] : $fallback;
+   354→   354→        if ( is_numeric( $img ) ) return wp_get_attachment_url( $img ) ?: $fallback;
+   355→   355→        return esc_url( $img );
+   356→   356→}
+   357→   357→
+   358→   358→/**
+   359→   359→ * Get ACF option with fallback
+   360→   360→ */
+   361→   361→function velure3_opt( $key, $fallback = '' ) {
+   362→   362→        if ( ! function_exists( 'get_field' ) ) return $fallback;
+   363→   363→        $val = get_field( $key, 'option' );
+   364→   364→        return $val !== null && $val !== '' && $val !== array() ? $val : $fallback;
+   365→   365→}
+   366→   366→
+   367→   367→/**
+   368→   368→ * Default SVG icons for the trust/feature bar
+   369→   369→ */
+   370→   370→function velure3_default_feature_icons() {
+   371→   371→        return array(
+   372→   372→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+   373→   373→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+   374→   374→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+   375→   375→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+   376→   376→        );
+   377→   377→}
+   378→   378→
+   379→   379→/**
+   380→   380→ * Get hero slides data (ACF or defaults)
+   381→   381→ */
+   382→   382→function velure3_get_hero_slides() {
+   383→   383→        $slides = velure3_opt( 'hero_slides', array() );
+   384→   384→        if ( ! empty( $slides ) ) {
+   385→   385→                return array_map( function( $s ) {
+   386→   386→                        return array(
+   387→   387→                                'image'    => velure3_get_image_url( $s['image'] ),
+   388→   388→                                'eyebrow'  => $s['eyebrow'] ?? '',
+   389→   389→                                'title'    => $s['title'] ?? '',
+   390→   390→                                'subtitle' => $s['subtitle'] ?? '',
+   391→   391→                                'cta_text' => $s['cta_text'] ?? 'DÉCOUVRIR',
+   392→   392→                                'cta_link' => $s['cta_link'] ?? '#',
+   393→   393→                        );
+   394→   394→                }, $slides );
+   395→   395→        }
+   396→   396→        // Defaults
+   397→   397→        return array(
+   398→   398→                array(
+   399→   399→                        'image'    => VELURE3_URI . '/assets/images/hero.jpg',
+   400→   400→                        'eyebrow'  => 'Nouvelle Collection',
+   401→   401→                        'title'    => "L'Élégance<br/>Minimaliste",
+   402→   402→                        'subtitle' => 'Nouvelle Collection Automne 2026',
+   403→   403→                        'cta_text' => 'DÉCOUVRIR',
+   404→   404→                        'cta_link' => '/boutique/',
+   405→   405→                ),
+   406→   406→                array(
+   407→   407→                        'image'    => VELURE3_URI . '/assets/images/banner-collection.jpg',
+   408→   408→                        'eyebrow'  => 'Notre Engagement',
+   409→   409→                        'title'    => "Matières<br/>Durables",
+   410→   410→                        'subtitle' => 'Vêtements éthiques conçus pour durer',
+   411→   411→                        'cta_text' => 'NOTRE ENGAGEMENT',
+   412→   412→                        'cta_link' => '/notre-engagement/',
+   413→   413→                ),
+   414→   414→        );
+   415→   415→}
+   416→   416→
+   417→   417→/**
+   418→   418→ * Get hero static blocks data
+   419→   419→ */
+   420→   420→function velure3_get_hero_static_blocks() {
+   421→   421→        return array(
+   422→   422→                'bestseller' => array(
+   423→   423→                        'image'     => velure3_get_image_url( velure3_opt( 'hs_bestseller_image' ), VELURE3_URI . '/assets/images/category-femme.jpg' ),
+   424→   424→                        'label'     => velure3_opt( 'hs_bestseller_label', 'Best-Seller' ),
+   425→   425→                        'title'     => velure3_opt( 'hs_bestseller_title', 'Sac Élégance' ),
+   426→   426→                        'price'     => velure3_opt( 'hs_bestseller_price', '285,00 €' ),
+   427→   427→                        'cta_text'  => velure3_opt( 'hs_bestseller_cta_text', 'VOIR LE PRODUIT' ),
+   428→   428→                        'cta_link'  => velure3_opt( 'hs_bestseller_cta_link', '#' ),
+   429→   429→                ),
+   430→   430→                'category' => array(
+   431→   431→                        'image'    => velure3_get_image_url( velure3_opt( 'hs_category_image' ), VELURE3_URI . '/assets/images/category-accessoires.jpg' ),
+   432→   432→                        'label'    => velure3_opt( 'hs_category_label', 'Capsule' ),
+   433→   433→                        'title'    => velure3_opt( 'hs_category_title', 'Les Accessoires Essentiels' ),
+   434→   434→                        'cta_link' => velure3_opt( 'hs_category_cta_link', '/categorie/accessoires/' ),
+   435→   435→                ),
+   436→   436→        );
+   437→   437→}
+   438→   438→
+   439→   439→/**
+   440→   440→ * Get trust/features bar data
+   441→   441→ */
+   442→   442→function velure3_get_features() {
+   443→   443→        $features = velure3_opt( 'trust_features', array() );
+   444→   444→        if ( ! empty( $features ) ) {
+   445→   445→                return array_map( function( $f ) {
+   446→   446→                        return array(
+   447→   447→                                'icon'   => $f['icon_svg'] ?? '',
+   448→   448→                                'title'  => $f['title'] ?? '',
+   449→   449→                                'desc'   => $f['description'] ?? '',
+   450→   450→                        );
+   451→   451→                }, $features );
+   452→   452→        }
+   453→   453→        // Defaults
+   454→   454→        return array(
+   455→   455→                array( 'icon' => velure3_default_feature_icons()[0], 'title' => 'Livraison Express', 'desc' => 'Sous 24-48h en France' ),
+   456→   456→                array( 'icon' => velure3_default_feature_icons()[1], 'title' => 'Retours Gratuits', 'desc' => 'Sous 30 jours, sans frais' ),
+   457→   457→                array( 'icon' => velure3_default_feature_icons()[2], 'title' => 'Paiement Sécurisé', 'desc' => 'SSL & cryptage 256 bits' ),
+   458→   458→                array( 'icon' => velure3_default_feature_icons()[3], 'title' => 'Service Client 7j/7', 'desc' => 'Par chat, email ou téléphone' ),
+   459→   459→        );
+   460→   460→}
+   461→   461→
+   462→   462→/**
+   463→   463→ * Get WooCommerce product categories for carousel
+   464→   464→ */
+   465→   465→function velure3_get_product_categories( $count = 10 ) {
+   466→   466→        if ( ! class_exists( 'WooCommerce' ) ) return array();
+   467→   467→
+   468→   468→        $default_cat = (int) get_option( 'default_product_cat', 0 );
+   469→   469→        $terms = get_terms( array(
+   470→   470→                'taxonomy'   => 'product_cat',
+   471→   471→                'hide_empty' => true,
+   472→   472→                'exclude'    => $default_cat,
+   473→   473→                'number'     => $count,
+   474→   474→                'orderby'    => 'count',
+   475→   475→                'order'      => 'DESC',
+   476→   476→        ) );
+   477→   477→
+   478→   478→        if ( is_wp_error( $terms ) || empty( $terms ) ) return array();
+   479→   479→
+   480→   480→        return array_map( function( $term ) {
+   481→   481→                $thumbnail_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+   482→   482→                $image_url = $thumbnail_id ? wp_get_attachment_url( $thumbnail_id ) : VELURE3_URI . '/assets/images/category-femme.jpg';
+   483→   483→                return array(
+   484→   484→                        'name'  => $term->name,
+   485→   485→                        'slug'  => $term->slug,
+   486→   486→                        'link'  => get_term_link( $term ),
+   487→   487→                        'image' => $image_url,
+   488→   488→                        'count' => $term->count,
+   489→   489→                );
+   490→   490→        }, $terms );
+   491→   491→}
+   492→   492→
+   493→   493→/**
+   494→   494→ * Get featured WooCommerce products
+   495→   495→ */
+   496→   496→function velure3_get_featured_products( $count = 8 ) {
+   497→   497→        if ( ! class_exists( 'WooCommerce' ) ) return array();
+   498→   498→
+   499→   499→        $args = array(
+   500→   500→                'limit'   => $count,
+   501→   501→                'visibility' => 'visible',
+   502→   502→                'orderby' => 'date',
+   503→   503→                'order'   => 'DESC',
+   504→   504→                'return'  => 'objects',
+   505→   505→        );
+   506→   506→
+   507→   507→        $products = wc_get_products( $args );
+   508→   508→        if ( empty( $products ) ) return array();
+   509→   509→
+   510→   510→        return array_map( function( $product ) {
+   511→   511→                $image_id   = $product->get_image_id();
+   512→   512→                $image_url  = $image_id ? wp_get_attachment_url( $image_id ) : '';
+   513→   513→                $price_html = $product->get_price_html();
+   514→   514→                $name       = $product->get_name();
+   515→   515→                $link       = $product->get_permalink();
+   516→   516→                $badge      = '';
+   517→   517→
+   518→   518→                if ( $product->is_on_sale() ) {
+   519→   519→                        $badge = '<span class="velure-product-card-badge sale">' . __( 'Promo', 'velure3' ) . '</span>';
+   520→   520→                } elseif ( $product->is_featured() ) {
+   521→   521→                        $badge = '<span class="velure-product-card-badge new">' . __( 'Nouveau', 'velure3' ) . '</span>';
+   522→   522→                }
+   523→   523→
+   524→   524→                return array(
+   525→   525→                        'name'        => $name,
+   526→   526→                        'link'        => $link,
+   527→   527→                        'image'       => $image_url,
+   528→   528→                        'price_html'  => $price_html,
+   529→   529→                        'badge'       => $badge,
+   530→   530→                );
+   531→   531→        }, $products );
+   532→   532→}
+   533→   533→
+   534→   534→/**
+   535→   535→ * Get split banner data
+   536→   536→ */
+   537→   537→function velure3_get_split_banner() {
+   538→   538→        return array(
+   539→   539→                'left' => array(
+   540→   540→                        'image'      => velure3_get_image_url( velure3_opt( 'sb_left_image' ), VELURE3_URI . '/assets/images/banner-collection.jpg' ),
+   541→   541→                        'eyebrow'    => velure3_opt( 'sb_left_eyebrow', 'Collection AW25' ),
+   542→   542→                        'title'      => velure3_opt( 'sb_left_title', 'La Nouvelle Collection' ),
+   543→   543→                        'desc'       => velure3_opt( 'sb_left_desc', 'Des silhouettes audacieuses et des matières nobles pour une saison inoubliable.' ),
+   544→   544→                        'cta_text'   => velure3_opt( 'sb_left_cta_text', 'Découvrir' ),
+   545→   545→                        'cta_link'   => velure3_opt( 'sb_left_cta_link', '/new-collection/' ),
+   546→   546→                        'cta_style'  => velure3_opt( 'sb_left_cta_style', 'gold' ),
+   547→   547→                ),
+   548→   548→                'right' => array(
+   549→   549→                        'image'      => velure3_get_image_url( velure3_opt( 'sb_right_image' ), VELURE3_URI . '/assets/images/category-accessoires.jpg' ),
+   550→   550→                        'eyebrow'    => velure3_opt( 'sb_right_eyebrow', 'Édition Limitée' ),
+   551→   551→                        'title'      => velure3_opt( 'sb_right_title', 'Accessoires d\'Exception' ),
+   552→   552→                        'desc'       => velure3_opt( 'sb_right_desc', 'Sacs, bijoux et ceintures signés par les meilleurs artisans.' ),
+   553→   553→                        'cta_text'   => velure3_opt( 'sb_right_cta_text', 'Explorer' ),
+   554→   554→                        'cta_link'   => velure3_opt( 'sb_right_cta_link', '/categorie/accessoires/' ),
+   555→   555→                        'cta_style'  => velure3_opt( 'sb_right_cta_style', 'outline' ),
+   556→   556→                ),
+   557→   557→        );
+   558→   558→}
+   559→   559→
+   560→   560→/**
+   561→   561→ * Get testimonials
+   562→   562→ */
+   563→   563→function velure3_get_testimonials( $count = 3 ) {
+   564→   564→        $posts = get_posts( array(
+   565→   565→                'numberposts' => $count,
+   566→   566→                'post_type'   => 'velure_testimonial',
+   567→   567→                'post_status' => 'publish',
+   568→   568→                'orderby'     => 'date',
+   569→   569→                'order'       => 'DESC',
+   570→   570→        ) );
+   571→   571→
+   572→   572→        if ( ! empty( $posts ) ) {
+   573→   573→                return array_map( function( $p ) {
+   574→   574→                        return array(
+   575→   575→                                'text'  => wp_trim_words( $p->post_content, 40, '...' ),
+   576→   576→                                'author' => get_the_title( $p ),
+   577→   577→                                'role'  => get_post_meta( $p->ID, '_velure_role', true ),
+   578→   578→                                'stars' => (int) get_post_meta( $p->ID, '_velure_stars', true ) ?: 5,
+   579→   579→                        );
+   580→   580→                }, $posts );
+   581→   581→        }
+   582→   582→
+   583→   583→        // Defaults
+   584→   584→        return array(
+   585→   585→                array( 'text' => 'La qualité des matières est exceptionnelle. Mon manteau en cachemire est devenu ma pièce préférée. Le service client est aussi remarquable — toujours à l\'écoute.', 'author' => 'Camille D.', 'role' => 'Cliente fidèle depuis 2023', 'stars' => 5 ),
+   586→   586→                array( 'text' => 'J\'ai commandé un blazer pour un événement et j\'ai été bluffée par la coupe et la finition. La livraison était rapide et l\'emballage impeccable. Je recommande vivement.', 'author' => 'Antoine M.', 'role' => 'Achat vérifié', 'stars' => 5 ),
+   587→   587→                array( 'text' => 'Velure est devenue ma référence mode. Les pièces sont intemporelles et la taille guide est très fiable. Les retours sont faciles quand nécessaire. Un concept store en ligne parfait.', 'author' => 'Sophie L.', 'role' => 'Cliente Premium', 'stars' => 5 ),
+   588→   588→        );
+   589→   589→}
+   590→   590→
+   591→   591→/**
+   592→   592→ * Get brand names for marquee
+   593→   593→ */
+   594→   594→function velure3_get_brands() {
+   595→   595→        $brands = velure3_opt( 'brand_names', array() );
+   596→   596→        if ( ! empty( $brands ) ) {
+   597→   597→                return array_map( function( $b ) {
+   598→   598→                        return strtoupper( $b['name'] ?? '' );
+   599→   599→                }, $brands );
+   600→   600→        }
+   601→   601→        return array( 'ELIE SAAB', 'VALENTINO', 'BOTTEGA VENETA', 'SAINT LAURENT', 'ACNE STUDIOS', 'THE ROW', 'LOEWE', 'RICK OWENS' );
+   602→   602→}
+   603→   603→
+   604→   604→/**
+   605→   605→ * Get blog posts
+   606→   606→ */
+   607→   607→function velure3_get_blog_posts( $count = 3 ) {
+   608→   608→        $posts = get_posts( array(
+   609→   609→                'numberposts' => $count,
+   610→   610→                'post_type'   => 'post',
+   611→   611→                'post_status' => 'publish',
+   612→   612→                'orderby'     => 'date',
+   613→   613→                'order'       => 'DESC',
+   614→   614→        ) );
+   615→   615→
+   616→   616→        if ( empty( $posts ) ) return array();
+   617→   617→
+   618→   618→        return array_map( function( $p ) {
+   619→   619→                $image_id = get_post_thumbnail_id( $p->ID );
+   620→   620→                $image_url = $image_id ? wp_get_attachment_url( $image_id ) : '';
+   621→   621→                $categories = get_the_category( $p->ID );
+   622→   622→                $cat_name = ! empty( $categories ) ? $categories[0]->name : '';
+   623→   623→                return array(
+   624→   624→                        'title'   => get_the_title( $p ),
+   625→   625→                        'excerpt' => wp_trim_words( $p->post_excerpt ?: $p->post_content, 20 ),
+   626→   626→                        'link'    => get_permalink( $p ),
+   627→   627→                        'image'   => $image_url,
+   628→   628→                        'date'    => get_the_date( 'd M Y', $p ),
+   629→   629→                        'category'=> $cat_name,
+   630→   630→                );
+   631→   631→        }, $posts );
+   632→   632→}
+   633→   633→
+   634→   634→/**
+   635→   635→ * Get Instagram images
+   636→   636→ */
+   637→   637→function velure3_get_instagram_items() {
+   638→   638→        $items = velure3_opt( 'instagram_images', array() );
+   639→   639→        if ( ! empty( $items ) ) {
+   640→   640→                return array_map( function( $item ) {
+   641→   641→                        return array(
+   642→   642→                                'image' => velure3_get_image_url( $item['image'] ),
+   643→   643→                                'link'  => $item['link'] ?: 'https://instagram.com/',
+   644→   644→                        );
+   645→   645→                }, $items );
+   646→   646→        }
+   647→   647→        // Defaults — local images
+   648→   648→        $defaults = array();
+   649→   649→        for ( $i = 1; $i <= 6; $i++ ) {
+   650→   650→                $defaults[] = array(
+   651→   651→                        'image' => VELURE3_URI . '/assets/images/instagram-0' . $i . '.jpg',
+   652→   652→                        'link'  => 'https://instagram.com/',
+   653→   653→                );
+   654→   654→        }
+   655→   655→        return $defaults;
+   656→   656→}
+   657→   657→
+   658→   658→/**
+   659→   659→ * Render a single star SVG (for testimonials)
+   660→   660→ */
+   661→   661→function velure3_star_svg() {
+   662→   662→        return '<svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+   663→   663→}
