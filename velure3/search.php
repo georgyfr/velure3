@@ -1,23 +1,25 @@
 <?php
 /**
- * Velure3 — Blog Index
+ * Velure3 — Search Results Template
  * @package Velure3
  * @version 1.0.0
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 get_header();
 ?>
 
 <div class="velure-page-header">
   <div class="velure-container">
-    <h1>Le Journal</h1>
+    <h1>Resultats pour : "<?php echo esc_html( get_search_query() ); ?>"</h1>
   </div>
 </div>
 
 <div class="velure-container" style="padding-bottom:5rem;">
   <?php if ( have_posts() ) : ?>
     <?php while ( have_posts() ) : the_post(); ?>
-      <article <?php post_class( 'velure-post-card' ); ?>>
+      <article <?php post_class( 'velure-post-card velure-animate' ); ?>>
         <?php if ( has_post_thumbnail() ) : ?>
           <div class="velure-post-card-img">
             <a href="<?php the_permalink(); ?>">
@@ -49,7 +51,10 @@ get_header();
     </div>
 
   <?php else : ?>
-    <p style="text-align:center;padding:4rem 0;color:#888;">Aucun article pour le moment.</p>
+    <div class="velure-404">
+      <p>Aucun resultat pour "<?php echo esc_html( get_search_query() ); ?>".</p>
+      <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="velure-btn velure-btn-primary">Retour a l'accueil</a>
+    </div>
   <?php endif; ?>
 </div>
 

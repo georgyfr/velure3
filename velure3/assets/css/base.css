@@ -5,12 +5,15 @@
 :root {
   --v-color-base: #FAFAF8;
   --v-color-contrast: #1A1A1A;
+  --v-color-contrast-light: #333333;
   --v-color-secondary: #C8A97E;
   --v-color-accent: #8B5E3C;
   --v-color-muted: #E8E4DE;
   --v-color-soft: #F5F0EB;
   --v-color-white: #FFFFFF;
   --v-color-border: #E5E0D8;
+  --v-color-text-muted: #666666;
+  --v-color-text-faint: #999999;
 
   --v-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --v-font-serif: 'Playfair Display', 'Georgia', serif;
@@ -44,12 +47,19 @@ body {
   padding: 0;
 }
 
+body.velure-menu-open,
+body.velure-search-open {
+  overflow: hidden;
+}
+
 #wpadminbar { position: fixed !important; }
 .admin-bar .velure-navbar { top: 32px; }
 .admin-bar .velure-search-overlay { padding-top: calc(15vh + 32px); }
+.admin-bar .velure-mobile-menu { top: 32px; height: calc(100% - 32px); }
 @media (max-width: 782px) {
   .admin-bar .velure-navbar { top: 46px; }
   .admin-bar .velure-search-overlay { padding-top: calc(15vh + 46px); }
+  .admin-bar .velure-mobile-menu { top: 46px; height: calc(100% - 46px); }
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -58,9 +68,33 @@ ul, ol { list-style: none; }
 button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 input, textarea { font: inherit; border: none; outline: none; }
 
+/* Focus-visible accessibility */
+a:focus-visible,
+button:focus-visible,
+.velure-btn:focus-visible,
+.velure-header-btn:focus-visible,
+.velure-nav-link:focus-visible,
+.velure-carousel-arrow:focus-visible,
+.velure-newsletter-btn:focus-visible {
+  outline: 2px solid var(--v-color-secondary);
+  outline-offset: 2px;
+}
+.velure-newsletter-input:focus,
+.velure-search-input:focus {
+  outline: none;
+}
+
 .velure-container {
   width: 100%;
   max-width: var(--v-container);
+  margin: 0 auto;
+  padding: 0 var(--v-gutter);
+  box-sizing: border-box;
+}
+
+.velure-container-wide {
+  width: 100%;
+  max-width: var(--v-container-wide);
   margin: 0 auto;
   padding: 0 var(--v-gutter);
   box-sizing: border-box;
@@ -86,7 +120,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .velure-section-heading p {
   font-size: 0.95rem;
-  color: #666;
+  color: var(--v-color-text-muted);
   max-width: 500px;
   margin: 0 auto;
   line-height: 1.6;
@@ -119,13 +153,19 @@ h1, h2, h3, h4, h5, h6 {
   transition: all var(--v-transition);
   text-decoration: none;
 }
+.velure-btn:disabled,
+.velure-btn.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
 
 .velure-btn-primary {
   background: var(--v-color-contrast);
   color: var(--v-color-base);
 }
 .velure-btn-primary:hover {
-  background: #333;
+  background: var(--v-color-contrast-light);
   color: var(--v-color-base);
   transform: translateY(-1px);
 }
@@ -186,11 +226,13 @@ h1, h2, h3, h4, h5, h6 {
   .velure-grid-4 { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 768px) {
+  .velure-section { padding: 3rem 0; }
   .velure-grid-2,
   .velure-grid-3,
   .velure-grid-4 { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
+  .velure-section { padding: 2rem 0; }
   .velure-grid-2,
   .velure-grid-3,
   .velure-grid-4 { grid-template-columns: 1fr; }
@@ -226,4 +268,20 @@ h1, h2, h3, h4, h5, h6 {
 .velure-animate.velure-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .velure-marquee-track { animation: none !important; }
+  .velure-skeleton { animation: none !important; }
+  html { scroll-behavior: auto; }
+  .velure-animate {
+    opacity: 1;
+    transform: none;
+  }
 }

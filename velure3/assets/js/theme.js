@@ -27,12 +27,12 @@
   if (searchToggle && searchOverlay) {
     searchToggle.addEventListener('click', function() {
       searchOverlay.classList.add('velure-active');
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('velure-search-open');
       setTimeout(function() { if (searchInput) searchInput.focus(); }, 100);
     });
     var closeSearch = function() {
       searchOverlay.classList.remove('velure-active');
-      document.body.style.overflow = '';
+      document.body.classList.remove('velure-search-open');
     };
     if (searchClose) searchClose.addEventListener('click', closeSearch);
     searchOverlay.addEventListener('click', function(e) {
@@ -53,12 +53,12 @@
     var openMobile = function() {
       mobileMenu.classList.add('velure-active');
       mobileOverlay.classList.add('velure-active');
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('velure-menu-open');
     };
     var closeMobile = function() {
       mobileMenu.classList.remove('velure-active');
       mobileOverlay.classList.remove('velure-active');
-      document.body.style.overflow = '';
+      document.body.classList.remove('velure-menu-open');
     };
     menuToggle.addEventListener('click', openMobile);
     if (mobileClose) mobileClose.addEventListener('click', closeMobile);
