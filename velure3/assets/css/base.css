@@ -109,21 +109,21 @@ h1, h2, h3, h4, h5, h6 {
 
 .velure-section-heading {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 3.5rem;
 }
 
 .velure-section-heading h2 {
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
 .velure-section-heading p {
   font-size: 0.95rem;
   color: var(--v-color-text-muted);
-  max-width: 500px;
+  max-width: 520px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .velure-eyebrow {
@@ -201,7 +201,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .velure-section {
-  padding: 5rem 0;
+  padding: 5.5rem 0;
   width: 100%;
 }
 
