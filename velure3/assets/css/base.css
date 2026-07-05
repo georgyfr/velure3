@@ -47,18 +47,15 @@ body {
   padding: 0;
 }
 
-body.velure-menu-open,
-body.velure-search-open {
+body.velure-menu-open {
   overflow: hidden;
 }
 
 #wpadminbar { position: fixed !important; }
 .admin-bar .velure-navbar { top: 32px; }
-.admin-bar .velure-search-overlay { padding-top: calc(15vh + 32px); }
 .admin-bar .velure-mobile-menu { top: 32px; height: calc(100% - 32px); }
 @media (max-width: 782px) {
   .admin-bar .velure-navbar { top: 46px; }
-  .admin-bar .velure-search-overlay { padding-top: calc(15vh + 46px); }
   .admin-bar .velure-mobile-menu { top: 46px; height: calc(100% - 46px); }
 }
 
@@ -79,8 +76,7 @@ button:focus-visible,
   outline: 2px solid var(--v-color-secondary);
   outline-offset: 2px;
 }
-.velure-newsletter-input:focus,
-.velure-search-input:focus {
+.velure-newsletter-input:focus {
   outline: none;
 }
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Velure3 — Header
- * Topbar + Sticky Navbar + Search Overlay + Mobile Menu
+ * Clean Topbar + Sticky Navbar with Inline Dynamic Search + Mobile Menu
  *
  * @package Velure3
  * @version 1.0.0
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div class="velure-topbar">
   <div class="velure-container velure-topbar-inner">
     <span class="velure-topbar-text">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px;"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
       Livraison offerte des 150 EUR d'achat &bull; Retours gratuits 30 jours
     </span>
     <div class="velure-topbar-actions">
@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     </a>
 
     <!-- Desktop Navigation -->
-    <div class="velure-nav">
+    <div class="velure-nav" id="velure-nav">
       <?php
       wp_nav_menu( array(
         'theme_location' => 'primary',
@@ -60,12 +60,35 @@ if ( ! defined( 'ABSPATH' ) ) exit;
       ?>
     </div>
 
-    <!-- Header Actions -->
+    <!-- Header Actions: Inline Search + Icons -->
     <div class="velure-header-actions">
-      <!-- Search -->
-      <button class="velure-header-btn" id="velure-search-toggle" aria-label="Rechercher">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
+      <!-- Inline Dynamic Search -->
+      <div class="velure-inline-search" id="velure-inline-search">
+        <button class="velure-search-trigger" id="velure-search-trigger" aria-label="Rechercher">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <div class="velure-search-expand">
+          <form role="search" method="get" class="velure-search-form-inline" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+            <input type="search"
+                   class="velure-search-input-inline"
+                   id="velure-search-input-inline"
+                   placeholder="Rechercher..."
+                   value="<?php echo esc_attr( get_search_query() ); ?>"
+                   name="s"
+                   autocomplete="off"
+                   aria-label="Rechercher un produit">
+            <input type="hidden" name="post_type" value="product">
+            <button type="submit" class="velure-search-submit-inline" aria-label="Rechercher">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <button type="button" class="velure-search-clear-inline" id="velure-search-clear-inline" aria-label="Effacer" style="display:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </form>
+          <!-- Dynamic Results Dropdown -->
+          <div class="velure-search-results" id="velure-search-results" style="display:none;"></div>
+        </div>
+      </div>
 
       <!-- Account -->
       <a href="<?php echo esc_url( home_url( '/mon-compte/' ) ); ?>" class="velure-header-btn" aria-label="Mon compte">
@@ -98,22 +121,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
   </div>
 </nav>
 
-<!-- ═══════ SEARCH OVERLAY ═══════ -->
-<div class="velure-search-overlay" id="velure-search-overlay">
-  <button class="velure-search-close" id="velure-search-close" aria-label="Fermer">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <div class="velure-search-inner">
-    <form role="search" method="get" class="velure-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-      <input type="search" class="velure-search-input" id="velure-search-input" placeholder="Rechercher un produit, une collection..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off">
-      <input type="hidden" name="post_type" value="product">
-      <button type="submit" class="velure-search-submit" aria-label="Rechercher">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </button>
-    </form>
-  </div>
-</div>
-
 <!-- ═══════ MOBILE OVERLAY ═══════ -->
 <div class="velure-mobile-overlay" id="velure-mobile-overlay"></div>
 
@@ -124,6 +131,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
     <button class="velure-mobile-close" id="velure-mobile-close" aria-label="Fermer le menu">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
+  </div>
+  <!-- Mobile Search -->
+  <div class="velure-mobile-search">
+    <form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+      <input type="search" placeholder="Rechercher un produit..." name="s" autocomplete="off">
+      <input type="hidden" name="post_type" value="product">
+      <button type="submit" aria-label="Rechercher">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </form>
   </div>
   <?php
   wp_nav_menu( array(
