@@ -243,6 +243,14 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
+/* Force horizontal nav — prevent WP or plugins from breaking layout */
+.velure-nav-list > li,
+.velure-nav-list > .menu-item {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--v-color-base); }
 ::-webkit-scrollbar-thumb { background: var(--v-color-muted); border-radius: 3px; }
