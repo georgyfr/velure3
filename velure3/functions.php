@@ -404,19 +404,23 @@ function velure3_localize() {
 }
 
 /* ═══════════════════════════════════════════════
-   6. DYNAMIC CONTENT
-   ═══════════════════════════════════════════════ */
-require_once VELURE3_DIR . '/inc/dynamic-fields.php';
+   6. DYNAMIC CONTENT — Delegated to Velure Core plugin
+   ═══════════════════════════════════════════════
+   If Velure Core plugin is active, it provides all ACF fields,
+   data helpers, and CPT. Otherwise, load the bundled shim.
+   */
+if ( ! did_action( 'velure_core_loaded' ) ) {
+        require_once VELURE3_DIR . '/inc/dynamic-fields-shim.php';
+}
 
 /* ═══════════════════════════════════════════════
-   7. ADMIN NOTICE
+   7. ADMIN NOTICE — Plugin recommendation
    ═══════════════════════════════════════════════ */
-add_action( 'admin_notices', 'velure3_acf_notice' );
-function velure3_acf_notice() {
-        if ( function_exists( 'acf_add_options_page' ) ) return;
-        echo '<div class="notice notice-warning"><p>';
-        echo '<strong>Velure3 :</strong> Le plugin <em>Advanced Custom Fields</em> (ACF) n\'est pas actif. ';
-        echo 'La page d\'accueil utilisera le contenu par défaut. ';
-        echo '<a href="' . esc_url( admin_url( 'plugin-install.php?s=advanced+custom+fields&tab=search&type=term' ) ) . '">Installer ACF</a>';
+add_action( 'admin_notices', 'velure3_plugin_notice' );
+function velure3_plugin_notice() {
+        if ( did_action( 'velure_core_loaded' ) ) return;
+        echo '<div class="notice notice-info"><p>';
+        echo '<strong>Velure3 :</strong> Pour une personnalisation complete de la page d\'accueil, installez le plugin <em>Velure Core</em>. ';
+        echo '<a href="' . esc_url( admin_url( 'plugin-install.php?s=velure+core&tab=search&type=term' ) ) . '">En savoir plus</a>';
         echo '</p></div>';
 }
