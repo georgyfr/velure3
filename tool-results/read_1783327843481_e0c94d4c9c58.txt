@@ -1,0 +1,1760 @@
+     1→<?php
+     2→/**
+     3→ * Velure Core — Admin Page
+     4→ * All settings are stored in a single wp_options row keyed by VELURE_CORE_OPTION.
+     5→ * Uses native WordPress Settings API patterns and custom forms — NO ACF dependency.
+     6→ *
+     7→ * @package VelureCore
+     8→ */
+     9→
+    10→if ( ! defined( 'ABSPATH' ) ) exit;
+    11→
+    12→/* ═══════════════════════════════════════════════
+    13→   1. SETTINGS RETRIEVAL
+    14→   ═══════════════════════════════════════════════ */
+    15→
+    16→/**
+    17→ * Retrieve the full settings array, merged with plugin defaults.
+    18→ *
+    19→ * @return array
+    20→ */
+    21→function velure_core_get_settings() {
+    22→        $saved   = get_option( VELURE_CORE_OPTION, array() );
+    23→        $default = Velure_Core::instance()->default_settings();
+    24→        return wp_parse_args( $saved, $default );
+    25→}
+    26→
+    27→/* ═══════════════════════════════════════════════
+    28→   2. FIELD HELPER FUNCTIONS
+    29→   ═══════════════════════════════════════════════ */
+    30→
+    31→/**
+    32→ * Render a standard text input field.
+    33→ *
+    34→ * @param array $args { label, name, value, description?, placeholder? }
+    35→ */
+    36→function velure_core_field_text( $args ) {
+    37→        $id          = 'vc-' . sanitize_html_class( $args['name'] );
+    38→        $val         = esc_attr( $args['value'] ?? '' );
+    39→        $desc        = ! empty( $args['description'] ) ? '<p class="description">' . esc_html( $args['description'] ) . '</p>' : '';
+    40→        $placeholder = ! empty( $args['placeholder'] ) ? ' placeholder="' . esc_attr( $args['placeholder'] ) . '"' : '';
+    41→
+    42→        echo '<div class="vc-field">';
+    43→        echo '<label for="' . $id . '">' . esc_html( $args['label'] ) . '</label>';
+    44→        echo '<input type="text" id="' . $id . '" name="' . esc_attr( $args['name'] ) . '" value="' . $val . '"' . $placeholder . ' class="regular-text" />';
+    45→        echo $desc;
+    46→        echo '</div>';
+    47→}
+    48→
+    49→/**
+    50→ * Render a textarea field.
+    51→ *
+    52→ * @param array $args { label, name, value, description?, rows? }
+    53→ */
+    54→function velure_core_field_textarea( $args ) {
+    55→        $id   = 'vc-' . sanitize_html_class( $args['name'] );
+    56→        $val  = esc_textarea( $args['value'] ?? '' );
+    57→        $desc = ! empty( $args['description'] ) ? '<p class="description">' . esc_html( $args['description'] ) . '</p>' : '';
+    58→        $rows = ! empty( $args['rows'] ) ? intval( $args['rows'] ) : 5;
+    59→
+    60→        echo '<div class="vc-field">';
+    61→        echo '<label for="' . $id . '">' . esc_html( $args['label'] ) . '</label>';
+    62→        echo '<textarea id="' . $id . '" name="' . esc_attr( $args['name'] ) . '" rows="' . $rows . '" class="large-text">' . $val . '</textarea>';
+    63→        echo $desc;
+    64→        echo '</div>';
+    65→}
+    66→
+    67→/**
+    68→ * Render a select dropdown.
+    69→ *
+    70→ * @param array $args { label, name, value, choices (assoc array), description? }
+    71→ */
+    72→function velure_core_field_select( $args ) {
+    73→        $id   = 'vc-' . sanitize_html_class( $args['name'] );
+    74→        $val  = isset( $args['value'] ) ? $args['value'] : '';
+    75→        $desc = ! empty( $args['description'] ) ? '<p class="description">' . esc_html( $args['description'] ) . '</p>' : '';
+    76→        $choices = ! empty( $args['choices'] ) ? $args['choices'] : array();
+    77→
+    78→        echo '<div class="vc-field">';
+    79→        echo '<label for="' . $id . '">' . esc_html( $args['label'] ) . '</label>';
+    80→        echo '<select id="' . $id . '" name="' . esc_attr( $args['name'] ) . '">';
+    81→        foreach ( $choices as $ck => $cv ) {
+    82→                $selected = ( string ) $val === ( string ) $ck ? ' selected' : '';
+    83→                echo '<option value="' . esc_attr( $ck ) . '"' . $selected . '>' . esc_html( $cv ) . '</option>';
+    84→        }
+    85→        echo '</select>';
+    86→        echo $desc;
+    87→        echo '</div>';
+    88→}
+    89→
+    90→/**
+    91→ * Render a number input field.
+    92→ *
+    93→ * @param array $args { label, name, value, description?, min?, max?, step? }
+    94→ */
+    95→function velure_core_field_number( $args ) {
+    96→        $id   = 'vc-' . sanitize_html_class( $args['name'] );
+    97→        $val  = isset( $args['value'] ) ? intval( $args['value'] ) : 0;
+    98→        $desc = ! empty( $args['description'] ) ? '<p class="description">' . esc_html( $args['description'] ) . '</p>' : '';
+    99→        $min  = isset( $args['min'] ) ? ' min="' . intval( $args['min'] ) . '"' : '';
+   100→        $max  = isset( $args['max'] ) ? ' max="' . intval( $args['max'] ) . '"' : '';
+   101→        $step = isset( $args['step'] ) ? ' step="' . esc_attr( $args['step'] ) . '"' : '';
+   102→
+   103→        echo '<div class="vc-field">';
+   104→        echo '<label for="' . $id . '">' . esc_html( $args['label'] ) . '</label>';
+   105→        echo '<input type="number" id="' . $id . '" name="' . esc_attr( $args['name'] ) . '" value="' . $val . '" class="small-text"' . $min . $max . $step . ' />';
+   106→        echo $desc;
+   107→        echo '</div>';
+   108→}
+   109→
+   110→/**
+   111→ * Render a toggle switch (checkbox styled as toggle).
+   112→ *
+   113→ * @param array $args { label, name, value, description?, on_text?, off_text? }
+   114→ */
+   115→function velure_core_field_toggle( $args ) {
+   116→        $name    = esc_attr( $args['name'] );
+   117→        $checked = ! empty( $args['value'] ) ? 'checked' : '';
+   118→        $on      = $args['on_text'] ?? 'Oui';
+   119→        $off     = $args['off_text'] ?? 'Non';
+   120→
+   121→        echo '<div class="vc-field vc-toggle-field">';
+   122→        echo '<label>' . esc_html( $args['label'] ) . '</label>';
+   123→        echo '<label class="vc-toggle">';
+   124→        echo '<input type="checkbox" name="' . $name . '" value="1" ' . $checked . ' />';
+   125→        echo '<span class="vc-toggle-slider"></span>';
+   126→        echo '<span class="vc-toggle-labels"><span class="vc-toggle-on">' . esc_html( $on ) . '</span><span class="vc-toggle-off">' . esc_html( $off ) . '</span></span>';
+   127→        echo '</label>';
+   128→        if ( ! empty( $args['description'] ) ) {
+   129→                echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+   130→        }
+   131→        echo '</div>';
+   132→}
+   133→
+   134→/**
+   135→ * Render an image upload field with "Choose Image" button and preview.
+   136→ *
+   137→ * @param array $args { label, name, value (attachment ID), description? }
+   138→ */
+   139→function velure_core_field_image( $args ) {
+   140→        $name    = esc_attr( $args['name'] );
+   141→        $val     = intval( $args['value'] ?? 0 );
+   142→        $url     = $val ? wp_get_attachment_url( $val ) : '';
+   143→        $preview = $url
+   144→                ? '<img src="' . esc_url( $url ) . '" class="vc-img-preview" />'
+   145→                : '<div class="vc-img-placeholder">Aucune image</div>';
+   146→
+   147→        echo '<div class="vc-field vc-image-field">';
+   148→        echo '<label>' . esc_html( $args['label'] ) . '</label>';
+   149→        echo '<div class="vc-img-wrap">' . $preview . '</div>';
+   150→        echo '<input type="hidden" name="' . $name . '" value="' . $val . '" class="vc-img-id" />';
+   151→        echo '<button type="button" class="button vc-img-btn">Choisir une image</button>';
+   152→        echo '<button type="button" class="button vc-img-remove" style="' . ( $val ? '' : 'display:none;' ) . '">Supprimer</button>';
+   153→        if ( ! empty( $args['description'] ) ) {
+   154→                echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+   155→        }
+   156→        echo '</div>';
+   157→}
+   158→
+   159→/**
+   160→ * Render the header for a repeater section with an "Add" button.
+   161→ *
+   162→ * @param array $args { label, button_label?, description? }
+   163→ */
+   164→function velure_core_field_repeater_header( $args ) {
+   165→        $button_label = $args['button_label'] ?? 'Ajouter un element';
+   166→        echo '<div class="vc-repeater-header-wrap">';
+   167→        echo '<h3>' . esc_html( $args['label'] ) . '</h3>';
+   168→        echo '<button type="button" class="button button-secondary vc-repeater-add">' . esc_html( $button_label ) . '</button>';
+   169→        if ( ! empty( $args['description'] ) ) {
+   170→                echo '<p class="description">' . esc_html( $args['description'] ) . '</p>';
+   171→        }
+   172→        echo '</div>';
+   173→}
+   174→
+   175→/**
+   176→ * Output the opening markup of a repeater row.
+   177→ *
+   178→ * @param int   $index  Current row index.
+   179→ * @param string $title Row title (e.g. "Slide 1").
+   180→ */
+   181→function velure_core_field_repeater_row_start( $index, $title = '' ) {
+   182→        echo '<div class="vc-repeater-row" data-index="' . intval( $index ) . '">';
+   183→        echo '<div class="vc-repeater-header">';
+   184→        echo '<span class="vc-repeater-handle" title="Glisser pour reordonner">&#9776;</span>';
+   185→        echo '<span class="vc-repeater-title">' . esc_html( $title ) . '</span>';
+   186→        echo '<button type="button" class="button vc-repeater-remove">Supprimer</button>';
+   187→        echo '</div>';
+   188→        echo '<div class="vc-repeater-fields">';
+   189→}
+   190→
+   191→/**
+   192→ * Output the closing markup of a repeater row.
+   193→ */
+   194→function velure_core_field_repeater_row_end() {
+   195→        echo '</div><!-- .vc-repeater-fields -->';
+   196→        echo '</div><!-- .vc-repeater-row -->';
+   197→}
+   198→
+   199→/* ═══════════════════════════════════════════════
+   200→   3. TAB RENDERING FUNCTIONS
+   201→   ═══════════════════════════════════════════════ */
+   202→
+   203→/**
+   204→ * Tab: Sections — Visibility toggles & drag-and-drop ordering.
+   205→ *
+   206→ * @param array $s Full settings array.
+   207→ */
+   208→function velure_core_tab_sections( $s ) {
+   209→        echo '<div class="vc-section vc-section-sections">';
+   210→
+   211→        /* ── Visibility toggles ── */
+   212→        echo '<h3>Visibilite des sections</h3>';
+   213→        echo '<p class="description">Activez ou desactivez chaque section de la page d\'accueil.</p>';
+   214→
+   215→        $visibility_sections = array(
+   216→                'show_hero'         => 'Hero (Slider)',
+   217→                'show_features'     => 'Barre de confiance',
+   218→                'show_categories'   => 'Categories',
+   219→                'show_products'     => 'Produits vedettes',
+   220→                'show_split_banner' => 'Banniere splittee',
+   221→                'show_marquee'      => 'Marquee (marques)',
+   222→                'show_testimonials' => 'Temoignages',
+   223→                'show_blog'         => 'Blog',
+   224→                'show_instagram'    => 'Instagram',
+   225→        );
+   226→
+   227→        echo '<div class="vc-grid vc-grid-2">';
+   228→        foreach ( $visibility_sections as $key => $label ) {
+   229→                velure_core_field_toggle( array(
+   230→                        'label' => $label,
+   231→                        'name'  => $key,
+   232→                        'value' => $s[ $key ] ?? 0,
+   233→                ) );
+   234→        }
+   235→        echo '</div>';
+   236→
+   237→        echo '<hr class="vc-separator" />';
+   238→
+   239→        /* ── Section ordering ── */
+   240→        echo '<h3>Ordre des sections</h3>';
+   241→        echo '<p class="description">Glissez-deposez pour reordonner les sections sur la page d\'accueil.</p>';
+   242→
+   243→        $section_labels = array(
+   244→                'hero'         => 'Hero (Slider)',
+   245→                'features'     => 'Barre de confiance',
+   246→                'categories'   => 'Categories',
+   247→                'products'     => 'Produits vedettes',
+   248→                'split_banner' => 'Banniere splittee',
+   249→                'marquee'      => 'Marquee (marques)',
+   250→                'testimonials' => 'Temoignages',
+   251→                'blog'         => 'Blog',
+   252→                'instagram'    => 'Instagram',
+   253→        );
+   254→
+   255→        $current_order = $s['section_order'] ?? array_keys( $section_labels );
+   256→        if ( ! is_array( $current_order ) || empty( $current_order ) ) {
+   257→                $current_order = array_keys( $section_labels );
+   258→        }
+   259→
+   260→        echo '<ul class="vc-sortable-list">';
+   261→        foreach ( $current_order as $i => $sec ) {
+   262→                $label   = $section_labels[ $sec ] ?? $sec;
+   263→                $visible = ! empty( $s[ 'show_' . $sec ] ) ? ' visible' : '';
+   264→                echo '<li class="vc-sortable-item' . $visible . '">';
+   265→                echo '<span class="vc-sortable-handle" title="Glisser pour reordonner">&#9776;</span>';
+   266→                echo '<span class="vc-sortable-label">' . esc_html( $label ) . '</span>';
+   267→                echo '<input type="hidden" name="section_order[]" value="' . esc_attr( $sec ) . '" />';
+   268→                echo '</li>';
+   269→        }
+   270→        echo '</ul>';
+   271→
+   272→        echo '</div>';
+   273→}
+   274→
+   275→/**
+   276→ * Tab: Hero — Slider configuration with slides repeater and side blocks.
+   277→ *
+   278→ * @param array $s Full settings array.
+   279→ */
+   280→function velure_core_tab_hero( $s ) {
+   281→        echo '<div class="vc-section vc-section-hero">';
+   282→
+   283→        /* ── Slider settings ── */
+   284→        echo '<h3>Parametres du slider</h3>';
+   285→        echo '<div class="vc-grid vc-grid-2">';
+   286→
+   287→        velure_core_field_select( array(
+   288→                'label'   => 'Hauteur du hero',
+   289→                'name'    => 'hero_height',
+   290→                'value'   => $s['hero_height'] ?? 'standard',
+   291→                'choices' => array(
+   292→                        'small'    => 'Petite',
+   293→                        'standard' => 'Standard',
+   294→                        'large'    => 'Grande',
+   295→                        'fullscreen' => 'Plein ecran',
+   296→                ),
+   297→        ) );
+   298→
+   299→        velure_core_field_toggle( array(
+   300→                'label' => 'Lecture automatique',
+   301→                'name'  => 'hero_autoplay',
+   302→                'value' => $s['hero_autoplay'] ?? 1,
+   303→        ) );
+   304→
+   305→        velure_core_field_number( array(
+   306→                'label' => 'Vitesse autoplay (ms)',
+   307→                'name'  => 'hero_autoplay_speed',
+   308→                'value' => $s['hero_autoplay_speed'] ?? 6000,
+   309→                'min'   => 1000,
+   310→                'max'   => 20000,
+   311→                'step'  => 500,
+   312→        ) );
+   313→
+   314→        velure_core_field_number( array(
+   315→                'label'       => 'Opacite de l\'overlay (%)',
+   316→                'name'        => 'hero_overlay_opacity',
+   317→                'value'       => $s['hero_overlay_opacity'] ?? 40,
+   318→                'min'         => 0,
+   319→                'max'         => 100,
+   320→                'step'        => 5,
+   321→                'description' => '0 = transparent, 100 = noir total.',
+   322→        ) );
+   323→
+   324→        velure_core_field_select( array(
+   325→                'label'   => 'Alignement du texte',
+   326→                'name'    => 'hero_text_align',
+   327→                'value'   => $s['hero_text_align'] ?? 'left',
+   328→                'choices' => array(
+   329→                        'left'   => 'Gauche',
+   330→                        'center' => 'Centre',
+   331→                        'right'  => 'Droite',
+   332→                ),
+   333→        ) );
+   334→
+   335→        velure_core_field_select( array(
+   336→                'label'   => 'Couleur du texte',
+   337→                'name'    => 'hero_text_color',
+   338→                'value'   => $s['hero_text_color'] ?? 'light',
+   339→                'choices' => array(
+   340→                        'light' => 'Clair (sur fond fonce)',
+   341→                        'dark'  => 'Fonce (sur fond clair)',
+   342→                ),
+   343→        ) );
+   344→
+   345→        echo '</div>';
+   346→
+   347→        echo '<hr class="vc-separator" />';
+   348→
+   349→        /* ── Side blocks ── */
+   350→        echo '<h3>Blocs lateraux</h3>';
+   351→        velure_core_field_toggle( array(
+   352→                'label'       => 'Afficher les blocs lateraux',
+   353→                'name'        => 'hero_show_side',
+   354→                'value'       => $s['hero_show_side'] ?? 0,
+   355→                'description' => 'Affiche un bloc best-seller et un bloc categorie a cote du slider.',
+   356→        ) );
+   357→
+   358→        echo '<div class="vc-side-blocks ' . ( ! empty( $s['hero_show_side'] ) ? '' : 'vc-hidden' ) . '" id="vc-hero-side-blocks">';
+   359→
+   360→        echo '<h4>Best-Seller</h4>';
+   361→        echo '<div class="vc-grid vc-grid-2">';
+   362→
+   363→        velure_core_field_image( array(
+   364→                'label' => 'Image best-seller',
+   365→                'name'  => 'hs_bestseller_image',
+   366→                'value' => $s['hs_bestseller_image'] ?? 0,
+   367→        ) );
+   368→        velure_core_field_text( array(
+   369→                'label'       => 'Label',
+   370→                'name'        => 'hs_bestseller_label',
+   371→                'value'       => $s['hs_bestseller_label'] ?? 'Best-Seller',
+   372→        ) );
+   373→        velure_core_field_text( array(
+   374→                'label'       => 'Titre du produit',
+   375→                'name'        => 'hs_bestseller_title',
+   376→                'value'       => $s['hs_bestseller_title'] ?? 'Sac Elegance',
+   377→        ) );
+   378→        velure_core_field_text( array(
+   379→                'label'       => 'Prix',
+   380→                'name'        => 'hs_bestseller_price',
+   381→                'value'       => $s['hs_bestseller_price'] ?? '285,00 EUR',
+   382→        ) );
+   383→        velure_core_field_text( array(
+   384→                'label'       => 'Texte du bouton CTA',
+   385→                'name'        => 'hs_bestseller_cta',
+   386→                'value'       => $s['hs_bestseller_cta'] ?? 'VOIR LE PRODUIT',
+   387→        ) );
+   388→        velure_core_field_text( array(
+   389→                'label'       => 'Lien du bouton CTA',
+   390→                'name'        => 'hs_bestseller_link',
+   391→                'value'       => $s['hs_bestseller_link'] ?? '#',
+   392→        ) );
+   393→
+   394→        echo '</div>';
+   395→
+   396→        echo '<h4>Bloc Categorie</h4>';
+   397→        echo '<div class="vc-grid vc-grid-2">';
+   398→
+   399→        velure_core_field_image( array(
+   400→                'label' => 'Image categorie',
+   401→                'name'  => 'hs_category_image',
+   402→                'value' => $s['hs_category_image'] ?? 0,
+   403→        ) );
+   404→        velure_core_field_text( array(
+   405→                'label'       => 'Label',
+   406→                'name'        => 'hs_category_label',
+   407→                'value'       => $s['hs_category_label'] ?? 'Capsule',
+   408→        ) );
+   409→        velure_core_field_text( array(
+   410→                'label'       => 'Titre de la categorie',
+   411→                'name'        => 'hs_category_title',
+   412→                'value'       => $s['hs_category_title'] ?? 'Les Accessoires Essentiels',
+   413→        ) );
+   414→        velure_core_field_text( array(
+   415→                'label'       => 'Lien vers la categorie',
+   416→                'name'        => 'hs_category_cta_link',
+   417→                'value'       => $s['hs_category_cta_link'] ?? '/categorie/accessoires/',
+   418→        ) );
+   419→
+   420→        echo '</div>';
+   421→        echo '</div>';
+   422→
+   423→        echo '<hr class="vc-separator" />';
+   424→
+   425→        /* ── Slides repeater ── */
+   426→        $slides = $s['hero_slides'] ?? array();
+   427→        if ( ! is_array( $slides ) ) {
+   428→                $slides = array();
+   429→        }
+   430→
+   431→        velure_core_field_repeater_header( array(
+   432→                'label'         => 'Slides du hero',
+   433→                'button_label'  => 'Ajouter un slide',
+   434→                'description'   => 'Chaque slide comprend une image, un texte et un bouton CTA.',
+   435→        ) );
+   436→
+   437→        echo '<div class="vc-repeater" id="vc-hero-slides-repeater">';
+   438→
+   439→        /* Existing rows */
+   440→        foreach ( $slides as $i => $slide ) {
+   441→                if ( ! is_array( $slide ) ) {
+   442→                        $slide = array();
+   443→                }
+   444→                velure_core_field_repeater_row_start( $i, 'Slide ' . ( $i + 1 ) );
+   445→
+   446→                velure_core_field_image( array(
+   447→                        'label' => 'Image du slide',
+   448→                        'name'  => 'hero_slides[' . $i . '][image]',
+   449→                        'value' => $slide['image'] ?? 0,
+   450→                ) );
+   451→                velure_core_field_text( array(
+   452→                        'label'       => 'Eyebrow',
+   453→                        'name'        => 'hero_slides[' . $i . '][eyebrow]',
+   454→                        'value'       => $slide['eyebrow'] ?? '',
+   455→                        'placeholder' => 'Nouvelle Collection',
+   456→                ) );
+   457→                velure_core_field_text( array(
+   458→                        'label'       => 'Titre',
+   459→                        'name'        => 'hero_slides[' . $i . '][title]',
+   460→                        'value'       => $slide['title'] ?? '',
+   461→                        'placeholder' => "L'Elegance Minimaliste",
+   462→                ) );
+   463→                velure_core_field_text( array(
+   464→                        'label'       => 'Sous-titre',
+   465→                        'name'        => 'hero_slides[' . $i . '][subtitle]',
+   466→                        'value'       => $slide['subtitle'] ?? '',
+   467→                        'placeholder' => 'Nouvelle Collection Automne 2026',
+   468→                ) );
+   469→                velure_core_field_text( array(
+   470→                        'label'       => 'Texte du bouton CTA',
+   471→                        'name'        => 'hero_slides[' . $i . '][cta_text]',
+   472→                        'value'       => $slide['cta_text'] ?? '',
+   473→                        'placeholder' => 'DECOUVRIR',
+   474→                ) );
+   475→                velure_core_field_text( array(
+   476→                        'label'       => 'Lien du bouton CTA',
+   477→                        'name'        => 'hero_slides[' . $i . '][cta_link]',
+   478→                        'value'       => $slide['cta_link'] ?? '#',
+   479→                ) );
+   480→                velure_core_field_select( array(
+   481→                        'label'   => 'Style du bouton CTA',
+   482→                        'name'    => 'hero_slides[' . $i . '][cta_style]',
+   483→                        'value'   => $slide['cta_style'] ?? 'primary',
+   484→                        'choices' => array(
+   485→                                'primary' => 'Principal',
+   486→                                'secondary' => 'Secondaire',
+   487→                                'gold'    => 'Dore',
+   488→                                'outline' => 'Contour',
+   489→                        ),
+   490→                ) );
+   491→
+   492→                velure_core_field_repeater_row_end();
+   493→        }
+   494→
+   495→        /* Hidden template row for JavaScript cloning */
+   496→        echo '<div class="vc-repeater-template" style="display:none;">';
+   497→        velure_core_field_repeater_row_start( '__INDEX__', 'Slide __NUM__' );
+   498→
+   499→        velure_core_field_image( array(
+   500→                'label' => 'Image du slide',
+   501→                'name'  => 'hero_slides[__INDEX__][image]',
+   502→                'value' => 0,
+   503→        ) );
+   504→        velure_core_field_text( array(
+   505→                'label'       => 'Eyebrow',
+   506→                'name'        => 'hero_slides[__INDEX__][eyebrow]',
+   507→                'value'       => '',
+   508→                'placeholder' => 'Nouvelle Collection',
+   509→        ) );
+   510→        velure_core_field_text( array(
+   511→                'label'       => 'Titre',
+   512→                'name'        => 'hero_slides[__INDEX__][title]',
+   513→                'value'       => '',
+   514→                'placeholder' => "L'Elegance Minimaliste",
+   515→        ) );
+   516→        velure_core_field_text( array(
+   517→                'label'       => 'Sous-titre',
+   518→                'name'        => 'hero_slides[__INDEX__][subtitle]',
+   519→                'value'       => '',
+   520→                'placeholder' => 'Nouvelle Collection Automne 2026',
+   521→        ) );
+   522→        velure_core_field_text( array(
+   523→                'label'       => 'Texte du bouton CTA',
+   524→                'name'        => 'hero_slides[__INDEX__][cta_text]',
+   525→                'value'       => '',
+   526→                'placeholder' => 'DECOUVRIR',
+   527→        ) );
+   528→        velure_core_field_text( array(
+   529→                'label'       => 'Lien du bouton CTA',
+   530→                'name'        => 'hero_slides[__INDEX__][cta_link]',
+   531→                'value'       => '#',
+   532→        ) );
+   533→        velure_core_field_select( array(
+   534→                'label'   => 'Style du bouton CTA',
+   535→                'name'    => 'hero_slides[__INDEX__][cta_style]',
+   536→                'value'   => 'primary',
+   537→                'choices' => array(
+   538→                        'primary'   => 'Principal',
+   539→                        'secondary' => 'Secondaire',
+   540→                        'gold'      => 'Dore',
+   541→                        'outline'   => 'Contour',
+   542→                ),
+   543→        ) );
+   544→
+   545→        velure_core_field_repeater_row_end();
+   546→        echo '</div><!-- .vc-repeater-template -->';
+   547→
+   548→        echo '</div><!-- .vc-repeater -->';
+   549→
+   550→        echo '</div>';
+   551→}
+   552→
+   553→/**
+   554→ * Tab: Features — Trust bar with features repeater.
+   555→ *
+   556→ * @param array $s Full settings array.
+   557→ */
+   558→function velure_core_tab_features( $s ) {
+   559→        echo '<div class="vc-section vc-section-features">';
+   560→
+   561→        echo '<h3>Parametres de la barre de confiance</h3>';
+   562→        echo '<div class="vc-grid vc-grid-3">';
+   563→
+   564→        velure_core_field_select( array(
+   565→                'label'   => 'Style de fond',
+   566→                'name'    => 'feat_bg_style',
+   567→                'value'   => $s['feat_bg_style'] ?? 'soft',
+   568→                'choices' => array(
+   569→                        'base'      => 'Base',
+   570→                        'soft'      => 'Doux',
+   571→                        'muted'     => 'Mute',
+   572→                        'dark'      => 'Fonce',
+   573→                        'secondary' => 'Secondaire',
+   574→                ),
+   575→        ) );
+   576→
+   577→        velure_core_field_select( array(
+   578→                'label'   => 'Espacement vertical',
+   579→                'name'    => 'feat_padding',
+   580→                'value'   => $s['feat_padding'] ?? 'normal',
+   581→                'choices' => array(
+   582→                        'compact' => 'Compact',
+   583→                        'normal'  => 'Normal',
+   584→                        'spacious'=> 'Espacieux',
+   585→                ),
+   586→        ) );
+   587→
+   588→        velure_core_field_toggle( array(
+   589→                'label'       => 'Bordure inferieure',
+   590→                'name'        => 'feat_bottom_border',
+   591→                'value'       => $s['feat_bottom_border'] ?? 0,
+   592→                'description' => 'Affiche une ligne separatrice en bas de la section.',
+   593→        ) );
+   594→
+   595→        echo '</div>';
+   596→
+   597→        echo '<hr class="vc-separator" />';
+   598→
+   599→        /* ── Features repeater ── */
+   600→        $features = $s['trust_features'] ?? array();
+   601→        if ( ! is_array( $features ) ) {
+   602→                $features = array();
+   603→        }
+   604→
+   605→        velure_core_field_repeater_header( array(
+   606→                'label'        => 'Elements de confiance',
+   607→                'button_label' => 'Ajouter un element',
+   608→                'description'  => 'Chaque element peut avoir une icone SVG personnalisee, un titre et une description.',
+   609→        ) );
+   610→
+   611→        echo '<div class="vc-repeater" id="vc-trust-features-repeater">';
+   612→
+   613→        foreach ( $features as $i => $feat ) {
+   614→                if ( ! is_array( $feat ) ) {
+   615→                        $feat = array();
+   616→                }
+   617→                velure_core_field_repeater_row_start( $i, 'Element ' . ( $i + 1 ) );
+   618→
+   619→                velure_core_field_textarea( array(
+   620→                        'label'       => 'Icone SVG',
+   621→                        'name'        => 'trust_features[' . $i . '][icon_svg]',
+   622→                        'value'       => $feat['icon_svg'] ?? '',
+   623→                        'rows'        => 4,
+   624→                        'description' => 'Collez le code SVG de l\'icone (balise <svg>...</svg>).',
+   625→                ) );
+   626→                velure_core_field_text( array(
+   627→                        'label'       => 'Titre',
+   628→                        'name'        => 'trust_features[' . $i . '][title]',
+   629→                        'value'       => $feat['title'] ?? '',
+   630→                        'placeholder' => 'Livraison Express',
+   631→                ) );
+   632→                velure_core_field_text( array(
+   633→                        'label'       => 'Description',
+   634→                        'name'        => 'trust_features[' . $i . '][description]',
+   635→                        'value'       => $feat['description'] ?? '',
+   636→                        'placeholder' => 'Sous 24-48h en France',
+   637→                ) );
+   638→
+   639→                velure_core_field_repeater_row_end();
+   640→        }
+   641→
+   642→        /* Hidden template row */
+   643→        echo '<div class="vc-repeater-template" style="display:none;">';
+   644→        velure_core_field_repeater_row_start( '__INDEX__', 'Element __NUM__' );
+   645→
+   646→        velure_core_field_textarea( array(
+   647→                'label'       => 'Icone SVG',
+   648→                'name'        => 'trust_features[__INDEX__][icon_svg]',
+   649→                'value'       => '',
+   650→                'rows'        => 4,
+   651→                'description' => 'Collez le code SVG de l\'icone (balise <svg>...</svg>).',
+   652→        ) );
+   653→        velure_core_field_text( array(
+   654→                'label'       => 'Titre',
+   655→                'name'        => 'trust_features[__INDEX__][title]',
+   656→                'value'       => '',
+   657→                'placeholder' => 'Livraison Express',
+   658→        ) );
+   659→        velure_core_field_text( array(
+   660→                'label'       => 'Description',
+   661→                'name'        => 'trust_features[__INDEX__][description]',
+   662→                'value'       => '',
+   663→                'placeholder' => 'Sous 24-48h en France',
+   664→        ) );
+   665→
+   666→        velure_core_field_repeater_row_end();
+   667→        echo '</div><!-- .vc-repeater-template -->';
+   668→
+   669→        echo '</div><!-- .vc-repeater -->';
+   670→
+   671→        echo '</div>';
+   672→}
+   673→
+   674→/**
+   675→ * Tab: Categories — Category section settings.
+   676→ *
+   677→ * @param array $s Full settings array.
+   678→ */
+   679→function velure_core_tab_categories( $s ) {
+   680→        echo '<div class="vc-section vc-section-categories">';
+   681→
+   682→        echo '<h3>Section Categories</h3>';
+   683→        echo '<div class="vc-grid vc-grid-2">';
+   684→
+   685→        velure_core_field_text( array(
+   686→                'label'       => 'Eyebrow',
+   687→                'name'        => 'cat_eyebrow',
+   688→                'value'       => $s['cat_eyebrow'] ?? 'Collections',
+   689→                'placeholder' => 'Collections',
+   690→        ) );
+   691→        velure_core_field_text( array(
+   692→                'label'       => 'Titre de la section',
+   693→                'name'        => 'section_title_categories',
+   694→                'value'       => $s['section_title_categories'] ?? 'Explorer par Univers',
+   695→                'placeholder' => 'Explorer par Univers',
+   696→        ) );
+   697→        velure_core_field_textarea( array(
+   698→                'label'       => 'Description',
+   699→                'name'        => 'cat_description',
+   700→                'value'       => $s['cat_description'] ?? '',
+   701→                'rows'        => 3,
+   702→                'placeholder' => 'Explorez nos univers et trouvez la piece qui vous correspond.',
+   703→        ) );
+   704→        velure_core_field_text( array(
+   705→                'label'       => 'Texte du bouton CTA',
+   706→                'name'        => 'cat_cta_text',
+   707→                'value'       => $s['cat_cta_text'] ?? 'Toutes les categories',
+   708→                'placeholder' => 'Toutes les categories',
+   709→        ) );
+   710→        velure_core_field_text( array(
+   711→                'label'       => 'Lien du bouton CTA',
+   712→                'name'        => 'cat_cta_link',
+   713→                'value'       => $s['cat_cta_link'] ?? '/boutique/',
+   714→                'placeholder' => '/boutique/',
+   715→        ) );
+   716→        velure_core_field_select( array(
+   717→                'label'   => 'Style de fond',
+   718→                'name'    => 'cat_bg_style',
+   719→                'value'   => $s['cat_bg_style'] ?? 'base',
+   720→                'choices' => array(
+   721→                        'base'      => 'Base',
+   722→                        'soft'      => 'Doux',
+   723→                        'muted'     => 'Mute',
+   724→                        'dark'      => 'Fonce',
+   725→                        'secondary' => 'Secondaire',
+   726→                ),
+   727→        ) );
+   728→        velure_core_field_number( array(
+   729→                'label'       => 'Nombre de categories a afficher',
+   730→                'name'        => 'cat_display_count',
+   731→                'value'       => $s['cat_display_count'] ?? 10,
+   732→                'min'         => 1,
+   733→                'max'         => 50,
+   734→        ) );
+   735→
+   736→        echo '</div>';
+   737→        echo '</div>';
+   738→}
+   739→
+   740→/**
+   741→ * Tab: Products — Featured products settings.
+   742→ *
+   743→ * @param array $s Full settings array.
+   744→ */
+   745→function velure_core_tab_products( $s ) {
+   746→        echo '<div class="vc-section vc-section-products">';
+   747→
+   748→        echo '<h3>Section Produits Vedettes</h3>';
+   749→        echo '<div class="vc-grid vc-grid-2">';
+   750→
+   751→        velure_core_field_text( array(
+   752→                'label'       => 'Eyebrow',
+   753→                'name'        => 'prod_eyebrow',
+   754→                'value'       => $s['prod_eyebrow'] ?? 'Selection',
+   755→                'placeholder' => 'Selection',
+   756→        ) );
+   757→        velure_core_field_text( array(
+   758→                'label'       => 'Titre de la section',
+   759→                'name'        => 'section_title_products',
+   760→                'value'       => $s['section_title_products'] ?? 'Pieces Vedettes',
+   761→                'placeholder' => 'Pieces Vedettes',
+   762→        ) );
+   763→        velure_core_field_textarea( array(
+   764→                'label'       => 'Description',
+   765→                'name'        => 'prod_description',
+   766→                'value'       => $s['prod_description'] ?? '',
+   767→                'rows'        => 3,
+   768→                'placeholder' => 'Nos pieces les plus appreciees, choisies pour vous.',
+   769→        ) );
+   770→        velure_core_field_text( array(
+   771→                'label'       => 'Texte du bouton CTA',
+   772→                'name'        => 'prod_cta_text',
+   773→                'value'       => $s['prod_cta_text'] ?? 'Voir toute la boutique',
+   774→                'placeholder' => 'Voir toute la boutique',
+   775→        ) );
+   776→        velure_core_field_text( array(
+   777→                'label'       => 'Lien du bouton CTA',
+   778→                'name'        => 'prod_cta_link',
+   779→                'value'       => $s['prod_cta_link'] ?? '/boutique/',
+   780→                'placeholder' => '/boutique/',
+   781→        ) );
+   782→        velure_core_field_select( array(
+   783→                'label'   => 'Nombre de colonnes',
+   784→                'name'    => 'prod_columns',
+   785→                'value'   => $s['prod_columns'] ?? '4',
+   786→                'choices' => array(
+   787→                        '2' => '2 colonnes',
+   788→                        '3' => '3 colonnes',
+   789→                        '4' => '4 colonnes',
+   790→                ),
+   791→        ) );
+   792→        velure_core_field_select( array(
+   793→                'label'       => 'Mode de selection',
+   794→                'name'        => 'prod_mode',
+   795→                'value'       => $s['prod_mode'] ?? 'auto',
+   796→                'choices'     => array(
+   797→                        'auto'   => 'Automatique (produits recents)',
+   798→                        'manual' => 'Manuel (selection manuelle)',
+   799→                ),
+   800→                'description' => 'En mode automatique, les produits sont recuperes depuis WooCommerce.',
+   801→        ) );
+   802→        velure_core_field_number( array(
+   803→                'label'       => 'Nombre de produits a afficher',
+   804→                'name'        => 'featured_products_count',
+   805→                'value'       => $s['featured_products_count'] ?? 8,
+   806→                'min'         => 1,
+   807→                'max'         => 50,
+   808→        ) );
+   809→        velure_core_field_select( array(
+   810→                'label'   => 'Style de fond',
+   811→                'name'    => 'prod_bg_style',
+   812→                'value'   => $s['prod_bg_style'] ?? 'soft',
+   813→                'choices' => array(
+   814→                        'base'      => 'Base',
+   815→                        'soft'      => 'Doux',
+   816→                        'muted'     => 'Mute',
+   817→                        'dark'      => 'Fonce',
+   818→                        'secondary' => 'Secondaire',
+   819→                ),
+   820→        ) );
+   821→        velure_core_field_select( array(
+   822→                'label'       => 'Tri des produits',
+   823→                'name'        => 'prod_sort',
+   824→                'value'       => $s['prod_sort'] ?? 'date',
+   825→                'choices'     => array(
+   826→                        'date'       => 'Date (plus recents)',
+   827→                        'popularity' => 'Popularite',
+   828→                        'rating'     => 'Note moyenne',
+   829→                        'rand'       => 'Aleatoire',
+   830→                ),
+   831→                'description' => 'Utilise uniquement en mode automatique.',
+   832→        ) );
+   833→
+   834→        echo '</div>';
+   835→        echo '</div>';
+   836→}
+   837→
+   838→/**
+   839→ * Tab: Banner — Split banner with left/right sides.
+   840→ *
+   841→ * @param array $s Full settings array.
+   842→ */
+   843→function velure_core_tab_banner( $s ) {
+   844→        echo '<div class="vc-section vc-section-banner">';
+   845→
+   846→        echo '<h3>Banniere Splitee</h3>';
+   847→
+   848→        velure_core_field_select( array(
+   849→                'label'   => 'Disposition',
+   850→                'name'    => 'sb_layout',
+   851→                'value'   => $s['sb_layout'] ?? '50-50',
+   852→                'choices' => array(
+   853→                        '50-50' => '50 / 50',
+   854→                        '60-40' => '60 / 40',
+   855→                        '40-60' => '40 / 60',
+   856→                ),
+   857→        ) );
+   858→
+   859→        echo '<hr class="vc-separator" />';
+   860→
+   861→        /* ── Left side ── */
+   862→        echo '<h4>Cote gauche</h4>';
+   863→        echo '<div class="vc-grid vc-grid-2">';
+   864→
+   865→        velure_core_field_image( array(
+   866→                'label' => 'Image',
+   867→                'name'  => 'sb_left_image',
+   868→                'value' => $s['sb_left_image'] ?? 0,
+   869→        ) );
+   870→        velure_core_field_text( array(
+   871→                'label'       => 'Eyebrow',
+   872→                'name'        => 'sb_left_eyebrow',
+   873→                'value'       => $s['sb_left_eyebrow'] ?? 'Collection AW25',
+   874→        ) );
+   875→        velure_core_field_text( array(
+   876→                'label'       => 'Titre',
+   877→                'name'        => 'sb_left_title',
+   878→                'value'       => $s['sb_left_title'] ?? 'La Nouvelle Collection',
+   879→        ) );
+   880→        velure_core_field_textarea( array(
+   881→                'label' => 'Description',
+   882→                'name'  => 'sb_left_desc',
+   883→                'value' => $s['sb_left_desc'] ?? '',
+   884→                'rows'  => 3,
+   885→        ) );
+   886→        velure_core_field_text( array(
+   887→                'label'       => 'Texte du bouton CTA',
+   888→                'name'        => 'sb_left_cta_text',
+   889→                'value'       => $s['sb_left_cta_text'] ?? 'Decouvrir',
+   890→        ) );
+   891→        velure_core_field_text( array(
+   892→                'label'       => 'Lien du bouton CTA',
+   893→                'name'        => 'sb_left_cta_link',
+   894→                'value'       => $s['sb_left_cta_link'] ?? '/new-collection/',
+   895→        ) );
+   896→        velure_core_field_select( array(
+   897→                'label'   => 'Style du bouton CTA',
+   898→                'name'    => 'sb_left_cta_style',
+   899→                'value'   => $s['sb_left_cta_style'] ?? 'gold',
+   900→                'choices' => array(
+   901→                        'primary'   => 'Principal',
+   902→                        'secondary' => 'Secondaire',
+   903→                        'gold'      => 'Dore',
+   904→                        'outline'   => 'Contour',
+   905→                ),
+   906→        ) );
+   907→        velure_core_field_select( array(
+   908→                'label'   => 'Style visuel',
+   909→                'name'    => 'sb_left_style',
+   910→                'value'   => $s['sb_left_style'] ?? 'dark',
+   911→                'choices' => array(
+   912→                        'light' => 'Clair',
+   913→                        'dark'  => 'Fonce',
+   914→                ),
+   915→        ) );
+   916→
+   917→        echo '</div>';
+   918→
+   919→        echo '<hr class="vc-separator" />';
+   920→
+   921→        /* ── Right side ── */
+   922→        echo '<h4>Cote droit</h4>';
+   923→        echo '<div class="vc-grid vc-grid-2">';
+   924→
+   925→        velure_core_field_image( array(
+   926→                'label' => 'Image',
+   927→                'name'  => 'sb_right_image',
+   928→                'value' => $s['sb_right_image'] ?? 0,
+   929→        ) );
+   930→        velure_core_field_text( array(
+   931→                'label'       => 'Eyebrow',
+   932→                'name'        => 'sb_right_eyebrow',
+   933→                'value'       => $s['sb_right_eyebrow'] ?? 'Edition Limitee',
+   934→        ) );
+   935→        velure_core_field_text( array(
+   936→                'label'       => 'Titre',
+   937→                'name'        => 'sb_right_title',
+   938→                'value'       => $s['sb_right_title'] ?? "Accessoires d'Exception",
+   939→        ) );
+   940→        velure_core_field_textarea( array(
+   941→                'label' => 'Description',
+   942→                'name'  => 'sb_right_desc',
+   943→                'value' => $s['sb_right_desc'] ?? '',
+   944→                'rows'  => 3,
+   945→        ) );
+   946→        velure_core_field_text( array(
+   947→                'label'       => 'Texte du bouton CTA',
+   948→                'name'        => 'sb_right_cta_text',
+   949→                'value'       => $s['sb_right_cta_text'] ?? 'Explorer',
+   950→        ) );
+   951→        velure_core_field_text( array(
+   952→                'label'       => 'Lien du bouton CTA',
+   953→                'name'        => 'sb_right_cta_link',
+   954→                'value'       => $s['sb_right_cta_link'] ?? '/categorie/accessoires/',
+   955→        ) );
+   956→        velure_core_field_select( array(
+   957→                'label'   => 'Style du bouton CTA',
+   958→                'name'    => 'sb_right_cta_style',
+   959→                'value'   => $s['sb_right_cta_style'] ?? 'outline',
+   960→                'choices' => array(
+   961→                        'primary'   => 'Principal',
+   962→                        'secondary' => 'Secondaire',
+   963→                        'gold'      => 'Dore',
+   964→                        'outline'   => 'Contour',
+   965→                ),
+   966→        ) );
+   967→        velure_core_field_select( array(
+   968→                'label'   => 'Style visuel',
+   969→                'name'    => 'sb_right_style',
+   970→                'value'   => $s['sb_right_style'] ?? 'light',
+   971→                'choices' => array(
+   972→                        'light' => 'Clair',
+   973→                        'dark'  => 'Fonce',
+   974→                ),
+   975→        ) );
+   976→
+   977→        echo '</div>';
+   978→        echo '</div>';
+   979→}
+   980→
+   981→/**
+   982→ * Tab: Marquee — Brand marquee with brands repeater.
+   983→ *
+   984→ * @param array $s Full settings array.
+   985→ */
+   986→function velure_core_tab_marquee( $s ) {
+   987→        echo '<div class="vc-section vc-section-marquee">';
+   988→
+   989→        echo '<h3>Marquee (Bandeau defilant)</h3>';
+   990→        echo '<div class="vc-grid vc-grid-3">';
+   991→
+   992→        velure_core_field_number( array(
+   993→                'label'       => 'Vitesse de defilement (s)',
+   994→                'name'        => 'marquee_speed',
+   995→                'value'       => $s['marquee_speed'] ?? 25,
+   996→                'min'         => 5,
+   997→                'max'         => 120,
+   998→                'step'        => 1,
+   999→                'description' => 'Duree en secondes pour un cycle complet.',
+  1000→        ) );
+  1001→        velure_core_field_select( array(
+  1002→                'label'   => 'Fond',
+  1003→                'name'    => 'marquee_bg',
+  1004→                'value'   => $s['marquee_bg'] ?? 'base',
+  1005→                'choices' => array(
+  1006→                        'base'      => 'Base',
+  1007→                        'soft'      => 'Doux',
+  1008→                        'muted'     => 'Mute',
+  1009→                        'dark'      => 'Fonce',
+  1010→                        'secondary' => 'Secondaire',
+  1011→                ),
+  1012→        ) );
+  1013→        velure_core_field_select( array(
+  1014→                'label'   => 'Direction',
+  1015→                'name'    => 'marquee_direction',
+  1016→                'value'   => $s['marquee_direction'] ?? 'left',
+  1017→                'choices' => array(
+  1018→                        'left'  => 'Gauche vers droite',
+  1019→                        'right' => 'Droite vers gauche',
+  1020→                ),
+  1021→        ) );
+  1022→
+  1023→        echo '</div>';
+  1024→
+  1025→        echo '<hr class="vc-separator" />';
+  1026→
+  1027→        /* ── Brands repeater ── */
+  1028→        $brands = $s['brand_names'] ?? array();
+  1029→        if ( ! is_array( $brands ) ) {
+  1030→                $brands = array();
+  1031→        }
+  1032→
+  1033→        velure_core_field_repeater_header( array(
+  1034→                'label'        => 'Marques',
+  1035→                'button_label' => 'Ajouter une marque',
+  1036→                'description'  => 'Entrez le nom de chaque marque a afficher dans le bandeau defilant.',
+  1037→        ) );
+  1038→
+  1039→        echo '<div class="vc-repeater" id="vc-brand-names-repeater">';
+  1040→
+  1041→        foreach ( $brands as $i => $brand ) {
+  1042→                if ( ! is_array( $brand ) ) {
+  1043→                        $brand = array();
+  1044→                }
+  1045→                velure_core_field_repeater_row_start( $i, 'Marque ' . ( $i + 1 ) );
+  1046→
+  1047→                velure_core_field_text( array(
+  1048→                        'label'       => 'Nom de la marque',
+  1049→                        'name'        => 'brand_names[' . $i . '][name]',
+  1050→                        'value'       => $brand['name'] ?? '',
+  1051→                        'placeholder' => 'NOM DE LA MARQUE',
+  1052→                ) );
+  1053→
+  1054→                velure_core_field_repeater_row_end();
+  1055→        }
+  1056→
+  1057→        /* Hidden template row */
+  1058→        echo '<div class="vc-repeater-template" style="display:none;">';
+  1059→        velure_core_field_repeater_row_start( '__INDEX__', 'Marque __NUM__' );
+  1060→
+  1061→        velure_core_field_text( array(
+  1062→                'label'       => 'Nom de la marque',
+  1063→                'name'        => 'brand_names[__INDEX__][name]',
+  1064→                'value'       => '',
+  1065→                'placeholder' => 'NOM DE LA MARQUE',
+  1066→        ) );
+  1067→
+  1068→        velure_core_field_repeater_row_end();
+  1069→        echo '</div><!-- .vc-repeater-template -->';
+  1070→
+  1071→        echo '</div><!-- .vc-repeater -->';
+  1072→
+  1073→        echo '</div>';
+  1074→}
+  1075→
+  1076→/**
+  1077→ * Tab: Testimonials — Testimonials section settings.
+  1078→ *
+  1079→ * @param array $s Full settings array.
+  1080→ */
+  1081→function velure_core_tab_testimonials( $s ) {
+  1082→        echo '<div class="vc-section vc-section-testimonials">';
+  1083→
+  1084→        echo '<h3>Section Temoignages</h3>';
+  1085→        echo '<p class="description">Les temoignages sont recuperes depuis le CPT "velure_testimonial". Ajoutez des temoignages depuis le menu "Temoignages" dans l\'admin.</p>';
+  1086→        echo '<div class="vc-grid vc-grid-2">';
+  1087→
+  1088→        velure_core_field_text( array(
+  1089→                'label'       => 'Eyebrow',
+  1090→                'name'        => 'testi_eyebrow',
+  1091→                'value'       => $s['testi_eyebrow'] ?? 'Avis Clients',
+  1092→                'placeholder' => 'Avis Clients',
+  1093→        ) );
+  1094→        velure_core_field_text( array(
+  1095→                'label'       => 'Titre de la section',
+  1096→                'name'        => 'section_title_testimonials',
+  1097→                'value'       => $s['section_title_testimonials'] ?? 'Ce Que Disent Nos Clients',
+  1098→                'placeholder' => 'Ce Que Disent Nos Clients',
+  1099→        ) );
+  1100→        velure_core_field_textarea( array(
+  1101→                'label'       => 'Description',
+  1102→                'name'        => 'testi_description',
+  1103→                'value'       => $s['testi_description'] ?? '',
+  1104→                'rows'        => 3,
+  1105→        ) );
+  1106→        velure_core_field_number( array(
+  1107→                'label'       => 'Nombre de temoignages',
+  1108→                'name'        => 'testimonials_count',
+  1109→                'value'       => $s['testimonials_count'] ?? 3,
+  1110→                'min'         => 1,
+  1111→                'max'         => 20,
+  1112→        ) );
+  1113→        velure_core_field_select( array(
+  1114→                'label'   => 'Style de fond',
+  1115→                'name'    => 'testi_bg_style',
+  1116→                'value'   => $s['testi_bg_style'] ?? 'base',
+  1117→                'choices' => array(
+  1118→                        'base'      => 'Base',
+  1119→                        'soft'      => 'Doux',
+  1120→                        'muted'     => 'Mute',
+  1121→                        'dark'      => 'Fonce',
+  1122→                        'secondary' => 'Secondaire',
+  1123→                ),
+  1124→        ) );
+  1125→        velure_core_field_select( array(
+  1126→                'label'   => 'Nombre de colonnes',
+  1127→                'name'    => 'testi_columns',
+  1128→                'value'   => $s['testi_columns'] ?? '3',
+  1129→                'choices' => array(
+  1130→                        '1' => '1 colonne',
+  1131→                        '2' => '2 colonnes',
+  1132→                        '3' => '3 colonnes',
+  1133→                ),
+  1134→        ) );
+  1135→
+  1136→        echo '</div>';
+  1137→        echo '</div>';
+  1138→}
+  1139→
+  1140→/**
+  1141→ * Tab: Blog — Blog section settings.
+  1142→ *
+  1143→ * @param array $s Full settings array.
+  1144→ */
+  1145→function velure_core_tab_blog( $s ) {
+  1146→        echo '<div class="vc-section vc-section-blog">';
+  1147→
+  1148→        echo '<h3>Section Blog (Le Journal)</h3>';
+  1149→        echo '<div class="vc-grid vc-grid-2">';
+  1150→
+  1151→        velure_core_field_text( array(
+  1152→                'label'       => 'Eyebrow',
+  1153→                'name'        => 'blog_eyebrow',
+  1154→                'value'       => $s['blog_eyebrow'] ?? 'Actualites',
+  1155→                'placeholder' => 'Actualites',
+  1156→        ) );
+  1157→        velure_core_field_text( array(
+  1158→                'label'       => 'Titre de la section',
+  1159→                'name'        => 'section_title_blog',
+  1160→                'value'       => $s['section_title_blog'] ?? 'Le Journal',
+  1161→                'placeholder' => 'Le Journal',
+  1162→        ) );
+  1163→        velure_core_field_textarea( array(
+  1164→                'label'       => 'Description',
+  1165→                'name'        => 'blog_description',
+  1166→                'value'       => $s['blog_description'] ?? '',
+  1167→                'rows'        => 3,
+  1168→        ) );
+  1169→        velure_core_field_text( array(
+  1170→                'label'       => 'Texte du bouton CTA',
+  1171→                'name'        => 'blog_cta_text',
+  1172→                'value'       => $s['blog_cta_text'] ?? 'Voir tous les articles',
+  1173→                'placeholder' => 'Voir tous les articles',
+  1174→        ) );
+  1175→        velure_core_field_text( array(
+  1176→                'label'       => 'Lien du bouton CTA',
+  1177→                'name'        => 'blog_cta_link',
+  1178→                'value'       => $s['blog_cta_link'] ?? '/blog/',
+  1179→                'placeholder' => '/blog/',
+  1180→        ) );
+  1181→        velure_core_field_number( array(
+  1182→                'label'       => 'Nombre d\'articles',
+  1183→                'name'        => 'blog_posts_count',
+  1184→                'value'       => $s['blog_posts_count'] ?? 3,
+  1185→                'min'         => 1,
+  1186→                'max'         => 20,
+  1187→        ) );
+  1188→        velure_core_field_select( array(
+  1189→                'label'   => 'Style de fond',
+  1190→                'name'    => 'blog_bg_style',
+  1191→                'value'   => $s['blog_bg_style'] ?? 'muted',
+  1192→                'choices' => array(
+  1193→                        'base'      => 'Base',
+  1194→                        'soft'      => 'Doux',
+  1195→                        'muted'     => 'Mute',
+  1196→                        'dark'      => 'Fonce',
+  1197→                        'secondary' => 'Secondaire',
+  1198→                ),
+  1199→        ) );
+  1200→        velure_core_field_select( array(
+  1201→                'label'   => 'Nombre de colonnes',
+  1202→                'name'    => 'blog_columns',
+  1203→                'value'   => $s['blog_columns'] ?? '3',
+  1204→                'choices' => array(
+  1205→                        '2' => '2 colonnes',
+  1206→                        '3' => '3 colonnes',
+  1207→                ),
+  1208→        ) );
+  1209→
+  1210→        echo '</div>';
+  1211→        echo '</div>';
+  1212→}
+  1213→
+  1214→/**
+  1215→ * Tab: Instagram — Instagram feed with images repeater.
+  1216→ *
+  1217→ * @param array $s Full settings array.
+  1218→ */
+  1219→function velure_core_tab_instagram( $s ) {
+  1220→        echo '<div class="vc-section vc-section-instagram">';
+  1221→
+  1222→        echo '<h3>Section Instagram</h3>';
+  1223→        echo '<div class="vc-grid vc-grid-2">';
+  1224→
+  1225→        velure_core_field_text( array(
+  1226→                'label'       => 'Handle Instagram',
+  1227→                'name'        => 'instagram_handle',
+  1228→                'value'       => $s['instagram_handle'] ?? '@velure.paris',
+  1229→                'placeholder' => '@velure.paris',
+  1230→        ) );
+  1231→        velure_core_field_text( array(
+  1232→                'label'       => 'URL Instagram',
+  1233→                'name'        => 'instagram_url',
+  1234→                'value'       => $s['instagram_url'] ?? 'https://instagram.com/',
+  1235→                'placeholder' => 'https://instagram.com/',
+  1236→        ) );
+  1237→        velure_core_field_text( array(
+  1238→                'label'       => 'Eyebrow',
+  1239→                'name'        => 'ig_eyebrow',
+  1240→                'value'       => $s['ig_eyebrow'] ?? 'Suivez-nous',
+  1241→                'placeholder' => 'Suivez-nous',
+  1242→        ) );
+  1243→        velure_core_field_select( array(
+  1244→                'label'   => 'Nombre de colonnes',
+  1245→                'name'    => 'ig_columns',
+  1246→                'value'   => $s['ig_columns'] ?? '6',
+  1247→                'choices' => array(
+  1248→                        '3' => '3 colonnes',
+  1249→                        '4' => '4 colonnes',
+  1250→                        '5' => '5 colonnes',
+  1251→                        '6' => '6 colonnes',
+  1252→                ),
+  1253→        ) );
+  1254→        velure_core_field_select( array(
+  1255→                'label'   => 'Espacement entre les images',
+  1256→                'name'    => 'ig_gap',
+  1257→                'value'   => $s['ig_gap'] ?? 'small',
+  1258→                'choices' => array(
+  1259→                        'none'  => 'Aucun',
+  1260→                        'small' => 'Petit',
+  1261→                        'medium'=> 'Moyen',
+  1262→                        'large' => 'Grand',
+  1263→                ),
+  1264→        ) );
+  1265→
+  1266→        echo '</div>';
+  1267→
+  1268→        echo '<hr class="vc-separator" />';
+  1269→
+  1270→        /* ── Instagram images repeater ── */
+  1271→        $images = $s['instagram_images'] ?? array();
+  1272→        if ( ! is_array( $images ) ) {
+  1273→                $images = array();
+  1274→        }
+  1275→
+  1276→        velure_core_field_repeater_header( array(
+  1277→                'label'        => 'Images Instagram',
+  1278→                'button_label' => 'Ajouter une image',
+  1279→                'description'  => 'Ajoutez les images a afficher dans la grille Instagram.',
+  1280→        ) );
+  1281→
+  1282→        echo '<div class="vc-repeater" id="vc-instagram-images-repeater">';
+  1283→
+  1284→        foreach ( $images as $i => $img ) {
+  1285→                if ( ! is_array( $img ) ) {
+  1286→                        $img = array();
+  1287→                }
+  1288→                velure_core_field_repeater_row_start( $i, 'Image ' . ( $i + 1 ) );
+  1289→
+  1290→                velure_core_field_image( array(
+  1291→                        'label' => 'Image',
+  1292→                        'name'  => 'instagram_images[' . $i . '][image]',
+  1293→                        'value' => $img['image'] ?? 0,
+  1294→                ) );
+  1295→                velure_core_field_text( array(
+  1296→                        'label'       => 'Lien',
+  1297→                        'name'        => 'instagram_images[' . $i . '][link]',
+  1298→                        'value'       => $img['link'] ?? '',
+  1299→                        'placeholder' => 'https://instagram.com/p/...',
+  1300→                ) );
+  1301→                velure_core_field_text( array(
+  1302→                        'label'       => 'Texte alternatif (alt)',
+  1303→                        'name'        => 'instagram_images[' . $i . '][alt]',
+  1304→                        'value'       => $img['alt'] ?? '',
+  1305→                        'placeholder' => 'Description de l\'image',
+  1306→                ) );
+  1307→
+  1308→                velure_core_field_repeater_row_end();
+  1309→        }
+  1310→
+  1311→        /* Hidden template row */
+  1312→        echo '<div class="vc-repeater-template" style="display:none;">';
+  1313→        velure_core_field_repeater_row_start( '__INDEX__', 'Image __NUM__' );
+  1314→
+  1315→        velure_core_field_image( array(
+  1316→                'label' => 'Image',
+  1317→                'name'  => 'instagram_images[__INDEX__][image]',
+  1318→                'value' => 0,
+  1319→        ) );
+  1320→        velure_core_field_text( array(
+  1321→                'label'       => 'Lien',
+  1322→                'name'        => 'instagram_images[__INDEX__][link]',
+  1323→                'value'       => '',
+  1324→                'placeholder' => 'https://instagram.com/p/...',
+  1325→        ) );
+  1326→        velure_core_field_text( array(
+  1327→                'label'       => 'Texte alternatif (alt)',
+  1328→                'name'        => 'instagram_images[__INDEX__][alt]',
+  1329→                'value'       => '',
+  1330→                'placeholder' => 'Description de l\'image',
+  1331→        ) );
+  1332→
+  1333→        velure_core_field_repeater_row_end();
+  1334→        echo '</div><!-- .vc-repeater-template -->';
+  1335→
+  1336→        echo '</div><!-- .vc-repeater -->';
+  1337→
+  1338→        echo '</div>';
+  1339→}
+  1340→
+  1341→/**
+  1342→ * Tab: Global — Topbar, footer, padding, animations, custom CSS.
+  1343→ *
+  1344→ * @param array $s Full settings array.
+  1345→ */
+  1346→function velure_core_tab_global( $s ) {
+  1347→        echo '<div class="vc-section vc-section-global">';
+  1348→
+  1349→        /* ── Topbar ── */
+  1350→        echo '<h3>Barre superieure (Topbar)</h3>';
+  1351→        echo '<div class="vc-grid vc-grid-2">';
+  1352→
+  1353→        velure_core_field_toggle( array(
+  1354→                'label' => 'Afficher la topbar',
+  1355→                'name'  => 'show_topbar',
+  1356→                'value' => $s['show_topbar'] ?? 1,
+  1357→        ) );
+  1358→        velure_core_field_text( array(
+  1359→                'label'       => 'Texte de la topbar',
+  1360→                'name'        => 'topbar_text',
+  1361→                'value'       => $s['topbar_text'] ?? '',
+  1362→                'placeholder' => 'Livraison offerte des 150 EUR d\'achat &bull; Retours gratuits 30 jours',
+  1363→                'description' => 'Utilisez &bull; pour les separateurs. Le HTML est autorise.',
+  1364→        ) );
+  1365→
+  1366→        echo '</div>';
+  1367→
+  1368→        echo '<hr class="vc-separator" />';
+  1369→
+  1370→        /* ── Footer ── */
+  1371→        echo '<h3>Pied de page (Footer)</h3>';
+  1372→
+  1373→        velure_core_field_text( array(
+  1374→                'label'       => 'Texte de copyright',
+  1375→                'name'        => 'footer_copyright',
+  1376→                'value'       => $s['footer_copyright'] ?? '',
+  1377→                'placeholder' => '&copy; 2026 Velure. Tous droits reserves.',
+  1378→                'description' => 'Le HTML est autorise.',
+  1379→        ) );
+  1380→
+  1381→        echo '<hr class="vc-separator" />';
+  1382→
+  1383→        /* ── Global styles ── */
+  1384→        echo '<h3>Styles globaux</h3>';
+  1385→        echo '<div class="vc-grid vc-grid-2">';
+  1386→
+  1387→        velure_core_field_select( array(
+  1388→                'label'       => 'Espacement des sections',
+  1389→                'name'        => 'section_padding',
+  1390→                'value'       => $s['section_padding'] ?? 'normal',
+  1391→                'choices'     => array(
+  1392→                        'none'     => 'Aucun',
+  1393→                        'compact'  => 'Compact',
+  1394→                        'normal'   => 'Normal',
+  1395→                        'spacious' => 'Espacieux',
+  1396→                ),
+  1397→                'description' => 'Definit l\'espacement vertical (padding haut/bas) de chaque section.',
+  1398→        ) );
+  1399→        velure_core_field_toggle( array(
+  1400→                'label'       => 'Animations au defilement',
+  1401→                'name'        => 'scroll_animations',
+  1402→                'value'       => $s['scroll_animations'] ?? 1,
+  1403→                'description' => 'Active les animations d\'entree au defilement sur la page d\'accueil.',
+  1404→        ) );
+  1405→
+  1406→        echo '</div>';
+  1407→
+  1408→        echo '<hr class="vc-separator" />';
+  1409→
+  1410→        /* ── Custom CSS ── */
+  1411→        echo '<h3>CSS personnalise</h3>';
+  1412→
+  1413→        velure_core_field_textarea( array(
+  1414→                'label'       => 'CSS personnalise',
+  1415→                'name'        => 'custom_css',
+  1416→                'value'       => $s['custom_css'] ?? '',
+  1417→                'rows'        => 12,
+  1418→                'description' => 'Ce CSS est injecte dans le <head> de la page d\'accueil uniquement. N\'entrez pas les balises <style>.',
+  1419→        ) );
+  1420→
+  1421→        echo '</div>';
+  1422→}
+  1423→
+  1424→/* ═══════════════════════════════════════════════
+  1425→   4. MAIN ADMIN PAGE CALLBACK
+  1426→   ═══════════════════════════════════════════════ */
+  1427→
+  1428→/**
+  1429→ * Render the full admin page.
+  1430→ * Handles form POST, tab navigation, and delegates to tab rendering functions.
+  1431→ */
+  1432→function velure_core_render_admin_page() {
+  1433→
+  1434→        /* ── Determine active tab ── */
+  1435→        $tab_keys = array( 'sections', 'hero', 'features', 'categories', 'products', 'banner', 'marquee', 'testimonials', 'blog', 'instagram', 'global' );
+  1436→        $active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'sections';
+  1437→        if ( ! in_array( $active_tab, $tab_keys, true ) ) {
+  1438→                $active_tab = 'sections';
+  1439→        }
+  1440→
+  1441→        /* ═══════════════════════════════════════════════
+  1442→           FORM SAVE HANDLER
+  1443→           ═══════════════════════════════════════════════ */
+  1444→        if ( isset( $_POST['velure_core_save'] ) && check_admin_referer( 'velure_core_save_settings' ) ) {
+  1445→
+  1446→                $raw     = wp_unslash( $_POST );
+  1447→                $saved   = get_option( VELURE_CORE_OPTION, array() );
+  1448→                $defaults = Velure_Core::instance()->default_settings();
+  1449→
+  1450→                /* ── Simple text / select fields ── */
+  1451→                $simple_fields = array(
+  1452→                        'hero_height',
+  1453→                        'hero_text_align',
+  1454→                        'hero_text_color',
+  1455→                        'hs_bestseller_label',
+  1456→                        'hs_bestseller_title',
+  1457→                        'hs_bestseller_price',
+  1458→                        'hs_bestseller_cta',
+  1459→                        'hs_bestseller_link',
+  1460→                        'hs_category_label',
+  1461→                        'hs_category_title',
+  1462→                        'hs_category_cta_link',
+  1463→                        'feat_bg_style',
+  1464→                        'feat_padding',
+  1465→                        'cat_eyebrow',
+  1466→                        'section_title_categories',
+  1467→                        'cat_description',
+  1468→                        'cat_cta_text',
+  1469→                        'cat_cta_link',
+  1470→                        'cat_bg_style',
+  1471→                        'prod_eyebrow',
+  1472→                        'section_title_products',
+  1473→                        'prod_description',
+  1474→                        'prod_cta_text',
+  1475→                        'prod_cta_link',
+  1476→                        'prod_columns',
+  1477→                        'prod_mode',
+  1478→                        'prod_bg_style',
+  1479→                        'prod_sort',
+  1480→                        'sb_layout',
+  1481→                        'sb_left_eyebrow',
+  1482→                        'sb_left_title',
+  1483→                        'sb_left_desc',
+  1484→                        'sb_left_cta_text',
+  1485→                        'sb_left_cta_link',
+  1486→                        'sb_left_cta_style',
+  1487→                        'sb_left_style',
+  1488→                        'sb_right_eyebrow',
+  1489→                        'sb_right_title',
+  1490→                        'sb_right_desc',
+  1491→                        'sb_right_cta_text',
+  1492→                        'sb_right_cta_link',
+  1493→                        'sb_right_cta_style',
+  1494→                        'sb_right_style',
+  1495→                        'marquee_direction',
+  1496→                        'marquee_bg',
+  1497→                        'testi_eyebrow',
+  1498→                        'section_title_testimonials',
+  1499→                        'testi_description',
+  1500→                        'testi_bg_style',
+  1501→                        'testi_columns',
+  1502→                        'blog_eyebrow',
+  1503→                        'section_title_blog',
+  1504→                        'blog_description',
+  1505→                        'blog_cta_text',
+  1506→                        'blog_cta_link',
+  1507→                        'blog_bg_style',
+  1508→                        'blog_columns',
+  1509→                        'instagram_handle',
+  1510→                        'instagram_url',
+  1511→                        'ig_eyebrow',
+  1512→                        'ig_columns',
+  1513→                        'ig_gap',
+  1514→                        'topbar_text',
+  1515→                        'footer_copyright',
+  1516→                        'section_padding',
+  1517→                        'custom_css',
+  1518→                );
+  1519→                foreach ( $simple_fields as $f ) {
+  1520→                        $saved[ $f ] = isset( $raw[ $f ] ) ? sanitize_text_field( $raw[ $f ] ) : ( $defaults[ $f ] ?? '' );
+  1521→                }
+  1522→
+  1523→                /* ── Toggle fields (0 or 1) ── */
+  1524→                $toggle_fields = array(
+  1525→                        'show_hero',
+  1526→                        'show_features',
+  1527→                        'show_categories',
+  1528→                        'show_products',
+  1529→                        'show_split_banner',
+  1530→                        'show_marquee',
+  1531→                        'show_testimonials',
+  1532→                        'show_blog',
+  1533→                        'show_instagram',
+  1534→                        'hero_autoplay',
+  1535→                        'hero_show_side',
+  1536→                        'feat_bottom_border',
+  1537→                        'scroll_animations',
+  1538→                        'show_topbar',
+  1539→                );
+  1540→                foreach ( $toggle_fields as $f ) {
+  1541→                        $saved[ $f ] = ! empty( $raw[ $f ] ) ? 1 : 0;
+  1542→                }
+  1543→
+  1544→                /* ── Number fields ── */
+  1545→                $number_fields = array(
+  1546→                        'hero_autoplay_speed'   => array( 'default' => 6000, 'min' => 1000, 'max' => 20000 ),
+  1547→                        'hero_overlay_opacity'  => array( 'default' => 40,   'min' => 0,    'max' => 100   ),
+  1548→                        'cat_display_count'     => array( 'default' => 10,   'min' => 1,    'max' => 50    ),
+  1549→                        'featured_products_count'=> array( 'default' => 8,    'min' => 1,    'max' => 50    ),
+  1550→                        'marquee_speed'         => array( 'default' => 25,   'min' => 5,    'max' => 120   ),
+  1551→                        'testimonials_count'    => array( 'default' => 3,    'min' => 1,    'max' => 20    ),
+  1552→                        'blog_posts_count'      => array( 'default' => 3,    'min' => 1,    'max' => 20    ),
+  1553→                );
+  1554→                foreach ( $number_fields as $f => $cfg ) {
+  1555→                        $val = isset( $raw[ $f ] ) ? intval( $raw[ $f ] ) : $cfg['default'];
+  1556→                        $val = max( $cfg['min'], min( $cfg['max'], $val ) );
+  1557→                        $saved[ $f ] = $val;
+  1558→                }
+  1559→
+  1560→                /* ── Image fields (integers) ── */
+  1561→                $image_fields = array(
+  1562→                        'hs_bestseller_image',
+  1563→                        'hs_category_image',
+  1564→                        'sb_left_image',
+  1565→                        'sb_right_image',
+  1566→                );
+  1567→                foreach ( $image_fields as $f ) {
+  1568→                        $saved[ $f ] = isset( $raw[ $f ] ) ? absint( $raw[ $f ] ) : 0;
+  1569→                }
+  1570→
+  1571→                /* ── Repeater: hero_slides ── */
+  1572→                $saved['hero_slides'] = array();
+  1573→                if ( ! empty( $raw['hero_slides'] ) && is_array( $raw['hero_slides'] ) ) {
+  1574→                        foreach ( $raw['hero_slides'] as $slide ) {
+  1575→                                if ( ! is_array( $slide ) ) {
+  1576→                                        continue;
+  1577→                                }
+  1578→                                $saved['hero_slides'][] = array(
+  1579→                                        'image'     => absint( $slide['image'] ?? 0 ),
+  1580→                                        'eyebrow'   => sanitize_text_field( $slide['eyebrow'] ?? '' ),
+  1581→                                        'title'     => sanitize_text_field( $slide['title'] ?? '' ),
+  1582→                                        'subtitle'  => sanitize_text_field( $slide['subtitle'] ?? '' ),
+  1583→                                        'cta_text'  => sanitize_text_field( $slide['cta_text'] ?? '' ),
+  1584→                                        'cta_link'  => esc_url_raw( $slide['cta_link'] ?? '#' ),
+  1585→                                        'cta_style' => sanitize_text_field( $slide['cta_style'] ?? 'primary' ),
+  1586→                                );
+  1587→                        }
+  1588→                }
+  1589→
+  1590→                /* ── Repeater: trust_features ── */
+  1591→                $saved['trust_features'] = array();
+  1592→                if ( ! empty( $raw['trust_features'] ) && is_array( $raw['trust_features'] ) ) {
+  1593→                        foreach ( $raw['trust_features'] as $feat ) {
+  1594→                                if ( ! is_array( $feat ) ) {
+  1595→                                        continue;
+  1596→                                }
+  1597→                                $saved['trust_features'][] = array(
+  1598→                                        'icon_svg'  => wp_kses( $feat['icon_svg'] ?? '', velure_core_svg_allowed() ),
+  1599→                                        'title'     => sanitize_text_field( $feat['title'] ?? '' ),
+  1600→                                        'description' => sanitize_text_field( $feat['description'] ?? '' ),
+  1601→                                );
+  1602→                        }
+  1603→                }
+  1604→
+  1605→                /* ── Repeater: brand_names ── */
+  1606→                $saved['brand_names'] = array();
+  1607→                if ( ! empty( $raw['brand_names'] ) && is_array( $raw['brand_names'] ) ) {
+  1608→                        foreach ( $raw['brand_names'] as $brand ) {
+  1609→                                if ( ! is_array( $brand ) ) {
+  1610→                                        continue;
+  1611→                                }
+  1612→                                $name = sanitize_text_field( $brand['name'] ?? '' );
+  1613→                                if ( '' !== $name ) {
+  1614→                                        $saved['brand_names'][] = array( 'name' => $name );
+  1615→                                }
+  1616→                        }
+  1617→                }
+  1618→
+  1619→                /* ── Repeater: instagram_images ── */
+  1620→                $saved['instagram_images'] = array();
+  1621→                if ( ! empty( $raw['instagram_images'] ) && is_array( $raw['instagram_images'] ) ) {
+  1622→                        foreach ( $raw['instagram_images'] as $img ) {
+  1623→                                if ( ! is_array( $img ) ) {
+  1624→                                        continue;
+  1625→                                }
+  1626→                                $saved['instagram_images'][] = array(
+  1627→                                        'image' => absint( $img['image'] ?? 0 ),
+  1628→                                        'link'  => esc_url_raw( $img['link'] ?? '' ),
+  1629→                                        'alt'   => sanitize_text_field( $img['alt'] ?? '' ),
+  1630→                                );
+  1631→                        }
+  1632→                }
+  1633→
+  1634→                /* ── Section order ── */
+  1635→                $valid_sections = array( 'hero', 'features', 'categories', 'products', 'split_banner', 'marquee', 'testimonials', 'blog', 'instagram' );
+  1636→                $saved['section_order'] = array();
+  1637→                if ( ! empty( $raw['section_order'] ) && is_array( $raw['section_order'] ) ) {
+  1638→                        foreach ( $raw['section_order'] as $sec ) {
+  1639→                                $sec = sanitize_text_field( $sec );
+  1640→                                if ( in_array( $sec, $valid_sections, true ) ) {
+  1641→                                        $saved['section_order'][] = $sec;
+  1642→                                }
+  1643→                        }
+  1644→                }
+  1645→                /* Ensure all sections are present in the order array */
+  1646→                foreach ( $valid_sections as $sec ) {
+  1647→                        if ( ! in_array( $sec, $saved['section_order'], true ) ) {
+  1648→                                $saved['section_order'][] = $sec;
+  1649→                        }
+  1650→                }
+  1651→
+  1652→                update_option( VELURE_CORE_OPTION, $saved );
+  1653→
+  1654→                wp_redirect( admin_url( 'admin.php?page=velure-front-page&tab=' . $active_tab . '&saved=1' ) );
+  1655→                exit;
+  1656→        }
+  1657→
+  1658→        /* ═══════════════════════════════════════════════
+  1659→           RETRIEVE SETTINGS FOR DISPLAY
+  1660→           ═══════════════════════════════════════════════ */
+  1661→        $s = velure_core_get_settings();
+  1662→
+  1663→        /* ═══════════════════════════════════════════════
+  1664→           RENDER THE ADMIN PAGE
+  1665→           ═══════════════════════════════════════════════ */
+  1666→        ?>
+  1667→        <div class="wrap velure-core-admin-wrap">
+  1668→
+  1669→                <!-- Welcome banner -->
+  1670→                <div class="vc-welcome-banner">
+  1671→                        <div>
+  1672→                                <h2>Velure Core v<?php echo esc_html( VELURE_CORE_VERSION ); ?></h2>
+  1673→                                <p>Personnalisez chaque section de votre page d'accueil. Ordre, contenu, styles — tout est configurable.</p>
+  1674→                        </div>
+  1675→                        <a href="https://velure.paris" target="_blank" rel="noopener noreferrer" class="vc-docs-btn">Documentation</a>
+  1676→                </div>
+  1677→
+  1678→                <!-- Saved notice -->
+  1679→                <?php if ( isset( $_GET['saved'] ) && '1' === $_GET['saved'] ) : ?>
+  1680→                        <div class="notice notice-success is-dismissible">
+  1681→                                <p><strong>Reglages sauvegardes avec succes.</strong></p>
+  1682→                        </div>
+  1683→                <?php endif; ?>
+  1684→
+  1685→                <!-- Tab navigation -->
+  1686→                <nav class="nav-tab-wrapper velure-core-tabs">
+  1687→                        <?php
+  1688→                        $tab_labels = array(
+  1689→                                'sections'    => 'Sections',
+  1690→                                'hero'        => 'Hero',
+  1691→                                'features'    => 'Confiance',
+  1692→                                'categories'  => 'Categories',
+  1693→                                'products'    => 'Produits',
+  1694→                                'banner'      => 'Banniere',
+  1695→                                'marquee'     => 'Marquee',
+  1696→                                'testimonials'=> 'Temoignages',
+  1697→                                'blog'        => 'Blog',
+  1698→                                'instagram'   => 'Instagram',
+  1699→                                'global'      => 'Global',
+  1700→                        );
+  1701→                        foreach ( $tab_keys as $tk ) {
+  1702→                                $tab_url = 'admin.php?page=velure-front-page&tab=' . $tk;
+  1703→                                $active  = ( $tk === $active_tab ) ? ' nav-tab-active' : '';
+  1704→                                echo '<a href="' . esc_url( admin_url( $tab_url ) ) . '" class="nav-tab' . $active . '">' . esc_html( $tab_labels[ $tk ] ) . '</a>';
+  1705→                        }
+  1706→                        ?>
+  1707→                </nav>
+  1708→
+  1709→                <!-- Settings form -->
+  1710→                <form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=velure-front-page' ) ); ?>" class="vc-settings-form">
+  1711→                        <?php wp_nonce_field( 'velure_core_save_settings' ); ?>
+  1712→
+  1713→                        <!-- Active tab content -->
+  1714→                        <?php
+  1715→                        switch ( $active_tab ) {
+  1716→                                case 'sections':
+  1717→                                        velure_core_tab_sections( $s );
+  1718→                                        break;
+  1719→                                case 'hero':
+  1720→                                        velure_core_tab_hero( $s );
+  1721→                                        break;
+  1722→                                case 'features':
+  1723→                                        velure_core_tab_features( $s );
+  1724→                                        break;
+  1725→                                case 'categories':
+  1726→                                        velure_core_tab_categories( $s );
+  1727→                                        break;
+  1728→                                case 'products':
+  1729→                                        velure_core_tab_products( $s );
+  1730→                                        break;
+  1731→                                case 'banner':
+  1732→                                        velure_core_tab_banner( $s );
+  1733→                                        break;
+  1734→                                case 'marquee':
+  1735→                                        velure_core_tab_marquee( $s );
+  1736→                                        break;
+  1737→                                case 'testimonials':
+  1738→                                        velure_core_tab_testimonials( $s );
+  1739→                                        break;
+  1740→                                case 'blog':
+  1741→                                        velure_core_tab_blog( $s );
+  1742→                                        break;
+  1743→                                case 'instagram':
+  1744→                                        velure_core_tab_instagram( $s );
+  1745→                                        break;
+  1746→                                case 'global':
+  1747→                                        velure_core_tab_global( $s );
+  1748→                                        break;
+  1749→                        }
+  1750→                        ?>
+  1751→
+  1752→                        <!-- Submit -->
+  1753→                        <div class="vc-form-actions">
+  1754→                                <?php submit_button( 'Sauvegarder les reglages', 'primary large', 'velure_core_save', false ); ?>
+  1755→                        </div>
+  1756→                </form>
+  1757→
+  1758→        </div>
+  1759→        <?php
+  1760→}
