@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         exit;
 }
 
-define( 'VELURE3_VERSION', '1.0.0' );
+define( 'VELURE3_VERSION', '1.0.1' );
 define( 'VELURE3_DIR', get_template_directory() );
 define( 'VELURE3_URI', get_template_directory_uri() );
 
@@ -409,7 +409,7 @@ function velure3_localize() {
    If Velure Core plugin is active, it provides all ACF fields,
    data helpers, and CPT. Otherwise, load the bundled shim.
    */
-if ( ! did_action( 'velure_core_loaded' ) ) {
+if ( ! did_action( 'velure_core_loaded' ) && ! ( defined( 'VELURE_CORE_ACTIVE' ) && VELURE_CORE_ACTIVE ) ) {
         require_once VELURE3_DIR . '/inc/dynamic-fields-shim.php';
 }
 

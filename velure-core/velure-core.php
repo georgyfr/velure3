@@ -17,6 +17,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/* Flag checked by the theme shim to prevent double-loading */
+define( 'VELURE_CORE_ACTIVE', true );
+
 define( 'VELURE_CORE_VERSION', '1.0.0' );
 define( 'VELURE_CORE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'VELURE_CORE_URI', plugin_dir_url( __FILE__ ) );

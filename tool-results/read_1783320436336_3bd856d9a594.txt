@@ -1,0 +1,372 @@
+     1→<?php
+     2→/**
+     3→ * Velure Core — ACF Field Groups
+     4→ * 100% de la page d'accueil est configurable.
+     5→ *
+     6→ * @package VelureCore
+     7→ */
+     8→
+     9→if ( ! defined( 'ABSPATH' ) ) exit;
+    10→
+    11→add_action( 'acf/init', 'velure_core_register_all_fields' );
+    12→function velure_core_register_all_fields() {
+    13→        if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+    14→
+    15→        $loc_main = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-front-page' ) ) );
+    16→        $loc_hero = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-hero' ) ) );
+    17→        $loc_feat = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-features' ) ) );
+    18→        $loc_cats = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-categories' ) ) );
+    19→        $loc_prod = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-products' ) ) );
+    20→        $loc_bann = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-banner' ) ) );
+    21→        $loc_mrq  = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-marquee' ) ) );
+    22→        $loc_test = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-testimonials' ) ) );
+    23→        $loc_blog = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-blog' ) ) );
+    24→        $loc_ig   = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-section-instagram' ) ) );
+    25→        $loc_glob = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-global-styles' ) ) );
+    26→        $loc_ord  = array( array( array( 'param' => 'options_page', 'operator' => '==', 'value' => 'velure-sections-order' ) ) );
+    27→
+    28→        /* ═══════════════════════════════════════════════════════════
+    29→           1. SECTIONS VISIBILITY & ORDER
+    30→           ═══════════════════════════════════════════════════════════ */
+    31→        $section_keys = array(
+    32→                'hero'         => 'Hero Slider',
+    33→                'features'     => 'Barre de Confiance',
+    34→                'categories'   => 'Categories',
+    35→                'products'     => 'Produits Vedettes',
+    36→                'split_banner' => 'Banniere Split',
+    37→                'marquee'      => 'Bandeau Marques',
+    38→                'testimonials' => 'Temoignages',
+    39→                'blog'         => 'Blog / Journal',
+    40→                'instagram'    => 'Instagram Feed',
+    41→        );
+    42→
+    43→        $vis_fields = array();
+    44→        foreach ( $section_keys as $key => $label ) {
+    45→                $vis_fields[] = array(
+    46→                        'key'   => 'field_vc_show_' . $key,
+    47→                        'label' => $label,
+    48→                        'name'  => 'show_' . $key,
+    49→                        'type'  => 'true_false',
+    50→                        'default_value' => 1,
+    51→                        'ui' => 1,
+    52→                        'ui_on_text'  => __( 'Afficher', 'velure-core' ),
+    53→                        'ui_off_text' => __( 'Masquer', 'velure-core' ),
+    54→                );
+    55→        }
+    56→
+    57→        acf_add_local_field_group( array(
+    58→                'key'    => 'group_vc_sections_visibility',
+    59→                'title'  => __( 'Visibilite des Sections', 'velure-core' ),
+    60→                'fields' => $vis_fields,
+    61→                'location' => $loc_ord,
+    62→        ) );
+    63→
+    64→        acf_add_local_field_group( array(
+    65→                'key'    => 'group_vc_sections_order',
+    66→                'title'  => __( 'Ordre des Sections', 'velure-core' ),
+    67→                'fields' => array(
+    68→                        array(
+    69→                                'key'           => 'field_vc_section_order',
+    70→                                'label'         => __( 'Ordre d\'affichage', 'velure-core' ),
+    71→                                'name'          => 'section_order',
+    72→                                'type'          => 'select',
+    73→                                'choices'       => $section_keys,
+    74→                                'multiple'      => 1,
+    75→                                'ui'            => 1,
+    76→                                'ajax'          => 1,
+    77→                                'instructions'  => __( 'Glissez-deplacez pour reordonner les sections.', 'velure-core' ),
+    78→                                'default_value' => array_keys( $section_keys ),
+    79→                        ),
+    80→                ),
+    81→                'location' => $loc_ord,
+    82→        ) );
+    83→
+    84→
+    85→        /* ═══════════════════════════════════════════════════════════
+    86→           2. HERO SLIDER
+    87→           ═══════════════════════════════════════════════════════════ */
+    88→        acf_add_local_field_group( array(
+    89→                'key'    => 'group_vc_hero',
+    90→                'title'  => __( 'Hero — Configuration', 'velure-core' ),
+    91→                'fields' => array(
+    92→                        /* General */
+    93→                        array( 'key' => 'field_vc_hero_height',     'label' => __( 'Hauteur du slider', 'velure-core' ),         'name' => 'hero_height',         'type' => 'select', 'choices' => array( 'standard' => __( 'Standard (75vh)', 'velure-core' ), 'tall' => __( 'Grand (90vh)', 'velure-core' ), 'compact' => __( 'Compact (60vh)', 'velure-core' ) ), 'default_value' => 'standard' ),
+    94→                        array( 'key' => 'field_vc_hero_autoplay',   'label' => __( 'Defilement automatique', 'velure-core' ),       'name' => 'hero_autoplay',      'type' => 'true_false', 'default_value' => 1, 'ui' => 1, 'ui_on_text' => 'Oui', 'ui_off_text' => 'Non' ),
+    95→                        array( 'key' => 'field_vc_hero_speed',      'label' => __( 'Vitesse (ms)', 'velure-core' ),               'name' => 'hero_autoplay_speed','type' => 'number', 'default_value' => 6000, 'min' => 2000, 'max' => 15000, 'step' => 500 ),
+    96→                        array( 'key' => 'field_vc_hero_overlay',    'label' => __( 'Opacite de l\'overlay (%)', 'velure-core' ),   'name' => 'hero_overlay_opacity','type' => 'number', 'default_value' => 40, 'min' => 0, 'max' => 80 ),
+    97→                        array( 'key' => 'field_vc_hero_text_align', 'label' => __( 'Alignement du texte', 'velure-core' ),        'name' => 'hero_text_align',    'type' => 'select', 'choices' => array( 'left' => 'Gauche', 'center' => 'Centre', 'right' => 'Droite' ), 'default_value' => 'left' ),
+    98→                        array( 'key' => 'field_vc_hero_text_color', 'label' => __( 'Couleur du texte', 'velure-core' ),          'name' => 'hero_text_color',    'type' => 'select', 'choices' => array( 'light' => 'Clair (sur fond sombre)', 'dark' => 'Sombre (sur fond clair)' ), 'default_value' => 'light' ),
+    99→
+   100→                        /* Side blocks tab */
+   101→                        array( 'key' => 'field_vc_hero_side_tab',   'label' => __( 'Blocs lateraux', 'velure-core' ),             'name' => '', 'type' => 'tab' ),
+   102→                        array( 'key' => 'field_vc_hero_show_side',  'label' => __( 'Afficher blocs lateraux', 'velure-core' ),     'name' => 'hero_show_side',     'type' => 'true_false', 'default_value' => 0, 'ui' => 1, 'ui_on_text' => 'Oui', 'ui_off_text' => 'Non' ),
+   103→                        array( 'key' => 'field_vc_hs_bs_image',     'label' => 'Best-Seller — Image',           'name' => 'hs_bestseller_image',  'type' => 'image', 'return_format' => 'array' ),
+   104→                        array( 'key' => 'field_vc_hs_bs_label',     'label' => 'Best-Seller — Label',           'name' => 'hs_bestseller_label',  'type' => 'text', 'default_value' => 'Best-Seller' ),
+   105→                        array( 'key' => 'field_vc_hs_bs_title',     'label' => 'Best-Seller — Titre',           'name' => 'hs_bestseller_title',  'type' => 'text', 'default_value' => 'Sac Elegance' ),
+   106→                        array( 'key' => 'field_vc_hs_bs_price',     'label' => 'Best-Seller — Prix',            'name' => 'hs_bestseller_price',  'type' => 'text', 'default_value' => '285,00 EUR' ),
+   107→                        array( 'key' => 'field_vc_hs_bs_cta_text',  'label' => 'Best-Seller — Texte bouton',    'name' => 'hs_bestseller_cta',    'type' => 'text', 'default_value' => 'VOIR LE PRODUIT' ),
+   108→                        array( 'key' => 'field_vc_hs_bs_cta_link',  'label' => 'Best-Seller — Lien',            'name' => 'hs_bestseller_link',   'type' => 'url' ),
+   109→                        array( 'key' => 'field_vc_hs_cat_image',    'label' => 'Categorie — Image',              'name' => 'hs_category_image',    'type' => 'image', 'return_format' => 'array' ),
+   110→                        array( 'key' => 'field_vc_hs_cat_label',    'label' => 'Categorie — Label',              'name' => 'hs_category_label',    'type' => 'text', 'default_value' => 'Capsule' ),
+   111→                        array( 'key' => 'field_vc_hs_cat_title',    'label' => 'Categorie — Titre',              'name' => 'hs_category_title',    'type' => 'text', 'default_value' => 'Les Accessoires Essentiels' ),
+   112→                        array( 'key' => 'field_vc_hs_cat_cta_link', 'label' => 'Categorie — Lien',               'name' => 'hs_category_cta_link', 'type' => 'url' ),
+   113→
+   114→                        /* Slides repeater tab */
+   115→                        array( 'key' => 'field_vc_hero_slides_tab', 'label' => __( 'Slides du slider', 'velure-core' ),            'name' => '', 'type' => 'tab' ),
+   116→                        array(
+   117→                                'key'          => 'field_vc_hero_slides_rep',
+   118→                                'label'        => __( 'Slides', 'velure-core' ),
+   119→                                'name'         => 'hero_slides',
+   120→                                'type'         => 'repeater',
+   121→                                'layout'       => 'row',
+   122→                                'button_label' => __( 'Ajouter un slide', 'velure-core' ),
+   123→                                'min'          => 0,
+   124→                                'max'          => 8,
+   125→                                'sub_fields'   => array(
+   126→                                        array( 'key' => 'field_vc_slide_image',    'label' => 'Image',       'name' => 'image',     'type' => 'image', 'return_format' => 'array', 'required' => 1 ),
+   127→                                        array( 'key' => 'field_vc_slide_eyebrow',  'label' => 'Eyebrow',     'name' => 'eyebrow',   'type' => 'text', 'placeholder' => 'Nouvelle Collection', 'required' => 1 ),
+   128→                                        array( 'key' => 'field_vc_slide_title',    'label' => 'Titre',       'name' => 'title',     'type' => 'text', 'placeholder' => "L'Elegance Minimaliste" ),
+   129→                                        array( 'key' => 'field_vc_slide_subtitle', 'label' => 'Sous-titre',  'name' => 'subtitle',  'type' => 'text' ),
+   130→                                        array( 'key' => 'field_vc_slide_cta_text', 'label' => 'Texte bouton','name' => 'cta_text',  'type' => 'text', 'placeholder' => 'DECOUVRIR' ),
+   131→                                        array( 'key' => 'field_vc_slide_cta_link', 'label' => 'Lien bouton', 'name' => 'cta_link',  'type' => 'url',   'placeholder' => '/boutique/' ),
+   132→                                        array( 'key' => 'field_vc_slide_btn_style','label' => 'Style bouton','name' => 'cta_style', 'type' => 'select', 'choices' => array( 'primary' => 'Sombre', 'gold' => 'Or', 'outline-light' => 'Contour clair' ), 'default_value' => 'primary' ),
+   133→                                ),
+   134→                        ),
+   135→                ),
+   136→                'location' => $loc_hero,
+   137→        ) );
+   138→
+   139→
+   140→        /* ═══════════════════════════════════════════════════════════
+   141→           3. FEATURES / TRUST BAR
+   142→           ═══════════════════════════════════════════════════════════ */
+   143→        acf_add_local_field_group( array(
+   144→                'key'    => 'group_vc_features',
+   145→                'title'  => __( 'Barre de Confiance', 'velure-core' ),
+   146→                'fields' => array(
+   147→                        array( 'key' => 'field_vc_feat_bg',    'label' => __( 'Fond de section', 'velure-core' ),     'name' => 'feat_bg_style', 'type' => 'select', 'choices' => array( 'soft' => 'Couleur douce', 'muted' => 'Couleur musee', 'base' => 'Couleur de base' ), 'default_value' => 'soft' ),
+   148→                        array( 'key' => 'field_vc_feat_pad',   'label' => __( 'Espacement vertical', 'velure-core' ), 'name' => 'feat_padding',  'type' => 'select', 'choices' => array( 'compact' => 'Compact', 'normal' => 'Normal', 'spacious' => 'Genereux' ), 'default_value' => 'normal' ),
+   149→                        array( 'key' => 'field_vc_feat_border','label' => __( 'Bordure basse', 'velure-core' ),      'name' => 'feat_bottom_border', 'type' => 'true_false', 'default_value' => 0, 'ui' => 1, 'ui_on_text' => 'Oui', 'ui_off_text' => 'Non' ),
+   150→                        array(
+   151→                                'key'          => 'field_vc_features_rep',
+   152→                                'label'        => __( 'Elements de confiance', 'velure-core' ),
+   153→                                'name'         => 'trust_features',
+   154→                                'type'         => 'repeater',
+   155→                                'layout'       => 'table',
+   156→                                'button_label' => __( 'Ajouter un element', 'velure-core' ),
+   157→                                'min'          => 0,
+   158→                                'max'          => 6,
+   159→                                'sub_fields'   => array(
+   160→                                        array( 'key' => 'field_vc_feat_icon',  'label' => 'Icone SVG',   'name' => 'icon_svg',   'type' => 'textarea', 'rows' => 3, 'instructions' => __( 'Collez le code <svg>...</svg>', 'velure-core' ) ),
+   161→                                        array( 'key' => 'field_vc_feat_title', 'label' => 'Titre',       'name' => 'title',      'type' => 'text', 'required' => 1 ),
+   162→                                        array( 'key' => 'field_vc_feat_desc',  'label' => 'Description', 'name' => 'description','type' => 'text' ),
+   163→                                ),
+   164→                        ),
+   165→                ),
+   166→                'location' => $loc_feat,
+   167→        ) );
+   168→
+   169→
+   170→        /* ═══════════════════════════════════════════════════════════
+   171→           4. CATEGORIES
+   172→           ═══════════════════════════════════════════════════════════ */
+   173→        acf_add_local_field_group( array(
+   174→                'key'    => 'group_vc_categories',
+   175→                'title'  => __( 'Section Categories', 'velure-core' ),
+   176→                'fields' => array(
+   177→                        array( 'key' => 'field_vc_cat_eyebrow',   'label' => 'Eyebrow',               'name' => 'cat_eyebrow',   'type' => 'text', 'default_value' => 'Collections' ),
+   178→                        array( 'key' => 'field_vc_cat_title',     'label' => 'Titre',                 'name' => 'section_title_categories', 'type' => 'text', 'default_value' => 'Explorer par Univers' ),
+   179→                        array( 'key' => 'field_vc_cat_desc',      'label' => 'Description',           'name' => 'cat_description', 'type' => 'text', 'default_value' => 'Explorez nos univers et trouvez la piece qui vous correspond.' ),
+   180→                        array( 'key' => 'field_vc_cat_cta_text',  'label' => 'Texte bouton CTA',      'name' => 'cat_cta_text',  'type' => 'text', 'default_value' => 'Toutes les categories' ),
+   181→                        array( 'key' => 'field_vc_cat_cta_link',  'label' => 'Lien bouton CTA',       'name' => 'cat_cta_link',  'type' => 'url',  'default_value' => '/boutique/' ),
+   182→                        array( 'key' => 'field_vc_cat_bg',        'label' => 'Fond de section',        'name' => 'cat_bg_style',  'type' => 'select', 'choices' => array( 'base' => 'Couleur de base', 'soft' => 'Couleur douce', 'muted' => 'Couleur musee' ), 'default_value' => 'base' ),
+   183→                        array( 'key' => 'field_vc_cat_count',     'label' => 'Nombre de categories',   'name' => 'cat_display_count', 'type' => 'number', 'default_value' => 10, 'min' => 2, 'max' => 20 ),
+   184→                        array( 'key' => 'field_vc_cat_manual',    'label' => 'Categories manuelles',   'name' => 'cat_manual',    'type' => 'relationship', 'post_type' => array(), 'taxonomy' => array( 'product_cat' ), 'return_format' => 'object', 'multiple' => 1, 'ui' => 1, 'instructions' => __( 'Si renseigne, remplace les categories automatiques.', 'velure-core' ) ),
+   185→                ),
+   186→                'location' => $loc_cats,
+   187→        ) );
+   188→
+   189→
+   190→        /* ═══════════════════════════════════════════════════════════
+   191→           5. PRODUCTS
+   192→           ═══════════════════════════════════════════════════════════ */
+   193→        acf_add_local_field_group( array(
+   194→                'key'    => 'group_vc_products',
+   195→                'title'  => __( 'Section Produits Vedettes', 'velure-core' ),
+   196→                'fields' => array(
+   197→                        array( 'key' => 'field_vc_prod_eyebrow',  'label' => 'Eyebrow',                'name' => 'prod_eyebrow',  'type' => 'text', 'default_value' => 'Selection' ),
+   198→                        array( 'key' => 'field_vc_prod_title',    'label' => 'Titre',                  'name' => 'section_title_products', 'type' => 'text', 'default_value' => 'Pieces Vedettes' ),
+   199→                        array( 'key' => 'field_vc_prod_desc',     'label' => 'Description',             'name' => 'prod_description', 'type' => 'text', 'default_value' => 'Nos pieces les plus appreciees, choisies pour vous.' ),
+   200→                        array( 'key' => 'field_vc_prod_cta_text', 'label' => 'Texte bouton CTA',        'name' => 'prod_cta_text', 'type' => 'text', 'default_value' => 'Voir toute la boutique' ),
+   201→                        array( 'key' => 'field_vc_prod_cta_link', 'label' => 'Lien bouton CTA',         'name' => 'prod_cta_link', 'type' => 'url',  'default_value' => '/boutique/' ),
+   202→                        array( 'key' => 'field_vc_prod_columns',  'label' => 'Nombre de colonnes',      'name' => 'prod_columns',  'type' => 'select', 'choices' => array( '3' => '3 colonnes', '4' => '4 colonnes' ), 'default_value' => '4' ),
+   203→                        array( 'key' => 'field_vc_prod_mode',     'label' => 'Mode de selection',       'name' => 'prod_mode',     'type' => 'select', 'choices' => array( 'auto' => 'Automatique (derniers produits)', 'manual' => 'Manuel (selection ci-dessous)' ), 'default_value' => 'auto' ),
+   204→                        array( 'key' => 'field_vc_prod_count',    'label' => 'Nombre de produits',     'name' => 'featured_products_count', 'type' => 'number', 'default_value' => 8, 'min' => 4, 'max' => 12 ),
+   205→                        array( 'key' => 'field_vc_prod_manual',   'label' => 'Produits (manuel)',       'name' => 'prod_manual',   'type' => 'relationship', 'post_type' => array( 'product' ), 'return_format' => 'object', 'multiple' => 1, 'ui' => 1, 'instructions' => __( 'Affiche uniquement si le mode "Manuel" est selectionne.', 'velure-core' ) ),
+   206→                        array( 'key' => 'field_vc_prod_bg',       'label' => 'Fond de section',         'name' => 'prod_bg_style', 'type' => 'select', 'choices' => array( 'soft' => 'Couleur douce', 'muted' => 'Couleur musee', 'base' => 'Couleur de base' ), 'default_value' => 'soft' ),
+   207→                        array( 'key' => 'field_vc_prod_sort',     'label' => 'Tri (mode auto)',         'name' => 'prod_sort',     'type' => 'select', 'choices' => array( 'date' => 'Plus recents', 'popularity' => 'Plus populaires', 'rating' => 'Mieux notes', 'rand' => 'Aleatoire' ), 'default_value' => 'date' ),
+   208→                ),
+   209→                'location' => $loc_prod,
+   210→        ) );
+   211→
+   212→
+   213→        /* ═══════════════════════════════════════════════════════════
+   214→           6. SPLIT BANNER
+   215→           ═══════════════════════════════════════════════════════════ */
+   216→        acf_add_local_field_group( array(
+   217→                'key'    => 'group_vc_split_banner',
+   218→                'title'  => __( 'Banniere Split', 'velure-core' ),
+   219→                'fields' => array(
+   220→                        array( 'key' => 'field_vc_sb_layout', 'label' => __( 'Disposition', 'velure-core' ), 'name' => 'sb_layout', 'type' => 'select', 'choices' => array( '50-50' => '50 / 50', '60-40' => '60 / 40', '40-60' => '40 / 60', 'full-left' => 'Plein gauche + texte', 'full-right' => 'Plein droit + texte' ), 'default_value' => '50-50' ),
+   221→
+   222→                        /* Left side */
+   223→                        array( 'key' => 'field_vc_sb_left_tab',       'label' => 'Cote Gauche',      'name' => '', 'type' => 'tab' ),
+   224→                        array( 'key' => 'field_vc_sb_left_image',      'label' => 'Image',            'name' => 'sb_left_image',      'type' => 'image', 'return_format' => 'array' ),
+   225→                        array( 'key' => 'field_vc_sb_left_eyebrow',    'label' => 'Eyebrow',          'name' => 'sb_left_eyebrow',    'type' => 'text' ),
+   226→                        array( 'key' => 'field_vc_sb_left_title',      'label' => 'Titre',            'name' => 'sb_left_title',      'type' => 'text' ),
+   227→                        array( 'key' => 'field_vc_sb_left_desc',       'label' => 'Description',      'name' => 'sb_left_desc',       'type' => 'textarea', 'rows' => 2 ),
+   228→                        array( 'key' => 'field_vc_sb_left_cta_text',   'label' => 'Texte bouton',     'name' => 'sb_left_cta_text',   'type' => 'text' ),
+   229→                        array( 'key' => 'field_vc_sb_left_cta_link',   'label' => 'Lien',             'name' => 'sb_left_cta_link',   'type' => 'url' ),
+   230→                        array( 'key' => 'field_vc_sb_left_cta_style',  'label' => 'Style bouton',     'name' => 'sb_left_cta_style',  'type' => 'select', 'choices' => array( 'gold' => 'Or', 'primary' => 'Sombre', 'outline' => 'Contour' ), 'default_value' => 'gold' ),
+   231→                        array( 'key' => 'field_vc_sb_left_overlay',    'label' => 'Style du cote',     'name' => 'sb_left_style',      'type' => 'select', 'choices' => array( 'dark' => 'Fonce (texte clair)', 'light' => 'Clair (texte sombre)' ), 'default_value' => 'dark' ),
+   232→
+   233→                        /* Right side */
+   234→                        array( 'key' => 'field_vc_sb_right_tab',      'label' => 'Cote Droit',       'name' => '', 'type' => 'tab' ),
+   235→                        array( 'key' => 'field_vc_sb_right_image',     'label' => 'Image',            'name' => 'sb_right_image',     'type' => 'image', 'return_format' => 'array' ),
+   236→                        array( 'key' => 'field_vc_sb_right_eyebrow',   'label' => 'Eyebrow',          'name' => 'sb_right_eyebrow',   'type' => 'text' ),
+   237→                        array( 'key' => 'field_vc_sb_right_title',     'label' => 'Titre',            'name' => 'sb_right_title',     'type' => 'text' ),
+   238→                        array( 'key' => 'field_vc_sb_right_desc',      'label' => 'Description',      'name' => 'sb_right_desc',      'type' => 'textarea', 'rows' => 2 ),
+   239→                        array( 'key' => 'field_vc_sb_right_cta_text',  'label' => 'Texte bouton',     'name' => 'sb_right_cta_text',  'type' => 'text' ),
+   240→                        array( 'key' => 'field_vc_sb_right_cta_link',  'label' => 'Lien',             'name' => 'sb_right_cta_link',  'type' => 'url' ),
+   241→                        array( 'key' => 'field_vc_sb_right_cta_style', 'label' => 'Style bouton',     'name' => 'sb_right_cta_style', 'type' => 'select', 'choices' => array( 'gold' => 'Or', 'primary' => 'Sombre', 'outline' => 'Contour' ), 'default_value' => 'outline' ),
+   242→                        array( 'key' => 'field_vc_sb_right_overlay',   'label' => 'Style du cote',     'name' => 'sb_right_style',     'type' => 'select', 'choices' => array( 'dark' => 'Fonce (texte clair)', 'light' => 'Clair (texte sombre)' ), 'default_value' => 'light' ),
+   243→                ),
+   244→                'location' => $loc_bann,
+   245→        ) );
+   246→
+   247→
+   248→        /* ═══════════════════════════════════════════════════════════
+   249→           7. BRAND MARQUEE
+   250→           ═══════════════════════════════════════════════════════════ */
+   251→        acf_add_local_field_group( array(
+   252→                'key'    => 'group_vc_marquee',
+   253→                'title'  => __( 'Bandeau Defilant (Marquees)', 'velure-core' ),
+   254→                'fields' => array(
+   255→                        array( 'key' => 'field_vc_marquee_speed', 'label' => __( 'Vitesse (secondes pour un cycle)', 'velure-core' ), 'name' => 'marquee_speed', 'type' => 'number', 'default_value' => 25, 'min' => 10, 'max' => 60 ),
+   256→                        array( 'key' => 'field_vc_marquee_bg',    'label' => __( 'Couleur de fond', 'velure-core' ),  'name' => 'marquee_bg',    'type' => 'select', 'choices' => array( 'base' => 'Couleur de base', 'soft' => 'Couleur douce', 'secondary' => 'Couleur or', 'dark' => 'Fonce' ), 'default_value' => 'base' ),
+   257→                        array( 'key' => 'field_vc_marquee_dir',   'label' => __( 'Direction', 'velure-core' ),       'name' => 'marquee_direction', 'type' => 'select', 'choices' => array( 'left' => 'Gauche vers Droite', 'right' => 'Droite vers Gauche' ), 'default_value' => 'left' ),
+   258→                        array(
+   259→                                'key'          => 'field_vc_brands_rep',
+   260→                                'label'        => __( 'Marques', 'velure-core' ),
+   261→                                'name'         => 'brand_names',
+   262→                                'type'         => 'repeater',
+   263→                                'layout'       => 'row',
+   264→                                'button_label' => __( 'Ajouter une marque', 'velure-core' ),
+   265→                                'sub_fields'   => array(
+   266→                                        array( 'key' => 'field_vc_brand_name', 'label' => 'Nom', 'name' => 'name', 'type' => 'text', 'required' => 1 ),
+   267→                                ),
+   268→                        ),
+   269→                ),
+   270→                'location' => $loc_mrq,
+   271→        ) );
+   272→
+   273→
+   274→        /* ═══════════════════════════════════════════════════════════
+   275→           8. TESTIMONIALS
+   276→           ═══════════════════════════════════════════════════════════ */
+   277→        acf_add_local_field_group( array(
+   278→                'key'    => 'group_vc_testimonials',
+   279→                'title'  => __( 'Section Temoignages', 'velure-core' ),
+   280→                'fields' => array(
+   281→                        array( 'key' => 'field_vc_testi_eyebrow', 'label' => 'Eyebrow',             'name' => 'testi_eyebrow',  'type' => 'text', 'default_value' => 'Avis Clients' ),
+   282→                        array( 'key' => 'field_vc_testi_title',   'label' => 'Titre',               'name' => 'section_title_testimonials', 'type' => 'text', 'default_value' => 'Ce Que Disent Nos Clients' ),
+   283→                        array( 'key' => 'field_vc_testi_desc',    'label' => 'Description',          'name' => 'testi_description', 'type' => 'text' ),
+   284→                        array( 'key' => 'field_vc_testi_count',   'label' => 'Nombre a afficher',   'name' => 'testimonials_count', 'type' => 'number', 'default_value' => 3, 'min' => 1, 'max' => 6 ),
+   285→                        array( 'key' => 'field_vc_testi_bg',      'label' => 'Fond de section',      'name' => 'testi_bg_style', 'type' => 'select', 'choices' => array( 'base' => 'Couleur de base', 'soft' => 'Couleur douce', 'muted' => 'Couleur musee', 'dark' => 'Fonce' ), 'default_value' => 'base' ),
+   286→                        array( 'key' => 'field_vc_testi_cols',    'label' => 'Colonnes',             'name' => 'testi_columns',  'type' => 'select', 'choices' => array( '2' => '2 colonnes', '3' => '3 colonnes' ), 'default_value' => '3' ),
+   287→                ),
+   288→                'location' => $loc_test,
+   289→        ) );
+   290→
+   291→
+   292→        /* ═══════════════════════════════════════════════════════════
+   293→           9. BLOG
+   294→           ═══════════════════════════════════════════════════════════ */
+   295→        acf_add_local_field_group( array(
+   296→                'key'    => 'group_vc_blog',
+   297→                'title'  => __( 'Section Blog / Journal', 'velure-core' ),
+   298→                'fields' => array(
+   299→                        array( 'key' => 'field_vc_blog_eyebrow',  'label' => 'Eyebrow',           'name' => 'blog_eyebrow',   'type' => 'text', 'default_value' => 'Actualites' ),
+   300→                        array( 'key' => 'field_vc_blog_title',    'label' => 'Titre',             'name' => 'section_title_blog', 'type' => 'text', 'default_value' => 'Le Journal' ),
+   301→                        array( 'key' => 'field_vc_blog_desc',     'label' => 'Description',        'name' => 'blog_description', 'type' => 'text' ),
+   302→                        array( 'key' => 'field_vc_blog_cta_text', 'label' => 'Texte bouton CTA',   'name' => 'blog_cta_text',  'type' => 'text', 'default_value' => 'Voir tous les articles' ),
+   303→                        array( 'key' => 'field_vc_blog_cta_link', 'label' => 'Lien bouton CTA',    'name' => 'blog_cta_link',  'type' => 'url',  'default_value' => '/blog/' ),
+   304→                        array( 'key' => 'field_vc_blog_count',    'label' => 'Nombre d\'articles', 'name' => 'blog_posts_count', 'type' => 'number', 'default_value' => 3, 'min' => 2, 'max' => 6 ),
+   305→                        array( 'key' => 'field_vc_blog_bg',       'label' => 'Fond de section',    'name' => 'blog_bg_style',   'type' => 'select', 'choices' => array( 'muted' => 'Couleur musee', 'soft' => 'Couleur douce', 'base' => 'Couleur de base' ), 'default_value' => 'muted' ),
+   306→                        array( 'key' => 'field_vc_blog_cols',     'label' => 'Colonnes',           'name' => 'blog_columns',   'type' => 'select', 'choices' => array( '2' => '2 colonnes', '3' => '3 colonnes' ), 'default_value' => '3' ),
+   307→                ),
+   308→                'location' => $loc_blog,
+   309→        ) );
+   310→
+   311→
+   312→        /* ═══════════════════════════════════════════════════════════
+   313→           10. INSTAGRAM
+   314→           ═══════════════════════════════════════════════════════════ */
+   315→        acf_add_local_field_group( array(
+   316→                'key'    => 'group_vc_instagram',
+   317→                'title'  => __( 'Section Instagram', 'velure-core' ),
+   318→                'fields' => array(
+   319→                        array( 'key' => 'field_vc_ig_handle',      'label' => 'Handle Instagram',    'name' => 'instagram_handle',  'type' => 'text', 'placeholder' => '@velure.paris' ),
+   320→                        array( 'key' => 'field_vc_ig_profile_url', 'label' => 'URL du profil',       'name' => 'instagram_url',     'type' => 'url',  'default_value' => 'https://instagram.com/' ),
+   321→                        array( 'key' => 'field_vc_ig_eyebrow',     'label' => 'Eyebrow',             'name' => 'ig_eyebrow',        'type' => 'text', 'default_value' => 'Suivez-nous' ),
+   322→                        array( 'key' => 'field_vc_ig_cols',        'label' => 'Colonnes',            'name' => 'ig_columns',       'type' => 'select', 'choices' => array( '4' => '4 colonnes', '5' => '5 colonnes', '6' => '6 colonnes' ), 'default_value' => '6' ),
+   323→                        array( 'key' => 'field_vc_ig_gap',         'label' => 'Espacement',          'name' => 'ig_gap',           'type' => 'select', 'choices' => array( 'none' => 'Aucun', 'small' => 'Petit', 'medium' => 'Moyen' ), 'default_value' => 'small' ),
+   324→                        array(
+   325→                                'key'          => 'field_vc_ig_images_rep',
+   326→                                'label'        => 'Images',
+   327→                                'name'         => 'instagram_images',
+   328→                                'type'         => 'repeater',
+   329→                                'layout'       => 'row',
+   330→                                'button_label' => __( 'Ajouter une image', 'velure-core' ),
+   331→                                'max'          => 8,
+   332→                                'sub_fields'   => array(
+   333→                                        array( 'key' => 'field_vc_ig_img',  'label' => 'Image', 'name' => 'image', 'type' => 'image', 'return_format' => 'array', 'required' => 1 ),
+   334→                                        array( 'key' => 'field_vc_ig_link', 'label' => 'Lien',  'name' => 'link',  'type' => 'url' ),
+   335→                                        array( 'key' => 'field_vc_ig_alt',  'label' => 'Texte alternatif', 'name' => 'alt', 'type' => 'text' ),
+   336→                                ),
+   337→                        ),
+   338→                ),
+   339→                'location' => $loc_ig,
+   340→        ) );
+   341→
+   342→
+   343→        /* ═══════════════════════════════════════════════════════════
+   344→           11. GLOBAL STYLES (per-section padding, topbar, etc.)
+   345→           ═══════════════════════════════════════════════════════════ */
+   346→        acf_add_local_field_group( array(
+   347→                'key'    => 'group_vc_global_styles',
+   348→                'title'  => __( 'Styles Globaux & Avances', 'velure-core' ),
+   349→                'fields' => array(
+   350→                        /* Topbar */
+   351→                        array( 'key' => 'field_vc_glob_topbar_text',  'label' => __( 'Texte de la top bar', 'velure-core' ),        'name' => 'topbar_text',     'type' => 'text', 'default_value' => 'Livraison offerte des 150 EUR d\'achat &bull; Retours gratuits 30 jours' ),
+   352→                        array( 'key' => 'field_vc_glob_topbar_show',  'label' => __( 'Afficher la top bar', 'velure-core' ),        'name' => 'show_topbar',     'type' => 'true_false', 'default_value' => 1, 'ui' => 1, 'ui_on_text' => 'Oui', 'ui_off_text' => 'Non' ),
+   353→
+   354→                        /* Footer */
+   355→                        array( 'key' => 'field_vc_glob_footer_text',  'label' => __( 'Copyright footer', 'velure-core' ),           'name' => 'footer_copyright','type' => 'text', 'default_value' => '&copy; 2026 Velure. Tous droits reserves.' ),
+   356→
+   357→                        /* Section spacing */
+   358→                        array( 'key' => 'field_vc_glob_sec_pad_tab', 'label' => __( 'Espacement des sections', 'velure-core' ),     'name' => '', 'type' => 'tab' ),
+   359→                        array( 'key' => 'field_vc_glob_section_pad', 'label' => __( 'Padding vertical global', 'velure-core' ),    'name' => 'section_padding', 'type' => 'select', 'choices' => array( 'compact' => 'Compact (3rem)', 'normal' => 'Normal (5.5rem)', 'spacious' => 'Genereux (8rem)', 'none' => 'Aucun' ), 'default_value' => 'normal' ),
+   360→
+   361→                        /* Animations */
+   362→                        array( 'key' => 'field_vc_glob_anim_tab',    'label' => __( 'Animations', 'velure-core' ),                'name' => '', 'type' => 'tab' ),
+   363→                        array( 'key' => 'field_vc_glob_anim_enable', 'label' => __( 'Activer les animations au scroll', 'velure-core' ), 'name' => 'scroll_animations', 'type' => 'true_false', 'default_value' => 1, 'ui' => 1, 'ui_on_text' => 'Oui', 'ui_off_text' => 'Non' ),
+   364→
+   365→                        /* Custom CSS */
+   366→                        array( 'key' => 'field_vc_glob_css_tab',     'label' => __( 'CSS Personnalise', 'velure-core' ),           'name' => '', 'type' => 'tab' ),
+   367→                        array( 'key' => 'field_vc_glob_custom_css',  'label' => __( 'CSS personnalise', 'velure-core' ),          'name' => 'custom_css',      'type' => 'textarea', 'rows' => 8, 'instructions' => __( 'Ce CSS sera injecte en front-end uniquement.', 'velure-core' ) ),
+   368→                ),
+   369→                'location' => $loc_glob,
+   370→        ) );
+   371→
+   372→}
