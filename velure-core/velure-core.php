@@ -239,14 +239,14 @@ final class Velure_Core {
 
         /* ── AJAX: Get settings for export ── */
         public function ajax_get_settings() {
-                check_ajax_referer( 'velure_core_save_settings', 'nonce' );
+                check_ajax_referer( 'velure_core_save_settings' );
                 if ( ! current_user_can( 'edit_theme_options' ) ) wp_send_json_error();
                 wp_send_json_success( get_option( VELURE_CORE_OPTION, array() ) );
         }
 
         /* ── AJAX: Import settings ── */
         public function ajax_import_settings() {
-                check_ajax_referer( 'velure_core_save_settings', 'nonce' );
+                check_ajax_referer( 'velure_core_save_settings' );
                 if ( ! current_user_can( 'edit_theme_options' ) ) wp_send_json_error();
                 $json = isset( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : '';
                 $data = json_decode( $json, true );
@@ -258,7 +258,7 @@ final class Velure_Core {
 
         /* ── AJAX: Reset to defaults ── */
         public function ajax_reset() {
-                check_ajax_referer( 'velure_core_save_settings', 'nonce' );
+                check_ajax_referer( 'velure_core_save_settings' );
                 if ( ! current_user_can( 'edit_theme_options' ) ) wp_send_json_error();
                 update_option( VELURE_CORE_OPTION, $this->default_settings() );
                 wp_send_json_success( array( 'message' => 'Reinitialisation reussie.' ) );

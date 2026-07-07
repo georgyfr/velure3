@@ -872,7 +872,7 @@ function velure_core_tab_global( $s ) {
    ═══════════════════════════════════════════════════════════════ */
 add_action( 'wp_ajax_velure_core_save', 'velure_core_ajax_save' );
 function velure_core_ajax_save() {
-        check_ajax_referer( 'velure_core_save_settings', 'nonce' );
+        check_ajax_referer( 'velure_core_save_settings' );
         if ( ! current_user_can( 'edit_theme_options' ) ) wp_send_json_error( array( 'message' => 'Permission insuffisante.' ) );
 
         $raw = wp_unslash( $_POST );

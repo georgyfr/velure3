@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   Velure Core — Admin Panel v3.0
+   Velure Core — Admin Panel v3.1
    Elementor-inspired, fully redesigned interface
    ═══════════════════════════════════════════════════════════════ */
 
@@ -29,22 +29,29 @@
 	--vc-footer-h: 60px;
 }
 
-/* ── Reset admin chrome for our page ── */
-#wpbody-content .velure-core-admin-wrap * {
+/* ── CRITICAL: Override ALL WordPress admin chrome for our page ── */
+#wpbody-content .velure-core-admin-wrap,
+.velure-core-admin-wrap {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+	margin: -20px -20px 0 -20px !important;
+	padding: 0 !important;
+	max-width: none !important;
+	min-height: calc(100vh - 32px);
+	background: var(--vc-bg-darker) !important;
+	color: var(--vc-text);
+	display: flex !important;
+	flex-direction: column !important;
+	overflow: hidden;
+	box-sizing: border-box;
+	width: auto;
+}
+#wpbody-content .velure-core-admin-wrap *,
+.velure-core-admin-wrap * {
 	box-sizing: border-box;
 }
-.velure-core-admin-wrap {
-	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-	margin: -20px -20px 0 -20px;
-	min-height: calc(100vh - 32px);
-	background: var(--vc-bg-darker);
-	color: var(--vc-text);
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-}
 .velure-core-admin-wrap .notice,
-.velure-core-admin-wrap .update-nag { display: none; }
+.velure-core-admin-wrap .update-nag,
+.velure-core-admin-wrap #message { display: none !important; }
 
 /* ═══════════════════════════════════════════════════════════════
    LAYOUT: Sidebar + Main
@@ -127,12 +134,14 @@
 	padding: 10px 20px;
 	margin: 1px 8px;
 	border-radius: var(--vc-radius-sm);
-	cursor: pointer;
+	cursor: pointer !important;
 	transition: all var(--vc-transition);
 	color: var(--vc-text-dim);
 	font-size: 13px;
 	font-weight: 500;
 	position: relative;
+	user-select: none;
+	-webkit-user-select: none;
 }
 .vc-nav-item:hover {
 	background: var(--vc-bg-hover);
@@ -185,7 +194,7 @@
 	gap: 8px;
 	padding: 8px 12px;
 	color: var(--vc-text-dim);
-	text-decoration: none;
+	text-decoration: none !important;
 	font-size: 12px;
 	border-radius: var(--vc-radius-sm);
 	transition: all var(--vc-transition);
@@ -203,6 +212,7 @@
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	min-width: 0;
 }
 
 /* ── HEADER BAR ── */
@@ -306,13 +316,18 @@
 .vc-panel::-webkit-scrollbar-track { background: transparent; }
 .vc-panel::-webkit-scrollbar-thumb { background: var(--vc-border); border-radius: 6px; }
 
+/* ── FORM: use display:contents so it doesn't break layout ── */
+.vc-settings-form {
+	display: contents;
+}
+
 /* ── SECTION PANEL (each tab's content) ── */
 .vc-section-panel {
 	display: none;
-	animation: vcFadeIn 0.3s ease;
 }
 .vc-section-panel.active {
 	display: block;
+	animation: vcFadeIn 0.3s ease;
 }
 @keyframes vcFadeIn {
 	from { opacity: 0; transform: translateY(8px); }
@@ -524,6 +539,7 @@
 	cursor: pointer;
 	transition: background var(--vc-transition);
 	user-select: none;
+	-webkit-user-select: none;
 }
 .vc-accordion-header:hover {
 	background: var(--vc-bg-hover);
@@ -769,7 +785,7 @@
 	height: 24px;
 	flex-shrink: 0;
 }
-.vc-toggle input { opacity: 0; width: 0; height: 0; }
+.vc-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
 .vc-toggle-slider {
 	position: absolute;
 	cursor: pointer;
@@ -855,6 +871,9 @@
 	font-size: 14px;
 	color: var(--vc-text-bright);
 }
+.vc-repeater {
+	min-height: 4px;
+}
 .vc-repeater-row {
 	border: 1px solid var(--vc-border);
 	border-radius: var(--vc-radius);
@@ -909,7 +928,7 @@
 }
 .vc-repeater-row-actions button:hover {
 	background: rgba(239, 68, 68, 0.15);
-	color: var(--vc-danger);
+	color: var(--danger);
 }
 .vc-repeater-fields {
 	padding: 16px;
@@ -919,7 +938,7 @@
 	display: block;
 	animation: vcFadeIn 0.2s ease;
 }
-.vc-repeater-template { display: none; }
+.vc-repeater-template { display: none !important; }
 
 /* ═══════════════════════════════════════════════════════════════
    SECTION ORDER (redesigned)
@@ -996,9 +1015,11 @@
 	align-items: center;
 	gap: 8px;
 	box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+	pointer-events: none;
 }
 .vc-toast.show {
 	transform: translateX(0);
+	pointer-events: auto;
 }
 .vc-toast-success {
 	background: #166534;
@@ -1031,6 +1052,20 @@
 @keyframes vcPulse {
 	0%, 100% { opacity: 1; }
 	50% { opacity: 0.4; }
+}
+
+/* ── Spinner ── */
+.vc-spinner {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border: 2px solid rgba(255,255,255,0.3);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: vcSpin 0.6s linear infinite;
+}
+@keyframes vcSpin {
+	to { transform: rotate(360deg); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
