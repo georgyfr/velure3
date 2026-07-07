@@ -315,7 +315,7 @@ function velure_core_get_templates( $section ) {
                 'features' => array(
                         array(
                                 'name' => 'Confiance Luxe',
-                                'desc' => '4 piliers de confiance avec icones,
+                                'desc' => '4 piliers de confiance avec icones',
                                 'badge' => 'popular',
                                 'icon'  => '&#128142;',
                                 'data'  => array(
@@ -889,125 +889,125 @@ function velure_core_tab_global( $s ) {
    ═══════════════════════════════════════════════════════════════ */
 add_action( 'wp_ajax_velure_core_save', 'velure_core_ajax_save' );
 function velure_core_ajax_save() {
-	check_ajax_referer( 'velure_core_save_settings', 'nonce' );
-	if ( ! current_user_can( 'edit_theme_options' ) ) wp_send_json_error( array( 'message' => 'Permission insuffisante.' ) );
+        check_ajax_referer( 'velure_core_save_settings', 'nonce' );
+        if ( ! current_user_can( 'edit_theme_options' ) ) wp_send_json_error( array( 'message' => 'Permission insuffisante.' ) );
 
-	$raw = wp_unslash( $_POST );
-	$saved = get_option( VELURE_CORE_OPTION, array() );
-	$default = Velure_Core::instance()->default_settings();
+        $raw = wp_unslash( $_POST );
+        $saved = get_option( VELURE_CORE_OPTION, array() );
+        $default = Velure_Core::instance()->default_settings();
 
-	$simple = array('hero_height','hero_text_align','hero_text_color','hs_bestseller_label','hs_bestseller_title','hs_bestseller_price','hs_bestseller_cta','hs_bestseller_link','hs_category_label','hs_category_title','hs_category_cta_link','feat_bg_style','feat_padding','cat_eyebrow','section_title_categories','cat_description','cat_cta_text','cat_cta_link','cat_bg_style','prod_eyebrow','section_title_products','prod_description','prod_cta_text','prod_cta_link','prod_columns','prod_mode','prod_bg_style','prod_sort','sb_layout','sb_left_eyebrow','sb_left_title','sb_left_desc','sb_left_cta_text','sb_left_cta_link','sb_left_cta_style','sb_left_style','sb_right_eyebrow','sb_right_title','sb_right_desc','sb_right_cta_text','sb_right_cta_link','sb_right_cta_style','sb_right_style','marquee_direction','marquee_bg','testi_eyebrow','section_title_testimonials','testi_description','testi_bg_style','testi_columns','blog_eyebrow','section_title_blog','blog_description','blog_cta_text','blog_cta_link','blog_bg_style','blog_columns','instagram_handle','instagram_url','ig_eyebrow','ig_columns','ig_gap','topbar_text','footer_copyright','section_padding','custom_css');
-	foreach ( $simple as $f ) { $saved[$f] = isset($raw[$f]) ? sanitize_text_field($raw[$f]) : ($default[$f] ?? ''); }
-	$toggles = array('show_hero','show_features','show_categories','show_products','show_split_banner','show_marquee','show_testimonials','show_blog','show_instagram','hero_autoplay','hero_show_side','feat_bottom_border','scroll_animations','show_topbar');
-	foreach ( $toggles as $f ) { $saved[$f] = !empty($raw[$f]) ? 1 : 0; }
-	$nums = array('hero_autoplay_speed'=>array(6000,1000,20000),'hero_overlay_opacity'=>array(40,0,100),'cat_display_count'=>array(10,1,50),'featured_products_count'=>array(8,1,50),'marquee_speed'=>array(25,5,120),'testimonials_count'=>array(3,1,20),'blog_posts_count'=>array(3,1,20));
-	foreach ( $nums as $f => $c ) { $v = isset($raw[$f]) ? intval($raw[$f]) : $c[0]; $saved[$f] = max($c[1],min($c[2],$v)); }
-	foreach ( array('hs_bestseller_image','hs_category_image','sb_left_image','sb_right_image') as $f ) { $saved[$f] = isset($raw[$f]) ? absint($raw[$f]) : 0; }
+        $simple = array('hero_height','hero_text_align','hero_text_color','hs_bestseller_label','hs_bestseller_title','hs_bestseller_price','hs_bestseller_cta','hs_bestseller_link','hs_category_label','hs_category_title','hs_category_cta_link','feat_bg_style','feat_padding','cat_eyebrow','section_title_categories','cat_description','cat_cta_text','cat_cta_link','cat_bg_style','prod_eyebrow','section_title_products','prod_description','prod_cta_text','prod_cta_link','prod_columns','prod_mode','prod_bg_style','prod_sort','sb_layout','sb_left_eyebrow','sb_left_title','sb_left_desc','sb_left_cta_text','sb_left_cta_link','sb_left_cta_style','sb_left_style','sb_right_eyebrow','sb_right_title','sb_right_desc','sb_right_cta_text','sb_right_cta_link','sb_right_cta_style','sb_right_style','marquee_direction','marquee_bg','testi_eyebrow','section_title_testimonials','testi_description','testi_bg_style','testi_columns','blog_eyebrow','section_title_blog','blog_description','blog_cta_text','blog_cta_link','blog_bg_style','blog_columns','instagram_handle','instagram_url','ig_eyebrow','ig_columns','ig_gap','topbar_text','footer_copyright','section_padding','custom_css');
+        foreach ( $simple as $f ) { $saved[$f] = isset($raw[$f]) ? sanitize_text_field($raw[$f]) : ($default[$f] ?? ''); }
+        $toggles = array('show_hero','show_features','show_categories','show_products','show_split_banner','show_marquee','show_testimonials','show_blog','show_instagram','hero_autoplay','hero_show_side','feat_bottom_border','scroll_animations','show_topbar');
+        foreach ( $toggles as $f ) { $saved[$f] = !empty($raw[$f]) ? 1 : 0; }
+        $nums = array('hero_autoplay_speed'=>array(6000,1000,20000),'hero_overlay_opacity'=>array(40,0,100),'cat_display_count'=>array(10,1,50),'featured_products_count'=>array(8,1,50),'marquee_speed'=>array(25,5,120),'testimonials_count'=>array(3,1,20),'blog_posts_count'=>array(3,1,20));
+        foreach ( $nums as $f => $c ) { $v = isset($raw[$f]) ? intval($raw[$f]) : $c[0]; $saved[$f] = max($c[1],min($c[2],$v)); }
+        foreach ( array('hs_bestseller_image','hs_category_image','sb_left_image','sb_right_image') as $f ) { $saved[$f] = isset($raw[$f]) ? absint($raw[$f]) : 0; }
 
-	$saved['hero_slides'] = array();
-	if ( !empty($raw['hero_slides']) && is_array($raw['hero_slides']) ) { foreach ($raw['hero_slides'] as $sl) { if (!is_array($sl)) continue; $saved['hero_slides'][] = array('image'=>absint($sl['image']??0),'eyebrow'=>sanitize_text_field($sl['eyebrow']??''),'title'=>sanitize_text_field($sl['title']??''),'subtitle'=>sanitize_text_field($sl['subtitle']??''),'cta_text'=>sanitize_text_field($sl['cta_text']??''),'cta_link'=>esc_url_raw($sl['cta_link']??'#'),'cta_style'=>sanitize_text_field($sl['cta_style']??'primary')); } }
-	$saved['trust_features'] = array();
-	if ( !empty($raw['trust_features']) && is_array($raw['trust_features']) ) { foreach ($raw['trust_features'] as $ft) { if (!is_array($ft)) continue; $saved['trust_features'][] = array('icon_svg'=>wp_kses($ft['icon_svg']??'',velure_core_svg_allowed()),'title'=>sanitize_text_field($ft['title']??''),'description'=>sanitize_text_field($ft['description']??'')); } }
-	$saved['brand_names'] = array();
-	if ( !empty($raw['brand_names']) && is_array($raw['brand_names']) ) { foreach ($raw['brand_names'] as $br) { if (!is_array($br)) continue; $n=sanitize_text_field($br['name']??''); if (''!==$n) $saved['brand_names'][] = array('name'=>$n); } }
-	$saved['instagram_images'] = array();
-	if ( !empty($raw['instagram_images']) && is_array($raw['instagram_images']) ) { foreach ($raw['instagram_images'] as $im) { if (!is_array($im)) continue; $saved['instagram_images'][] = array('image'=>absint($im['image']??0),'link'=>esc_url_raw($im['link']??''),'alt'=>sanitize_text_field($im['alt']??'')); } }
+        $saved['hero_slides'] = array();
+        if ( !empty($raw['hero_slides']) && is_array($raw['hero_slides']) ) { foreach ($raw['hero_slides'] as $sl) { if (!is_array($sl)) continue; $saved['hero_slides'][] = array('image'=>absint($sl['image']??0),'eyebrow'=>sanitize_text_field($sl['eyebrow']??''),'title'=>sanitize_text_field($sl['title']??''),'subtitle'=>sanitize_text_field($sl['subtitle']??''),'cta_text'=>sanitize_text_field($sl['cta_text']??''),'cta_link'=>esc_url_raw($sl['cta_link']??'#'),'cta_style'=>sanitize_text_field($sl['cta_style']??'primary')); } }
+        $saved['trust_features'] = array();
+        if ( !empty($raw['trust_features']) && is_array($raw['trust_features']) ) { foreach ($raw['trust_features'] as $ft) { if (!is_array($ft)) continue; $saved['trust_features'][] = array('icon_svg'=>wp_kses($ft['icon_svg']??'',velure_core_svg_allowed()),'title'=>sanitize_text_field($ft['title']??''),'description'=>sanitize_text_field($ft['description']??'')); } }
+        $saved['brand_names'] = array();
+        if ( !empty($raw['brand_names']) && is_array($raw['brand_names']) ) { foreach ($raw['brand_names'] as $br) { if (!is_array($br)) continue; $n=sanitize_text_field($br['name']??''); if (''!==$n) $saved['brand_names'][] = array('name'=>$n); } }
+        $saved['instagram_images'] = array();
+        if ( !empty($raw['instagram_images']) && is_array($raw['instagram_images']) ) { foreach ($raw['instagram_images'] as $im) { if (!is_array($im)) continue; $saved['instagram_images'][] = array('image'=>absint($im['image']??0),'link'=>esc_url_raw($im['link']??''),'alt'=>sanitize_text_field($im['alt']??'')); } }
 
-	$valid = array('hero','features','categories','products','split_banner','marquee','testimonials','blog','instagram');
-	$saved['section_order'] = array();
-	if ( !empty($raw['section_order']) && is_array($raw['section_order']) ) { foreach ($raw['section_order'] as $sec) { $sec=sanitize_text_field($sec); if (in_array($sec,$valid,true)) $saved['section_order'][]=$sec; } }
-	foreach ($valid as $sec) { if (!in_array($sec,$saved['section_order'],true)) $saved['section_order'][]=$sec; }
+        $valid = array('hero','features','categories','products','split_banner','marquee','testimonials','blog','instagram');
+        $saved['section_order'] = array();
+        if ( !empty($raw['section_order']) && is_array($raw['section_order']) ) { foreach ($raw['section_order'] as $sec) { $sec=sanitize_text_field($sec); if (in_array($sec,$valid,true)) $saved['section_order'][]=$sec; } }
+        foreach ($valid as $sec) { if (!in_array($sec,$saved['section_order'],true)) $saved['section_order'][]=$sec; }
 
-	update_option( VELURE_CORE_OPTION, $saved );
-	update_option( 'velure_core_last_saved', current_time('mysql') );
-	wp_send_json_success( array( 'message' => 'Reglages publies avec succes.' ) );
+        update_option( VELURE_CORE_OPTION, $saved );
+        update_option( 'velure_core_last_saved', current_time('mysql') );
+        wp_send_json_success( array( 'message' => 'Reglages publies avec succes.' ) );
 }
 
 /* ═══════════════════════════════════════════════════════════════
    6. MAIN ADMIN PAGE (Elementor-like layout)
    ═══════════════════════════════════════════════════════════════ */
 function velure_core_render_admin_page() {
-	$s = velure_core_get_settings();
-	$nav_items = array(
-		'sections'    => array('Sections','&#128202;','Gestion du layout'),
-		'hero'        => array('Hero','&#127916;','Slider et CTA'),
-		'features'    => array('Confiance','&#128142;','Barre de confiance'),
-		'categories'  => array('Categories','&#127970;','Univers produits'),
-		'products'    => array('Produits','&#128722;','Pieces vedettes'),
-		'banner'      => array('Banniere','&#128248;','Banniere splitee'),
-		'marquee'     => array('Marquee','&#127926;','Bandeau defilant'),
-		'testimonials'=> array('Temoignages','&#128172;','Avis clients'),
-		'blog'        => array('Blog','&#128240;','Le Journal'),
-		'instagram'   => array('Instagram','&#128247;','Galerie photos'),
-		'global'      => array('Global','&#127760;','Reglages generaux'),
-	);
-	$all_templates = array();
-	foreach ( array('hero','features','categories','products','banner') as $ts ) { $all_templates[$ts] = velure_core_get_templates($ts); }
-	?>
-	<div class="wrap velure-core-admin-wrap">
-		<div class="vc-app">
-			<aside class="vc-sidebar">
-				<div class="vc-sidebar-brand">
-					<div class="vc-sidebar-brand-icon">V</div>
-					<div class="vc-sidebar-brand-text"><strong>Velure Core</strong><span>v<?php echo esc_html(VELURE_CORE_VERSION); ?></span></div>
-				</div>
-				<nav class="vc-sidebar-nav">
-					<div class="vc-nav-section-label">Page d'accueil</div>
-					<?php $pi=0; foreach ($nav_items as $key => $item) : if ($pi===5) echo '<div class="vc-nav-section-label">Contenu</div>'; ?>
-					<div class="vc-nav-item<?php echo $pi===0?' active':''; ?>" data-nav="<?php echo esc_attr($key); ?>">
-						<span class="vc-nav-item-icon"><?php echo $item[1]; ?></span>
-						<span class="vc-nav-item-label"><?php echo esc_html($item[0]); ?></span>
-					</div>
-					<?php $pi++; endforeach; ?>
-				</nav>
-				<div class="vc-sidebar-footer">
-					<a href="https://velure.paris" target="_blank" rel="noopener noreferrer"><span style="margin-right:6px">&#128196;</span> Documentation</a>
-				</div>
-			</aside>
-			<div class="vc-main">
-				<div class="vc-header">
-					<div>
-						<div class="vc-header-title" id="vc-header-title">Gestionnaire de Sections</div>
-						<div class="vc-header-breadcrumb">Velure Accueil <span>/</span> <span id="vc-breadcrumb-current">Sections</span></div>
-					</div>
-					<div class="vc-header-actions">
-						<span class="vc-unsaved-dot" id="vc-unsaved-dot"></span>
-						<button type="button" class="vc-btn vc-btn-ghost" onclick="window.open('<?php echo esc_url(home_url('/')); ?>','_blank')">&#128065; Apercu</button>
-					</div>
-				</div>
-				<div class="vc-panel">
-					<?php if (isset($_GET['saved'])&&'1'===$_GET['saved']): ?>
-					<div class="vc-toast vc-toast-success show" id="vc-saved-toast">&#10003; Reglages sauvegardes.</div>
-					<?php endif; ?>
-					<form method="post" action="" class="vc-settings-form" id="vc-settings-form">
-						<?php wp_nonce_field('velure_core_save_settings'); ?>
-						<input type="hidden" name="action" value="velure_core_save" />
-						<?php
-						velure_core_tab_sections($s);
-						velure_core_tab_hero($s);
-						velure_core_tab_features($s);
-						velure_core_tab_categories($s);
-						velure_core_tab_products($s);
-						velure_core_tab_banner($s);
-						velure_core_tab_marquee($s);
-						velure_core_tab_testimonials($s);
-						velure_core_tab_blog($s);
-						velure_core_tab_instagram($s);
-						velure_core_tab_global($s);
-						?>
-					</form>
-				</div>
-				<div class="vc-footer">
-					<div class="vc-footer-status"><span class="vc-footer-status-dot"></span><span>Derniere sauvegarde : <?php echo esc_html(get_option('velure_core_last_saved','--')); ?></span></div>
-					<div class="vc-footer-actions">
-						<button type="button" class="vc-btn vc-btn-ghost" id="vc-discard-btn">Annuler</button>
-						<button type="button" class="vc-btn vc-btn-publish" id="vc-publish-btn">&#10003; Publier</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="vc-toast" id="vc-toast"></div>
-		<script type="application/json" id="vc-templates-data"><?php echo esc_json_encode($all_templates); ?></script>
-	</div>
-	<?php
+        $s = velure_core_get_settings();
+        $nav_items = array(
+                'sections'    => array('Sections','&#128202;','Gestion du layout'),
+                'hero'        => array('Hero','&#127916;','Slider et CTA'),
+                'features'    => array('Confiance','&#128142;','Barre de confiance'),
+                'categories'  => array('Categories','&#127970;','Univers produits'),
+                'products'    => array('Produits','&#128722;','Pieces vedettes'),
+                'banner'      => array('Banniere','&#128248;','Banniere splitee'),
+                'marquee'     => array('Marquee','&#127926;','Bandeau defilant'),
+                'testimonials'=> array('Temoignages','&#128172;','Avis clients'),
+                'blog'        => array('Blog','&#128240;','Le Journal'),
+                'instagram'   => array('Instagram','&#128247;','Galerie photos'),
+                'global'      => array('Global','&#127760;','Reglages generaux'),
+        );
+        $all_templates = array();
+        foreach ( array('hero','features','categories','products','banner') as $ts ) { $all_templates[$ts] = velure_core_get_templates($ts); }
+        ?>
+        <div class="wrap velure-core-admin-wrap">
+                <div class="vc-app">
+                        <aside class="vc-sidebar">
+                                <div class="vc-sidebar-brand">
+                                        <div class="vc-sidebar-brand-icon">V</div>
+                                        <div class="vc-sidebar-brand-text"><strong>Velure Core</strong><span>v<?php echo esc_html(VELURE_CORE_VERSION); ?></span></div>
+                                </div>
+                                <nav class="vc-sidebar-nav">
+                                        <div class="vc-nav-section-label">Page d'accueil</div>
+                                        <?php $pi=0; foreach ($nav_items as $key => $item) : if ($pi===5) echo '<div class="vc-nav-section-label">Contenu</div>'; ?>
+                                        <div class="vc-nav-item<?php echo $pi===0?' active':''; ?>" data-nav="<?php echo esc_attr($key); ?>">
+                                                <span class="vc-nav-item-icon"><?php echo $item[1]; ?></span>
+                                                <span class="vc-nav-item-label"><?php echo esc_html($item[0]); ?></span>
+                                        </div>
+                                        <?php $pi++; endforeach; ?>
+                                </nav>
+                                <div class="vc-sidebar-footer">
+                                        <a href="https://velure.paris" target="_blank" rel="noopener noreferrer"><span style="margin-right:6px">&#128196;</span> Documentation</a>
+                                </div>
+                        </aside>
+                        <div class="vc-main">
+                                <div class="vc-header">
+                                        <div>
+                                                <div class="vc-header-title" id="vc-header-title">Gestionnaire de Sections</div>
+                                                <div class="vc-header-breadcrumb">Velure Accueil <span>/</span> <span id="vc-breadcrumb-current">Sections</span></div>
+                                        </div>
+                                        <div class="vc-header-actions">
+                                                <span class="vc-unsaved-dot" id="vc-unsaved-dot"></span>
+                                                <button type="button" class="vc-btn vc-btn-ghost" onclick="window.open('<?php echo esc_url(home_url('/')); ?>','_blank')">&#128065; Apercu</button>
+                                        </div>
+                                </div>
+                                <div class="vc-panel">
+                                        <?php if (isset($_GET['saved'])&&'1'===$_GET['saved']): ?>
+                                        <div class="vc-toast vc-toast-success show" id="vc-saved-toast">&#10003; Reglages sauvegardes.</div>
+                                        <?php endif; ?>
+                                        <form method="post" action="" class="vc-settings-form" id="vc-settings-form">
+                                                <?php wp_nonce_field('velure_core_save_settings'); ?>
+                                                <input type="hidden" name="action" value="velure_core_save" />
+                                                <?php
+                                                velure_core_tab_sections($s);
+                                                velure_core_tab_hero($s);
+                                                velure_core_tab_features($s);
+                                                velure_core_tab_categories($s);
+                                                velure_core_tab_products($s);
+                                                velure_core_tab_banner($s);
+                                                velure_core_tab_marquee($s);
+                                                velure_core_tab_testimonials($s);
+                                                velure_core_tab_blog($s);
+                                                velure_core_tab_instagram($s);
+                                                velure_core_tab_global($s);
+                                                ?>
+                                        </form>
+                                </div>
+                                <div class="vc-footer">
+                                        <div class="vc-footer-status"><span class="vc-footer-status-dot"></span><span>Derniere sauvegarde : <?php echo esc_html(get_option('velure_core_last_saved','--')); ?></span></div>
+                                        <div class="vc-footer-actions">
+                                                <button type="button" class="vc-btn vc-btn-ghost" id="vc-discard-btn">Annuler</button>
+                                                <button type="button" class="vc-btn vc-btn-publish" id="vc-publish-btn">&#10003; Publier</button>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <div class="vc-toast" id="vc-toast"></div>
+                <script type="application/json" id="vc-templates-data"><?php echo esc_json_encode($all_templates); ?></script>
+        </div>
+        <?php
 }
