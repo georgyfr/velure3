@@ -211,23 +211,6 @@ function velure_core_accordion_end() {
         echo '</div><!-- .vc-accordion-item -->';
 }
 
-/* ── SVG allowed tags ── */
-function velure_core_svg_allowed() {
-        return array(
-                'svg'    => array( 'xmlns','viewBox','width','height','fill','stroke','class','style' ),
-                'path'   => array( 'd','fill','stroke','stroke-width','stroke-linecap','stroke-linejoin' ),
-                'circle' => array( 'cx','cy','r','fill','stroke','stroke-width' ),
-                'rect'   => array( 'x','y','width','height','rx','ry','fill','stroke' ),
-                'line'   => array( 'x1','y1','x2','y2','stroke','stroke-width' ),
-                'polyline'=> array( 'points','fill','stroke','stroke-width' ),
-                'polygon' => array( 'points','fill','stroke' ),
-                'g'      => array( 'fill','stroke','transform','class' ),
-                'use'    => array( 'href','xlink:href','x','y','width','height' ),
-                'defs'   => array(),
-                'clipPath'=> array( 'id' ),
-        );
-}
-
 /* ═══════════════════════════════════════════════════════════════
    3. PRE-BUILT TEMPLATES
    ═══════════════════════════════════════════════════════════════ */
