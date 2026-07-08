@@ -1,0 +1,502 @@
+     1→   500→                        'hero_title_font_family':    { css: 'fontFamily' },
+     2→   501→
+     3→   502→                        /* Hero Subtitle */
+     4→   503→                        'hero_subtitle_font_size':      { css: 'fontSize',      unit: 'px' },
+     5→   504→                        'hero_subtitle_font_weight':    { css: 'fontWeight' },
+     6→   505→                        'hero_subtitle_color':          { css: 'color' },
+     7→   506→                        'hero_subtitle_line_height':    { css: 'lineHeight' },
+     8→   507→                        'hero_subtitle_margin_bottom':  { css: 'marginBottom',  unit: 'px' },
+     9→   508→                        'hero_subtitle_font_family':    { css: 'fontFamily' },
+    10→   509→
+    11→   510→                        /* Hero CTA */
+    12→   511→                        'hero_cta_font_size':         { css: 'fontSize',      unit: 'px' },
+    13→   512→                        'hero_cta_font_weight':       { css: 'fontWeight' },
+    14→   513→                        'hero_cta_letter_spacing':    { css: 'letterSpacing', unit: 'px' },
+    15→   514→                        'hero_cta_text_transform':    { css: 'textTransform' },
+    16→   515→                        'hero_cta_padding_x':         { css: 'paddingLeft',   unit: 'px', also: 'paddingRight', alsoUnit: 'px' },
+    17→   516→                        'hero_cta_padding_y':         { css: 'paddingTop',    unit: 'px', also: 'paddingBottom', alsoUnit: 'px' },
+    18→   517→                        'hero_cta_border_radius':     { css: 'borderRadius',  unit: 'px' },
+    19→   518→                        'hero_cta_bg_color':          { css: 'backgroundColor' },
+    20→   519→                        'hero_cta_text_color':        { css: 'color' },
+    21→   520→                },
+    22→   521→
+    23→   522→                /* ═══════════════════════════════════════════════════════════════
+    24→   523→                   SETTINGS HELPER — deep get by dot-notation key
+    25→   524→                   ═════════════════════════════════════════════════════════════ */
+    26→   525→                getVal: function (key) {
+    27→   526→                        if (!key) return '';
+    28→   527→                        var parts = key.split('.');
+    29→   528→                        var val = VCB.settings;
+    30→   529→                        for (var i = 0; i < parts.length; i++) {
+    31→   530→                                if (val === null || val === undefined) return '';
+    32→   531→                                val = val[parts[i]];
+    33→   532→                        }
+    34→   533→                        return (val !== null && val !== undefined) ? val : '';
+    35→   534→                },
+    36→   535→
+    37→   536→                /* ═══════════════════════════════════════════════════════════════
+    38→   537→                   FIELD HTML RENDERERS
+    39→   538→                   ═════════════════════════════════════════════════════════════ */
+    40→   539→
+    41→   540→                /**
+    42→   541→                 * Render a single field and return jQuery element.
+    43→   542→                 * @param {Object} f  Field definition
+    44→   543→                 * @returns {jQuery}
+    45→   544→                 */
+    46→   545→                renderField: function (f) {
+    47→   546→                        var val = String(VCB.getVal(f.key));
+    48→   547→                        var $w = $('<div class="vc-bp-field" data-key="' + f.key + '"></div>');
+    49→   548→
+    50→   549→                        switch (f.type) {
+    51→   550→
+    52→   551→                                case 'text':
+    53→   552→                                        $w.append('<label>' + f.label + '</label>');
+    54→   553→                                        $w.append($('<input type="text" />')
+    55→   554→                                                .attr({ 'data-vc-key': f.key, value: val, placeholder: f.placeholder || '' }));
+    56→   555→                                        break;
+    57→   556→
+    58→   557→                                case 'textarea':
+    59→   558→                                        $w.append('<label>' + f.label + '</label>');
+    60→   559→                                        $w.append($('<textarea rows="3"></textarea>')
+    61→   560→                                                .attr({ 'data-vc-key': f.key, placeholder: f.placeholder || '' })
+    62→   561→                                                .val(val));
+    63→   562→                                        break;
+    64→   563→
+    65→   564→                                case 'number':
+    66→   565→                                        $w.append('<label>' + f.label + (f.unit ? ' <span class="vc-bp-unit">' + f.unit + '</span>' : '') + '</label>');
+    67→   566→                                        $w.append($('<input type="number" />')
+    68→   567→                                                .attr({ 'data-vc-key': f.key, step: f.step || 1, min: f.min !== undefined ? f.min : '', max: f.max !== undefined ? f.max : '', value: val }));
+    69→   568→                                        break;
+    70→   569→
+    71→   570→                                case 'color':
+    72→   571→                                        $w.append('<label>' + f.label + '</label>');
+    73→   572→                                        $w.append($('<div class="vc-bp-color-wrap"></div>')
+    74→   573→                                                .append($('<input type="color" />').attr({ 'data-vc-key': f.key, value: val || '#000000' }))
+    75→   574→                                                .append($('<input type="text" class="vc-bp-color-text" />').attr({ 'data-vc-key': f.key + '_hex', value: val, placeholder: '#000000' })));
+    76→   575→                                        break;
+    77→   576→
+    78→   577→                                case 'select':
+    79→   578→                                        $w.append('<label>' + f.label + '</label>');
+    80→   579→                                        var $sel = $('<select></select>').attr('data-vc-key', f.key);
+    81→   580→                                        (f.options || []).forEach(function (o) {
+    82→   581→                                                var optVal = o.v !== undefined ? o.v : o.value;
+    83→   582→                                                var optLbl = o.l !== undefined ? o.l : o.label;
+    84→   583→                                                $sel.append($('<option></option>').attr({ value: optVal, selected: optVal === val ? 'selected' : '' }).text(optLbl));
+    85→   584→                                        });
+    86→   585→                                        $w.append($sel);
+    87→   586→                                        break;
+    88→   587→
+    89→   588→                                case 'toggle':
+    90→   589→                                        var isOn = val === '1' || val === 1 || val === true;
+    91→   590→                                        $w.html(
+    92→   591→                                                '<label class="vc-bp-toggle-label">' +
+    93→   592→                                                        '<span>' + f.label + '</span>' +
+    94→   593→                                                        '<span class="vc-bp-toggle' + (isOn ? ' active' : '') + '" data-vc-key="' + f.key + '">' +
+    95→   594→                                                                '<span class="vc-bp-toggle-knob"></span>' +
+    96→   595→                                                        '</span>' +
+    97→   596→                                                '</label>'
+    98→   597→                                        );
+    99→   598→                                        break;
+   100→   599→
+   101→   600→                                case 'range':
+   102→   601→                                        var numVal = parseFloat(val) || f.min || 0;
+   103→   602→                                        $w.append('<label>' + f.label + ' <span class="vc-bp-range-val">' + numVal + (f.unit || '') + '</span></label>');
+   104→   603→                                        $w.append($('<input type="range" />')
+   105→   604→                                                .attr({ 'data-vc-key': f.key, min: f.min || 0, max: f.max || 100, step: f.step || 1, value: numVal }));
+   106→   605→                                        break;
+   107→   606→
+   108→   607→                                case 'media':
+   109→   608→                                        $w.append('<label>' + f.label + '</label>');
+   110→   609→                                        var $mediaWrap = $('<div class="vc-bp-media-wrap"></div>');
+   111→   610→                                        var $mediaInput = $('<input type="text" class="vc-bp-media-input" readonly />').attr({ 'data-vc-key': f.key, value: val });
+   112→   611→                                        var $mediaBtn = $('<button type="button" class="vc-bp-media-btn">Choisir</button>');
+   113→   612→                                        if (val) {
+   114→   613→                                                $mediaWrap.append($('<div class="vc-bp-media-thumb"><img src="' + val + '" alt=""></div>'));
+   115→   614→                                        }
+   116→   615→                                        $mediaWrap.append($mediaInput).append($mediaBtn);
+   117→   616→                                        $w.append($mediaWrap);
+   118→   617→                                        break;
+   119→   618→                        }
+   120→   619→
+   121→   620→                        return $w;
+   122→   621→                },
+   123→   622→
+   124→   623→                /* ═══════════════════════════════════════════════════════════════
+   125→   624→                   PANEL RENDERING — show fields for the selected widget
+   126→   625→                   ═════════════════════════════════════════════════════════════ */
+   127→   626→
+   128→   627→                /**
+   129→   628→                 * Render the full panel for a widget.
+   130→   629→                 * @param {Object} info  Widget info from postMessage (widget, base, label, index, etc.)
+   131→   630→                 */
+   132→   631→                renderPanel: function (info) {
+   133→   632→                        var base = info.base || info.widget;
+   134→   633→                        var def  = VCB.FIELDS[base];
+   135→   634→                        if (!def) {
+   136→   635→                                VCB.showEmpty('Aucun champ defini pour : ' + base);
+   137→   636→                                return;
+   138→   637→                        }
+   139→   638→
+   140→   639→                        /* Update header */
+   141→   640→                        var idxLabel = (info.index !== null && info.index !== undefined) ? ' #' + (parseInt(info.index, 10) + 1) : '';
+   142→   641→                        $('.vc-bp-header-title').text(def.label + idxLabel);
+   143→   642→                        $('.vc-bp-header-label').text(info.widget);
+   144→   643→
+   145→   644→                        /* Show widget editor */
+   146→   645→                        $('#vc-bp-widget-editor').show();
+   147→   646→
+   148→   647→                        /* Render each tab */
+   149→   648→                        ['content', 'style', 'advanced'].forEach(function (tabKey) {
+   150→   649→                                var fields = def.tabs[tabKey] || [];
+   151→   650→                                var $pane  = $('.vc-bp-tab-pane[data-tab="' + tabKey + '"]').empty();
+   152→   651→
+   153→   652→                                if (fields.length === 0) {
+   154→   653→                                        $pane.append('<p class="vc-bp-no-fields">Aucune option disponible pour cet onglet.</p>');
+   155→   654→                                        return;
+   156→   655→                                }
+   157→   656→
+   158→   657→                                fields.forEach(function (f) {
+   159→   658→                                        $pane.append(VCB.renderField(f));
+   160→   659→                                });
+   161→   660→                        });
+   162→   661→
+   163→   662→                        /* Activate first non-empty tab, fallback to 'content' */
+   164→   663→                        var firstTab = 'content';
+   165→   664→                        if (def.tabs.content && def.tabs.content.length === 0 && def.tabs.style && def.tabs.style.length > 0) {
+   166→   665→                                firstTab = 'style';
+   167→   666→                        }
+   168→   667→                        VCB.switchTab(firstTab);
+   169→   668→                },
+   170→   669→
+   171→   670→                /**
+   172→   671→                 * Hide the widget editor (deselect state).
+   173→   672→                 */
+   174→   673→                showEmpty: function (msg) {
+   175→   674→                        $('#vc-bp-widget-editor').hide();
+   176→   675→                },
+   177→   676→
+   178→   677→                /**
+   179→   678→                 * Switch active tab.
+   180→   679→                 */
+   181→   680→                switchTab: function (tabKey) {
+   182→   681→                        VCB.currentTab = tabKey;
+   183→   682→                        $('.vc-bp-tab-btn').removeClass('active');
+   184→   683→                        $('.vc-bp-tab-btn[data-tab="' + tabKey + '"]').addClass('active');
+   185→   684→                        $('.vc-bp-tab-pane').removeClass('active');
+   186→   685→                        $('.vc-bp-tab-pane[data-tab="' + tabKey + '"]').addClass('active');
+   187→   686→                },
+   188→   687→
+   189→   688→                /* ═══════════════════════════════════════════════════════════════
+   190→   689→                   LIVE PREVIEW — push changes to iframe
+   191→   690→                   ═════════════════════════════════════════════════════════════ */
+   192→   691→
+   193→   692→                /**
+   194→   693→                 * When a field changes, determine if we should push a CSS style
+   195→   694→                 * or text update to the iframe canvas.
+   196→   695→                 */
+   197→   696→                onFieldChange: function (key, value) {
+   198→   697→                        if (!VCB.selected) return;
+   199→   698→                        var widgetId = VCB.selected.widget;
+   200→   699→
+   201→   700→                        /* ── Queue change for auto-save (debounce 1.5s) ── */
+   202→   701→                        VCB.addToChanges(key, value);
+   203→   702→
+   204→   703→                        /* Check CSS_MAP for live preview */
+   205→   704→                        var cssDef = VCB.CSS_MAP[key];
+   206→   705→                        if (cssDef) {
+   207→   706→                                var css = {};
+   208→   707→                                var numVal = parseFloat(value);
+   209→   708→                                var cssVal = isNaN(numVal) ? value : numVal;
+   210→   709→                                if (cssDef.unit) cssVal = cssVal + cssDef.unit;
+   211→   710→                                css[cssDef.css] = cssVal;
+   212→   711→
+   213→   712→                                /* Handle dual property (e.g. paddingLeft + paddingRight) */
+   214→   713→                                if (cssDef.also) {
+   215→   714→                                        var alsoVal = isNaN(parseFloat(value)) ? value : parseFloat(value);
+   216→   715→                                        if (cssDef.alsoUnit) alsoVal = alsoVal + cssDef.alsoUnit;
+   217→   716→                                        css[cssDef.also] = alsoVal;
+   218→   717→                                }
+   219→   718→
+   220→   719→                                VCB.sendToIframe({ action: 'vc-apply-style', widget: widgetId, css: css });
+   221→   720→                                return;
+   222→   721→                        }
+   223→   722→
+   224→   723→                        /* For text fields, push content update */
+   225→   724→                        var base = VCB.selected.base || widgetId;
+   226→   725→                        if (base === 'hero-eyebrow' || base === 'hero-title' || base === 'hero-subtitle') {
+   227→   726→                                VCB.sendToIframe({ action: 'vc-apply-text', widget: widgetId, text: value });
+   228→   727→                        }
+   229→   728→
+   230→   729→                        /* For hero-cta text */
+   231→   730→                        if (base === 'hero-cta' && key.indexOf('cta_text') !== -1) {
+   232→   731→                                VCB.sendToIframe({ action: 'vc-apply-text', widget: widgetId, text: value });
+   233→   732→                        }
+   234→   733→                },
+   235→   734→
+   236→   735→                /**
+   237→   736→                 * Send a message to the canvas iframe.
+   238→   737→                 */
+   239→   738→                sendToIframe: function (data) {
+   240→   739→                        if (!VCB.iframe || !VCB.iframe.contentWindow) return;
+   241→   740→                        VCB.iframe.contentWindow.postMessage(data, '*');
+   242→   741→                },
+   243→   742→
+   244→   743→                /* ═══════════════════════════════════════════════════════════════
+   245→   744→                   WIDGET CONTENT KEY MAP
+   246→   745→                   Maps editable widget base IDs to their settings key for auto-save.
+   247→   746→                   Used when contenteditable text is changed inline in the iframe.
+   248→   747→                   ═══════════════════════════════════════════════════════════════ */
+   249→   748→                WIDGET_CONTENT_KEY: {
+   250→   749→                        'hero-eyebrow':  'hero_slides.0.eyebrow',
+   251→   750→                        'hero-title':    'hero_slides.0.title',
+   252→   751→                        'hero-subtitle': 'hero_slides.0.subtitle',
+   253→   752→                        'hero-cta':      'hero_slides.0.cta_text',
+   254→   753→                },
+   255→   754→
+   256→   755→                /* ═══════════════════════════════════════════════════════════════
+   257→   756→                   AUTO-SAVE ENGINE (debounce 1.5s)
+   258→   757→                   ═══════════════════════════════════════════════════════════════ */
+   259→   758→
+   260→   759→                /**
+   261→   760→                 * Add a key-value pair to the pending-changes queue
+   262→   761→                 * and (re)start the debounce timer.
+   263→   762→                 */
+   264→   763→                addToChanges: function (key, value) {
+   265→   764→                        VCB.pendingChanges[key] = value;
+   266→   765→                        VCB._markUnsaved();
+   267→   766→                        VCB._debounceSave();
+   268→   767→                },
+   269→   768→
+   270→   769→                _markUnsaved: function () {
+   271→   770→                        if (!VCB._hasUnsaved) {
+   272→   771→                                VCB._hasUnsaved = true;
+   273→   772→                                $('#vc-unsaved-dot').addClass('show');
+   274→   773→                                $(window).on('beforeunload.vc-builder', function () { return true; });
+   275→   774→                        }
+   276→   775→                },
+   277→   776→
+   278→   777→                _markSaved: function () {
+   279→   778→                        VCB._hasUnsaved = false;
+   280→   779→                        VCB.pendingChanges = {};
+   281→   780→                        $('#vc-unsaved-dot').removeClass('show');
+   282→   781→                        $(window).off('beforeunload.vc-builder');
+   283→   782→                },
+   284→   783→
+   285→   784→                _debounceSave: function () {
+   286→   785→                        clearTimeout(VCB._saveTimer);
+   287→   786→                        VCB._showSaveIndicator('pending');
+   288→   787→                        VCB._saveTimer = setTimeout(function () {
+   289→   788→                                VCB.saveChanges();
+   290→   789→                        }, 1500);
+   291→   790→                },
+   292→   791→
+   293→   792→                /**
+   294→   793→                 * Flush all pending changes to the server via AJAX.
+   295→   794→                 * Called by the debounce timer or by the Publish button.
+   296→   795→                 */
+   297→   796→                saveChanges: function () {
+   298→   797→                        var keys = Object.keys(VCB.pendingChanges);
+   299→   798→                        if (keys.length === 0) {
+   300→   799→                                VCB._showSaveIndicator('idle');
+   301→   800→                                return;
+   302→   801→                        }
+   303→   802→
+   304→   803→                        var changes = JSON.parse(JSON.stringify(VCB.pendingChanges));
+   305→   804→                        VCB._showSaveIndicator('saving');
+   306→   805→
+   307→   806→                        $.ajax({
+   308→   807→                                url:  (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php',
+   309→   808→                                type: 'POST',
+   310→   809→                                data: {
+   311→   810→                                        action:  'velure_core_auto_save',
+   312→   811→                                        _wpnonce: (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.nonce : '',
+   313→   812→                                        changes: JSON.stringify(changes),
+   314→   813→                                },
+   315→   814→                                success: function (res) {
+   316→   815→                                        if (res && res.success) {
+   317→   816→                                                keys.forEach(function (k) {
+   318→   817→                                                        VCB._setNestedValue(VCB.settings, k, changes[k]);
+   319→   818→                                                });
+   320→   819→                                                VCB._markSaved();
+   321→   820→                                                VCB._showSaveIndicator('saved');
+   322→   821→                                        } else {
+   323→   822→                                                VCB._showSaveIndicator('error');
+   324→   823→                                                VCB.toast((res && res.data && res.data.message) || 'Erreur de sauvegarde.', 'error');
+   325→   824→                                        }
+   326→   825→                                },
+   327→   826→                                error: function () {
+   328→   827→                                        VCB._showSaveIndicator('error');
+   329→   828→                                        VCB.toast('Erreur reseau lors de la sauvegarde.', 'error');
+   330→   829→                                },
+   331→   830→                        });
+   332→   831→                },
+   333→   832→
+   334→   833→                _setNestedValue: function (obj, key, value) {
+   335→   834→                        var parts = key.split('.');
+   336→   835→                        var current = obj;
+   337→   836→                        for (var i = 0; i < parts.length - 1; i++) {
+   338→   837→                                if (!current[parts[i]] || typeof current[parts[i]] !== 'object') {
+   339→   838→                                        current[parts[i]] = {};
+   340→   839→                                }
+   341→   840→                                current = current[parts[i]];
+   342→   841→                        }
+   343→   842→                        current[parts[parts.length - 1]] = value;
+   344→   843→                },
+   345→   844→
+   346→   845→                /**
+   347→   846→                 * Manage the save indicator in the topbar.
+   348→   847→                 * States: idle | pending | saving | saved | error
+   349→   848→                 */
+   350→   849→                _showSaveIndicator: function (state) {
+   351→   850→                        var $ind = $('#vc-save-indicator');
+   352→   851→                        if (!$ind.length) return;
+   353→   852→
+   354→   853→                        $ind.removeClass('vc-saving vc-saved vc-error vc-visible');
+   355→   854→
+   356→   855→                        switch (state) {
+   357→   856→                                case 'pending':
+   358→   857→                                        $ind.find('.vc-save-text').text('Modifications en attente');
+   359→   858→                                        $ind.addClass('vc-visible');
+   360→   859→                                        break;
+   361→   860→                                case 'saving':
+   362→   861→                                        $ind.find('.vc-save-text').text('Enregistrement...');
+   363→   862→                                        $ind.addClass('vc-visible vc-saving');
+   364→   863→                                        break;
+   365→   864→                                case 'saved':
+   366→   865→                                        $ind.find('.vc-save-text').text('Enregistre');
+   367→   866→                                        $ind.addClass('vc-visible vc-saved');
+   368→   867→                                        setTimeout(function () { $ind.removeClass('vc-visible'); }, 3000);
+   369→   868→                                        break;
+   370→   869→                                case 'error':
+   371→   870→                                        $ind.find('.vc-save-text').text('Erreur');
+   372→   871→                                        $ind.addClass('vc-visible vc-error');
+   373→   872→                                        setTimeout(function () { $ind.removeClass('vc-visible'); }, 4000);
+   374→   873→                                        break;
+   375→   874→                                default:
+   376→   875→                                        $ind.removeClass('vc-visible');
+   377→   876→                        }
+   378→   877→                },
+   379→   878→
+   380→   879→                toast: function (msg, type) {
+   381→   880→                        var el = document.getElementById('vc-toast');
+   382→   881→                        if (!el) return;
+   383→   882→                        el.className = 'vc-toast';
+   384→   883→                        if (type) el.className += ' vc-toast-' + type;
+   385→   884→                        var icon = type === 'success' ? '\u2713 ' : type === 'error' ? '\u2717 ' : type === 'saving' ? '\u23F3 ' : '';
+   386→   885→                        el.innerHTML = icon + msg;
+   387→   886→                        el.classList.add('show');
+   388→   887→                        clearTimeout(VCB._toastTimer);
+   389→   888→                        VCB._toastTimer = setTimeout(function () { el.classList.remove('show'); }, 4000);
+   390→   889→                },
+   391→   890→
+   392→   891→
+   393→   892→                /* ═══════════════════════════════════════════════════════════════
+   394→   893→                   POST MESSAGE LISTENER — receive events from canvas-bridge.js
+   395→   894→                   ═════════════════════════════════════════════════════════════ */
+   396→   895→                onMessage: function (e) {
+   397→   896→                        if (!e.data || typeof e.data.action !== 'string') return;
+   398→   897→
+   399→   898→                        switch (e.data.action) {
+   400→   899→
+   401→   900→                                case 'vc-widget-selected':
+   402→   901→                                        VCB.selected = {
+   403→   902→                                                widget:   e.data.widget,
+   404→   903→                                                base:     e.data.base,
+   405→   904→                                                section:  e.data.section,
+   406→   905→                                                label:    e.data.label,
+   407→   906→                                                editable: e.data.editable,
+   408→   907→                                                index:    e.data.index,
+   409→   908→                                        };
+   410→   909→                                        VCB.renderPanel(VCB.selected);
+   411→   910→                                        break;
+   412→   911→
+   413→   912→                                case 'vc-widget-deselected':
+   414→   913→                                        VCB.selected = null;
+   415→   914→                                        VCB.showEmpty();
+   416→   915→                                        break;
+   417→   916→
+   418→   917→                                case 'vc-content-changed':
+   419→   918→                                        /* Update the corresponding field in the panel */
+   420→   919→                                        if (e.data.settingKey) {
+   421→   920→                                                var $cfield = $('[data-vc-key="' + e.data.settingKey + '"]');
+   422→   921→                                                if ($cfield.length && ($cfield.is('input[type="text"]') || $cfield.is('textarea'))) {
+   423→   922→                                                        $cfield.val(e.data.value);
+   424→   923→                                                }
+   425→   924→                                                /* Queue for auto-save */
+   426→   925→                                                VCB.addToChanges(e.data.settingKey, e.data.value);
+   427→   926→                                        }
+   428→   927→                                        break;
+   429→   928→                        }
+   430→   929→                },
+   431→   930→
+   432→   931→                /* ═══════════════════════════════════════════════════════════════
+   433→   932→                   EVENT BINDING
+   434→   933→                   ═════════════════════════════════════════════════════════════ */
+   435→   934→                bindEvents: function () {
+   436→   935→                        /* Tab switching */
+   437→   936→                        $(document).on('click', '.vc-bp-tab-btn', function (e) {
+   438→   937→                                e.preventDefault();
+   439→   938→                                VCB.switchTab($(this).attr('data-tab'));
+   440→   939→                        });
+   441→   940→
+   442→   941→                        /* Deselect button */
+   443→   942→                        $(document).on('click', '.vc-bp-close-btn', function () {
+   444→   943→                                VCB.selected = null;
+   445→   944→                                VCB.showEmpty();
+   446→   945→                                VCB.sendToIframe({ action: 'vc-deselect' });
+   447→   946→                        });
+   448→   947→
+   449→   948→                        /* Field changes — inputs */
+   450→   949→                        $(document).on('input change', '.vc-bp-field input[type="text"], .vc-bp-field input[type="number"], .vc-bp-field textarea, .vc-bp-field select', function () {
+   451→   950→                                var key   = $(this).attr('data-vc-key');
+   452→   951→                                var value = $(this).val();
+   453→   952→                                VCB.onFieldChange(key, value);
+   454→   953→                        });
+   455→   954→
+   456→   955→                        /* Color picker sync */
+   457→   956→                        $(document).on('input', '.vc-bp-field input[type="color"]', function () {
+   458→   957→                                var key   = $(this).attr('data-vc-key');
+   459→   958→                                var value = $(this).val();
+   460→   959→                                $(this).siblings('.vc-bp-color-text').val(value);
+   461→   960→                                VCB.onFieldChange(key, value);
+   462→   961→                        });
+   463→   962→                        $(document).on('input', '.vc-bp-color-text', function () {
+   464→   963→                                var key   = $(this).attr('data-vc-key').replace('_hex', '');
+   465→   964→                                var value = $(this).val();
+   466→   965→                                $(this).siblings('input[type="color"]').val(value);
+   467→   966→                                VCB.onFieldChange(key, value);
+   468→   967→                        });
+   469→   968→
+   470→   969→                        /* Range sliders */
+   471→   970→                        $(document).on('input', '.vc-bp-field input[type="range"]', function () {
+   472→   971→                                var key   = $(this).attr('data-vc-key');
+   473→   972→                                var value = $(this).val();
+   474→   973→                                var unit  = $(this).closest('.vc-bp-field').find('.vc-bp-unit').text() || '';
+   475→   974→                                $(this).siblings('label').find('.vc-bp-range-val').text(value + unit);
+   476→   975→                                VCB.onFieldChange(key, value);
+   477→   976→                        });
+   478→   977→
+   479→   978→                        /* Toggle switches */
+   480→   979→                        $(document).on('click', '.vc-bp-toggle', function () {
+   481→   980→                                var $t = $(this);
+   482→   981→                                var isOn = $t.hasClass('active');
+   483→   982→                                $t.toggleClass('active');
+   484→   983→                                var key   = $t.attr('data-vc-key');
+   485→   984→                                var value = isOn ? '0' : '1';
+   486→   985→                                VCB.onFieldChange(key, value);
+   487→   986→                        });
+   488→   987→
+   489→   988→                        /* Media library button */
+   490→   989→                        $(document).on('click', '.vc-bp-media-btn', function () {
+   491→   990→                                var $wrap = $(this).closest('.vc-bp-media-wrap');
+   492→   991→                                var $input = $wrap.find('.vc-bp-media-input');
+   493→   992→                                var key = $input.attr('data-vc-key');
+   494→   993→
+   495→   994→                                if (typeof wp === 'undefined' || !wp.media) return;
+   496→   995→
+   497→   996→                                var frame = wp.media({ title: 'Choisir une image', multiple: false, library: { type: 'image' } });
+   498→   997→                                frame.on('select', function () {
+   499→   998→                                        var attachment = frame.state().get('selection').first().toJSON();
+   500→   999→                                        var url = attachment.url;
+   501→
+   502→[showing lines 500-999 of 1054; use offset=1000 with limit to continue reading]

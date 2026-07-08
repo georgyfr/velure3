@@ -1,0 +1,1281 @@
+     1→     1→/**
+     2→     2→ * Velure Core — Visual Builder JS v3.5.1
+     3→     3→ * Loaded in the PARENT (WordPress admin) when #vc-builder-app is present.
+     4→     4→ *
+     5→     5→ * Responsibilities:
+     6→     6→ *  1. Listen for postMessage from canvas-bridge.js inside the iframe
+     7→     7→ *  2. Show contextual 3-tab panel (Contenu / Style / Avancé)
+     8→     8→ *  3. Render fields dynamically per widget type
+     9→     9→ *  4. Send REAL-TIME style/text/structural updates back to iframe
+    10→    10→ *
+    11→    11→ * @package VelureCore
+    12→    12→ * @since 3.2.1
+    13→    13→ * @updated 3.5.1 Real-time live preview for ALL controls (Wix-like)
+    14→    14→ */
+    15→    15→
+    16→    16→/* ═══ v3.5.1: Utility helpers for CSS_MAP class patterns ═══ */
+    17→    17→function _vcBgStyleMap() {
+    18→    18→        return {
+    19→    19→                base:  { add: 'velure-section-base',  remove: 'velure-section-soft velure-section-muted' },
+    20→    20→                soft:  { add: 'velure-section-soft',  remove: 'velure-section-base velure-section-muted' },
+    21→    21→                muted: { add: 'velure-section-muted', remove: 'velure-section-base velure-section-soft' },
+    22→    22→        };
+    23→    23→}
+    24→    24→function _vcColMap() {
+    25→    25→        return {
+    26→    26→                '2': { add: 'velure-grid-2', remove: 'velure-grid-3 velure-grid-4' },
+    27→    27→                '3': { add: 'velure-grid-3', remove: 'velure-grid-2 velure-grid-4' },
+    28→    28→                '4': { add: 'velure-grid-4', remove: 'velure-grid-2 velure-grid-3' },
+    29→    29→        };
+    30→    30→}
+    31→    31→function _vcIgColMap() {
+    32→    32→        return {
+    33→    33→                '4': { add: 'velure-grid-4', remove: 'velure-grid-5 velure-grid-6' },
+    34→    34→                '5': { add: 'velure-grid-5', remove: 'velure-grid-4 velure-grid-6' },
+    35→    35→                '6': { add: 'velure-grid-6', remove: 'velure-grid-4 velure-grid-5' },
+    36→    36→        };
+    37→    37→}
+    38→    38→
+    39→    39→(function ($) {
+    40→    40→        'use strict';
+    41→    41→
+    42→    42→        var VCB = {
+    43→    43→                iframe:      null,
+    44→    44→                selected:    null,   // current widget info from iframe
+    45→    45→                currentTab:  'content',
+    46→    46→                settings:    {},
+    47→    47→                section:     '',
+    48→    48→                _saveTimer: null,
+    49→    49→                pendingChanges: {},
+    50→    50→                _hasUnsaved: false,
+    51→    51→                _toastTimer: null,
+    52→    52→                _saveTimer: null,
+    53→    53→                pendingChanges: {},
+    54→    54→                _hasUnsaved: false,
+    55→    55→                _toastTimer: null,
+    56→    56→
+    57→    57→                /* ═══════════════════════════════════════════════════════════════
+    58→    58→                   WIDGET FIELD REGISTRY
+    59→    59→                   Maps widget base ID → { label, tabs: { content:[], style:[], advanced:[] } }
+    60→    60→                   Each field: { type, key, label, unit?, min?, max?, step?, options?, placeholder? }
+    61→    61→                   ═════════════════════════════════════════════════════════════ */
+    62→    62→                FIELDS: {
+    63→    63→
+    64→    64→                        /* ──────────────── HERO ──────────────── */
+    65→    65→                        'hero-bg': {
+    66→    66→                                label: 'Image de fond',
+    67→    67→                                tabs: {
+    68→    68→                                        content: [
+    69→    69→                                                { type: 'media', key: 'hero_slides.0.image', label: 'Image du slide' },
+    70→    70→                                        ],
+    71→    71→                                        style: [
+    72→    72→                                                { type: 'select', key: 'hero_bg_position', label: 'Position du fond', options: [
+    73→    73→                                                        {v:'center',l:'Centre'},{v:'top',l:'Haut'},{v:'bottom',l:'Bas'},{v:'left',l:'Gauche'},{v:'right',l:'Droite'}
+    74→    74→                                                ]},
+    75→    75→                                                { type: 'select', key: 'hero_bg_size', label: 'Taille du fond', options: [
+    76→    76→                                                        {v:'cover',l:'Cover'},{v:'contain',l:'Contain'},{v:'auto',l:'Auto'}
+    77→    77→                                                ]},
+    78→    78→                                                { type: 'range', key: 'hero_overlay_opacity', label: 'Opacite de l\'overlay', min:0, max:100, step:5, unit:'%' },
+    79→    79→                                        ],
+    80→    80→                                        advanced: [
+    81→    81→                                                { type: 'text', key: 'hero_height', label: 'Hauteur hero', placeholder: 'standard / tall / compact' },
+    82→    82→                                        ]
+    83→    83→                                }
+    84→    84→                        },
+    85→    85→                        'hero-overlay': {
+    86→    86→                                label: 'Overlay',
+    87→    87→                                tabs: {
+    88→    88→                                        content: [],
+    89→    89→                                        style: [
+    90→    90→                                                { type: 'range', key: 'hero_overlay_opacity', label: 'Opacite', min:0, max:100, step:5, unit:'%' },
+    91→    91→                                        ],
+    92→    92→                                        advanced: []
+    93→    93→                                }
+    94→    94→                        },
+    95→    95→                        'hero-eyebrow': {
+    96→    96→                                label: 'Sur-titre',
+    97→    97→                                tabs: {
+    98→    98→                                        content: [
+    99→    99→                                                { type: 'text', key: 'hero_slides.0.eyebrow', label: 'Texte du sur-titre' },
+   100→   100→                                        ],
+   101→   101→                                        style: [
+   102→   102→                                                { type: 'select', key: 'hero_eyebrow_font_family', label: 'Police', options: [
+   103→   103→                                                        {v:'Inter',l:'Inter'},{v:'Playfair Display',l:'Playfair Display'},{v:'Cormorant Garamond',l:'Cormorant Garamond'}
+   104→   104→                                                ]},
+   105→   105→                                                { type: 'number', key: 'hero_eyebrow_font_size', label: 'Taille', unit:'px' },
+   106→   106→                                                { type: 'select', key: 'hero_eyebrow_font_weight', label: 'Graisse', options: [
+   107→   107→                                                        {v:'300',l:'Light'},{v:'400',l:'Regular'},{v:'500',l:'Medium'},{v:'600',l:'Semi Bold'},{v:'700',l:'Bold'}
+   108→   108→                                                ]},
+   109→   109→                                                { type: 'color', key: 'hero_eyebrow_color', label: 'Couleur' },
+   110→   110→                                                { type: 'number', key: 'hero_eyebrow_letter_spacing', label: 'Espacement lettres', unit:'px' },
+   111→   111→                                                { type: 'select', key: 'hero_eyebrow_text_transform', label: 'Casse', options: [
+   112→   112→                                                        {v:'uppercase',l:'Majuscules'},{v:'lowercase',l:'Minuscules'},{v:'none',l:'Normal'}
+   113→   113→                                                ]},
+   114→   114→                                                { type: 'number', key: 'hero_eyebrow_margin_bottom', label: 'Marge bas', unit:'px' },
+   115→   115→                                        ],
+   116→   116→                                        advanced: []
+   117→   117→                                }
+   118→   118→                        },
+   119→   119→                        'hero-title': {
+   120→   120→                                label: 'Titre principal',
+   121→   121→                                tabs: {
+   122→   122→                                        content: [
+   123→   123→                                                { type: 'text', key: 'hero_slides.0.title', label: 'Titre' },
+   124→   124→                                        ],
+   125→   125→                                        style: [
+   126→   126→                                                { type: 'select', key: 'hero_title_font_family', label: 'Police', options: [
+   127→   127→                                                        {v:'Playfair Display',l:'Playfair Display'},{v:'Inter',l:'Inter'},{v:'Cormorant Garamond',l:'Cormorant Garamond'}
+   128→   128→                                                ]},
+   129→   129→                                                { type: 'number', key: 'hero_title_font_size', label: 'Taille', unit:'px' },
+   130→   130→                                                { type: 'select', key: 'hero_title_font_weight', label: 'Graisse', options: [
+   131→   131→                                                        {v:'400',l:'Regular'},{v:'500',l:'Medium'},{v:'600',l:'Semi Bold'},{v:'700',l:'Bold'}
+   132→   132→                                                ]},
+   133→   133→                                                { type: 'color', key: 'hero_title_color', label: 'Couleur' },
+   134→   134→                                                { type: 'number', key: 'hero_title_line_height', label: 'Hauteur de ligne', step:0.1 },
+   135→   135→                                                { type: 'number', key: 'hero_title_letter_spacing', label: 'Espacement lettres', unit:'px' },
+   136→   136→                                                { type: 'number', key: 'hero_title_margin_bottom', label: 'Marge bas', unit:'px' },
+   137→   137→                                        ],
+   138→   138→                                        advanced: []
+   139→   139→                                }
+   140→   140→                        },
+   141→   141→                        'hero-subtitle': {
+   142→   142→                                label: 'Sous-titre',
+   143→   143→                                tabs: {
+   144→   144→                                        content: [
+   145→   145→                                                { type: 'textarea', key: 'hero_slides.0.subtitle', label: 'Sous-titre' },
+   146→   146→                                        ],
+   147→   147→                                        style: [
+   148→   148→                                                { type: 'select', key: 'hero_subtitle_font_family', label: 'Police', options: [
+   149→   149→                                                        {v:'Inter',l:'Inter'},{v:'Playfair Display',l:'Playfair Display'}
+   150→   150→                                                ]},
+   151→   151→                                                { type: 'number', key: 'hero_subtitle_font_size', label: 'Taille', unit:'px' },
+   152→   152→                                                { type: 'select', key: 'hero_subtitle_font_weight', label: 'Graisse', options: [
+   153→   153→                                                        {v:'300',l:'Light'},{v:'400',l:'Regular'},{v:'500',l:'Medium'}
+   154→   154→                                                ]},
+   155→   155→                                                { type: 'color', key: 'hero_subtitle_color', label: 'Couleur' },
+   156→   156→                                                { type: 'number', key: 'hero_subtitle_line_height', label: 'Hauteur de ligne', step:0.1 },
+   157→   157→                                                { type: 'number', key: 'hero_subtitle_margin_bottom', label: 'Marge bas', unit:'px' },
+   158→   158→                                        ],
+   159→   159→                                        advanced: []
+   160→   160→                                }
+   161→   161→                        },
+   162→   162→                        'hero-cta': {
+   163→   163→                                label: 'Bouton CTA',
+   164→   164→                                tabs: {
+   165→   165→                                        content: [
+   166→   166→                                                { type: 'text', key: 'hero_slides.0.cta_text', label: 'Texte du bouton' },
+   167→   167→                                                { type: 'text', key: 'hero_slides.0.cta_link', label: 'Lien destination', placeholder: 'https://...' },
+   168→   168→                                                { type: 'select', key: 'hero_slides.0.cta_style', label: 'Style du bouton', options: [
+   169→   169→                                                        {v:'primary',l:'Principal (fond sombre)'},{v:'gold',l:'Or'},{v:'outline',l:'Contour'}
+   170→   170→                                                ]},
+   171→   171→                                        ],
+   172→   172→                                        style: [
+   173→   173→                                                { type: 'number', key: 'hero_cta_font_size', label: 'Taille police', unit:'px' },
+   174→   174→                                                { type: 'select', key: 'hero_cta_font_weight', label: 'Graisse', options: [
+   175→   175→                                                        {v:'400',l:'Regular'},{v:'500',l:'Medium'},{v:'600',l:'Semi Bold'},{v:'700',l:'Bold'}
+   176→   176→                                                ]},
+   177→   177→                                                { type: 'number', key: 'hero_cta_letter_spacing', label: 'Espacement lettres', unit:'px' },
+   178→   178→                                                { type: 'select', key: 'hero_cta_text_transform', label: 'Casse', options: [
+   179→   179→                                                        {v:'uppercase',l:'Majuscules'},{v:'none',l:'Normal'}
+   180→   180→                                                ]},
+   181→   181→                                                { type: 'number', key: 'hero_cta_padding_x', label: 'Padding horizontal', unit:'px' },
+   182→   182→                                                { type: 'number', key: 'hero_cta_padding_y', label: 'Padding vertical', unit:'px' },
+   183→   183→                                                { type: 'number', key: 'hero_cta_border_radius', label: 'Border radius', unit:'px' },
+   184→   184→                                                { type: 'color', key: 'hero_cta_bg_color', label: 'Couleur fond' },
+   185→   185→                                                { type: 'color', key: 'hero_cta_text_color', label: 'Couleur texte' },
+   186→   186→                                                { type: 'color', key: 'hero_cta_hover_bg_color', label: 'Couleur fond (hover)' },
+   187→   187→                                                { type: 'color', key: 'hero_cta_hover_text_color', label: 'Couleur texte (hover)' },
+   188→   188→                                                { type: 'number', key: 'hero_cta_border_width', label: 'Largeur bordure', unit:'px' },
+   189→   189→                                                { type: 'color', key: 'hero_cta_border_color', label: 'Couleur bordure' },
+   190→   190→                                        ],
+   191→   191→                                        advanced: []
+   192→   192→                                }
+   193→   193→                        },
+   194→   194→                        'hero-side': {
+   195→   195→                                label: 'Blocs lateraux',
+   196→   196→                                tabs: {
+   197→   197→                                        content: [
+   198→   198→                                                { type: 'text', key: 'hs_bestseller_label', label: 'Label best-seller' },
+   199→   199→                                                { type: 'text', key: 'hs_bestseller_title', label: 'Titre best-seller' },
+   200→   200→                                                { type: 'text', key: 'hs_bestseller_price', label: 'Prix best-seller' },
+   201→   201→                                                { type: 'text', key: 'hs_bestseller_cta', label: 'Texte CTA best-seller' },
+   202→   202→                                                { type: 'text', key: 'hs_category_label', label: 'Label categorie' },
+   203→   203→                                                { type: 'text', key: 'hs_category_title', label: 'Titre categorie' },
+   204→   204→                                        ],
+   205→   205→                                        style: [
+   206→   206→                                                { type: 'number', key: 'hero_side_width', label: 'Largeur panneau', unit:'px' },
+   207→   207→                                                { type: 'number', key: 'hero_side_gap', label: 'Espacement cartes', unit:'px' },
+   208→   208→                                                { type: 'number', key: 'hero_side_card_radius', label: 'Border radius carte', unit:'px' },
+   209→   209→                                                { type: 'number', key: 'hero_side_card_img_height', label: 'Hauteur image carte', unit:'px' },
+   210→   210→                                        ],
+   211→   211→                                        advanced: [
+   212→   212→                                                { type: 'toggle', key: 'hero_hide_side_mobile', label: 'Masquer sur mobile' },
+   213→   213→                                        ]
+   214→   214→                                }
+   215→   215→                        },
+   216→   216→                        'hero-dots': {
+   217→   217→                                label: 'Navigation slides',
+   218→   218→                                tabs: {
+   219→   219→                                        content: [
+   220→   220→                                                { type: 'toggle', key: 'hero_autoplay', label: 'Lecture automatique' },
+   221→   221→                                                { type: 'number', key: 'hero_autoplay_speed', label: 'Vitesse de defilement', unit:'ms' },
+   222→   222→                                        ],
+   223→   223→                                        style: [],
+   224→   224→                                        advanced: []
+   225→   225→                                }
+   226→   226→                        },
+   227→   227→
+   228→   228→                        /* ──────────────── FEATURES ──────────────── */
+   229→   229→                        'feature-item': {
+   230→   230→                                label: 'Element de confiance',
+   231→   231→                                tabs: {
+   232→   232→                                        content: [],
+   233→   233→                                        style: [
+   234→   234→                                                { type: 'select', key: 'feat_bg_style', label: 'Fond de section', options: [
+   235→   235→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   236→   236→                                                ]},
+   237→   237→                                                { type: 'select', key: 'feat_padding', label: 'Espacement', options: [
+   238→   238→                                                        {v:'compact',l:'Compact'},{v:'normal',l:'Normal'},{v:'wide',l:'Large'}
+   239→   239→                                                ]},
+   240→   240→                                                { type: 'toggle', key: 'feat_bottom_border', label: 'Bordure inferieure' },
+   241→   241→                                        ],
+   242→   242→                                        advanced: []
+   243→   243→                                }
+   244→   244→                        },
+   245→   245→
+   246→   246→                        /* ──────────────── CATEGORIES ──────────────── */
+   247→   247→                        'cat-heading': {
+   248→   248→                                label: 'En-tete Categories',
+   249→   249→                                tabs: {
+   250→   250→                                        content: [
+   251→   251→                                                { type: 'text', key: 'cat_eyebrow', label: 'Sur-titre (eyebrow)' },
+   252→   252→                                                { type: 'text', key: 'section_title_categories', label: 'Titre de section' },
+   253→   253→                                                { type: 'textarea', key: 'cat_description', label: 'Description' },
+   254→   254→                                        ],
+   255→   255→                                        style: [
+   256→   256→                                                { type: 'select', key: 'cat_bg_style', label: 'Fond de section', options: [
+   257→   257→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   258→   258→                                                ]},
+   259→   259→                                        ],
+   260→   260→                                        advanced: []
+   261→   261→                                }
+   262→   262→                        },
+   263→   263→                        'cat-card': {
+   264→   264→                                label: 'Carte categorie',
+   265→   265→                                tabs: {
+   266→   266→                                        content: [],
+   267→   267→                                        style: [
+   268→   268→                                                { type: 'number', key: 'cat_display_count', label: 'Nombre de categories' },
+   269→   269→                                        ],
+   270→   270→                                        advanced: []
+   271→   271→                                }
+   272→   272→                        },
+   273→   273→                        'cat-cta': {
+   274→   274→                                label: 'Bouton CTA',
+   275→   275→                                tabs: {
+   276→   276→                                        content: [
+   277→   277→                                                { type: 'text', key: 'cat_cta_text', label: 'Texte du bouton' },
+   278→   278→                                                { type: 'text', key: 'cat_cta_link', label: 'Lien', placeholder: '/boutique/' },
+   279→   279→                                        ],
+   280→   280→                                        style: [],
+   281→   281→                                        advanced: []
+   282→   282→                                }
+   283→   283→                        },
+   284→   284→
+   285→   285→                        /* ──────────────── PRODUCTS ──────────────── */
+   286→   286→                        'prod-heading': {
+   287→   287→                                label: 'En-tete Produits',
+   288→   288→                                tabs: {
+   289→   289→                                        content: [
+   290→   290→                                                { type: 'text', key: 'prod_eyebrow', label: 'Sur-titre (eyebrow)' },
+   291→   291→                                                { type: 'text', key: 'section_title_products', label: 'Titre de section' },
+   292→   292→                                                { type: 'textarea', key: 'prod_description', label: 'Description' },
+   293→   293→                                        ],
+   294→   294→                                        style: [
+   295→   295→                                                { type: 'select', key: 'prod_bg_style', label: 'Fond de section', options: [
+   296→   296→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   297→   297→                                                ]},
+   298→   298→                                                { type: 'select', key: 'prod_columns', label: 'Colonnes', options: [
+   299→   299→                                                        {v:'2',l:'2 colonnes'},{v:'3',l:'3 colonnes'},{v:'4',l:'4 colonnes'}
+   300→   300→                                                ]},
+   301→   301→                                        ],
+   302→   302→                                        advanced: [
+   303→   303→                                                { type: 'select', key: 'prod_sort', label: 'Tri', options: [
+   304→   304→                                                        {v:'date',l:'Date'},{v:'title',l:'Titre'},{v:'price',l:'Prix'},{v:'popularity',l:'Popularite'}
+   305→   305→                                                ]},
+   306→   306→                                        ]
+   307→   307→                                }
+   308→   308→                        },
+   309→   309→                        'prod-card': {
+   310→   310→                                label: 'Carte produit',
+   311→   311→                                tabs: {
+   312→   312→                                        content: [
+   313→   313→                                                { type: 'number', key: 'featured_products_count', label: 'Nombre de produits' },
+   314→   314→                                        ],
+   315→   315→                                        style: [],
+   316→   316→                                        advanced: []
+   317→   317→                                }
+   318→   318→                        },
+   319→   319→                        'prod-cta': {
+   320→   320→                                label: 'Bouton CTA',
+   321→   321→                                tabs: {
+   322→   322→                                        content: [
+   323→   323→                                                { type: 'text', key: 'prod_cta_text', label: 'Texte du bouton' },
+   324→   324→                                                { type: 'text', key: 'prod_cta_link', label: 'Lien', placeholder: '/boutique/' },
+   325→   325→                                        ],
+   326→   326→                                        style: [],
+   327→   327→                                        advanced: []
+   328→   328→                                }
+   329→   329→                        },
+   330→   330→
+   331→   331→                        /* ──────────────── SPLIT BANNER ──────────────── */
+   332→   332→                        'banner-left': {
+   333→   333→                                label: 'Banniere gauche',
+   334→   334→                                tabs: {
+   335→   335→                                        content: [
+   336→   336→                                                { type: 'media', key: 'sb_left_image', label: 'Image' },
+   337→   337→                                                { type: 'text', key: 'sb_left_eyebrow', label: 'Sur-titre' },
+   338→   338→                                                { type: 'text', key: 'sb_left_title', label: 'Titre' },
+   339→   339→                                                { type: 'textarea', key: 'sb_left_desc', label: 'Description' },
+   340→   340→                                                { type: 'text', key: 'sb_left_cta_text', label: 'Texte CTA' },
+   341→   341→                                                { type: 'text', key: 'sb_left_cta_link', label: 'Lien CTA' },
+   342→   342→                                        ],
+   343→   343→                                        style: [
+   344→   344→                                                { type: 'select', key: 'sb_left_cta_style', label: 'Style CTA', options: [
+   345→   345→                                                        {v:'primary',l:'Principal'},{v:'gold',l:'Or'},{v:'outline',l:'Contour'}
+   346→   346→                                                ]},
+   347→   347→                                                { type: 'select', key: 'sb_left_style', label: 'Variante', options: [
+   348→   348→                                                        {v:'dark',l:'Sombre'},{v:'light',l:'Clair'}
+   349→   349→                                                ]},
+   350→   350→                                        ],
+   351→   351→                                        advanced: []
+   352→   352→                                }
+   353→   353→                        },
+   354→   354→                        'banner-right': {
+   355→   355→                                label: 'Banniere droite',
+   356→   356→                                tabs: {
+   357→   357→                                        content: [
+   358→   358→                                                { type: 'media', key: 'sb_right_image', label: 'Image' },
+   359→   359→                                                { type: 'text', key: 'sb_right_eyebrow', label: 'Sur-titre' },
+   360→   360→                                                { type: 'text', key: 'sb_right_title', label: 'Titre' },
+   361→   361→                                                { type: 'textarea', key: 'sb_right_desc', label: 'Description' },
+   362→   362→                                                { type: 'text', key: 'sb_right_cta_text', label: 'Texte CTA' },
+   363→   363→                                                { type: 'text', key: 'sb_right_cta_link', label: 'Lien CTA' },
+   364→   364→                                        ],
+   365→   365→                                        style: [
+   366→   366→                                                { type: 'select', key: 'sb_right_cta_style', label: 'Style CTA', options: [
+   367→   367→                                                        {v:'primary',l:'Principal'},{v:'gold',l:'Or'},{v:'outline',l:'Contour'}
+   368→   368→                                                ]},
+   369→   369→                                                { type: 'select', key: 'sb_right_style', label: 'Variante', options: [
+   370→   370→                                                        {v:'dark',l:'Sombre'},{v:'light',l:'Clair'}
+   371→   371→                                                ]},
+   372→   372→                                        ],
+   373→   373→                                        advanced: [
+   374→   374→                                                { type: 'select', key: 'sb_layout', label: 'Disposition', options: [
+   375→   375→                                                        {v:'50-50',l:'50 / 50'},{v:'60-40',l:'60 / 40'},{v:'40-60',l:'40 / 60'}
+   376→   376→                                                ]},
+   377→   377→                                        ]
+   378→   378→                                }
+   379→   379→                        },
+   380→   380→
+   381→   381→                        /* ──────────────── MARQUEE ──────────────── */
+   382→   382→                        'marquee-track': {
+   383→   383→                                label: 'Bandeau defilant',
+   384→   384→                                tabs: {
+   385→   385→                                        content: [],
+   386→   386→                                        style: [
+   387→   387→                                                { type: 'number', key: 'marquee_speed', label: 'Vitesse de defilement', unit:'s' },
+   388→   388→                                                { type: 'select', key: 'marquee_direction', label: 'Direction', options: [
+   389→   389→                                                        {v:'left',l:'Gauche'},{v:'right',l:'Droite'}
+   390→   390→                                                ]},
+   391→   391→                                                { type: 'select', key: 'marquee_bg', label: 'Fond', options: [
+   392→   392→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   393→   393→                                                ]},
+   394→   394→                                        ],
+   395→   395→                                        advanced: []
+   396→   396→                                }
+   397→   397→                        },
+   398→   398→
+   399→   399→                        /* ──────────────── TESTIMONIALS ──────────────── */
+   400→   400→                        'testi-heading': {
+   401→   401→                                label: 'En-tete Temoignages',
+   402→   402→                                tabs: {
+   403→   403→                                        content: [
+   404→   404→                                                { type: 'text', key: 'testi_eyebrow', label: 'Sur-titre' },
+   405→   405→                                                { type: 'text', key: 'section_title_testimonials', label: 'Titre de section' },
+   406→   406→                                                { type: 'textarea', key: 'testi_description', label: 'Description' },
+   407→   407→                                        ],
+   408→   408→                                        style: [
+   409→   409→                                                { type: 'select', key: 'testi_bg_style', label: 'Fond', options: [
+   410→   410→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   411→   411→                                                ]},
+   412→   412→                                                { type: 'select', key: 'testi_columns', label: 'Colonnes', options: [
+   413→   413→                                                        {v:'2',l:'2 colonnes'},{v:'3',l:'3 colonnes'}
+   414→   414→                                                ]},
+   415→   415→                                        ],
+   416→   416→                                        advanced: [
+   417→   417→                                                { type: 'number', key: 'testimonials_count', label: 'Nombre de temoignages' },
+   418→   418→                                        ]
+   419→   419→                                }
+   420→   420→                        },
+   421→   421→                        'testi-card': {
+   422→   422→                                label: 'Carte temoignage',
+   423→   423→                                tabs: {
+   424→   424→                                        content: [],
+   425→   425→                                        style: [],
+   426→   426→                                        advanced: []
+   427→   427→                                }
+   428→   428→                        },
+   429→   429→
+   430→   430→                        /* ──────────────── BLOG ──────────────── */
+   431→   431→                        'blog-heading': {
+   432→   432→                                label: 'En-tete Blog',
+   433→   433→                                tabs: {
+   434→   434→                                        content: [
+   435→   435→                                                { type: 'text', key: 'blog_eyebrow', label: 'Sur-titre' },
+   436→   436→                                                { type: 'text', key: 'section_title_blog', label: 'Titre de section' },
+   437→   437→                                                { type: 'textarea', key: 'blog_description', label: 'Description' },
+   438→   438→                                        ],
+   439→   439→                                        style: [
+   440→   440→                                                { type: 'select', key: 'blog_bg_style', label: 'Fond', options: [
+   441→   441→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   442→   442→                                                ]},
+   443→   443→                                                { type: 'select', key: 'blog_columns', label: 'Colonnes', options: [
+   444→   444→                                                        {v:'2',l:'2 colonnes'},{v:'3',l:'3 colonnes'}
+   445→   445→                                                ]},
+   446→   446→                                        ],
+   447→   447→                                        advanced: [
+   448→   448→                                                { type: 'number', key: 'blog_posts_count', label: 'Nombre d\'articles' },
+   449→   449→                                        ]
+   450→   450→                                }
+   451→   451→                        },
+   452→   452→                        'blog-card': {
+   453→   453→                                label: 'Carte article',
+   454→   454→                                tabs: {
+   455→   455→                                        content: [],
+   456→   456→                                        style: [],
+   457→   457→                                        advanced: []
+   458→   458→                                }
+   459→   459→                        },
+   460→   460→                        'blog-cta': {
+   461→   461→                                label: 'Bouton CTA',
+   462→   462→                                tabs: {
+   463→   463→                                        content: [
+   464→   464→                                                { type: 'text', key: 'blog_cta_text', label: 'Texte du bouton' },
+   465→   465→                                                { type: 'text', key: 'blog_cta_link', label: 'Lien', placeholder: '/blog/' },
+   466→   466→                                        ],
+   467→   467→                                        style: [],
+   468→   468→                                        advanced: []
+   469→   469→                                }
+   470→   470→                        },
+   471→   471→
+   472→   472→                        /* ──────────────── INSTAGRAM ──────────────── */
+   473→   473→                        'ig-heading': {
+   474→   474→                                label: 'En-tete Instagram',
+   475→   475→                                tabs: {
+   476→   476→                                        content: [
+   477→   477→                                                { type: 'text', key: 'ig_eyebrow', label: 'Sur-titre' },
+   478→   478→                                                { type: 'text', key: 'instagram_handle', label: 'Nom du compte' },
+   479→   479→                                        ],
+   480→   480→                                        style: [
+   481→   481→                                                { type: 'select', key: 'ig_columns', label: 'Colonnes', options: [
+   482→   482→                                                        {v:'4',l:'4 colonnes'},{v:'5',l:'5 colonnes'},{v:'6',l:'6 colonnes'}
+   483→   483→                                                ]},
+   484→   484→                                                { type: 'select', key: 'ig_gap', label: 'Espacement', options: [
+   485→   485→                                                        {v:'none',l:'Aucun'},{v:'small',l:'Petit'},{v:'medium',l:'Moyen'},{v:'large',l:'Grand'}
+   486→   486→                                                ]},
+   487→   487→                                        ],
+   488→   488→                                        advanced: []
+   489→   489→                                }
+   490→   490→                        },
+   491→   491→                        'ig-item': {
+   492→   492→                                label: 'Image Instagram',
+   493→   493→                                tabs: {
+   494→   494→                                        content: [],
+   495→   495→                                        style: [],
+   496→   496→                                        advanced: []
+   497→   497→                                }
+   498→   498→                        },
+   499→   499→                },
+   500→   500→
+   501→   501→                /* ═══════════════════════════════════════════════════════════════
+   502→   502→                   CSS PREVIEW MAP — EXTENDED v3.5.1
+   503→   503→                   Maps setting keys → preview definition.
+   504→   504→                   Types:
+   505→   505→                     { css, unit?, widget? }      → apply inline style on widget
+   506→   506→                     { cssVar, widget?, unit? }  → set CSS custom property on widget
+   507→   507→                     { sectionCss, unit? }       → apply inline style on section container
+   508→   508→                     { class: { val: {add,remove} } } → toggle CSS classes
+   509→   509→                     { bgImage, widget? }        → update background-image on widget
+   510→   510→                     { none }                    → no live preview (server-render)
+   511→   511→                   ═════════════════════════════════════════════════════════════ */
+   512→   512→                CSS_MAP: {
+   513→   513→                        /* ── Hero Overlay Opacity (CSS var) ── */
+   514→   514→                        'hero_overlay_opacity': { cssVar: 'opacity', widget: 'hero-overlay', unit: '%' },
+   515→   515→
+   516→   516→                        /* ── Hero Height (class toggle on section) ── */
+   517→   517→                        'hero_height': { 'class': {
+   518→   518→                                standard: { add: '', remove: 'v-hero-tall v-hero-compact' },
+   519→   519→                                tall:     { add: 'v-hero-tall', remove: 'v-hero-compact' },
+   520→   520→                                compact:  { add: 'v-hero-compact', remove: 'v-hero-tall' },
+   521→   521→                        }, section: true },
+   522→   522→
+   523→   523→                        /* ── Hero Text Align ── */
+   524→   524→                        'hero_text_align': { sectionCss: 'textAlign' },
+   525→   525→
+   526→   526→                        /* ── Hero BG Position / Size ── */
+   527→   527→                        'hero_bg_position': { css: 'backgroundPosition', widget: 'hero-bg' },
+   528→   528→                        'hero_bg_size': { css: 'backgroundSize', widget: 'hero-bg' },
+   529→   529→
+   530→   530→                        /* ── Hero Content Max Width ── */
+   531→   531→                        'hero_content_max_width': { sectionCss: 'maxWidth', unit: 'px' },
+   532→   532→
+   533→   533→                        /* ── Hero Padding Vertical ── */
+   534→   534→                        'hero_padding_v': { sectionCss: 'paddingTop', unit: 'px', also: 'paddingBottom', alsoUnit: 'px' },
+   535→   535→
+   536→   536→                        /* ── Hero Text Color ── */
+   537→   537→                        'hero_text_color': { sectionCss: 'color', transform: function(v) {
+   538→   538→                                return v === 'dark' ? '#1A1A1A' : '#FFFFFF';
+   539→   539→                        }},
+   540→   540→
+   541→   541→                        /* ── Hero Side Blocks ── */
+   542→   542→                        'hero_show_side': { 'class': {
+   543→   543→                                '1': { add: 'v-hero-side-visible', remove: '' },
+   544→   544→                                '0': { add: '', remove: 'v-hero-side-visible' },
+   545→   545→                        }, section: true },
+   546→   546→                        'hero_side_width': { css: 'width', widget: 'hero-side', unit: 'px' },
+   547→   547→
+   548→   548→                        /* ── Hero BG Image ── */
+   549→   549→                        'hero_slides.0.image': { bgImage: 'hero-bg' },
+   550→   550→
+   551→   551→                        /* Hero Eyebrow */
+   552→   552→                        'hero_eyebrow_font_size':      { css: 'fontSize',      unit: 'px' },
+   553→   553→                        'hero_eyebrow_font_weight':    { css: 'fontWeight' },
+   554→   554→                        'hero_eyebrow_color':          { css: 'color' },
+   555→   555→                        'hero_eyebrow_letter_spacing': { css: 'letterSpacing', unit: 'px' },
+   556→   556→                        'hero_eyebrow_text_transform': { css: 'textTransform' },
+   557→   557→                        'hero_eyebrow_margin_bottom':  { css: 'marginBottom',  unit: 'px' },
+   558→   558→                        'hero_eyebrow_font_family':    { css: 'fontFamily' },
+   559→   559→
+   560→   560→                        /* Hero Title */
+   561→   561→                        'hero_title_font_size':      { css: 'fontSize',      unit: 'px' },
+   562→   562→                        'hero_title_font_weight':    { css: 'fontWeight' },
+   563→   563→                        'hero_title_color':          { css: 'color' },
+   564→   564→                        'hero_title_line_height':    { css: 'lineHeight' },
+   565→   565→                        'hero_title_letter_spacing': { css: 'letterSpacing', unit: 'px' },
+   566→   566→                        'hero_title_margin_bottom':  { css: 'marginBottom',  unit: 'px' },
+   567→   567→                        'hero_title_font_family':    { css: 'fontFamily' },
+   568→   568→
+   569→   569→                        /* Hero Subtitle */
+   570→   570→                        'hero_subtitle_font_size':      { css: 'fontSize',      unit: 'px' },
+   571→   571→                        'hero_subtitle_font_weight':    { css: 'fontWeight' },
+   572→   572→                        'hero_subtitle_color':          { css: 'color' },
+   573→   573→                        'hero_subtitle_line_height':    { css: 'lineHeight' },
+   574→   574→                        'hero_subtitle_margin_bottom':  { css: 'marginBottom',  unit: 'px' },
+   575→   575→                        'hero_subtitle_font_family':    { css: 'fontFamily' },
+   576→   576→
+   577→   577→                        /* Hero CTA */
+   578→   578→                        'hero_cta_font_size':         { css: 'fontSize',      unit: 'px' },
+   579→   579→                        'hero_cta_font_weight':       { css: 'fontWeight' },
+   580→   580→                        'hero_cta_letter_spacing':    { css: 'letterSpacing', unit: 'px' },
+   581→   581→                        'hero_cta_text_transform':    { css: 'textTransform' },
+   582→   582→                        'hero_cta_padding_x':         { css: 'paddingLeft',   unit: 'px', also: 'paddingRight', alsoUnit: 'px' },
+   583→   583→                        'hero_cta_padding_y':         { css: 'paddingTop',    unit: 'px', also: 'paddingBottom', alsoUnit: 'px' },
+   584→   584→                        'hero_cta_border_radius':     { css: 'borderRadius',  unit: 'px' },
+   585→   585→                        'hero_cta_bg_color':          { css: 'backgroundColor' },
+   586→   586→                        'hero_cta_text_color':        { css: 'color' },
+   587→   587→
+   588→   588→                        /* ── Section BG Style Classes ── */
+   589→   589→                        'cat_bg_style':     { 'class': _vcBgStyleMap(), section: true },
+   590→   590→                        'prod_bg_style':    { 'class': _vcBgStyleMap(), section: true },
+   591→   591→                        'testi_bg_style':   { 'class': _vcBgStyleMap(), section: true },
+   592→   592→                        'blog_bg_style':    { 'class': _vcBgStyleMap(), section: true },
+   593→   593→                        'feat_bg_style':    { 'class': { base: {add:'velure-section-base',remove:'velure-section-soft'}, soft: {add:'velure-section-soft',remove:'velure-section-base'} }, section: true },
+   594→   594→                        'marquee_bg':       { 'class': { base: {add:'velure-section-base',remove:'velure-section-soft'}, soft: {add:'velure-section-soft',remove:'velure-section-base'} }, section: true },
+   595→   595→
+   596→   596→                        /* ── Grid Columns ── */
+   597→   597→                        'prod_columns':  { 'class': _vcColMap(), section: true },
+   598→   598→                        'testi_columns': { 'class': _vcColMap(), section: true },
+   599→   599→                        'blog_columns':  { 'class': _vcColMap(), section: true },
+   600→   600→                        'ig_columns':    { 'class': _vcIgColMap(), section: true },
+   601→   601→
+   602→   602→                        /* ── Instagram Gap ── */
+   603→   603→                        'ig_gap': { sectionCss: 'gap', transform: function(v) {
+   604→   604→                                var map = { none: '0', small: '4px', medium: '8px', large: '16px' };
+   605→   605→                                return map[v] || '4px';
+   606→   606→                        }},
+   607→   607→
+   608→   608→                        /* ── Marquee ── */
+   609→   609→                        'marquee_speed': { css: 'animationDuration', widget: 'marquee-track', transform: function(v) { return v + 's'; } },
+   610→   610→                        'marquee_direction': { css: 'animationDirection', widget: 'marquee-track' },
+   611→   611→
+   612→   612→                        /* ── Split Banner ── */
+   613→   613→                        'sb_layout': { 'class': {
+   614→   614→                                '50-50': { add: 'velure-split-equal',   remove: 'velure-split-wide velure-split-narrow' },
+   615→   615→                                '60-40': { add: 'velure-split-wide',    remove: 'velure-split-equal velure-split-narrow' },
+   616→   616→                                '40-60': { add: 'velure-split-narrow',  remove: 'velure-split-equal velure-split-wide' },
+   617→   617→                        }, section: true },
+   618→   618→                        'sb_left_image':  { bgImage: 'banner-left' },
+   619→   619→                        'sb_right_image': { bgImage: 'banner-right' },
+   620→   620→                },
+   621→   621→
+   622→   622→                /* ═══════════════════════════════════════════════════════════════
+   623→   623→                   SETTINGS HELPER — deep get by dot-notation key
+   624→   624→                   ═════════════════════════════════════════════════════════════ */
+   625→   625→                getVal: function (key) {
+   626→   626→                        if (!key) return '';
+   627→   627→                        var parts = key.split('.');
+   628→   628→                        var val = VCB.settings;
+   629→   629→                        for (var i = 0; i < parts.length; i++) {
+   630→   630→                                if (val === null || val === undefined) return '';
+   631→   631→                                val = val[parts[i]];
+   632→   632→                        }
+   633→   633→                        return (val !== null && val !== undefined) ? val : '';
+   634→   634→                },
+   635→   635→
+   636→   636→                /* ═══════════════════════════════════════════════════════════════
+   637→   637→                   FIELD HTML RENDERERS
+   638→   638→                   ═════════════════════════════════════════════════════════════ */
+   639→   639→
+   640→   640→                /**
+   641→   641→                 * Render a single field and return jQuery element.
+   642→   642→                 * @param {Object} f  Field definition
+   643→   643→                 * @returns {jQuery}
+   644→   644→                 */
+   645→   645→                renderField: function (f) {
+   646→   646→                        var val = String(VCB.getVal(f.key));
+   647→   647→                        var $w = $('<div class="vc-bp-field" data-key="' + f.key + '"></div>');
+   648→   648→
+   649→   649→                        switch (f.type) {
+   650→   650→
+   651→   651→                                case 'text':
+   652→   652→                                        $w.append('<label>' + f.label + '</label>');
+   653→   653→                                        $w.append($('<input type="text" />')
+   654→   654→                                                .attr({ 'data-vc-key': f.key, value: val, placeholder: f.placeholder || '' }));
+   655→   655→                                        break;
+   656→   656→
+   657→   657→                                case 'textarea':
+   658→   658→                                        $w.append('<label>' + f.label + '</label>');
+   659→   659→                                        $w.append($('<textarea rows="3"></textarea>')
+   660→   660→                                                .attr({ 'data-vc-key': f.key, placeholder: f.placeholder || '' })
+   661→   661→                                                .val(val));
+   662→   662→                                        break;
+   663→   663→
+   664→   664→                                case 'number':
+   665→   665→                                        $w.append('<label>' + f.label + (f.unit ? ' <span class="vc-bp-unit">' + f.unit + '</span>' : '') + '</label>');
+   666→   666→                                        $w.append($('<input type="number" />')
+   667→   667→                                                .attr({ 'data-vc-key': f.key, step: f.step || 1, min: f.min !== undefined ? f.min : '', max: f.max !== undefined ? f.max : '', value: val }));
+   668→   668→                                        break;
+   669→   669→
+   670→   670→                                case 'color':
+   671→   671→                                        $w.append('<label>' + f.label + '</label>');
+   672→   672→                                        $w.append($('<div class="vc-bp-color-wrap"></div>')
+   673→   673→                                                .append($('<input type="color" />').attr({ 'data-vc-key': f.key, value: val || '#000000' }))
+   674→   674→                                                .append($('<input type="text" class="vc-bp-color-text" />').attr({ 'data-vc-key': f.key + '_hex', value: val, placeholder: '#000000' })));
+   675→   675→                                        break;
+   676→   676→
+   677→   677→                                case 'select':
+   678→   678→                                        $w.append('<label>' + f.label + '</label>');
+   679→   679→                                        var $sel = $('<select></select>').attr('data-vc-key', f.key);
+   680→   680→                                        (f.options || []).forEach(function (o) {
+   681→   681→                                                var optVal = o.v !== undefined ? o.v : o.value;
+   682→   682→                                                var optLbl = o.l !== undefined ? o.l : o.label;
+   683→   683→                                                $sel.append($('<option></option>').attr({ value: optVal, selected: optVal === val ? 'selected' : '' }).text(optLbl));
+   684→   684→                                        });
+   685→   685→                                        $w.append($sel);
+   686→   686→                                        break;
+   687→   687→
+   688→   688→                                case 'toggle':
+   689→   689→                                        var isOn = val === '1' || val === 1 || val === true;
+   690→   690→                                        $w.html(
+   691→   691→                                                '<label class="vc-bp-toggle-label">' +
+   692→   692→                                                        '<span>' + f.label + '</span>' +
+   693→   693→                                                        '<span class="vc-bp-toggle' + (isOn ? ' active' : '') + '" data-vc-key="' + f.key + '">' +
+   694→   694→                                                                '<span class="vc-bp-toggle-knob"></span>' +
+   695→   695→                                                        '</span>' +
+   696→   696→                                                '</label>'
+   697→   697→                                        );
+   698→   698→                                        break;
+   699→   699→
+   700→   700→                                case 'range':
+   701→   701→                                        var numVal = parseFloat(val) || f.min || 0;
+   702→   702→                                        $w.append('<label>' + f.label + ' <span class="vc-bp-range-val">' + numVal + (f.unit || '') + '</span></label>');
+   703→   703→                                        $w.append($('<input type="range" />')
+   704→   704→                                                .attr({ 'data-vc-key': f.key, min: f.min || 0, max: f.max || 100, step: f.step || 1, value: numVal }));
+   705→   705→                                        break;
+   706→   706→
+   707→   707→                                case 'media':
+   708→   708→                                        $w.append('<label>' + f.label + '</label>');
+   709→   709→                                        var $mediaWrap = $('<div class="vc-bp-media-wrap"></div>');
+   710→   710→                                        var $mediaInput = $('<input type="text" class="vc-bp-media-input" readonly />').attr({ 'data-vc-key': f.key, value: val });
+   711→   711→                                        var $mediaBtn = $('<button type="button" class="vc-bp-media-btn">Choisir</button>');
+   712→   712→                                        if (val) {
+   713→   713→                                                $mediaWrap.append($('<div class="vc-bp-media-thumb"><img src="' + val + '" alt=""></div>'));
+   714→   714→                                        }
+   715→   715→                                        $mediaWrap.append($mediaInput).append($mediaBtn);
+   716→   716→                                        $w.append($mediaWrap);
+   717→   717→                                        break;
+   718→   718→                        }
+   719→   719→
+   720→   720→                        return $w;
+   721→   721→                },
+   722→   722→
+   723→   723→                /* ═══════════════════════════════════════════════════════════════
+   724→   724→                   PANEL RENDERING — show fields for the selected widget
+   725→   725→                   ═════════════════════════════════════════════════════════════ */
+   726→   726→
+   727→   727→                /**
+   728→   728→                 * Render the full panel for a widget.
+   729→   729→                 * @param {Object} info  Widget info from postMessage (widget, base, label, index, etc.)
+   730→   730→                 */
+   731→   731→                renderPanel: function (info) {
+   732→   732→                        var base = info.base || info.widget;
+   733→   733→                        var def  = VCB.FIELDS[base];
+   734→   734→                        if (!def) {
+   735→   735→                                VCB.showEmpty('Aucun champ defini pour : ' + base);
+   736→   736→                                return;
+   737→   737→                        }
+   738→   738→
+   739→   739→                        /* Update header */
+   740→   740→                        var idxLabel = (info.index !== null && info.index !== undefined) ? ' #' + (parseInt(info.index, 10) + 1) : '';
+   741→   741→                        $('.vc-bp-header-title').text(def.label + idxLabel);
+   742→   742→                        $('.vc-bp-header-label').text(info.widget);
+   743→   743→
+   744→   744→                        /* Show widget editor */
+   745→   745→                        $('#vc-bp-widget-editor').show();
+   746→   746→
+   747→   747→                        /* Render each tab */
+   748→   748→                        ['content', 'style', 'advanced'].forEach(function (tabKey) {
+   749→   749→                                var fields = def.tabs[tabKey] || [];
+   750→   750→                                var $pane  = $('.vc-bp-tab-pane[data-tab="' + tabKey + '"]').empty();
+   751→   751→
+   752→   752→                                if (fields.length === 0) {
+   753→   753→                                        $pane.append('<p class="vc-bp-no-fields">Aucune option disponible pour cet onglet.</p>');
+   754→   754→                                        return;
+   755→   755→                                }
+   756→   756→
+   757→   757→                                fields.forEach(function (f) {
+   758→   758→                                        $pane.append(VCB.renderField(f));
+   759→   759→                                });
+   760→   760→                        });
+   761→   761→
+   762→   762→                        /* Activate first non-empty tab, fallback to 'content' */
+   763→   763→                        var firstTab = 'content';
+   764→   764→                        if (def.tabs.content && def.tabs.content.length === 0 && def.tabs.style && def.tabs.style.length > 0) {
+   765→   765→                                firstTab = 'style';
+   766→   766→                        }
+   767→   767→                        VCB.switchTab(firstTab);
+   768→   768→                },
+   769→   769→
+   770→   770→                /**
+   771→   771→                 * Hide the widget editor (deselect state).
+   772→   772→                 */
+   773→   773→                showEmpty: function (msg) {
+   774→   774→                        $('#vc-bp-widget-editor').hide();
+   775→   775→                },
+   776→   776→
+   777→   777→                /**
+   778→   778→                 * Switch active tab.
+   779→   779→                 */
+   780→   780→                switchTab: function (tabKey) {
+   781→   781→                        VCB.currentTab = tabKey;
+   782→   782→                        $('.vc-bp-tab-btn').removeClass('active');
+   783→   783→                        $('.vc-bp-tab-btn[data-tab="' + tabKey + '"]').addClass('active');
+   784→   784→                        $('.vc-bp-tab-pane').removeClass('active');
+   785→   785→                        $('.vc-bp-tab-pane[data-tab="' + tabKey + '"]').addClass('active');
+   786→   786→                },
+   787→   787→
+   788→   788→                /* ═══════════════════════════════════════════════════════════════
+   789→   789→                   LIVE PREVIEW — push REAL-TIME changes to iframe (Wix-like)
+   790→   790→                   ═════════════════════════════════════════════════════════════ */
+   791→   791→
+   792→   792→                /**
+   793→   793→                 * When a field changes, determine the preview type and push
+   794→   794→                 * the appropriate message to the iframe canvas.
+   795→   795→                 * v3.5.1: EXTENDED — handles ALL control types in real-time:
+   796→   796→                 *   - Widget inline styles (css)
+   797→   797→                 *   - CSS custom properties (cssVar)
+   798→   798→                 *   - Section-level styles (sectionCss)
+   799→   799→                 *   - Class toggles (class)
+   800→   800→                 *   - Background image swaps (bgImage)
+   801→   801→                 *   - Text content updates (text)
+   802→   802→                 *   - Structural changes → AJAX partial render (vc-replace-html)
+   803→   803→                 *
+   804→   804→                 * @param {string} key    Settings key (dot-notation)
+   805→   805→                 * @param {string} value  New value
+   806→   806→                 */
+   807→   807→                onFieldChange: function (key, value) {
+   808→   808→                        if (!VCB.iframe || !VCB.iframe.contentWindow) return;
+   809→   809→                        var widgetId = VCB.selected ? VCB.selected.widget : null;
+   810→   810→
+   811→   811→                        /* ── Queue change for auto-save (debounce 1.5s) ── */
+   812→   812→                        VCB.addToChanges(key, value);
+   813→   813→
+   814→   814→                        /* ── Check CSS_MAP for real-time preview ── */
+   815→   815→                        var def = VCB.CSS_MAP[key];
+   816→   816→                        if (def) {
+   817→   817→                                /* TYPE 1: Widget-level inline CSS */
+   818→   818→                                if (def.css) {
+   819→   819→                                        var cssVal = def.transform ? def.transform(value) : value;
+   820→   820→                                        var numVal = parseFloat(cssVal);
+   821→   821→                                        if (!isNaN(numVal) && !def.transform) {
+   822→   822→                                                cssVal = numVal + (def.unit || '');
+   823→   823→                                        }
+   824→   824→                                        var css = {};
+   825→   825→                                        css[def.css] = cssVal;
+   826→   826→                                        if (def.also) {
+   827→   827→                                                var alsoVal = def.transform ? def.transform(value) : value;
+   828→   828→                                                var alsoNum = parseFloat(alsoVal);
+   829→   829→                                                if (!isNaN(alsoNum) && !def.transform) {
+   830→   830→                                                        alsoVal = alsoNum + (def.alsoUnit || def.unit || '');
+   831→   831→                                                }
+   832→   832→                                                css[def.also] = alsoVal;
+   833→   833→                                        }
+   834→   834→                                        var targetWidget = def.widget || widgetId;
+   835→   835→                                        if (targetWidget) {
+   836→   836→                                                VCB.sendToIframe({ action: 'vc-apply-style', widget: targetWidget, css: css });
+   837→   837→                                        }
+   838→   838→                                        return;
+   839→   839→                                }
+   840→   840→
+   841→   841→                                /* TYPE 2: CSS custom property on widget */
+   842→   842→                                if (def.cssVar) {
+   843→   843→                                        var cssVarVal = (def.unit && !def.transform) ? value + def.unit : (def.transform ? def.transform(value) : value);
+   844→   844→                                        var varWidget = def.widget || widgetId;
+   845→   845→                                        VCB.sendToIframe({
+   846→   846→                                                action:   'vc-apply-css-var',
+   847→   847→                                                widget:   varWidget,
+   848→   848→                                                property: def.cssVar,
+   849→   849→                                                value:    cssVarVal
+   850→   850→                                        });
+   851→   851→                                        return;
+   852→   852→                                }
+   853→   853→
+   854→   854→                                /* TYPE 3: Section-level inline CSS */
+   855→   855→                                if (def.sectionCss) {
+   856→   856→                                        var secCssVal = def.transform ? def.transform(value) : value;
+   857→   857→                                        var numSecVal = parseFloat(secCssVal);
+   858→   858→                                        if (!isNaN(numSecVal) && !def.transform) {
+   859→   859→                                                secCssVal = numSecVal + (def.unit || '');
+   860→   860→                                        }
+   861→   861→                                        var secCss = {};
+   862→   862→                                        secCss[def.sectionCss] = secCssVal;
+   863→   863→                                        if (def.also) {
+   864→   864→                                                var alsoSecVal = def.transform ? def.transform(value) : value;
+   865→   865→                                                var alsoSecNum = parseFloat(alsoSecVal);
+   866→   866→                                                if (!isNaN(alsoSecNum) && !def.transform) {
+   867→   867→                                                        alsoSecVal = alsoSecNum + (def.alsoUnit || def.unit || '');
+   868→   868→                                                }
+   869→   869→                                                secCss[def.also] = alsoSecVal;
+   870→   870→                                        }
+   871→   871→                                        VCB.sendToIframe({ action: 'vc-apply-section-css', css: secCss });
+   872→   872→                                        return;
+   873→   873→                                }
+   874→   874→
+   875→   875→                                /* TYPE 4: Class toggle */
+   876→   876→                                if (def['class']) {
+   877→   877→                                        var classMap = def['class'];
+   878→   878→                                        var classDef = classMap[String(value)];
+   879→   879→                                        if (classDef) {
+   880→   880→                                                var target = def.section ? null : (def.widget || widgetId);
+   881→   881→                                                if (target) {
+   882→   882→                                                        VCB.sendToIframe({
+   883→   883→                                                                action: 'vc-apply-class',
+   884→   884→                                                                widget: target,
+   885→   885→                                                                add: classDef.add || '',
+   886→   886→                                                                remove: classDef.remove || ''
+   887→   887→                                                        });
+   888→   888→                                                } else {
+   889→   889→                                                        /* Section-level class toggle */
+   890→   890→                                                        VCB.sendToIframe({
+   891→   891→                                                                action: 'vc-apply-class',
+   892→   892→                                                                widget: '__section__',
+   893→   893→                                                                add: classDef.add || '',
+   894→   894→                                                                remove: classDef.remove || ''
+   895→   895→                                                        });
+   896→   896→                                                }
+   897→   897→                                        }
+   898→   898→                                        return;
+   899→   899→                                }
+   900→   900→
+   901→   901→                                /* TYPE 5: Background image swap */
+   902→   902→                                if (def.bgImage) {
+   903→   903→                                        var bgWidget = def.widget || widgetId;
+   904→   904→                                        VCB.sendToIframe({
+   905→   905→                                                action: 'vc-update-bg-image',
+   906→   906→                                                widget: bgWidget,
+   907→   907→                                                url: value
+   908→   908→                                        });
+   909→   909→                                        return;
+   910→   910→                                }
+   911→   911→                        }
+   912→   912→
+   913→   913→                        /* ── Text content updates for known editable widgets ── */
+   914→   914→                        var base = VCB.selected ? (VCB.selected.base || widgetId) : '';
+   915→   915→                        if (base === 'hero-eyebrow' || base === 'hero-title' || base === 'hero-subtitle') {
+   916→   916→                                VCB.sendToIframe({ action: 'vc-apply-text', widget: widgetId, text: value });
+   917→   917→                                return;
+   918→   918→                        }
+   919→   919→                        if (base === 'hero-cta' && key.indexOf('cta_text') !== -1) {
+   920→   920→                                VCB.sendToIframe({ action: 'vc-apply-text', widget: widgetId, text: value });
+   921→   921→                                return;
+   922→   922→                        }
+   923→   923→
+   924→   924→                        /* ── Structural changes: trigger AJAX partial render ──
+   925→   925→                           For keys not in CSS_MAP and not text, do a surgical
+   926→   926→                           section re-render via AJAX (no iframe reload). */
+   927→   927→                        VCB._requestPartialRender(key, value);
+   928→   928→                },
+   929→   929→
+   930→   930→                /**
+   931→   931→                 * Request a surgical HTML fragment from the server and inject it
+   932→   932→                 * into the iframe. Only used for structural changes that can't
+   933→   933→                 * be handled by CSS alone (new blocks, image additions, etc.)
+   934→   934→                 * Debounced to 300ms to avoid flooding on rapid changes.
+   935→   935→                 */
+   936→   936→                _partialRenderTimer: null,
+   937→   937→                _requestPartialRender: function(key, value) {
+   938→   938→                        /* Only attempt if we have a valid section */
+   939→   939→                        if (!VCB.section) return;
+   940→   940→
+   941→   941→                        clearTimeout(VCB._partialRenderTimer);
+   942→   942→                        VCB._partialRenderTimer = setTimeout(function () {
+   943→   943→                                $.ajax({
+   944→   944→                                        url:  (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php',
+   945→   945→                                        type: 'POST',
+   946→   946→                                        data: {
+   947→   947→                                                action:  'vc_render_component_preview',
+   948→   948→                                                section: VCB.section,
+   949→   949→                                                key:     key,
+   950→   950→                                                value:   value,
+   951→   951→                                                _ajax_nonce: (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.nonce : '',
+   952→   952→                                        },
+   953→   953→                                        success: function (res) {
+   954→   954→                                                if (res && res.success && res.data && res.data.html) {
+   955→   955→                                                        VCB.sendToIframe({ action: 'vc-replace-html', html: res.data.html });
+   956→   956→                                                }
+   957→   957→                                        }
+   958→   958→                                });
+   959→   959→                        }, 300);
+   960→   960→                },
+   961→   961→
+   962→   962→                /**
+   963→   963→                 * Send a message to the canvas iframe.
+   964→   964→                 */
+   965→   965→                sendToIframe: function (data) {
+   966→   966→                        if (!VCB.iframe || !VCB.iframe.contentWindow) return;
+   967→   967→                        VCB.iframe.contentWindow.postMessage(data, '*');
+   968→   968→                },
+   969→   969→
+   970→   970→                /* ═══════════════════════════════════════════════════════════════
+   971→   971→                   WIDGET CONTENT KEY MAP
+   972→   972→                   Maps editable widget base IDs to their settings key for auto-save.
+   973→   973→                   Used when contenteditable text is changed inline in the iframe.
+   974→   974→                   ═══════════════════════════════════════════════════════════════ */
+   975→   975→                WIDGET_CONTENT_KEY: {
+   976→   976→                        'hero-eyebrow':  'hero_slides.0.eyebrow',
+   977→   977→                        'hero-title':    'hero_slides.0.title',
+   978→   978→                        'hero-subtitle': 'hero_slides.0.subtitle',
+   979→   979→                        'hero-cta':      'hero_slides.0.cta_text',
+   980→   980→                },
+   981→   981→
+   982→   982→                /* ═══════════════════════════════════════════════════════════════
+   983→   983→                   AUTO-SAVE ENGINE (debounce 1.5s)
+   984→   984→                   ═══════════════════════════════════════════════════════════════ */
+   985→   985→
+   986→   986→                /**
+   987→   987→                 * Add a key-value pair to the pending-changes queue
+   988→   988→                 * and (re)start the debounce timer.
+   989→   989→                 */
+   990→   990→                addToChanges: function (key, value) {
+   991→   991→                        VCB.pendingChanges[key] = value;
+   992→   992→                        VCB._markUnsaved();
+   993→   993→                        VCB._debounceSave();
+   994→   994→                },
+   995→   995→
+   996→   996→                _markUnsaved: function () {
+   997→   997→                        if (!VCB._hasUnsaved) {
+   998→   998→                                VCB._hasUnsaved = true;
+   999→   999→                                $('#vc-unsaved-dot').addClass('show');
+  1000→  1000→                                $(window).on('beforeunload.vc-builder', function () { return true; });
+  1001→  1001→                        }
+  1002→  1002→                },
+  1003→  1003→
+  1004→  1004→                _markSaved: function () {
+  1005→  1005→                        VCB._hasUnsaved = false;
+  1006→  1006→                        VCB.pendingChanges = {};
+  1007→  1007→                        $('#vc-unsaved-dot').removeClass('show');
+  1008→  1008→                        $(window).off('beforeunload.vc-builder');
+  1009→  1009→                },
+  1010→  1010→
+  1011→  1011→                _debounceSave: function () {
+  1012→  1012→                        clearTimeout(VCB._saveTimer);
+  1013→  1013→                        VCB._showSaveIndicator('pending');
+  1014→  1014→                        VCB._saveTimer = setTimeout(function () {
+  1015→  1015→                                VCB.saveChanges();
+  1016→  1016→                        }, 1500);
+  1017→  1017→                },
+  1018→  1018→
+  1019→  1019→                /**
+  1020→  1020→                 * Flush all pending changes to the server via AJAX.
+  1021→  1021→                 * Called by the debounce timer or by the Publish button.
+  1022→  1022→                 */
+  1023→  1023→                saveChanges: function () {
+  1024→  1024→                        var keys = Object.keys(VCB.pendingChanges);
+  1025→  1025→                        if (keys.length === 0) {
+  1026→  1026→                                VCB._showSaveIndicator('idle');
+  1027→  1027→                                return;
+  1028→  1028→                        }
+  1029→  1029→
+  1030→  1030→                        var changes = JSON.parse(JSON.stringify(VCB.pendingChanges));
+  1031→  1031→                        VCB._showSaveIndicator('saving');
+  1032→  1032→
+  1033→  1033→                        $.ajax({
+  1034→  1034→                                url:  (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php',
+  1035→  1035→                                type: 'POST',
+  1036→  1036→                                data: {
+  1037→  1037→                                        action:  'velure_core_auto_save',
+  1038→  1038→                                        _wpnonce: (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.nonce : '',
+  1039→  1039→                                        changes: JSON.stringify(changes),
+  1040→  1040→                                },
+  1041→  1041→                                success: function (res) {
+  1042→  1042→                                        if (res && res.success) {
+  1043→  1043→                                                keys.forEach(function (k) {
+  1044→  1044→                                                        VCB._setNestedValue(VCB.settings, k, changes[k]);
+  1045→  1045→                                                });
+  1046→  1046→                                                VCB._markSaved();
+  1047→  1047→                                                VCB._showSaveIndicator('saved');
+  1048→  1048→                                        } else {
+  1049→  1049→                                                VCB._showSaveIndicator('error');
+  1050→  1050→                                                VCB.toast((res && res.data && res.data.message) || 'Erreur de sauvegarde.', 'error');
+  1051→  1051→                                        }
+  1052→  1052→                                },
+  1053→  1053→                                error: function () {
+  1054→  1054→                                        VCB._showSaveIndicator('error');
+  1055→  1055→                                        VCB.toast('Erreur reseau lors de la sauvegarde.', 'error');
+  1056→  1056→                                },
+  1057→  1057→                        });
+  1058→  1058→                },
+  1059→  1059→
+  1060→  1060→                _setNestedValue: function (obj, key, value) {
+  1061→  1061→                        var parts = key.split('.');
+  1062→  1062→                        var current = obj;
+  1063→  1063→                        for (var i = 0; i < parts.length - 1; i++) {
+  1064→  1064→                                if (!current[parts[i]] || typeof current[parts[i]] !== 'object') {
+  1065→  1065→                                        current[parts[i]] = {};
+  1066→  1066→                                }
+  1067→  1067→                                current = current[parts[i]];
+  1068→  1068→                        }
+  1069→  1069→                        current[parts[parts.length - 1]] = value;
+  1070→  1070→                },
+  1071→  1071→
+  1072→  1072→                /**
+  1073→  1073→                 * Manage the save indicator in the topbar.
+  1074→  1074→                 * States: idle | pending | saving | saved | error
+  1075→  1075→                 */
+  1076→  1076→                _showSaveIndicator: function (state) {
+  1077→  1077→                        var $ind = $('#vc-save-indicator');
+  1078→  1078→                        if (!$ind.length) return;
+  1079→  1079→
+  1080→  1080→                        $ind.removeClass('vc-saving vc-saved vc-error vc-visible');
+  1081→  1081→
+  1082→  1082→                        switch (state) {
+  1083→  1083→                                case 'pending':
+  1084→  1084→                                        $ind.find('.vc-save-text').text('Modifications en attente');
+  1085→  1085→                                        $ind.addClass('vc-visible');
+  1086→  1086→                                        break;
+  1087→  1087→                                case 'saving':
+  1088→  1088→                                        $ind.find('.vc-save-text').text('Enregistrement...');
+  1089→  1089→                                        $ind.addClass('vc-visible vc-saving');
+  1090→  1090→                                        break;
+  1091→  1091→                                case 'saved':
+  1092→  1092→                                        $ind.find('.vc-save-text').text('Enregistre');
+  1093→  1093→                                        $ind.addClass('vc-visible vc-saved');
+  1094→  1094→                                        setTimeout(function () { $ind.removeClass('vc-visible'); }, 3000);
+  1095→  1095→                                        break;
+  1096→  1096→                                case 'error':
+  1097→  1097→                                        $ind.find('.vc-save-text').text('Erreur');
+  1098→  1098→                                        $ind.addClass('vc-visible vc-error');
+  1099→  1099→                                        setTimeout(function () { $ind.removeClass('vc-visible'); }, 4000);
+  1100→  1100→                                        break;
+  1101→  1101→                                default:
+  1102→  1102→                                        $ind.removeClass('vc-visible');
+  1103→  1103→                        }
+  1104→  1104→                },
+  1105→  1105→
+  1106→  1106→                toast: function (msg, type) {
+  1107→  1107→                        var el = document.getElementById('vc-toast');
+  1108→  1108→                        if (!el) return;
+  1109→  1109→                        el.className = 'vc-toast';
+  1110→  1110→                        if (type) el.className += ' vc-toast-' + type;
+  1111→  1111→                        var icon = type === 'success' ? '\u2713 ' : type === 'error' ? '\u2717 ' : type === 'saving' ? '\u23F3 ' : '';
+  1112→  1112→                        el.innerHTML = icon + msg;
+  1113→  1113→                        el.classList.add('show');
+  1114→  1114→                        clearTimeout(VCB._toastTimer);
+  1115→  1115→                        VCB._toastTimer = setTimeout(function () { el.classList.remove('show'); }, 4000);
+  1116→  1116→                },
+  1117→  1117→
+  1118→  1118→
+  1119→  1119→                /* ═══════════════════════════════════════════════════════════════
+  1120→  1120→                   POST MESSAGE LISTENER — receive events from canvas-bridge.js
+  1121→  1121→                   ═════════════════════════════════════════════════════════════ */
+  1122→  1122→                onMessage: function (e) {
+  1123→  1123→                        if (!e.data || typeof e.data.action !== 'string') return;
+  1124→  1124→
+  1125→  1125→                        switch (e.data.action) {
+  1126→  1126→
+  1127→  1127→                                case 'vc-widget-selected':
+  1128→  1128→                                        VCB.selected = {
+  1129→  1129→                                                widget:   e.data.widget,
+  1130→  1130→                                                base:     e.data.base,
+  1131→  1131→                                                section:  e.data.section,
+  1132→  1132→                                                label:    e.data.label,
+  1133→  1133→                                                editable: e.data.editable,
+  1134→  1134→                                                index:    e.data.index,
+  1135→  1135→                                        };
+  1136→  1136→                                        VCB.renderPanel(VCB.selected);
+  1137→  1137→                                        break;
+  1138→  1138→
+  1139→  1139→                                case 'vc-widget-deselected':
+  1140→  1140→                                        VCB.selected = null;
+  1141→  1141→                                        VCB.showEmpty();
+  1142→  1142→                                        break;
+  1143→  1143→
+  1144→  1144→                                case 'vc-content-changed':
+  1145→  1145→                                        /* Update the corresponding field in the panel */
+  1146→  1146→                                        if (e.data.settingKey) {
+  1147→  1147→                                                var $cfield = $('[data-vc-key="' + e.data.settingKey + '"]');
+  1148→  1148→                                                if ($cfield.length && ($cfield.is('input[type="text"]') || $cfield.is('textarea'))) {
+  1149→  1149→                                                        $cfield.val(e.data.value);
+  1150→  1150→                                                }
+  1151→  1151→                                                /* Queue for auto-save */
+  1152→  1152→                                                VCB.addToChanges(e.data.settingKey, e.data.value);
+  1153→  1153→                                        }
+  1154→  1154→                                        break;
+  1155→  1155→                        }
+  1156→  1156→                },
+  1157→  1157→
+  1158→  1158→                /* ═══════════════════════════════════════════════════════════════
+  1159→  1159→                   EVENT BINDING
+  1160→  1160→                   ═════════════════════════════════════════════════════════════ */
+  1161→  1161→                bindEvents: function () {
+  1162→  1162→                        /* Tab switching */
+  1163→  1163→                        $(document).on('click', '.vc-bp-tab-btn', function (e) {
+  1164→  1164→                                e.preventDefault();
+  1165→  1165→                                VCB.switchTab($(this).attr('data-tab'));
+  1166→  1166→                        });
+  1167→  1167→
+  1168→  1168→                        /* Deselect button */
+  1169→  1169→                        $(document).on('click', '.vc-bp-close-btn', function () {
+  1170→  1170→                                VCB.selected = null;
+  1171→  1171→                                VCB.showEmpty();
+  1172→  1172→                                VCB.sendToIframe({ action: 'vc-deselect' });
+  1173→  1173→                        });
+  1174→  1174→
+  1175→  1175→                        /* Field changes — inputs */
+  1176→  1176→                        $(document).on('input change', '.vc-bp-field input[type="text"], .vc-bp-field input[type="number"], .vc-bp-field textarea, .vc-bp-field select', function () {
+  1177→  1177→                                var key   = $(this).attr('data-vc-key');
+  1178→  1178→                                var value = $(this).val();
+  1179→  1179→                                VCB.onFieldChange(key, value);
+  1180→  1180→                        });
+  1181→  1181→
+  1182→  1182→                        /* Color picker sync */
+  1183→  1183→                        $(document).on('input', '.vc-bp-field input[type="color"]', function () {
+  1184→  1184→                                var key   = $(this).attr('data-vc-key');
+  1185→  1185→                                var value = $(this).val();
+  1186→  1186→                                $(this).siblings('.vc-bp-color-text').val(value);
+  1187→  1187→                                VCB.onFieldChange(key, value);
+  1188→  1188→                        });
+  1189→  1189→                        $(document).on('input', '.vc-bp-color-text', function () {
+  1190→  1190→                                var key   = $(this).attr('data-vc-key').replace('_hex', '');
+  1191→  1191→                                var value = $(this).val();
+  1192→  1192→                                $(this).siblings('input[type="color"]').val(value);
+  1193→  1193→                                VCB.onFieldChange(key, value);
+  1194→  1194→                        });
+  1195→  1195→
+  1196→  1196→                        /* Range sliders */
+  1197→  1197→                        $(document).on('input', '.vc-bp-field input[type="range"]', function () {
+  1198→  1198→                                var key   = $(this).attr('data-vc-key');
+  1199→  1199→                                var value = $(this).val();
+  1200→  1200→                                var unit  = $(this).closest('.vc-bp-field').find('.vc-bp-unit').text() || '';
+  1201→  1201→                                $(this).siblings('label').find('.vc-bp-range-val').text(value + unit);
+  1202→  1202→                                VCB.onFieldChange(key, value);
+  1203→  1203→                        });
+  1204→  1204→
+  1205→  1205→                        /* Toggle switches */
+  1206→  1206→                        $(document).on('click', '.vc-bp-toggle', function () {
+  1207→  1207→                                var $t = $(this);
+  1208→  1208→                                var isOn = $t.hasClass('active');
+  1209→  1209→                                $t.toggleClass('active');
+  1210→  1210→                                var key   = $t.attr('data-vc-key');
+  1211→  1211→                                var value = isOn ? '0' : '1';
+  1212→  1212→                                VCB.onFieldChange(key, value);
+  1213→  1213→                        });
+  1214→  1214→
+  1215→  1215→                        /* Media library button */
+  1216→  1216→                        $(document).on('click', '.vc-bp-media-btn', function () {
+  1217→  1217→                                var $wrap = $(this).closest('.vc-bp-media-wrap');
+  1218→  1218→                                var $input = $wrap.find('.vc-bp-media-input');
+  1219→  1219→                                var key = $input.attr('data-vc-key');
+  1220→  1220→
+  1221→  1221→                                if (typeof wp === 'undefined' || !wp.media) return;
+  1222→  1222→
+  1223→  1223→                                var frame = wp.media({ title: 'Choisir une image', multiple: false, library: { type: 'image' } });
+  1224→  1224→                                frame.on('select', function () {
+  1225→  1225→                                        var attachment = frame.state().get('selection').first().toJSON();
+  1226→  1226→                                        var url = attachment.url;
+  1227→  1227→                                        $input.val(url);
+  1228→  1228→                                        /* Update thumbnail */
+  1229→  1229→                                        var $thumb = $wrap.find('.vc-bp-media-thumb');
+  1230→  1230→                                        if ($thumb.length) {
+  1231→  1231→                                                $thumb.find('img').attr('src', url);
+  1232→  1232→                                        } else {
+  1233→  1233→                                                $wrap.prepend('<div class="vc-bp-media-thumb"><img src="' + url + '" alt=""></div>');
+  1234→  1234→                                        }
+  1235→  1235→                                        VCB.onFieldChange(key, url);
+  1236→  1236→                                });
+  1237→  1237→                                frame.open();
+  1238→  1238→                        });
+  1239→  1239→                },
+  1240→  1240→
+  1241→  1241→                /* ═══════════════════════════════════════════════════════════════
+  1242→  1242→                   INIT
+  1243→  1243→                   ═════════════════════════════════════════════════════════════ */
+  1244→  1244→                init: function () {
+  1245→  1245→                        /* Only run inside the visual builder */
+  1246→  1246→                        if (!$('#vc-builder-app').length) return;
+  1247→  1247→
+  1248→  1248→                        VCB.section  = $('#vc-builder-section').val() || '';
+  1249→  1249→                        VCB.iframe   = document.getElementById('vc-builder-canvas');
+  1250→  1250→
+  1251→  1251→                        /* Parse settings JSON */
+  1252→  1252→                        try {
+  1253→  1253→                                var $json = $('#vc-builder-settings');
+  1254→  1254→                                if ($json.length) {
+  1255→  1255→                                        VCB.settings = JSON.parse($json.text()) || {};
+  1256→  1256→                                }
+  1257→  1257→                        } catch (err) {
+  1258→  1258→                                VCB.settings = {};
+  1259→  1259→                        }
+  1260→  1260→
+  1261→  1261→                        /* Bind all events */
+  1262→  1262→                        VCB.bindEvents();
+  1263→  1263→
+  1264→  1264→                        /* Listen for postMessage from iframe */
+  1265→  1265→                        window.addEventListener('message', VCB.onMessage);
+  1266→  1266→
+  1267→  1267→                        /* Widget editor is hidden by default (inline style), no empty state needed */
+  1268→  1268→
+  1269→  1269→                        /* ── Publish button: flush pending changes immediately ── */
+  1270→  1270→                        $(document).on('click', '#vc-publish-btn', function (e) {
+  1271→  1271→                                e.preventDefault();
+  1272→  1272→                                clearTimeout(VCB._saveTimer);
+  1273→  1273→                                VCB.saveChanges();
+  1274→  1274→                        });
+  1275→  1275→                }
+  1276→  1276→        };
+  1277→  1277→
+  1278→  1278→        /* Boot when DOM is ready */
+  1279→  1279→        $(document).ready(VCB.init);
+  1280→  1280→
+  1281→  1281→})(jQuery);

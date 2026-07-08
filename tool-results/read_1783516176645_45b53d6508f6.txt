@@ -1,0 +1,565 @@
+     1→/**
+     2→ * Velure Core — Admin JS v3.2
+     3→ * Elementor-inspired: sidebar nav, AJAX publish, templates, accordions, repeaters
+     4→ *
+     5→ * FIXES v3.2:
+     6→ *  - Nav: CSS-only panel switching (no .hide()/.show() conflicts)
+     7→ *  - Publish: robust form detection + serialized data with explicit nonce
+     8→ *  - Guard: graceful fallback if velureCoreAdmin missing
+     9→ */
+    10→(function($){
+    11→'use strict';
+    12→
+    13→var VC = {
+    14→        $form: null,
+    15→        unsaved: false,
+    16→        _initialForm: '',
+    17→        _toastTimer: null,
+    18→
+    19→        /* ═══════════════════════════════════════
+    20→           1. SIDEBAR NAVIGATION
+    21→           ═══════════════════════════════════════ */
+    22→        initNav: function() {
+    23→                var self = this;
+    24→                $(document).on('click', '.vc-nav-item', function(e){
+    25→                        e.preventDefault();
+    26→                        e.stopPropagation();
+    27→
+    28→                        var panel = $(this).attr('data-nav');
+    29→                        if (!panel) return;
+    30→
+    31→                        /* Update active state on nav items */
+    32→                        $('.vc-nav-item').removeClass('active');
+    33→                        $(this).addClass('active');
+    34→
+    35→                        /* Switch panels using ONLY CSS class — no .hide()/.show() */
+    36→                        $('.vc-section-panel').removeClass('active');
+    37→
+    38→                        var target = $('.vc-section-panel[data-panel="' + panel + '"]');
+    39→                        if (target.length) {
+    40→                                target.addClass('active');
+    41→                        }
+    42→
+    43→                        /* Update header */
+    44→                        var label = $(this).find('.vc-nav-item-label').text() || panel;
+    45→                        $('#vc-header-title').text(label);
+    46→                        $('#vc-breadcrumb-current').text(label);
+    47→
+    48→                        /* Scroll panel to top */
+    49→                        var panelEl = document.querySelector('.vc-panel');
+    50→                        if (panelEl) panelEl.scrollTop = 0;
+    51→
+    52→                        /* Init sortables on newly visible panel */
+    53→                        setTimeout(function(){
+    54→                                VC.initRepeaterSortable(target);
+    55→                        }, 60);
+    56→                });
+    57→        },
+    58→
+    59→        /* ═══════════════════════════════════════
+    60→           2. ACCORDIONS
+    61→           ═══════════════════════════════════════ */
+    62→        initAccordions: function() {
+    63→                $(document).on('click', '.vc-accordion-header', function(e){
+    64→                        e.stopPropagation();
+    65→                        $(this).closest('.vc-accordion-item').toggleClass('open');
+    66→                });
+    67→        },
+    68→
+    69→        /* ═══════════════════════════════════════
+    70→           3. REPEATER — Add / Remove / Sort
+    71→           ═══════════════════════════════════════ */
+    72→        _addRepeaterRow: function(templateEl, containerEl, label) {
+    73→                var clone = templateEl.clone().removeClass('vc-repeater-template').removeAttr('id').show();
+    74→                var idx = containerEl.find('.vc-repeater-row:not(.vc-repeater-template)').length;
+    75→
+    76→                clone.find('[name]').each(function(){
+    77→                        var name = $(this).attr('name');
+    78→                        if (!name) return;
+    79→                        name = name.replace(/\[\d+\]/g, '[' + idx + ']');
+    80→                        name = name.replace(/__INDEX__/g, idx);
+    81→                        name = name.replace(/__NUM__/g, (idx + 1));
+    82→                        $(this).attr('name', name);
+    83→                });
+    84→                clone.find('[data-index]').attr('data-index', idx);
+    85→
+    86→                clone.find('.vc-repeater-title').text((label || 'Element') + ' ' + (idx + 1));
+    87→                clone.addClass('open');
+    88→                containerEl.append(clone);
+    89→        },
+    90→
+    91→        initRepeaters: function() {
+    92→                var self = this;
+    93→
+    94→                /* Add button */
+    95→                $(document).on('click', '.vc-repeater-add', function(e){
+    96→                        e.preventDefault();
+    97→                        e.stopPropagation();
+    98→
+    99→                        var repeaterId = $(this).data('repeater');
+   100→                        var template = $('#' + repeaterId + '-template');
+   101→                        var container = $('#' + repeaterId);
+   102→
+   103→                        if (!template.length || !container.length) {
+   104→                                /* Fallback: search within parent */
+   105→                                var parent = $(this).closest('.vc-accordion-body, .vc-section-panel');
+   106→                                template = parent.find('.vc-repeater-template').first();
+   107→                                container = parent.find('.vc-repeater').first();
+   108→                        }
+   109→                        if (!template.length || !container.length) return;
+   110→
+   111→                        var label = template.data('label') || container.data('label') || 'Element';
+   112→                        self._addRepeaterRow(template, container, label);
+   113→                        self.markUnsaved();
+   114→                });
+   115→
+   116→                /* Remove row */
+   117→                $(document).on('click', '.vc-repeater-remove', function(e){
+   118→                        e.preventDefault();
+   119→                        e.stopPropagation();
+   120→                        var row = $(this).closest('.vc-repeater-row');
+   121→                        row.fadeOut(200, function(){ $(this).remove(); });
+   122→                        self.markUnsaved();
+   123→                });
+   124→
+   125→                /* Toggle collapse */
+   126→                $(document).on('click', '.vc-repeater-row-header', function(e){
+   127→                        if ($(e.target).closest('.vc-repeater-remove, .vc-repeater-toggle-btn').length) return;
+   128→                        $(this).closest('.vc-repeater-row').toggleClass('open');
+   129→                });
+   130→        },
+   131→
+   132→        /* Init sortable on visible repeaters — call after panel switch */
+   133→        initRepeaterSortable: function(container) {
+   134→                var self = this;
+   135→                var $containers = container ? container.find('.vc-repeater') : $('.vc-repeater');
+   136→                $containers.each(function(){
+   137→                        if ($(this).data('ui-sortable')) return; // already initialized
+   138→                        $(this).sortable({
+   139→                                handle: '.vc-repeater-handle',
+   140→                                items: '> .vc-repeater-row:not(.vc-repeater-template)',
+   141→                                opacity: 0.7,
+   142→                                placeholder: 'ui-sortable-placeholder',
+   143→                                update: function(){ self.markUnsaved(); }
+   144→                        });
+   145→                });
+   146→        },
+   147→
+   148→        /* ═══════════════════════════════════════
+   149→           4. MEDIA UPLOAD
+   150→           ═══════════════════════════════════════ */
+   151→        initMedia: function() {
+   152→                var self = this;
+   153→                $(document).on('click', '.vc-img-btn', function(e){
+   154→                        e.preventDefault();
+   155→                        e.stopPropagation();
+   156→                        var field = $(this).closest('.vc-image-field');
+   157→                        var wrap = field.find('.vc-img-wrap');
+   158→                        var input = field.find('.vc-img-id');
+   159→                        var removeBtn = field.find('.vc-img-remove');
+   160→
+   161→                        if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+   162→                                self.toast('WordPress Media Library non disponible.', 'error');
+   163→                                return;
+   164→                        }
+   165→
+   166→                        var frame = wp.media({
+   167→                                title: 'Choisir une image',
+   168→                                button: { text: 'Utiliser cette image' },
+   169→                                multiple: false,
+   170→                                library: { type: 'image' }
+   171→                        });
+   172→                        frame.on('select', function(){
+   173→                                var att = frame.state().get('selection').first().toJSON();
+   174→                                input.val(att.id);
+   175→                                wrap.html('<img src="' + att.url + '" class="vc-img-preview" />');
+   176→                                removeBtn.show();
+   177→                                self.markUnsaved();
+   178→                        });
+   179→                        frame.open();
+   180→                });
+   181→
+   182→                $(document).on('click', '.vc-img-remove', function(e){
+   183→                        e.preventDefault();
+   184→                        e.stopPropagation();
+   185→                        var field = $(this).closest('.vc-image-field');
+   186→                        var wrap = field.find('.vc-img-wrap');
+   187→                        var input = field.find('.vc-img-id');
+   188→                        wrap.html('<div class="vc-img-placeholder"><span class="vc-img-placeholder-icon">&#128247;</span>Cliquer ou glisser une image</div>');
+   189→                        input.val(0);
+   190→                        $(this).hide();
+   191→                        VC.markUnsaved();
+   192→                });
+   193→        },
+   194→
+   195→        /* ═══════════════════════════════════════
+   196→           5. RANGE SLIDERS
+   197→           ═══════════════════════════════════════ */
+   198→        initRanges: function() {
+   199→                $(document).on('input', '[data-range]', function(){
+   200→                        var val = $(this).val();
+   201→                        var display = $(this).closest('.vc-range-wrap').find('.vc-range-value');
+   202→                        if (display.length) {
+   203→                                var currentText = display.text();
+   204→                                var unit = currentText.replace(/[\d\s.,]+/, '').trim();
+   205→                                display.text(val + (unit ? ' ' + unit : ''));
+   206→                        }
+   207→                        VC.markUnsaved();
+   208→                });
+   209→        },
+   210→
+   211→        /* ═══════════════════════════════════════
+   212→           6. COLOR PICKERS
+   213→           ═══════════════════════════════════════ */
+   214→        initColors: function() {
+   215→                $(document).on('input', '[data-color]', function(){
+   216→                        var color = $(this).val();
+   217→                        $(this).closest('.vc-color-wrap').find('.vc-color-swatch').css('background', color);
+   218→                        var textInput = $(this).closest('.vc-color-wrap').find('[data-color-text]');
+   219→                        if (textInput.length) textInput.val(color);
+   220→                        VC.markUnsaved();
+   221→                });
+   222→                $(document).on('change', '[data-color-text]', function(){
+   223→                        var color = $(this).val();
+   224→                        if (/^#[0-9a-fA-F]{6}$/.test(color)) {
+   225→                                $(this).closest('.vc-color-wrap').find('[data-color]').val(color);
+   226→                                $(this).closest('.vc-color-wrap').find('.vc-color-swatch').css('background', color);
+   227→                        }
+   228→                        VC.markUnsaved();
+   229→                });
+   230→        },
+   231→
+   232→        /* ═══════════════════════════════════════
+   233→           7. SECTION ORDER SORTABLE
+   234→           ═══════════════════════════════════════ */
+   235→        initSectionOrder: function() {
+   236→                var self = this;
+   237→                $('.vc-section-order-list').sortable({
+   238→                        handle: '.vc-section-order-handle',
+   239→                        axis: 'y',
+   240→                        opacity: 0.7,
+   241→                        placeholder: 'ui-sortable-placeholder',
+   242→                        update: function(){ self.markUnsaved(); }
+   243→                });
+   244→                $('.vc-section-order-list input').on('mousedown', function(e){ e.stopPropagation(); });
+   245→        },
+   246→
+   247→        /* ═══════════════════════════════════════
+   248→           8. HERO SIDE BLOCKS TOGGLE
+   249→           ═══════════════════════════════════════ */
+   250→        initConditional: function() {
+   251→                $(document).on('change', '[name="hero_show_side"]', function(){
+   252→                        var el = document.getElementById('vc-hero-side-blocks');
+   253→                        if (el) el.style.display = this.checked ? '' : 'none';
+   254→                });
+   255→        },
+   256→
+   257→        /* ═══════════════════════════════════════
+   258→           9. TEMPLATES SYSTEM
+   259→           ═══════════════════════════════════════ */
+   260→        initTemplates: function() {
+   261→                var self = this;
+   262→                $(document).on('click', '.vc-template-card', function(e){
+   263→                        e.preventDefault();
+   264→                        e.stopPropagation();
+   265→                        if (!confirm('Appliquer ce modele ? Les reglages actuels de cette section seront remplaces.')) return;
+   266→
+   267→                        var section = $(this).data('template-section');
+   268→                        var name = $(this).data('template');
+   269→                        var templates = {};
+   270→                        try {
+   271→                                templates = JSON.parse($('#vc-templates-data').text() || '{}');
+   272→                        } catch(ex) {
+   273→                                self.toast('Erreur de lecture des modeles.', 'error');
+   274→                                return;
+   275→                        }
+   276→
+   277→                        var sectionTemplates = templates[section] || [];
+   278→                        var tmpl = null;
+   279→                        for (var i = 0; i < sectionTemplates.length; i++) {
+   280→                                if (sectionTemplates[i].name === name) { tmpl = sectionTemplates[i]; break; }
+   281→                        }
+   282→                        if (!tmpl || !tmpl.data) {
+   283→                                self.toast('Modele introuvable.', 'error');
+   284→                                return;
+   285→                        }
+   286→
+   287→                        /* Fill form fields from template data */
+   288→                        var skipKeys = ['hero_slides','trust_features','brand_names','instagram_images'];
+   289→                        $.each(tmpl.data, function(key, val){
+   290→                                if (skipKeys.indexOf(key) !== -1) return;
+   291→                                var field = $('[name="' + key + '"]');
+   292→                                if (field.length) {
+   293→                                        if (field.is(':checkbox')) {
+   294→                                                field.prop('checked', !!val);
+   295→                                        } else {
+   296→                                                field.val(val).trigger('change');
+   297→                                        }
+   298→                                }
+   299→                        });
+   300→
+   301→                        /* Trigger conditional fields */
+   302→                        $('[name="hero_show_side"]').trigger('change');
+   303→
+   304→                        self.markUnsaved();
+   305→                        self.toast('Modele "' + name + '" applique !', 'success');
+   306→                });
+   307→        },
+   308→
+   309→        /* ═══════════════════════════════════════
+   310→           10. UNSAVED CHANGES TRACKING
+   311→           ═══════════════════════════════════════ */
+   312→        markUnsaved: function() {
+   313→                VC.unsaved = true;
+   314→                $('#vc-unsaved-dot').addClass('active');
+   315→        },
+   316→        markSaved: function() {
+   317→                VC.unsaved = false;
+   318→                $('#vc-unsaved-dot').removeClass('active');
+   319→        },
+   320→
+   321→        /* ═══════════════════════════════════════
+   322→           11. AJAX PUBLISH
+   323→           ═══════════════════════════════════════ */
+   324→        initPublish: function() {
+   325→                var self = this;
+   326→
+   327→                /* Re-find the form every time (more reliable than caching) */
+   328→                $('#vc-publish-btn').on('click', function(e){
+   329→                        e.preventDefault();
+   330→
+   331→                        var $form = $('#vc-settings-form');
+   332→                        if (!$form.length) {
+   333→                                self.toast('Formulaire introuvable. Rechargez la page.', 'error');
+   334→                                console.error('[Velure Core] #vc-settings-form not found');
+   335→                                return;
+   336→                        }
+   337→
+   338→                        var btn = $(this);
+   339→                        btn.prop('disabled', true).html('<span style="display:inline-flex;align-items:center;gap:6px"><span class="vc-spinner"></span> Publication...</span>');
+   340→                        self.toast('Publication en cours...', 'saving');
+   341→
+   342→                        /* Build data object explicitly for reliability */
+   343→                        var formData = $form.serialize();
+   344→                        var ajaxUrl = (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php';
+   345→
+   346→                        $.ajax({
+   347→                                url: ajaxUrl,
+   348→                                type: 'POST',
+   349→                                data: formData,
+   350→                                dataType: 'json',
+   351→                                success: function(res){
+   352→                                        if (res && res.success) {
+   353→                                                self.markSaved();
+   354→                                                self.toast(res.data && res.data.message ? res.data.message : 'Publie !', 'success');
+   355→                                                $('.vc-footer-status span:last-child').text('Derniere sauvegarde : ' + new Date().toLocaleTimeString());
+   356→                                                VC._initialForm = $form.serialize();
+   357→                                        } else {
+   358→                                                var errMsg = (res && res.data && res.data.message) ? res.data.message : 'Erreur lors de la publication.';
+   359→                                                self.toast(errMsg, 'error');
+   360→                                                console.error('[Velure Core] Save error:', res);
+   361→                                        }
+   362→                                },
+   363→                                error: function(xhr, status, err){
+   364→                                        self.toast('Erreur reseau (' + status + '). Veuillez reessayer.', 'error');
+   365→                                        console.error('[Velure Core] AJAX error:', status, err);
+   366→                                },
+   367→                                complete: function(){
+   368→                                        btn.prop('disabled', false).html('&#10003; Publier');
+   369→                                }
+   370→                        });
+   371→                });
+   372→
+   373→                /* Discard */
+   374→                $('#vc-discard-btn').on('click', function(){
+   375→                        if (VC.unsaved && !confirm('Voulez-vous vraiment annuler toutes les modifications non publiees ?')) return;
+   376→                        window.location.reload();
+   377→                });
+   378→        },
+   379→
+   380→        /* ═══════════════════════════════════════
+   381→           12. IMPORT / EXPORT
+   382→           ═══════════════════════════════════════ */
+   383→        initIO: function() {
+   384→                var self = this;
+   385→                var ajaxUrl = (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php';
+   386→                var nonce = (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.nonce : '';
+   387→
+   388→                /* Export */
+   389→                $(document).on('click', '#vc-export-btn', function(){
+   390→                        $.post(ajaxUrl, {
+   391→                                action: 'velure_core_get_settings',
+   392→                                _wpnonce: nonce
+   393→                        }, function(res){
+   394→                                if (res && res.success) {
+   395→                                        $('#vc-export-text').val(JSON.stringify(res.data, null, 2));
+   396→                                        $('#vc-export-output').show();
+   397→                                        $('#vc-import-input').hide();
+   398→                                }
+   399→                        });
+   400→                });
+   401→
+   402→                /* Copy */
+   403→                $(document).on('click', '#vc-copy-export', function(){
+   404→                        var ta = document.getElementById('vc-export-text');
+   405→                        if (ta) {
+   406→                                ta.select();
+   407→                                try { document.execCommand('copy'); } catch(e){}
+   408→                        }
+   409→                        var btn = $(this);
+   410→                        btn.text('\u2713 Copie !');
+   411→                        setTimeout(function(){ btn.text('&#128203; Copier'); }, 2000);
+   412→                });
+   413→
+   414→                /* Show import */
+   415→                $(document).on('click', '#vc-import-btn', function(){
+   416→                        $('#vc-import-input').toggle();
+   417→                        $('#vc-export-output').hide();
+   418→                });
+   419→
+   420→                /* Apply import */
+   421→                $(document).on('click', '#vc-do-import', function(){
+   422→                        var json = $('#vc-import-text').val().trim();
+   423→                        if (!json) { self.toast('Veuillez coller du JSON.', 'error'); return; }
+   424→                        try {
+   425→                                JSON.parse(json);
+   426→                        } catch(e) {
+   427→                                self.toast('JSON invalide.', 'error');
+   428→                                return;
+   429→                        }
+   430→                        $.post(ajaxUrl, {
+   431→                                action: 'velure_core_import_settings',
+   432→                                _wpnonce: nonce,
+   433→                                settings: json
+   434→                        }, function(res){
+   435→                                if (res && res.success) {
+   436→                                        self.toast('Import reussi ! Rechargement...', 'success');
+   437→                                        setTimeout(function(){ window.location.reload(); }, 1500);
+   438→                                } else {
+   439→                                        self.toast((res && res.data && res.data.message) ? res.data.message : "Erreur d'import.", 'error');
+   440→                                }
+   441→                        });
+   442→                });
+   443→
+   444→                /* Reset */
+   445→                $(document).on('click', '#vc-reset-btn', function(){
+   446→                        if (!confirm('Reinitialiser tous les reglages aux valeurs par defaut ? Cette action est irreversible.')) return;
+   447→                        $.post(ajaxUrl, {
+   448→                                action: 'velure_core_reset',
+   449→                                _wpnonce: nonce
+   450→                        }, function(res){
+   451→                                if (res && res.success) {
+   452→                                        self.toast('Reinitialisation reussie. Rechargement...', 'success');
+   453→                                        setTimeout(function(){ window.location.reload(); }, 1500);
+   454→                                }
+   455→                        });
+   456→                });
+   457→        },
+   458→
+   459→        /* ═══════════════════════════════════════
+   460→           13. TOAST NOTIFICATIONS
+   461→           ═══════════════════════════════════════ */
+   462→        toast: function(msg, type) {
+   463→                var el = $('#vc-toast');
+   464→                if (!el.length) {
+   465→                        /* Fallback: create toast if missing */
+   466→                        $('body').append('<div id="vc-toast" class="vc-toast"></div>');
+   467→                        el = $('#vc-toast');
+   468→                }
+   469→                var icon = '';
+   470→                if (type === 'success') icon = '\u2713 ';
+   471→                else if (type === 'error') icon = '\u2717 ';
+   472→                else if (type === 'saving') icon = '\u23F3 ';
+   473→
+   474→                el.removeClass('show vc-toast-success vc-toast-error vc-toast-saving');
+   475→                if (type) el.addClass('vc-toast-' + type);
+   476→                el.html(icon + msg).addClass('show');
+   477→                clearTimeout(VC._toastTimer);
+   478→                VC._toastTimer = setTimeout(function(){ el.removeClass('show'); }, 4000);
+   479→        },
+   480→
+   481→        /* ═══════════════════════════════════════
+   482→           14. TRACK CHANGES
+   483→           ═══════════════════════════════════════ */
+   484→        initChangeTracking: function() {
+   485→                if (!VC.$form || !VC.$form.length) return;
+   486→                VC._initialForm = VC.$form.serialize();
+   487→                VC.$form.on('change input', 'input, select, textarea', function(){
+   488→                        if (VC.$form.serialize() !== VC._initialForm) { VC.markUnsaved(); }
+   489→                        else { VC.markSaved(); }
+   490→                });
+   491→                $(window).on('beforeunload', function(){
+   492→                        if (VC.unsaved) return true;
+   493→                });
+   494→        },
+   495→
+   496→        /* ═══════════════════════════════════════
+   497→           15. VISUAL BUILDER — ROUTING + RESPONSIVE
+   498→           ═══════════════════════════════════════ */
+   499→        initBuilder: function() {
+   500→                /* Only run if we're in builder mode (the #vc-builder-app wrapper exists) */
+   501→                var $builderApp = $('#vc-builder-app');
+   502→                if ( ! $builderApp.length ) return;
+   503→
+   504→                var self = this;
+   505→
+   506→                /* ── Responsive toggle ── */
+   507→                $(document).on('click', '.vc-builder-resp-btn', function(e){
+   508→                        e.preventDefault();
+   509→                        $('.vc-builder-resp-btn').removeClass('active');
+   510→                        $(this).addClass('active');
+   511→                        var width = $(this).data('width');
+   512→                        var $wrap = $('#vc-builder-canvas-wrap');
+   513→                        if ( width === '100%' ) {
+   514→                                $wrap.css('max-width', 'none');
+   515→                                $wrap.css('padding', '0');
+   516→                        } else {
+   517→                                var numW = parseInt(width, 10);
+   518→                                $wrap.css('max-width', numW + 'px');
+   519→                                $wrap.css('padding', '0 20px');
+   520→                        }
+   521→                        /* Resize the iframe container to center it */
+   522→                        $wrap.css('margin', '0 auto');
+   523→                });
+   524→
+   525→                /* ── Toast for builder context ── */
+   526→                self.toast('Mode Visual Builder actif. Canvas charge...', 'saving');
+   527→        },
+   528→
+   529→        /* ═══════════════════════════════════════
+   530→           INIT
+   531→           ═══════════════════════════════════════ */
+   532→        init: function() {
+   533→                /* Route: Builder mode or Classic mode */
+   534→                var isBuilder = $('#vc-builder-app').length > 0;
+   535→
+   536→                if ( isBuilder ) {
+   537→                        VC.initBuilder();
+   538→                        VC.initPublish();
+   539→                        return;
+   540→                }
+   541→
+   542→                /* Classic admin mode */
+   543→                VC.$form = $('#vc-settings-form');
+   544→
+   545→                VC.initNav();
+   546→                VC.initAccordions();
+   547→                VC.initRepeaters();
+   548→                VC.initMedia();
+   549→                VC.initRanges();
+   550→                VC.initColors();
+   551→                VC.initSectionOrder();
+   552→                VC.initConditional();
+   553→                VC.initTemplates();
+   554→                VC.initPublish();
+   555→                VC.initIO();
+   556→                VC.initChangeTracking();
+   557→
+   558→                /* Init sortable on the currently visible panel */
+   559→                VC.initRepeaterSortable($('.vc-section-panel.active'));
+   560→        }
+   561→};
+   562→
+   563→$(document).ready(VC.init);
+   564→
+   565→})(jQuery);

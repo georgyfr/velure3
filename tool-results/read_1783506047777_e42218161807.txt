@@ -1,0 +1,501 @@
+     1→<?php
+     2→/**
+     3→ * Velure Core — Data Helpers & Fallbacks
+     4→ * @package VelureCore
+     5→ */
+     6→
+     7→if ( ! defined( 'ABSPATH' ) ) exit;
+     8→
+     9→/* ═══════════════════════════════════════════════
+    10→   1. GENERIC HELPERS
+    11→   ═══════════════════════════════════════════════ */
+    12→
+    13→function velure_core_get_image_url( $img, $fallback = '' ) {
+    14→        if ( empty( $img ) ) return $fallback;
+    15→        if ( is_array( $img ) ) return isset( $img['url'] ) ? $img['url'] : $fallback;
+    16→        if ( is_numeric( $img ) ) return wp_get_attachment_url( (int) $img ) ?: $fallback;
+    17→        return esc_url( $img );
+    18→}
+    19→
+    20→function velure_core_opt( $key, $fallback = '' ) {
+    21→        static $settings = null;
+    22→        if ( null === $settings ) {
+    23→                $settings = get_option( VELURE_CORE_OPTION, array() );
+    24→                if ( ! is_array( $settings ) ) $settings = array();
+    25→        }
+    26→        $val = isset( $settings[ $key ] ) ? $settings[ $key ] : null;
+    27→        if ( $val === null || $val === '' ) return $fallback;
+    28→        if ( is_array( $val ) && empty( $val ) ) return $fallback;
+    29→        return $val;
+    30→}
+    31→
+    32→function velure_core_opt_bool( $key, $fallback = true ) {
+    33→        static $settings = null;
+    34→        if ( null === $settings ) {
+    35→                $settings = get_option( VELURE_CORE_OPTION, array() );
+    36→                if ( ! is_array( $settings ) ) $settings = array();
+    37→        }
+    38→        if ( ! isset( $settings[ $key ] ) ) return $fallback;
+    39→        return (bool) $settings[ $key ];
+    40→}
+    41→
+    42→function velure_core_svg_allowed() {
+    43→        return array(
+    44→                'svg'      => array( 'width','height','viewBox','fill','stroke','stroke-width','stroke-linecap','stroke-linejoin','xmlns','class' ),
+    45→                'rect'     => array( 'x','y','width','height','rx','ry','fill','stroke' ),
+    46→                'circle'   => array( 'cx','cy','r','fill','stroke' ),
+    47→                'polygon'  => array( 'points','fill' ),
+    48→                'polyline' => array( 'points','fill','stroke' ),
+    49→                'path'     => array( 'd','fill','stroke' ),
+    50→                'line'     => array( 'x1','y1','x2','y2','stroke' ),
+    51→        );
+    52→}
+    53→
+    54→function velure_core_bg_class( $style ) {
+    55→        $map = array( 'soft'=>'velure-section-soft','muted'=>'velure-section-muted','dark'=>'velure-section-dark','secondary'=>'velure-section-secondary','base'=>'' );
+    56→        return isset( $map[ $style ] ) ? $map[ $style ] : '';
+    57→}
+    58→
+    59→function velure_core_star_svg() {
+    60→        return '<svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+    61→}
+    62→
+    63→function velure_core_theme_uri() {
+    64→        return defined( 'VELURE3_URI' ) ? VELURE3_URI : '';
+    65→}
+    66→
+    67→/* ═══════════════════════════════════════════════
+    68→   2. SECTION VISIBILITY & ORDER
+    69→   ═══════════════════════════════════════════════ */
+    70→
+    71→function velure_core_get_section_visibility() {
+    72→        return array(
+    73→                'hero'         => velure_core_opt_bool( 'show_hero', true ),
+    74→                'features'     => velure_core_opt_bool( 'show_features', true ),
+    75→                'categories'   => velure_core_opt_bool( 'show_categories', true ),
+    76→                'products'     => velure_core_opt_bool( 'show_products', true ),
+    77→                'split_banner' => velure_core_opt_bool( 'show_split_banner', true ),
+    78→                'marquee'      => velure_core_opt_bool( 'show_marquee', true ),
+    79→                'testimonials' => velure_core_opt_bool( 'show_testimonials', true ),
+    80→                'blog'         => velure_core_opt_bool( 'show_blog', true ),
+    81→                'instagram'    => velure_core_opt_bool( 'show_instagram', true ),
+    82→        );
+    83→}
+    84→
+    85→function velure_core_get_ordered_sections() {
+    86→        $default_order = array( 'hero','features','categories','products','split_banner','marquee','testimonials','blog','instagram' );
+    87→        $custom_order  = velure_core_opt( 'section_order', array() );
+    88→        if ( ! empty( $custom_order ) && is_array( $custom_order ) ) {
+    89→                $order = array_values( $custom_order );
+    90→        } else {
+    91→                $order = $default_order;
+    92→        }
+    93→        $visibility = velure_core_get_section_visibility();
+    94→        return array_filter( $order, function( $sec ) use ( $visibility ) {
+    95→                return isset( $visibility[ $sec ] ) && $visibility[ $sec ];
+    96→        } );
+    97→}
+    98→
+    99→/* ═══════════════════════════════════════════════
+   100→   3. DEFAULT FEATURE ICONS
+   101→   ═══════════════════════════════════════════════ */
+   102→function velure_core_default_feature_icons() {
+   103→        return array(
+   104→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+   105→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+   106→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+   107→                '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+   108→        );
+   109→}
+   110→
+   111→/* ═══════════════════════════════════════════════
+   112→   4. SECTION DATA FUNCTIONS
+   113→   ═══════════════════════════════════════════════ */
+   114→
+   115→function velure_core_get_hero_data() {
+   116→        $uri = velure_core_theme_uri();
+   117→        $slides_raw = velure_core_opt( 'hero_slides', array() );
+   118→        $slides = array();
+   119→        if ( ! empty( $slides_raw ) && is_array( $slides_raw ) ) {
+   120→                foreach ( $slides_raw as $s ) {
+   121→                        if ( empty( $s['image'] ) && empty( $s['title'] ) ) continue;
+   122→                        $slides[] = array(
+   123→                                'image'     => velure_core_get_image_url( $s['image'] ?? 0 ),
+   124→                                'eyebrow'   => $s['eyebrow'] ?? '',
+   125→                                'title'     => $s['title'] ?? '',
+   126→                                'subtitle'  => $s['subtitle'] ?? '',
+   127→                                'cta_text'  => $s['cta_text'] ?? '',
+   128→                                'cta_link'  => $s['cta_link'] ?? '#',
+   129→                                'cta_style' => $s['cta_style'] ?? 'primary',
+   130→                        );
+   131→                }
+   132→        }
+   133→        if ( empty( $slides ) ) {
+   134→                $slides = array(
+   135→                        array( 'image'=>$uri.'/assets/images/hero.jpg','eyebrow'=>'Nouvelle Collection','title'=>"L'Elegance<br/>Minimaliste",'subtitle'=>'Nouvelle Collection Automne 2026','cta_text'=>'DECOUVRIR','cta_link'=>'/boutique/','cta_style'=>'primary' ),
+   136→                        array( 'image'=>$uri.'/assets/images/banner-collection.jpg','eyebrow'=>'Notre Engagement','title'=>"Matieres<br/>Durables",'subtitle'=>'Vetements ethiques concus pour durer','cta_text'=>'NOTRE ENGAGEMENT','cta_link'=>'/notre-engagement/','cta_style'=>'primary' ),
+   137→                );
+   138→        }
+   139→        $show_side = velure_core_opt_bool( 'hero_show_side', false );
+   140→        $side_blocks = array();
+   141→        if ( $show_side ) {
+   142→                $side_blocks = array(
+   143→                        'bestseller' => array(
+   144→                                'image'=>$velure_core_get_image_url(velure_core_opt('hs_bestseller_image',0),$uri.'/assets/images/category-femme.jpg'),
+   145→                                'label'=>velure_core_opt('hs_bestseller_label','Best-Seller'),
+   146→                                'title'=>velure_core_opt('hs_bestseller_title','Sac Elegance'),
+   147→                                'price'=>velure_core_opt('hs_bestseller_price','285,00 EUR'),
+   148→                                'cta_text'=>velure_core_opt('hs_bestseller_cta','VOIR LE PRODUIT'),
+   149→                                'cta_link'=>velure_core_opt('hs_bestseller_link','#'),
+   150→                        ),
+   151→                        'category' => array(
+   152→                                'image'=>$velure_core_get_image_url(velure_core_opt('hs_category_image',0),$uri.'/assets/images/category-accessoires.jpg'),
+   153→                                'label'=>velure_core_opt('hs_category_label','Capsule'),
+   154→                                'title'=>velure_core_opt('hs_category_title','Les Accessoires Essentiels'),
+   155→                                'cta_link'=>velure_core_opt('hs_category_cta_link','/categorie/accessoires/'),
+   156→                        ),
+   157→                );
+   158→        }
+   159→        return array(
+   160→                'height'=>$velure_core_opt('hero_height','standard'),
+   161→                'autoplay'=>velure_core_opt_bool('hero_autoplay',true),
+   162→                'autoplay_speed'=>absint(velure_core_opt('hero_autoplay_speed',6000)),
+   163→                'overlay_opacity'=>absint(velure_core_opt('hero_overlay_opacity',40)),
+   164→                'text_align'=>velure_core_opt('hero_text_align','left'),
+   165→                'text_color'=>velure_core_opt('hero_text_color','light'),
+   166→                'slides'=>$slides,'show_side'=>$show_side,'side_blocks'=>$side_blocks,
+   167→        );
+   168→}
+   169→
+   170→function velure_core_get_features() {
+   171→        $features = velure_core_opt( 'trust_features', array() );
+   172→        if ( ! empty( $features ) && is_array( $features ) ) {
+   173→                $out = array();
+   174→                foreach ( $features as $f ) {
+   175→                        if ( empty( $f['title'] ) ) continue;
+   176→                        $out[] = array( 'icon'=>$f['icon_svg']??'','title'=>$f['title'],'desc'=>$f['description']??'' );
+   177→                }
+   178→                if ( ! empty( $out ) ) return $out;
+   179→        }
+   180→        $icons = velure_core_default_feature_icons();
+   181→        return array(
+   182→                array('icon'=>$icons[0],'title'=>'Livraison Express','desc'=>'Sous 24-48h en France'),
+   183→                array('icon'=>$icons[1],'title'=>'Retours Gratuits','desc'=>'Sous 30 jours, sans frais'),
+   184→                array('icon'=>$icons[2],'title'=>'Paiement Securise','desc'=>'SSL & cryptage 256 bits'),
+   185→                array('icon'=>$icons[3],'title'=>'Service Client 7j/7','desc'=>'Par chat, email ou telephone'),
+   186→        );
+   187→}
+   188→
+   189→function velure_core_get_product_categories() {
+   190→        $uri = velure_core_theme_uri();
+   191→        $count = absint( velure_core_opt( 'cat_display_count', 10 ) );
+   192→        if ( class_exists( 'WooCommerce' ) ) {
+   193→                $default_cat = (int) get_option( 'default_product_cat', 0 );
+   194→                $terms = get_terms( array('taxonomy'=>'product_cat','hide_empty'=>false,'exclude'=>$default_cat,'number'=>$count,'orderby'=>'count','order'=>'DESC') );
+   195→                if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+   196→                        return array_map( function( $term ) use ( $uri ) {
+   197→                                $tid = get_term_meta( $term->term_id, 'thumbnail_id', true );
+   198→                                return array('name'=>$term->name,'slug'=>$term->slug,'link'=>get_term_link($term),'image'=>$tid?wp_get_attachment_url($tid):$uri.'/assets/images/category-femme.jpg','count'=>$term->count);
+   199→                        }, $terms );
+   200→                }
+   201→        }
+   202→        return array(
+   203→                array('name'=>'Femme','slug'=>'femme','link'=>home_url('/categorie-femme/'),'image'=>$uri.'/assets/images/category-femme.jpg','count'=>0),
+   204→                array('name'=>'Homme','slug'=>'homme','link'=>home_url('/categorie-homme/'),'image'=>$uri.'/assets/images/category-homme.jpg','count'=>0),
+   205→                array('name'=>'Accessoires','slug'=>'accessoires','link'=>home_url('/categorie/accessoires/'),'image'=>$uri.'/assets/images/category-accessoires.jpg','count'=>0),
+   206→                array('name'=>'Chaussures','slug'=>'chaussures','link'=>home_url('/categorie/chaussures/'),'image'=>$uri.'/assets/images/category-chaussures.jpg','count'=>0),
+   207→                array('name'=>'Maroquinerie','slug'=>'maroquinerie','link'=>home_url('/categorie/maroquinerie/'),'image'=>$uri.'/assets/images/category-maroquinerie.jpg','count'=>0),
+   208→                array('name'=>'Sportswear','slug'=>'sportswear','link'=>home_url('/categorie/sportswear/'),'image'=>$uri.'/assets/images/category-sportswear.jpg','count'=>0),
+   209→        );
+   210→}
+   211→
+   212→function velure_core_get_featured_products() {
+   213→        $uri = velure_core_theme_uri();
+   214→        $mode = velure_core_opt( 'prod_mode', 'auto' );
+   215→        $count = absint( velure_core_opt( 'featured_products_count', 8 ) );
+   216→        $sort = velure_core_opt( 'prod_sort', 'date' );
+   217→        if ( 'auto' === $mode && class_exists( 'WooCommerce' ) ) {
+   218→                $wc_args = array('limit'=>$count,'visibility'=>'visible','return'=>'objects');
+   219→                switch($sort){case'popularity':$wc_args['orderby']='popularity';break;case'rating':$wc_args['orderby']='rating';break;case'rand':$wc_args['orderby']='rand';break;default:$wc_args['orderby']='date';$wc_args['order']='DESC';break;}
+   220→                $wc_products = wc_get_products($wc_args);
+   221→                if(!empty($wc_products)){return array_map(function($p){$img_id=$p->get_image_id();$badge='';if($p->is_on_sale())$badge='<span class="velure-product-card-badge sale">Promo</span>';elseif($p->is_featured())$badge='<span class="velure-product-card-badge new">Nouveau</span>';return array('name'=>$p->get_name(),'link'=>$p->get_permalink(),'image'=>$img_id?wp_get_attachment_url($img_id):'','price_html'=>$p->get_price_html(),'badge'=>$badge);},$wc_products);}
+   222→        }
+   223→        $demo=array(array('name'=>'Manteau Camel','price'=>'485,00 EUR','badge'=>'<span class="velure-product-card-badge new">Nouveau</span>','img'=>'product-manteau-camel.jpg'),array('name'=>'Blazer Ivoire','price'=>'320,00 EUR','badge'=>'','img'=>'product-blazer-ivoire.jpg'),array('name'=>'Robe Noire','price'=>'275,00 EUR','badge'=>'','img'=>'product-robe-noire.jpg'),array('name'=>'Pull Beige','price'=>'145,00 EUR','badge'=>'<span class="velure-product-card-badge sale">Promo</span>','img'=>'product-pull-beige.jpg'),array('name'=>'Pantalon Gris','price'=>'195,00 EUR','badge'=>'','img'=>'product-pantalon-gris.jpg'),array('name'=>'Sac Cuir','price'=>'385,00 EUR','badge'=>'','img'=>'product-sac-cuir.jpg'),array('name'=>'Bottines Brun','price'=>'265,00 EUR','badge'=>'<span class="velure-product-card-badge new">Nouveau</span>','img'=>'product-bottines-brun.jpg'),array('name'=>'Chemise Blanc','price'=>'125,00 EUR','badge'=>'','img'=>'product-chemise-blanc.jpg'));
+   224→        return array_map(function($p)use($uri){return array('name'=>$p['name'],'link'=>home_url('/boutique/'),'image'=>$uri.'/assets/images/'.$p['img'],'price_html'=>$p['price'],'badge'=>$p['badge']);},array_slice($demo,0,$count));
+   225→}
+   226→
+   227→function velure_core_get_split_banner() {
+   228→        $uri = velure_core_theme_uri();
+   229→        return array(
+   230→                'layout'=>velure_core_opt('sb_layout','50-50'),
+   231→                'left'=>array('image'=>velure_core_get_image_url(velure_core_opt('sb_left_image',0),$uri.'/assets/images/banner-collection.jpg'),'eyebrow'=>velure_core_opt('sb_left_eyebrow','Collection AW25'),'title'=>velure_core_opt('sb_left_title','La Nouvelle Collection'),'desc'=>velure_core_opt('sb_left_desc','Des silhouettes audacieuses et des matieres nobles pour une saison inoubliable.'),'cta_text'=>velure_core_opt('sb_left_cta_text','Decouvrir'),'cta_link'=>velure_core_opt('sb_left_cta_link','/new-collection/'),'cta_style'=>velure_core_opt('sb_left_cta_style','gold'),'style'=>velure_core_opt('sb_left_style','dark')),
+   232→                'right'=>array('image'=>velure_core_get_image_url(velure_core_opt('sb_right_image',0),$uri.'/assets/images/category-accessoires.jpg'),'eyebrow'=>velure_core_opt('sb_right_eyebrow','Edition Limitee'),'title'=>velure_core_opt('sb_right_title',"Accessoires d'Exception"),'desc'=>velure_core_opt('sb_right_desc','Sacs, bijoux et ceintures signes par les meilleurs artisans.'),'cta_text'=>velure_core_opt('sb_right_cta_text','Explorer'),'cta_link'=>velure_core_opt('sb_right_cta_link','/categorie/accessoires/'),'cta_style'=>velure_core_opt('sb_right_cta_style','outline'),'style'=>velure_core_opt('sb_right_style','light')),
+   233→        );
+   234→}
+   235→
+   236→function velure_core_get_brands() {
+   237→        $brands = velure_core_opt( 'brand_names', array() );
+   238→        if ( ! empty( $brands ) && is_array( $brands ) ) {
+   239→                $out = array();
+   240→                foreach ( $brands as $b ) { $name = $b['name'] ?? ''; if ( $name ) $out[] = strtoupper( $name ); }
+   241→                if ( ! empty( $out ) ) return $out;
+   242→        }
+   243→        return array( 'ELIE SAAB','VALENTINO','BOTTEGA VENETA','SAINT LAURENT','ACNE STUDIOS','THE ROW','LOEWE','RICK OWENS' );
+   244→}
+   245→
+   246→function velure_core_get_testimonials( $count = 3 ) {
+   247→        $posts = get_posts(array('numberposts'=>$count,'post_type'=>'velure_testimonial','post_status'=>'publish','orderby'=>'date','order'=>'DESC'));
+   248→        if(!empty($posts)){return array_map(function($p){return array('text'=>wp_trim_words($p->post_content,40,'...'),'author'=>get_the_title($p),'role'=>get_post_meta($p->ID,'_velure_role',true),'stars'=>(int)get_post_meta($p->ID,'_velure_stars',true)?:5);},$posts);}
+   249→        return array(array('text'=>"La qualite des matieres est exceptionnelle. Mon manteau en cachemire est devenu ma piece preferee.",'author'=>'Camille D.','role'=>'Cliente fidele depuis 2023','stars'=>5),array('text'=>"J'ai commande un blazer pour un evenement et j'ai ete bluffee par la coupe et la finition.",'author'=>'Antoine M.','role'=>'Achat verifie','stars'=>5),array('text'=>'Velure est devenue ma reference mode. Les pieces sont intemporelles et la taille guide est tres fiable.','author'=>'Sophie L.','role'=>'Cliente Premium','stars'=>5));
+   250→}
+   251→
+   252→function velure_core_get_blog_posts( $count = 3 ) {
+   253→        $uri = velure_core_theme_uri();
+   254→        $posts = get_posts(array('numberposts'=>$count,'post_type'=>'post','post_status'=>'publish','orderby'=>'date','order'=>'DESC'));
+   255→        if(!empty($posts)){return array_map(function($p){$img_id=get_post_thumbnail_id($p->ID);$cats=get_the_category($p->ID);return array('title'=>get_the_title($p),'excerpt'=>wp_trim_words($p->post_excerpt?:$p->post_content,20),'link'=>get_permalink($p),'image'=>$img_id?wp_get_attachment_url($img_id):'','date'=>get_the_date('d M Y',$p),'category'=>!empty($cats)?$cats[0]->name:'');},$posts);}
+   256→        $demo=array(array('title'=>'Tendances Automne/Hiver 2025','category'=>'Tendances','date'=>'15 Jan 2025','excerpt'=>'Les couleurs, coupes et matieres qui dominent cette saison.','img'=>'blog-tendances-aw25.jpg'),array('title'=>'Capsule Garderobe Ideale','category'=>'Style','date'=>'8 Jan 2025','excerpt'=>'Construisez une garde-robe capsule de 15 pieces.','img'=>'blog-capsule-garderobe.jpg'),array('title'=>'Entretien du Cachemire','category'=>'Entretien','date'=>'2 Jan 2025','excerpt'=>"Nos conseils d'experts pour laver, secher et ranger vos pieces en cachemire.",'img'=>'blog-cachemire-entretien.jpg'));
+   257→        return array_map(function($p)use($uri){return array('title'=>$p['title'],'excerpt'=>$p['excerpt'],'link'=>home_url('/blog/'),'image'=>$uri.'/assets/images/'.$p['img'],'date'=>$p['date'],'category'=>$p['category']);},array_slice($demo,0,$count));
+   258→}
+   259→
+   260→function velure_core_get_instagram_items() {
+   261→        $uri = velure_core_theme_uri();
+   262→        $items = velure_core_opt( 'instagram_images', array() );
+   263→        if ( ! empty( $items ) && is_array( $items ) ) {
+   264→                $ig_url = velure_core_opt( 'instagram_url', 'https://instagram.com/' );
+   265→                $out = array();
+   266→                foreach ( $items as $item ) {
+   267→                        if ( empty( $item['image'] ) ) continue;
+   268→                        $out[] = array('image'=>velure_core_get_image_url($item['image']),'link'=>!empty($item['link'])?$item['link']:$ig_url,'alt'=>$item['alt']??'');
+   269→                }
+   270→                if ( ! empty( $out ) ) return $out;
+   271→        }
+   272→        $defaults = array();
+   273→        $ig_url = velure_core_opt( 'instagram_url', 'https://instagram.com/' );
+   274→        for ( $i = 1; $i <= 6; $i++ ) { $defaults[] = array('image'=>$uri.'/assets/images/instagram-0'.$i.'.jpg','link'=>$ig_url,'alt'=>''); }
+   275→        return $defaults;
+   276→}
+   277→
+   278→/* ═══════════════════════════════════════════════
+   279→   5. FRONT-END CSS INJECTION
+   280→   ═══════════════════════════════════════════════ */
+   281→add_action( 'wp_head', 'velure_core_inject_custom_css' );
+   282→function velure_core_inject_custom_css() {
+   283→        if ( ! is_front_page() ) return;
+   284→        $rules = array();
+   285→
+   286→        /* Section padding */
+   287→        $pad = velure_core_opt( 'section_padding', 'normal' );
+   288→        $pad_map = array( 'compact'=>'3rem','normal'=>'5.5rem','spacious'=>'8rem','none'=>'0' );
+   289→        if ( isset( $pad_map[ $pad ] ) ) {
+   290→                $rules[] = '.velure-section { padding-top: ' . $pad_map[ $pad ] . '; padding-bottom: ' . $pad_map[ $pad ] . '; }';
+   291→        }
+   292→
+   293→        /* ── Hero WYSIWYG Styles ── */
+   294→        $rules = array_merge( $rules, velure_core_hero_dynamic_css() );
+   295→
+   296→        /* Custom CSS from admin */
+   297→        $custom_css = velure_core_opt( 'custom_css', '' );
+   298→        if ( $custom_css ) { $rules[] = $custom_css; }
+   299→
+   300→        if ( empty( $rules ) ) return;
+   301→        echo '<style id="velure-core-custom">' . "\n";
+   302→        echo implode( "\n", $rules );
+   303→        echo "\n</style>\n";
+   304→}
+   305→
+   306→/**
+   307→ * Generate all dynamic CSS for the Hero section based on saved settings.
+   308→ */
+   309→function velure_core_hero_dynamic_css() {
+   310→        $r = array();
+   311→
+   312→        /* ── Eyebrow Typography ── */
+   313→        $ff = velure_core_opt( 'hero_eyebrow_font_family', '' );
+   314→        $fs = velure_core_opt( 'hero_eyebrow_font_size', '' );
+   315→        $fw = velure_core_opt( 'hero_eyebrow_font_weight', '' );
+   316→        $cl = velure_core_opt( 'hero_eyebrow_color', '' );
+   317→        $ls = velure_core_opt( 'hero_eyebrow_letter_spacing', '' );
+   318→        $tt = velure_core_opt( 'hero_eyebrow_text_transform', '' );
+   319→        $mb = velure_core_opt( 'hero_eyebrow_margin_bottom', '' );
+   320→        $props = array();
+   321→        if ( $ff ) $props[] = 'font-family:' . esc_attr( $ff ) . ',sans-serif';
+   322→        if ( $fs ) $props[] = 'font-size:' . intval($fs) . 'px';
+   323→        if ( $fw ) $props[] = 'font-weight:' . intval($fw);
+   324→        if ( $cl ) $props[] = 'color:' . esc_attr( $cl );
+   325→        if ( $ls ) $props[] = 'letter-spacing:' . floatval($ls) . 'px';
+   326→        if ( $tt && 'none' !== $tt ) $props[] = 'text-transform:' . esc_attr( $tt );
+   327→        if ( $mb ) $props[] = 'margin-bottom:' . intval($mb) . 'px';
+   328→        if ( $props ) $r[] = '.velure-eyebrow{'.implode(';',$props).';}';
+   329→
+   330→        /* ── Title Typography ── */
+   331→        $ff = velure_core_opt( 'hero_title_font_family', '' );
+   332→        $fs = velure_core_opt( 'hero_title_font_size', '' );
+   333→        $fw = velure_core_opt( 'hero_title_font_weight', '' );
+   334→        $cl = velure_core_opt( 'hero_title_color', '' );
+   335→        $lh = velure_core_opt( 'hero_title_line_height', '' );
+   336→        $ls = velure_core_opt( 'hero_title_letter_spacing', '' );
+   337→        $mb = velure_core_opt( 'hero_title_margin_bottom', '' );
+   338→        $props = array();
+   339→        if ( $ff ) $props[] = 'font-family:' . esc_attr( $ff ) . ',serif';
+   340→        if ( $fs ) $props[] = 'font-size:' . intval($fs) . 'px';
+   341→        if ( $fw ) $props[] = 'font-weight:' . intval($fw);
+   342→        if ( $cl ) $props[] = 'color:' . esc_attr( $cl );
+   343→        if ( $lh ) $props[] = 'line-height:' . floatval($lh);
+   344→        if ( $ls ) $props[] = 'letter-spacing:' . floatval($ls) . 'px';
+   345→        if ( $mb ) $props[] = 'margin-bottom:' . intval($mb) . 'px';
+   346→        if ( $props ) $r[] = '.v-hero-slide-content h2{'.implode(';',$props).';}';
+   347→
+   348→        /* ── Subtitle Typography ── */
+   349→        $ff = velure_core_opt( 'hero_subtitle_font_family', '' );
+   350→        $fs = velure_core_opt( 'hero_subtitle_font_size', '' );
+   351→        $fw = velure_core_opt( 'hero_subtitle_font_weight', '' );
+   352→        $cl = velure_core_opt( 'hero_subtitle_color', '' );
+   353→        $lh = velure_core_opt( 'hero_subtitle_line_height', '' );
+   354→        $mb = velure_core_opt( 'hero_subtitle_margin_bottom', '' );
+   355→        $props = array();
+   356→        if ( $ff ) $props[] = 'font-family:' . esc_attr( $ff ) . ',sans-serif';
+   357→        if ( $fs ) $props[] = 'font-size:' . intval($fs) . 'px';
+   358→        if ( $fw ) $props[] = 'font-weight:' . intval($fw);
+   359→        if ( $cl ) $props[] = 'color:' . esc_attr( $cl );
+   360→        if ( $lh ) $props[] = 'line-height:' . floatval($lh);
+   361→        if ( $mb ) $props[] = 'margin-bottom:' . intval($mb) . 'px';
+   362→        if ( $props ) $r[] = '.v-hero-subtitle{'.implode(';',$props).';}';
+   363→
+   364→        /* ── CTA Button ── */
+   365→        $fs = velure_core_opt( 'hero_cta_font_size', '' );
+   366→        $fw = velure_core_opt( 'hero_cta_font_weight', '' );
+   367→        $ls = velure_core_opt( 'hero_cta_letter_spacing', '' );
+   368→        $tt = velure_core_opt( 'hero_cta_text_transform', '' );
+   369→        $px = velure_core_opt( 'hero_cta_padding_x', '' );
+   370→        $py = velure_core_opt( 'hero_cta_padding_y', '' );
+   371→        $br = velure_core_opt( 'hero_cta_border_radius', '' );
+   372→        $bg = velure_core_opt( 'hero_cta_bg_color', '' );
+   373→        $tc = velure_core_opt( 'hero_cta_text_color', '' );
+   374→        $bw = velure_core_opt( 'hero_cta_border_width', '' );
+   375→        $bc = velure_core_opt( 'hero_cta_border_color', '' );
+   376→        $hbg = velure_core_opt( 'hero_cta_hover_bg_color', '' );
+   377→        $htc = velure_core_opt( 'hero_cta_hover_text_color', '' );
+   378→        $props = array();
+   379→        $props[] = 'display:inline-block';
+   380→        if ( $fs ) $props[] = 'font-size:' . intval($fs) . 'px';
+   381→        if ( $fw ) $props[] = 'font-weight:' . intval($fw);
+   382→        if ( $ls ) $props[] = 'letter-spacing:' . floatval($ls) . 'px';
+   383→        if ( $tt && 'none' !== $tt ) $props[] = 'text-transform:' . esc_attr( $tt );
+   384→        if ( $px || $py ) $props[] = 'padding:' . intval($py) . 'px ' . intval($px) . 'px';
+   385→        if ( $br ) $props[] = 'border-radius:' . intval($br) . 'px';
+   386→        if ( $bg ) $props[] = 'background:' . esc_attr( $bg );
+   387→        if ( $tc ) $props[] = 'color:' . esc_attr( $tc );
+   388→        if ( $bw ) $props[] = 'border:' . intval($bw) . 'px solid ' . esc_attr( $bc ?: $bg );
+   389→        $props[] = 'text-decoration:none';
+   390→        $props[] = 'transition:all .25s ease';
+   391→        $r[] = '.v-hero-slide-content .velure-btn{'.implode(';',$props).';}';
+   392→        /* Hover */
+   393→        $hprops = array();
+   394→        if ( $hbg ) $hprops[] = 'background:' . esc_attr( $hbg );
+   395→        if ( $htc ) $hprops[] = 'color:' . esc_attr( $htc );
+   396→        if ( $hprops ) $r[] = '.v-hero-slide-content .velure-btn:hover{'.implode(';',$hprops).';}';
+   397→
+   398→        /* ── Background ── */
+   399→        $bgp = velure_core_opt( 'hero_bg_position', '' );
+   400→        $bgs = velure_core_opt( 'hero_bg_size', '' );
+   401→        $bprops = array();
+   402→        if ( $bgp && 'center' !== $bgp ) $bprops[] = 'background-position:' . esc_attr( $bgp );
+   403→        if ( $bgs && 'cover' !== $bgs ) $bprops[] = 'background-size:' . esc_attr( $bgs );
+   404→        if ( $bprops ) $r[] = '.v-hero-slide-bg{'.implode(';',$bprops).';}';
+   405→
+   406→        /* ── Spacing & Layout ── */
+   407→        $mw = velure_core_opt( 'hero_content_max_width', '' );
+   408→        if ( $mw ) $r[] = '.v-hero-slide-content{max-width:'.intval($mw).'px;}';
+   409→        $pv = velure_core_opt( 'hero_padding_v', '' );
+   410→        if ( $pv ) $r[] = '.v-hero-slider{padding-top:'.intval($pv).'px;padding-bottom:'.intval($pv).'px;}';
+   411→
+   412→        /* ── Side Blocks ── */
+   413→        $sw = velure_core_opt( 'hero_side_width', '' );
+   414→        if ( $sw ) $r[] = '.v-hero-side{width:'.intval($sw).'px;min-width:'.intval($sw).'px;}';
+   415→        $sg = velure_core_opt( 'hero_side_gap', '' );
+   416→        if ( $sg ) $r[] = '.v-hero-side{gap:'.intval($sg).'px;}';
+   417→        $scr = velure_core_opt( 'hero_side_card_radius', '' );
+   418→        if ( $scr ) $r[] = '.v-hero-side-card{border-radius:'.intval($scr).'px;overflow:hidden;}';
+   419→        $sih = velure_core_opt( 'hero_side_card_img_height', '' );
+   420→        if ( $sih ) $r[] = '.v-hero-side-card-img{height:'.intval($sih).'px;}';
+   421→
+   422→        /* ── Responsive (Mobile) ── */
+   423→        $mfs = velure_core_opt( 'hero_title_size_mobile', '' );
+   424→        $mss = velure_core_opt( 'hero_subtitle_size_mobile', '' );
+   425→        $mcs = velure_core_opt( 'hero_cta_size_mobile', '' );
+   426→        $mes = velure_core_opt( 'hero_eyebrow_size_mobile', '' );
+   427→        $mpv = velure_core_opt( 'hero_padding_v_mobile', '' );
+   428→        $mhs = velure_core_opt( 'hero_hide_side_mobile', 0 );
+   429→        $mobile = array();
+   430→        if ( $mfs ) $mobile[] = '.v-hero-slide-content h2{font-size:'.intval($mfs).'px;}';
+   431→        if ( $mss ) $mobile[] = '.v-hero-subtitle{font-size:'.intval($mss).'px;}';
+   432→        if ( $mcs ) $mobile[] = '.v-hero-slide-content .velure-btn{font-size:'.intval($mcs).'px;}';
+   433→        if ( $mes ) $mobile[] = '.velure-eyebrow{font-size:'.intval($mes).'px;}';
+   434→        if ( $mpv ) $mobile[] = '.v-hero-slider{padding-top:'.intval($mpv).'px;padding-bottom:'.intval($mpv).'px;}';
+   435→        if ( $mhs ) $mobile[] = '.v-hero-side{display:none !important;}';
+   436→        if ( $mobile ) $r[] = '@media(max-width:768px){'.implode('',$mobile).'}';
+   437→
+   438→        return $r;
+   439→}
+   440→
+   441→/* ── Disable scroll animations if requested ── */
+   442→add_filter( 'body_class', 'velure_core_body_classes' );
+   443→function velure_core_body_classes( $classes ) {
+   444→        if ( is_front_page() && ! velure_core_opt_bool( 'scroll_animations', true ) ) {
+   445→                $classes[] = 'velure-no-animations';
+   446→        }
+   447→        return $classes;
+   448→}
+   449→
+   450→/* ═══════════════════════════════════════════════
+   451→   6. COMPATIBILITY ALIASES
+   452→   ═══════════════════════════════════════════════ */
+   453→if ( ! function_exists( 'velure3_get_image_url' ) ) {
+   454→        function velure3_get_image_url( $img, $fallback = '' ) { return velure_core_get_image_url( $img, $fallback ); }
+   455→}
+   456→if ( ! function_exists( 'velure3_opt' ) ) {
+   457→        function velure3_opt( $key, $fallback = '' ) { return velure_core_opt( $key, $fallback ); }
+   458→}
+   459→if ( ! function_exists( 'velure3_opt_bool' ) ) {
+   460→        function velure3_opt_bool( $key, $fallback = true ) { return velure_core_opt_bool( $key, $fallback ); }
+   461→}
+   462→if ( ! function_exists( 'velure3_svg_allowed' ) ) {
+   463→        function velure3_svg_allowed() { return velure_core_svg_allowed(); }
+   464→}
+   465→if ( ! function_exists( 'velure3_bg_class' ) ) {
+   466→        function velure3_bg_class( $style ) { return velure_core_bg_class( $style ); }
+   467→}
+   468→if ( ! function_exists( 'velure3_star_svg' ) ) {
+   469→        function velure3_star_svg() { return velure_core_star_svg(); }
+   470→}
+   471→if ( ! function_exists( 'velure3_get_section_visibility' ) ) {
+   472→        function velure3_get_section_visibility() { return velure_core_get_section_visibility(); }
+   473→}
+   474→if ( ! function_exists( 'velure3_get_hero_data' ) ) {
+   475→        function velure3_get_hero_data() { return velure_core_get_hero_data(); }
+   476→}
+   477→if ( ! function_exists( 'velure3_get_features' ) ) {
+   478→        function velure3_get_features() { return velure_core_get_features(); }
+   479→}
+   480→if ( ! function_exists( 'velure3_get_product_categories' ) ) {
+   481→        function velure3_get_product_categories( $count = 10 ) { return velure_core_get_product_categories( $count ); }
+   482→}
+   483→if ( ! function_exists( 'velure3_get_featured_products' ) ) {
+   484→        function velure3_get_featured_products() { return velure_core_get_featured_products(); }
+   485→}
+   486→if ( ! function_exists( 'velure3_get_split_banner' ) ) {
+   487→        function velure3_get_split_banner() { return velure_core_get_split_banner(); }
+   488→}
+   489→if ( ! function_exists( 'velure3_get_brands' ) ) {
+   490→        function velure3_get_brands() { return velure_core_get_brands(); }
+   491→}
+   492→if ( ! function_exists( 'velure3_get_testimonials' ) ) {
+   493→        function velure3_get_testimonials( $count = 3 ) { return velure_core_get_testimonials( $count ); }
+   494→}
+   495→if ( ! function_exists( 'velure3_get_blog_posts' ) ) {
+   496→        function velure3_get_blog_posts( $count = 3 ) { return velure_core_get_blog_posts( $count ); }
+   497→}
+   498→if ( ! function_exists( 'velure3_get_instagram_items' ) ) {
+   499→        function velure3_get_instagram_items() { return velure_core_get_instagram_items(); }
+   500→}
+   501→

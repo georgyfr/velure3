@@ -23,4 +23,25 @@ Stage Summary:
 - Plugin Velure Core v1.0.0 créé avec 100% de la page d'accueil configurable
 - Architecture propre : plugin = logique métier, thème = affichage
 - Synchronisation via aliases de fonctions + action hook
-- 2 zips disponibles : thème + plugin (séparés)
+- 2 zips disponibles : thème + plugin (séparés)---
+Task ID: 1
+Agent: Super Z (main)
+Task: Implement complete Real-Time Live Preview (v3.5.2) — zero-latency sync for ALL controls
+
+Work Log:
+- Read and analyzed all 3 JS files (admin.js 1280 lines, canvas-bridge.js 712 lines, visual-builder.js 1281 lines)
+- Identified 6 critical bugs in v3.5.1: __section__ sentinel not handled, no text preview for non-hero sections, no AJAX fallback for structural changes, image IDs never resolved to URLs, inline styles lost on DOM replacement, select dropdowns only fired on blur
+- Rewrote canvas-bridge.js: TEXT_SELECTOR_MAP (28+ text fields), _inlineStyleCache + _snapshotInlineStyles for style preservation across DOM swaps, __section__ sentinel handling in applyClass/applyCssVar, flash animation on HTML replacement
+- Rewrote _pushPanelPreview in admin.js: non-hero text preview (28 fields), _resolveImageUrl via WP REST API, _requestPanelPartialRender for structural changes, select input+change for continuous preview
+- Enriched CSS_MAP in visual-builder.js: { none: true } for 8 structural fields, hero-side style entries, TYPE 6 handler in onFieldChange, non-hero text key passthrough
+- Verified PHP endpoint vc_render_component_preview handles all cases correctly
+- Validated JS syntax for all 3 files (node -c)
+- Cross-verified all postMessage actions match between sender and receiver
+- Committed and pushed to GitHub
+
+Stage Summary:
+- v3.5.2 pushed to main (commit 712088e)
+- 3 JS files modified: canvas-bridge.js, admin.js, visual-builder.js
+- Plugin version bumped to 3.5.2 in velure-core.php
+- Zero iframe reloads for CSS/text/class/image changes
+- Structural changes (count, sort) use 300ms-debounced AJAX partial render

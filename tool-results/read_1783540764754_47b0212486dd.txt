@@ -1,0 +1,712 @@
+     1→/**
+     2→ * Velure Core — Canvas Bridge v3.5.1
+     3→ * Injected ONLY inside the canvas iframe (&mode=canvas).
+     4→ *
+     5→ * Responsibilities:
+     6→ *  1. Attribute data-vc-widget to all editable elements
+     7→ *  2. Hover → light blue outline
+     8→ *  3. Click → dashed blue halo + postMessage to parent
+     9→ *  4. Double-click on text → contenteditable + green outline
+    10→ *  5. Receive postMessage from parent and apply in REAL-TIME:
+    11→ *     - vc-apply-style     → inline style on widget element
+    12→ *     - vc-apply-text      → textContent update
+    13→ *     - vc-apply-css-var   → CSS custom property on section/widget
+    14→ *     - vc-apply-section-css → CSS on the section container
+    15→ *     - vc-apply-class     → toggle CSS classes on elements
+    16→ *     - vc-replace-html    → surgical HTML fragment replacement
+    17→ *     - vc-update-bg-image → background-image change
+    18→ *     - vc-deselect        → deselect all
+    19→ *     - vc-select-widget   → programmatic selection
+    20→ *
+    21→ * @package VelureCore
+    22→ * @since 3.2.1
+    23→ * @updated 3.5.1 Real-time live preview (Wix-like)
+    24→ */
+    25→
+    26→(function () {
+    27→        'use strict';
+    28→
+    29→        /* ── Detect section from body attribute (set by canvas-renderer.php) ── */
+    30→        var section = document.body.getAttribute('data-vc-section') || '';
+    31→        if (!section) return;
+    32→
+    33→        var selectedEl = null;
+    34→        var editingEl  = null;
+    35→
+    36→        /* ═══════════════════════════════════════════════════════════════════
+    37→           SECTION CONTAINER SELECTOR MAP
+    38→           Maps section slug → CSS selector for the section wrapper.
+    39→           Used by vc-apply-section-css and vc-replace-html to target
+    40→           the correct container.
+    41→           ═══════════════════════════════════════════════════════════════════ */
+    42→        var SECTION_SELECTOR = {
+    43→                hero:         '.v-hero-slider',
+    44→                features:     '.velure-features',
+    45→                categories:   '.velure-section',
+    46→                products:     '.velure-section',
+    47→                split_banner: '.velure-split-banner',
+    48→                marquee:      '.velure-marquee',
+    49→                testimonials: '.velure-section',
+    50→                blog:         '.velure-section',
+    51→                instagram:    '.velure-section',
+    52→        };
+    53→
+    54→        /* ═══════════════════════════════════════════════════════════════════
+    55→           WIDGET SELECTOR MAP
+    56→       One entry per editable element type, keyed by section slug.
+    57→       Multiple items with the same selector use { multiple: true } to
+    58→       auto-append an index suffix  (e.g.  feature-item-0, feature-item-1).
+    59→           ═══════════════════════════════════════════════════════════════════ */
+    60→        var WIDGET_MAP = {
+    61→                hero: [
+    62→                        { widget: 'hero-bg',       selector: '.v-hero-slide-bg',                  label: 'Image de fond',           editable: false },
+    63→                        { widget: 'hero-overlay',   selector: '.v-hero-slide-overlay',              label: 'Overlay',                  editable: false },
+    64→                        { widget: 'hero-eyebrow',   selector: '.v-hero-slide-content > .velure-eyebrow', label: 'Sur-titre',           editable: true  },
+    65→                        { widget: 'hero-title',     selector: '.v-hero-slide-content > h2',        label: 'Titre principal',         editable: true  },
+    66→                        { widget: 'hero-subtitle',  selector: '.v-hero-subtitle',                   label: 'Sous-titre',              editable: true  },
+    67→                        { widget: 'hero-cta',       selector: '.v-hero-slide-content > .velure-btn', label: 'Bouton CTA',            editable: false },
+    68→                        { widget: 'hero-side',      selector: '.v-hero-side',                       label: 'Blocs lateraux',          editable: false },
+    69→                        { widget: 'hero-dots',      selector: '.v-hero-dots',                       label: 'Navigation slides',       editable: false },
+    70→                ],
+    71→                features: [
+    72→                        { widget: 'feature-item',   selector: '.velure-feature-item',               label: 'Element de confiance',    multiple: true, editable: false },
+    73→                ],
+    74→                categories: [
+    75→                        { widget: 'cat-heading',    selector: '.velure-section-heading',            label: 'En-tete section',         editable: false },
+    76→                        { widget: 'cat-card',       selector: '.velure-category-card',              label: 'Carte categorie',         multiple: true, editable: false },
+    77→                        { widget: 'cat-cta',        selector: '.velure-btn-outline',                label: 'Bouton CTA',              editable: false },
+    78→                ],
+    79→                products: [
+    80→                        { widget: 'prod-heading',   selector: '.velure-section-heading',            label: 'En-tete section',         editable: false },
+    81→                        { widget: 'prod-card',      selector: '.velure-product-card',               label: 'Carte produit',           multiple: true, editable: false },
+    82→                        { widget: 'prod-cta',       selector: '.velure-btn-outline',                label: 'Bouton CTA',              editable: false },
+    83→                ],
+    84→                split_banner: [
+    85→                        { widget: 'banner-left',    selector: '.velure-split-side:first-child',     label: 'Banniere gauche',         editable: false },
+    86→                        { widget: 'banner-right',   selector: '.velure-split-side:last-child',      label: 'Banniere droite',         editable: false },
+    87→                ],
+    88→                marquee: [
+    89→                        { widget: 'marquee-track',  selector: '.velure-marquee',                    label: 'Bandeau defilant',        editable: false },
+    90→                ],
+    91→                testimonials: [
+    92→                        { widget: 'testi-heading',  selector: '.velure-section-heading',            label: 'En-tete section',         editable: false },
+    93→                        { widget: 'testi-card',     selector: '.velure-testimonial-card',           label: 'Carte temoignage',        multiple: true, editable: false },
+    94→                ],
+    95→                blog: [
+    96→                        { widget: 'blog-heading',   selector: '.velure-section-heading',            label: 'En-tete section',         editable: false },
+    97→                        { widget: 'blog-card',      selector: '.velure-blog-card',                  label: 'Carte article',           multiple: true, editable: false },
+    98→                        { widget: 'blog-cta',       selector: '.velure-btn-outline',                label: 'Bouton CTA',              editable: false },
+    99→                ],
+   100→                instagram: [
+   101→                        { widget: 'ig-heading',     selector: '.velure-section-heading',            label: 'En-tete section',         editable: false },
+   102→                        { widget: 'ig-item',        selector: '.velure-instagram-item',             label: 'Image Instagram',         multiple: true, editable: false },
+   103→                ],
+   104→        };
+   105→
+   106→        /* ═══════════════════════════════════════════════════════════════════
+   107→           CONTENT KEY MAP
+   108→           Maps editable widget base IDs to their settings key.
+   109→           Sent to the parent so auto-save knows which option to update.
+   110→           ═══════════════════════════════════════════════════════════════════ */
+   111→        var CONTENT_KEY_MAP = {
+   112→                'hero-eyebrow':  'hero_slides.0.eyebrow',
+   113→                'hero-title':    'hero_slides.0.title',
+   114→                'hero-subtitle': 'hero_slides.0.subtitle',
+   115→                'hero-cta':      'hero_slides.0.cta_text',
+   116→        };
+   117→
+   118→        var widgets = WIDGET_MAP[section] || [];
+   119→
+   120→        /* ═══════════════════════════════════════════════════════════════════
+   121→           1. INJECT data-vc-widget ATTRIBUTES
+   122→           ═══════════════════════════════════════════════════════════════════ */
+   123→        function initWidgets() {
+   124→                widgets.forEach(function (def) {
+   125→                        var els = document.querySelectorAll(def.selector);
+   126→                        els.forEach(function (el, index) {
+   127→                                var widgetId = def.widget;
+   128→                                if (def.multiple) {
+   129→                                        widgetId = def.widget + '-' + index;
+   130→                                }
+   131→                                el.setAttribute('data-vc-widget', widgetId);
+   132→                                el.setAttribute('data-vc-label', def.label);
+   133→                                el.setAttribute('data-vc-editable', def.editable ? 'true' : 'false');
+   134→                                el.setAttribute('data-vc-base', def.widget);
+   135→                                if (def.multiple) {
+   136→                                        el.setAttribute('data-vc-index', String(index));
+   137→                                }
+   138→
+   139→                                /* ═══ Propagate data-vc-field from child text nodes ═══
+   140→                                   If the widget wrapper doesn't have data-vc-field but a direct
+   141→                                   text child does, copy it up so onClick can find it. */
+   142→                                if (!el.getAttribute('data-vc-field')) {
+   143→                                        var fieldChild = el.querySelector('[data-vc-field]');
+   144→                                        if (fieldChild) {
+   145→                                                el.setAttribute('data-vc-field', fieldChild.getAttribute('data-vc-field'));
+   146→                                        }
+   147→                                }
+   148→                        });
+   149→                });
+   150→        }
+   151→
+   152→        /* ═══════════════════════════════════════════════════════════════════
+   153→           2. SELECTION MANAGEMENT
+   154→           ═══════════════════════════════════════════════════════════════════ */
+   155→        function selectElement(el) {
+   156→                /* Deselect previous */
+   157→                if (selectedEl && selectedEl !== el) {
+   158→                        selectedEl.classList.remove('vc-widget-selected');
+   159→                }
+   160→                selectedEl = el;
+   161→                el.classList.add('vc-widget-selected');
+   162→
+   163→                /* Scroll into view if needed */
+   164→                var rect = el.getBoundingClientRect();
+   165→                if (rect.top < 0 || rect.bottom > window.innerHeight) {
+   166→                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+   167→                }
+   168→
+   169→                /* Notify parent */
+   170→                window.parent.postMessage({
+   171→                        action:   'vc-widget-selected',
+   172→                        widget:   el.getAttribute('data-vc-widget'),
+   173→                        base:     el.getAttribute('data-vc-base') || el.getAttribute('data-vc-widget'),
+   174→                        section:  section,
+   175→                        label:    el.getAttribute('data-vc-label') || '',
+   176→                        editable: el.getAttribute('data-vc-editable') === 'true',
+   177→                        index:    el.getAttribute('data-vc-index'),
+   178→                }, '*');
+   179→        }
+   180→
+   181→        function deselectAll() {
+   182→                if (selectedEl) {
+   183→                        selectedEl.classList.remove('vc-widget-selected');
+   184→                        selectedEl = null;
+   185→                }
+   186→                closeEditing();
+   187→                window.parent.postMessage({ action: 'vc-widget-deselected' }, '*');
+   188→        }
+   189→
+   190→        function closeEditing() {
+   191→                if (editingEl) {
+   192→                        editingEl.contentEditable = 'false';
+   193→                        editingEl.classList.remove('vc-editing');
+   194→                        editingEl = null;
+   195→                }
+   196→        }
+   197→
+   198→        /* ═══════════════════════════════════════════════════════════════════
+   199→           3. EVENT HANDLERS
+   200→           ═══════════════════════════════════════════════════════════════════ */
+   201→
+   202→        /* ── Hover: light blue outline ── */
+   203→        function onHoverIn(e) {
+   204→                var el = e.target.closest('[data-vc-widget]');
+   205→                if (el && el !== selectedEl) {
+   206→                        el.classList.add('vc-widget-hover');
+   207→                }
+   208→        }
+   209→
+   210→        function onHoverOut(e) {
+   211→                var el = e.target.closest('[data-vc-widget]');
+   212→                if (el) {
+   213→                        el.classList.remove('vc-widget-hover');
+   214→                }
+   215→        }
+   216→
+   217→        /* ── Click: select + halo + activate field in parent panel ── */
+   218→        function onClick(e) {
+   219→                var el = e.target.closest('[data-vc-widget]');
+   220→                if (el) {
+   221→                        e.preventDefault();
+   222→                        e.stopPropagation();
+   223→                        selectElement(el);
+   224→
+   225→                        /* ═══ WIX-LIKE: Send field key to parent for panel focus ═══ */
+   226→                        var fieldKey = el.getAttribute('data-vc-field');
+   227→                        if (fieldKey) {
+   228→                                window.parent.postMessage({
+   229→                                        action: 'vc-activate-control',
+   230→                                        key: fieldKey,
+   231→                                        widget: el.getAttribute('data-vc-widget'),
+   232→                                        label: el.getAttribute('data-vc-label') || ''
+   233→                                }, '*');
+   234→                        }
+   235→                } else if (!e.target.closest('.vc-editing')) {
+   236→                        deselectAll();
+   237→                }
+   238→        }
+   239→
+   240→        /* ── Double-click: contenteditable for text elements ── */
+   241→        function onDblClick(e) {
+   242→                var el = e.target.closest('[data-vc-widget]');
+   243→                if (!el) return;
+   244→                if (el.getAttribute('data-vc-editable') !== 'true') return;
+   245→
+   246→                e.preventDefault();
+   247→                e.stopPropagation();
+   248→
+   249→                /* Close previous editing session */
+   250→                if (editingEl && editingEl !== el) {
+   251→                        notifyContentChange(editingEl);
+   252→                        closeEditing();
+   253→                }
+   254→
+   255→                editingEl = el;
+   256→                el.contentEditable = 'true';
+   257→                el.classList.add('vc-editing');
+   258→                el.focus();
+   259→
+   260→                /* Select all text inside */
+   261→                var range = document.createRange();
+   262→                range.selectNodeContents(el);
+   263→                var sel = window.getSelection();
+   264→                sel.removeAllRanges();
+   265→                sel.addRange(range);
+   266→        }
+   267→
+   268→        /* ── Blur: save editing + notify parent ── */
+   269→        function onBlur(e) {
+   270→                if (editingEl && e.target === editingEl) {
+   271→                        notifyContentChange(editingEl);
+   272→                        closeEditing();
+   273→                }
+   274→        }
+   275→
+   276→        function notifyContentChange(el) {
+   277→                var base = el.getAttribute('data-vc-base') || el.getAttribute('data-vc-widget');
+   278→                window.parent.postMessage({
+   279→                        action:     'vc-content-changed',
+   280→                        widget:     el.getAttribute('data-vc-widget'),
+   281→                        base:       base,
+   282→                        section:    section,
+   283→                        property:   'text',
+   284→                        value:      el.textContent.trim(),
+   285→                        settingKey: CONTENT_KEY_MAP[base] || null,
+   286→                }, '*');
+   287→        }
+   288→
+   289→        /* ── Keyboard ── */
+   290→        function onKeyDown(e) {
+   291→                /* Escape exits editing */
+   292→                if (editingEl && e.key === 'Escape') {
+   293→                        editingEl.blur();
+   294→                }
+   295→                /* Prevent link navigation when clicking inside a widget */
+   296→                if (e.target.closest('[data-vc-widget]') && e.key === 'Enter') {
+   297→                        if (e.target.getAttribute('contenteditable') !== 'true') {
+   298→                                e.preventDefault();
+   299→                        }
+   300→                }
+   301→        }
+   302→
+   303→        /* ═══════════════════════════════════════════════════════════════════
+   304→           4. RECEIVE MESSAGES FROM PARENT — REAL-TIME LIVE PREVIEW
+   305→           ═══════════════════════════════════════════════════════════════════ */
+   306→        function onParentMessage(e) {
+   307→                if (!e.data || typeof e.data.action !== 'string') return;
+   308→
+   309→                switch (e.data.action) {
+   310→
+   311→                        /* ── Widget-level inline style (existing, enhanced) ── */
+   312→                        case 'vc-apply-style':
+   313→                                applyStyleToWidget(e.data.widget, e.data.css);
+   314→                                break;
+   315→
+   316→                        /* ── Widget-level text content (existing) ── */
+   317→                        case 'vc-apply-text':
+   318→                                applyTextToWidget(e.data.widget, e.data.text);
+   319→                                break;
+   320→
+   321→                        /* ═══════════════════════════════════════════════════
+   322→                           NEW v3.5.1 — REAL-TIME LIVE PREVIEW MESSAGES
+   323→                           ═══════════════════════════════════════════════════ */
+   324→
+   325→                        /* Apply CSS custom property on a widget element.
+   326→                           E.g. { widget: 'hero-overlay', property: '--overlay-opacity', value: '0.4' }
+   327→                           → el.style.setProperty('--overlay-opacity', '0.4') */
+   328→                        case 'vc-apply-css-var':
+   329→                                applyCssVar(e.data.widget, e.data.property, e.data.value);
+   330→                                break;
+   331→
+   332→                        /* Apply CSS properties on the entire section container.
+   333→                           E.g. { css: { minHeight: '80vh', textAlign: 'center' } }
+   334→                           Used for height, alignment, padding that affect the whole section. */
+   335→                        case 'vc-apply-section-css':
+   336→                                applySectionCss(e.data.css);
+   337→                                break;
+   338→
+   339→                        /* Toggle/add/remove CSS classes on an element.
+   340→                           E.g. { widget: 'hero-bg', add: 'v-hero-tall', remove: 'v-hero-compact' } */
+   341→                        case 'vc-apply-class':
+   342→                                applyClass(e.data.widget, e.data.add, e.data.remove);
+   343→                                break;
+   344→
+   345→                        /* Update background-image on a widget (hero bg, split banner sides).
+   346→                           E.g. { widget: 'hero-bg', url: 'https://...' } */
+   347→                        case 'vc-update-bg-image':
+   348→                                updateBgImage(e.data.widget, e.data.url);
+   349→                                break;
+   350→
+   351→                        /* Surgical HTML replacement — replace the entire section
+   352→                           container innerHTML with server-rendered fragment.
+   353→                           NO iframe reload — instant DOM swap.
+   354→                           E.g. { html: '<div class="velure-features">...</div>' } */
+   355→                        case 'vc-replace-html':
+   356→                                replaceSectionHtml(e.data.html);
+   357→                                break;
+   358→
+   359→                        /* Surgical HTML replacement for a specific widget only.
+   360→                           E.g. { widget: 'hero-side', html: '...' } */
+   361→                        case 'vc-replace-widget-html':
+   362→                                replaceWidgetHtml(e.data.widget, e.data.html);
+   363→                                break;
+   364→
+   365→                        /* ── Deselect / Select (existing) ── */
+   366→                        case 'vc-deselect':
+   367→                                deselectAll();
+   368→                                break;
+   369→
+   370→                        case 'vc-select-widget':
+   371→                                var target = document.querySelector('[data-vc-widget="' + e.data.widget + '"]');
+   372→                                if (target) selectElement(target);
+   373→                                break;
+   374→                }
+   375→        }
+   376→
+   377→        /* ─────────────────────────────────────────────────────────────────
+   378→           STYLE APPLICATION FUNCTIONS — Real-Time
+   379→           ───────────────────────────────────────────────────────────────── */
+   380→
+   381→        /**
+   382→         * Apply inline CSS to a widget element.
+   383→         * @param {string} widgetId  data-vc-widget value
+   384→         * @param {Object} css       { cssProp: cssValue, ... }
+   385→         */
+   386→        function applyStyleToWidget(widgetId, css) {
+   387→                if (!css || typeof css !== 'object') return;
+   388→                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+   389→                if (!el) return;
+   390→                Object.keys(css).forEach(function (prop) {
+   391→                        el.style[prop] = css[prop];
+   392→                });
+   393→        }
+   394→
+   395→        /**
+   396→         * Apply text content to a widget element.
+   397→         */
+   398→        function applyTextToWidget(widgetId, text) {
+   399→                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+   400→                if (!el) return;
+   401→                el.textContent = text;
+   402→        }
+   403→
+   404→        /**
+   405→         * Apply a CSS custom property on a widget element.
+   406→         * @param {string} widgetId  Widget to target
+   407→         * @param {string} prop      CSS custom property name (e.g. '--overlay-opacity')
+   408→         * @param {string} value     Value to set
+   409→         */
+   410→        function applyCssVar(widgetId, prop, value) {
+   411→                if (!prop) return;
+   412→                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+   413→                if (!el) {
+   414→                        /* Fallback: apply on section container */
+   415→                        el = getSectionContainer();
+   416→                        if (!el) return;
+   417→                }
+   418→                el.style.setProperty(prop, value);
+   419→        }
+   420→
+   421→        /**
+   422→         * Apply CSS properties on the section container.
+   423→         * @param {Object} css  { cssProp: value, ... }
+   424→         */
+   425→        function applySectionCss(css) {
+   426→                if (!css || typeof css !== 'object') return;
+   427→                var el = getSectionContainer();
+   428→                if (!el) return;
+   429→                Object.keys(css).forEach(function (prop) {
+   430→                        el.style[prop] = css[prop];
+   431→                });
+   432→        }
+   433→
+   434→        /**
+   435→         * Toggle CSS classes on a widget element.
+   436→         * @param {string} widgetId  Widget to target
+   437→         * @param {string} add       Classes to add (space-separated)
+   438→         * @param {string} remove    Classes to remove (space-separated)
+   439→         */
+   440→        function applyClass(widgetId, add, remove) {
+   441→                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+   442→                if (!el) {
+   443→                        /* Fallback: section container */
+   444→                        el = getSectionContainer();
+   445→                }
+   446→                if (!el) return;
+   447→                if (add) {
+   448→                        add.split(/\s+/).forEach(function (c) {
+   449→                                if (c) el.classList.add(c);
+   450→                        });
+   451→                }
+   452→                if (remove) {
+   453→                        remove.split(/\s+/).forEach(function (c) {
+   454→                                if (c) el.classList.remove(c);
+   455→                        });
+   456→                }
+   457→        }
+   458→
+   459→        /**
+   460→         * Update background-image on a widget.
+   461→         * @param {string} widgetId  Widget to target
+   462→         * @param {string} url       New image URL
+   463→         */
+   464→        function updateBgImage(widgetId, url) {
+   465→                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+   466→                if (!el) return;
+   467→                if (url && url !== '0') {
+   468→                        el.style.backgroundImage = 'url(' + url + ')';
+   469→                        el.style.backgroundSize = 'cover';
+   470→                        el.style.backgroundPosition = 'center';
+   471→                } else {
+   472→                        el.style.backgroundImage = 'none';
+   473→                }
+   474→        }
+   475→
+   476→        /**
+   477→         * Replace the entire section container's innerHTML with new HTML.
+   478→         * Used for structural changes (new blocks, image additions) where
+   479→         * surgical CSS isn't enough. No iframe reload — instant DOM swap.
+   480→         * @param {string} html  The new HTML fragment
+   481→         */
+   482→        function replaceSectionHtml(html) {
+   483→                if (!html) return;
+   484→                var container = getSectionContainer();
+   485→                if (!container) return;
+   486→
+   487→                /* Save the parent element and replace children */
+   488→                var parent = container.parentNode;
+   489→                if (!parent) return;
+   490→
+   491→                /* Create a temporary element to parse the HTML */
+   492→                var temp = document.createElement('div');
+   493→                temp.innerHTML = html;
+   494→                var newEl = temp.firstElementChild;
+   495→                if (!newEl) return;
+   496→
+   497→                /* Copy the section selector class to the new element */
+   498→                var oldClasses = container.className;
+   499→                newEl.className = oldClasses;
+   500→
+   501→                /* Replace the old container with the new one */
+   502→                parent.replaceChild(newEl, container);
+   503→
+   504→                /* Re-initialize widgets on the new DOM */
+   505→                initWidgets();
+   506→
+   507→                /* Re-freeze hero if needed */
+   508→                if (section === 'hero') {
+   509→                        freezeHeroSlider();
+   510→                }
+   511→        }
+   512→
+   513→        /**
+   514→         * Replace a specific widget's HTML content.
+   515→         * @param {string} widgetId  Widget to replace
+   516→         * @param {string} html      New innerHTML
+   517→         */
+   518→        function replaceWidgetHtml(widgetId, html) {
+   519→                if (!html) return;
+   520→                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+   521→                if (!el) return;
+   522→
+   523→                el.innerHTML = html;
+   524→
+   525→                /* Re-init widgets for new children */
+   526→                initWidgets();
+   527→
+   528→                /* Re-freeze hero if the replaced widget is inside hero */
+   529→                if (section === 'hero') {
+   530→                        freezeHeroSlider();
+   531→                }
+   532→        }
+   533→
+   534→        /* ─────────────────────────────────────────────────────────────────
+   535→           HELPERS
+   536→           ───────────────────────────────────────────────────────────────── */
+   537→
+   538→        /**
+   539→         * Get the section container element for the current section.
+   540→         */
+   541→        function getSectionContainer() {
+   542→                var sel = SECTION_SELECTOR[section];
+   543→                if (!sel) return document.body.firstElementChild || document.body;
+   544→                var el = document.querySelector(sel);
+   545→                return el || document.body.firstElementChild || document.body;
+   546→        }
+   547→
+   548→        /* ═══════════════════════════════════════════════════════════════════
+   549→           5. CANVAS-SPECIFIC STYLES
+   550→           ═══════════════════════════════════════════════════════════════════ */
+   551→        function injectCanvasStyles() {
+   552→                var css = document.createElement('style');
+   553→                css.id = 'vc-canvas-bridge-css';
+   554→                css.textContent = [
+   555→                        '/* ── Canvas Bridge: Widget overlay styles ── */',
+   556→                        '[data-vc-widget] {',
+   557→                        '  cursor: pointer;',
+   558→                        '  transition: outline 0.15s ease, outline-offset 0.15s ease;',
+   559→                        '  outline: 2px solid transparent;',
+   560→                        '  outline-offset: 2px;',
+   561→                        '  position: relative;',
+   562→                        '}',
+   563→
+   564→                        '/* Hover: light blue outline */',
+   565→                        '[data-vc-widget].vc-widget-hover {',
+   566→                        '  outline: 2px solid rgba(59, 130, 246, 0.45);',
+   567→                        '}',
+   568→
+   569→                        '/* Selected: dashed blue halo */',
+   570→                        '[data-vc-widget].vc-widget-selected {',
+   571→                        '  outline: 2px dashed #3b82f6;',
+   572→                        '  outline-offset: 4px;',
+   573→                        '}',
+   574→
+   575→                        '/* Editing: solid green outline */',
+   576→                        '[data-vc-editable="true"].vc-editing {',
+   577→                        '  outline: 2px solid #22c55e !important;',
+   578→                        '  outline-offset: 4px;',
+   579→                        '  cursor: text;',
+   580→                        '  background: rgba(255, 255, 255, 0.06);',
+   581→                        '  border-radius: 2px;',
+   582→                        '  min-width: 40px;',
+   583→                        '  min-height: 1em;',
+   584→                        '}',
+   585→
+   586→                        '/* Widget label tooltip on hover */',
+   587→                        '[data-vc-widget].vc-widget-hover::after,',
+   588→                        '[data-vc-widget].vc-widget-selected::after {',
+   589→                        '  content: attr(data-vc-label);',
+   590→                        '  position: absolute;',
+   591→                        '  top: -28px;',
+   592→                        '  left: 50%;',
+   593→                        '  transform: translateX(-50%);',
+   594→                        '  background: rgba(26, 26, 46, 0.92);',
+   595→                        '  color: #C8A97E;',
+   596→                        '  font-family: "Inter", sans-serif;',
+   597→                        '  font-size: 11px;',
+   598→                        '  font-weight: 600;',
+   599→                        '  padding: 3px 10px;',
+   600→                        '  border-radius: 4px;',
+   601→                        '  white-space: nowrap;',
+   602→                        '  pointer-events: none;',
+   603→                        '  z-index: 99999;',
+   604→                        '  letter-spacing: 0.3px;',
+   605→                        '  backdrop-filter: blur(6px);',
+   606→                        '}',
+   607→
+   608→                        '/* Make overlays non-blocking so clicks reach widgets behind them */',
+   609→                        '.v-hero-slide-overlay, .velure-split-side-bg {',
+   610→                        '  pointer-events: none !important;',
+   611→                        '}',
+   612→
+   613→                        '/* Prevent links from navigating in canvas */',
+   614→                        '[data-vc-widget] a, a[data-vc-widget] {',
+   615→                        '  pointer-events: none;',
+   616→                        '}',
+   617→
+   618→                        '/* ═══ WIX-LIKE: Editable field hover indicator ═══ */',
+   619→                        '[data-vc-field] {',
+   620→                        '  position: relative;',
+   621→                        '}',
+   622→                        '[data-vc-field]:hover::before {',
+   623→                        '  content: "\\270F Edit";',
+   624→                        '  position: absolute;',
+   625→                        '  top: -22px;',
+   626→                        '  right: -4px;',
+   627→                        '  background: rgba(59, 130, 246, 0.92);',
+   628→                        '  color: #fff;',
+   629→                        '  font-size: 10px;',
+   630→                        '  font-weight: 600;',
+   631→                        '  font-family: "Inter", sans-serif;',
+   632→                        '  padding: 2px 8px;',
+   633→                        '  border-radius: 4px;',
+   634→                        '  z-index: 99998;',
+   635→                        '  pointer-events: none;',
+   636→                        '  letter-spacing: 0.3px;',
+   637→                        '  white-space: nowrap;',
+   638→                        '  opacity: 0;',
+   639→                        '  transition: opacity 0.15s ease;',
+   640→                        '}',
+   641→                        '[data-vc-widget]:hover [data-vc-field]::before,',
+   642→                        '[data-vc-field].vc-widget-hover::before,',
+   643→                        '[data-vc-field].vc-widget-selected::before {',
+   644→                        '  opacity: 1;',
+   645→                        '}',
+   646→
+   647→                        '/* ═══ v3.5.1: Flash animation for HTML replacement ═══ */',
+   648→                        '@keyframes vc-flash-replace {',
+   649→                        '  0% { opacity: 0.6; }',
+   650→                        '  100% { opacity: 1; }',
+   651→                        '}',
+   652→                        '.vc-flash-replace {',
+   653→                        '  animation: vc-flash-replace 0.3s ease-out;',
+   654→                        '}',
+   655→                ].join('\n');
+   656→                document.head.appendChild(css);
+   657→        }
+   658→
+   659→        /* ═══════════════════════════════════════════════════════════════════
+   660→           6. HERO SLIDER FREEZE (canvas edit mode)
+   661→           Prevents auto-advance and ensures first slide stays visible.
+   662→           ═══════════════════════════════════════════════════════════════════ */
+   663→        function freezeHeroSlider() {
+   664→                var slider = document.querySelector('.v-hero-slider');
+   665→                if (!slider) return;
+   666→
+   667→                /* Force first slide active if none are */
+   668→                var slides = slider.querySelectorAll('.v-hero-slide');
+   669→                var hasActive = false;
+   670→                slides.forEach(function(s) {
+   671→                        if (s.classList.contains('v-hero-slide--active')) hasActive = true;
+   672→                });
+   673→                if (!hasActive && slides.length > 0) {
+   674→                        slides[0].classList.add('v-hero-slide--active');
+   675→                }
+   676→
+   677→                /* Remove all event listeners from slider by cloning */
+   678→                var main = slider.querySelector('.v-hero-main');
+   679→                if (main) {
+   680→                        var clone = main.cloneNode(true);
+   681→                        main.parentNode.replaceChild(clone, main);
+   682→                }
+   683→        }
+   684→
+   685→        /* ═══════════════════════════════════════════════════════════════════
+   686→           INIT
+   687→           ═══════════════════════════════════════════════════════════════════ */
+   688→        function init() {
+   689→                injectCanvasStyles();
+   690→                initWidgets();
+   691→
+   692→                /* Freeze hero slider in canvas mode (no auto-advance) */
+   693→                if (section === 'hero') {
+   694→                        freezeHeroSlider();
+   695→                }
+   696→
+   697→                /* Capture phase so we intercept before any default handlers */
+   698→                document.addEventListener('mouseover',  onHoverIn,  true);
+   699→                document.addEventListener('mouseout',   onHoverOut, true);
+   700→                document.addEventListener('click',       onClick,     true);
+   701→                document.addEventListener('dblclick',    onDblClick,  true);
+   702→                document.addEventListener('focusout',    onBlur,      true);
+   703→                document.addEventListener('keydown',     onKeyDown,   true);
+   704→                window.addEventListener('message',      onParentMessage);
+   705→        }
+   706→
+   707→        if (document.readyState === 'loading') {
+   708→                document.addEventListener('DOMContentLoaded', init);
+   709→        } else {
+   710→                init();
+   711→        }
+   712→})();

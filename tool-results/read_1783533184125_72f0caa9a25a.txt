@@ -1,0 +1,502 @@
+     1→/**
+     2→ * Velure Core — Visual Builder JS v3.2.1
+     3→ * Loaded in the PARENT (WordPress admin) when #vc-builder-app is present.
+     4→ *
+     5→ * Responsibilities:
+     6→ *  1. Listen for postMessage from canvas-bridge.js inside the iframe
+     7→ *  2. Show contextual 3-tab panel (Contenu / Style / Avancé)
+     8→ *  3. Render fields dynamically per widget type
+     9→ *  4. Send style/text updates back to iframe for live preview
+    10→ *
+    11→ * @package VelureCore
+    12→ * @since 3.2.1
+    13→ * @updated 3.3.0 Auto-save with debounce, save indicator, bidirectional sync
+    14→ */
+    15→
+    16→(function ($) {
+    17→        'use strict';
+    18→
+    19→        var VCB = {
+    20→                iframe:      null,
+    21→                selected:    null,   // current widget info from iframe
+    22→                currentTab:  'content',
+    23→                settings:    {},
+    24→                section:     '',
+    25→                _saveTimer: null,
+    26→                pendingChanges: {},
+    27→                _hasUnsaved: false,
+    28→                _toastTimer: null,
+    29→                _saveTimer: null,
+    30→                pendingChanges: {},
+    31→                _hasUnsaved: false,
+    32→                _toastTimer: null,
+    33→
+    34→                /* ═══════════════════════════════════════════════════════════════
+    35→                   WIDGET FIELD REGISTRY
+    36→                   Maps widget base ID → { label, tabs: { content:[], style:[], advanced:[] } }
+    37→                   Each field: { type, key, label, unit?, min?, max?, step?, options?, placeholder? }
+    38→                   ═════════════════════════════════════════════════════════════ */
+    39→                FIELDS: {
+    40→
+    41→                        /* ──────────────── HERO ──────────────── */
+    42→                        'hero-bg': {
+    43→                                label: 'Image de fond',
+    44→                                tabs: {
+    45→                                        content: [
+    46→                                                { type: 'media', key: 'hero_slides.0.image', label: 'Image du slide' },
+    47→                                        ],
+    48→                                        style: [
+    49→                                                { type: 'select', key: 'hero_bg_position', label: 'Position du fond', options: [
+    50→                                                        {v:'center',l:'Centre'},{v:'top',l:'Haut'},{v:'bottom',l:'Bas'},{v:'left',l:'Gauche'},{v:'right',l:'Droite'}
+    51→                                                ]},
+    52→                                                { type: 'select', key: 'hero_bg_size', label: 'Taille du fond', options: [
+    53→                                                        {v:'cover',l:'Cover'},{v:'contain',l:'Contain'},{v:'auto',l:'Auto'}
+    54→                                                ]},
+    55→                                                { type: 'range', key: 'hero_overlay_opacity', label: 'Opacite de l\'overlay', min:0, max:100, step:5, unit:'%' },
+    56→                                        ],
+    57→                                        advanced: [
+    58→                                                { type: 'text', key: 'hero_height', label: 'Hauteur hero', placeholder: 'standard / tall / compact' },
+    59→                                        ]
+    60→                                }
+    61→                        },
+    62→                        'hero-overlay': {
+    63→                                label: 'Overlay',
+    64→                                tabs: {
+    65→                                        content: [],
+    66→                                        style: [
+    67→                                                { type: 'range', key: 'hero_overlay_opacity', label: 'Opacite', min:0, max:100, step:5, unit:'%' },
+    68→                                        ],
+    69→                                        advanced: []
+    70→                                }
+    71→                        },
+    72→                        'hero-eyebrow': {
+    73→                                label: 'Sur-titre',
+    74→                                tabs: {
+    75→                                        content: [
+    76→                                                { type: 'text', key: 'hero_slides.0.eyebrow', label: 'Texte du sur-titre' },
+    77→                                        ],
+    78→                                        style: [
+    79→                                                { type: 'select', key: 'hero_eyebrow_font_family', label: 'Police', options: [
+    80→                                                        {v:'Inter',l:'Inter'},{v:'Playfair Display',l:'Playfair Display'},{v:'Cormorant Garamond',l:'Cormorant Garamond'}
+    81→                                                ]},
+    82→                                                { type: 'number', key: 'hero_eyebrow_font_size', label: 'Taille', unit:'px' },
+    83→                                                { type: 'select', key: 'hero_eyebrow_font_weight', label: 'Graisse', options: [
+    84→                                                        {v:'300',l:'Light'},{v:'400',l:'Regular'},{v:'500',l:'Medium'},{v:'600',l:'Semi Bold'},{v:'700',l:'Bold'}
+    85→                                                ]},
+    86→                                                { type: 'color', key: 'hero_eyebrow_color', label: 'Couleur' },
+    87→                                                { type: 'number', key: 'hero_eyebrow_letter_spacing', label: 'Espacement lettres', unit:'px' },
+    88→                                                { type: 'select', key: 'hero_eyebrow_text_transform', label: 'Casse', options: [
+    89→                                                        {v:'uppercase',l:'Majuscules'},{v:'lowercase',l:'Minuscules'},{v:'none',l:'Normal'}
+    90→                                                ]},
+    91→                                                { type: 'number', key: 'hero_eyebrow_margin_bottom', label: 'Marge bas', unit:'px' },
+    92→                                        ],
+    93→                                        advanced: []
+    94→                                }
+    95→                        },
+    96→                        'hero-title': {
+    97→                                label: 'Titre principal',
+    98→                                tabs: {
+    99→                                        content: [
+   100→                                                { type: 'text', key: 'hero_slides.0.title', label: 'Titre' },
+   101→                                        ],
+   102→                                        style: [
+   103→                                                { type: 'select', key: 'hero_title_font_family', label: 'Police', options: [
+   104→                                                        {v:'Playfair Display',l:'Playfair Display'},{v:'Inter',l:'Inter'},{v:'Cormorant Garamond',l:'Cormorant Garamond'}
+   105→                                                ]},
+   106→                                                { type: 'number', key: 'hero_title_font_size', label: 'Taille', unit:'px' },
+   107→                                                { type: 'select', key: 'hero_title_font_weight', label: 'Graisse', options: [
+   108→                                                        {v:'400',l:'Regular'},{v:'500',l:'Medium'},{v:'600',l:'Semi Bold'},{v:'700',l:'Bold'}
+   109→                                                ]},
+   110→                                                { type: 'color', key: 'hero_title_color', label: 'Couleur' },
+   111→                                                { type: 'number', key: 'hero_title_line_height', label: 'Hauteur de ligne', step:0.1 },
+   112→                                                { type: 'number', key: 'hero_title_letter_spacing', label: 'Espacement lettres', unit:'px' },
+   113→                                                { type: 'number', key: 'hero_title_margin_bottom', label: 'Marge bas', unit:'px' },
+   114→                                        ],
+   115→                                        advanced: []
+   116→                                }
+   117→                        },
+   118→                        'hero-subtitle': {
+   119→                                label: 'Sous-titre',
+   120→                                tabs: {
+   121→                                        content: [
+   122→                                                { type: 'textarea', key: 'hero_slides.0.subtitle', label: 'Sous-titre' },
+   123→                                        ],
+   124→                                        style: [
+   125→                                                { type: 'select', key: 'hero_subtitle_font_family', label: 'Police', options: [
+   126→                                                        {v:'Inter',l:'Inter'},{v:'Playfair Display',l:'Playfair Display'}
+   127→                                                ]},
+   128→                                                { type: 'number', key: 'hero_subtitle_font_size', label: 'Taille', unit:'px' },
+   129→                                                { type: 'select', key: 'hero_subtitle_font_weight', label: 'Graisse', options: [
+   130→                                                        {v:'300',l:'Light'},{v:'400',l:'Regular'},{v:'500',l:'Medium'}
+   131→                                                ]},
+   132→                                                { type: 'color', key: 'hero_subtitle_color', label: 'Couleur' },
+   133→                                                { type: 'number', key: 'hero_subtitle_line_height', label: 'Hauteur de ligne', step:0.1 },
+   134→                                                { type: 'number', key: 'hero_subtitle_margin_bottom', label: 'Marge bas', unit:'px' },
+   135→                                        ],
+   136→                                        advanced: []
+   137→                                }
+   138→                        },
+   139→                        'hero-cta': {
+   140→                                label: 'Bouton CTA',
+   141→                                tabs: {
+   142→                                        content: [
+   143→                                                { type: 'text', key: 'hero_slides.0.cta_text', label: 'Texte du bouton' },
+   144→                                                { type: 'text', key: 'hero_slides.0.cta_link', label: 'Lien destination', placeholder: 'https://...' },
+   145→                                                { type: 'select', key: 'hero_slides.0.cta_style', label: 'Style du bouton', options: [
+   146→                                                        {v:'primary',l:'Principal (fond sombre)'},{v:'gold',l:'Or'},{v:'outline',l:'Contour'}
+   147→                                                ]},
+   148→                                        ],
+   149→                                        style: [
+   150→                                                { type: 'number', key: 'hero_cta_font_size', label: 'Taille police', unit:'px' },
+   151→                                                { type: 'select', key: 'hero_cta_font_weight', label: 'Graisse', options: [
+   152→                                                        {v:'400',l:'Regular'},{v:'500',l:'Medium'},{v:'600',l:'Semi Bold'},{v:'700',l:'Bold'}
+   153→                                                ]},
+   154→                                                { type: 'number', key: 'hero_cta_letter_spacing', label: 'Espacement lettres', unit:'px' },
+   155→                                                { type: 'select', key: 'hero_cta_text_transform', label: 'Casse', options: [
+   156→                                                        {v:'uppercase',l:'Majuscules'},{v:'none',l:'Normal'}
+   157→                                                ]},
+   158→                                                { type: 'number', key: 'hero_cta_padding_x', label: 'Padding horizontal', unit:'px' },
+   159→                                                { type: 'number', key: 'hero_cta_padding_y', label: 'Padding vertical', unit:'px' },
+   160→                                                { type: 'number', key: 'hero_cta_border_radius', label: 'Border radius', unit:'px' },
+   161→                                                { type: 'color', key: 'hero_cta_bg_color', label: 'Couleur fond' },
+   162→                                                { type: 'color', key: 'hero_cta_text_color', label: 'Couleur texte' },
+   163→                                                { type: 'color', key: 'hero_cta_hover_bg_color', label: 'Couleur fond (hover)' },
+   164→                                                { type: 'color', key: 'hero_cta_hover_text_color', label: 'Couleur texte (hover)' },
+   165→                                                { type: 'number', key: 'hero_cta_border_width', label: 'Largeur bordure', unit:'px' },
+   166→                                                { type: 'color', key: 'hero_cta_border_color', label: 'Couleur bordure' },
+   167→                                        ],
+   168→                                        advanced: []
+   169→                                }
+   170→                        },
+   171→                        'hero-side': {
+   172→                                label: 'Blocs lateraux',
+   173→                                tabs: {
+   174→                                        content: [
+   175→                                                { type: 'text', key: 'hs_bestseller_label', label: 'Label best-seller' },
+   176→                                                { type: 'text', key: 'hs_bestseller_title', label: 'Titre best-seller' },
+   177→                                                { type: 'text', key: 'hs_bestseller_price', label: 'Prix best-seller' },
+   178→                                                { type: 'text', key: 'hs_bestseller_cta', label: 'Texte CTA best-seller' },
+   179→                                                { type: 'text', key: 'hs_category_label', label: 'Label categorie' },
+   180→                                                { type: 'text', key: 'hs_category_title', label: 'Titre categorie' },
+   181→                                        ],
+   182→                                        style: [
+   183→                                                { type: 'number', key: 'hero_side_width', label: 'Largeur panneau', unit:'px' },
+   184→                                                { type: 'number', key: 'hero_side_gap', label: 'Espacement cartes', unit:'px' },
+   185→                                                { type: 'number', key: 'hero_side_card_radius', label: 'Border radius carte', unit:'px' },
+   186→                                                { type: 'number', key: 'hero_side_card_img_height', label: 'Hauteur image carte', unit:'px' },
+   187→                                        ],
+   188→                                        advanced: [
+   189→                                                { type: 'toggle', key: 'hero_hide_side_mobile', label: 'Masquer sur mobile' },
+   190→                                        ]
+   191→                                }
+   192→                        },
+   193→                        'hero-dots': {
+   194→                                label: 'Navigation slides',
+   195→                                tabs: {
+   196→                                        content: [
+   197→                                                { type: 'toggle', key: 'hero_autoplay', label: 'Lecture automatique' },
+   198→                                                { type: 'number', key: 'hero_autoplay_speed', label: 'Vitesse de defilement', unit:'ms' },
+   199→                                        ],
+   200→                                        style: [],
+   201→                                        advanced: []
+   202→                                }
+   203→                        },
+   204→
+   205→                        /* ──────────────── FEATURES ──────────────── */
+   206→                        'feature-item': {
+   207→                                label: 'Element de confiance',
+   208→                                tabs: {
+   209→                                        content: [],
+   210→                                        style: [
+   211→                                                { type: 'select', key: 'feat_bg_style', label: 'Fond de section', options: [
+   212→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   213→                                                ]},
+   214→                                                { type: 'select', key: 'feat_padding', label: 'Espacement', options: [
+   215→                                                        {v:'compact',l:'Compact'},{v:'normal',l:'Normal'},{v:'wide',l:'Large'}
+   216→                                                ]},
+   217→                                                { type: 'toggle', key: 'feat_bottom_border', label: 'Bordure inferieure' },
+   218→                                        ],
+   219→                                        advanced: []
+   220→                                }
+   221→                        },
+   222→
+   223→                        /* ──────────────── CATEGORIES ──────────────── */
+   224→                        'cat-heading': {
+   225→                                label: 'En-tete Categories',
+   226→                                tabs: {
+   227→                                        content: [
+   228→                                                { type: 'text', key: 'cat_eyebrow', label: 'Sur-titre (eyebrow)' },
+   229→                                                { type: 'text', key: 'section_title_categories', label: 'Titre de section' },
+   230→                                                { type: 'textarea', key: 'cat_description', label: 'Description' },
+   231→                                        ],
+   232→                                        style: [
+   233→                                                { type: 'select', key: 'cat_bg_style', label: 'Fond de section', options: [
+   234→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   235→                                                ]},
+   236→                                        ],
+   237→                                        advanced: []
+   238→                                }
+   239→                        },
+   240→                        'cat-card': {
+   241→                                label: 'Carte categorie',
+   242→                                tabs: {
+   243→                                        content: [],
+   244→                                        style: [
+   245→                                                { type: 'number', key: 'cat_display_count', label: 'Nombre de categories' },
+   246→                                        ],
+   247→                                        advanced: []
+   248→                                }
+   249→                        },
+   250→                        'cat-cta': {
+   251→                                label: 'Bouton CTA',
+   252→                                tabs: {
+   253→                                        content: [
+   254→                                                { type: 'text', key: 'cat_cta_text', label: 'Texte du bouton' },
+   255→                                                { type: 'text', key: 'cat_cta_link', label: 'Lien', placeholder: '/boutique/' },
+   256→                                        ],
+   257→                                        style: [],
+   258→                                        advanced: []
+   259→                                }
+   260→                        },
+   261→
+   262→                        /* ──────────────── PRODUCTS ──────────────── */
+   263→                        'prod-heading': {
+   264→                                label: 'En-tete Produits',
+   265→                                tabs: {
+   266→                                        content: [
+   267→                                                { type: 'text', key: 'prod_eyebrow', label: 'Sur-titre (eyebrow)' },
+   268→                                                { type: 'text', key: 'section_title_products', label: 'Titre de section' },
+   269→                                                { type: 'textarea', key: 'prod_description', label: 'Description' },
+   270→                                        ],
+   271→                                        style: [
+   272→                                                { type: 'select', key: 'prod_bg_style', label: 'Fond de section', options: [
+   273→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   274→                                                ]},
+   275→                                                { type: 'select', key: 'prod_columns', label: 'Colonnes', options: [
+   276→                                                        {v:'2',l:'2 colonnes'},{v:'3',l:'3 colonnes'},{v:'4',l:'4 colonnes'}
+   277→                                                ]},
+   278→                                        ],
+   279→                                        advanced: [
+   280→                                                { type: 'select', key: 'prod_sort', label: 'Tri', options: [
+   281→                                                        {v:'date',l:'Date'},{v:'title',l:'Titre'},{v:'price',l:'Prix'},{v:'popularity',l:'Popularite'}
+   282→                                                ]},
+   283→                                        ]
+   284→                                }
+   285→                        },
+   286→                        'prod-card': {
+   287→                                label: 'Carte produit',
+   288→                                tabs: {
+   289→                                        content: [
+   290→                                                { type: 'number', key: 'featured_products_count', label: 'Nombre de produits' },
+   291→                                        ],
+   292→                                        style: [],
+   293→                                        advanced: []
+   294→                                }
+   295→                        },
+   296→                        'prod-cta': {
+   297→                                label: 'Bouton CTA',
+   298→                                tabs: {
+   299→                                        content: [
+   300→                                                { type: 'text', key: 'prod_cta_text', label: 'Texte du bouton' },
+   301→                                                { type: 'text', key: 'prod_cta_link', label: 'Lien', placeholder: '/boutique/' },
+   302→                                        ],
+   303→                                        style: [],
+   304→                                        advanced: []
+   305→                                }
+   306→                        },
+   307→
+   308→                        /* ──────────────── SPLIT BANNER ──────────────── */
+   309→                        'banner-left': {
+   310→                                label: 'Banniere gauche',
+   311→                                tabs: {
+   312→                                        content: [
+   313→                                                { type: 'media', key: 'sb_left_image', label: 'Image' },
+   314→                                                { type: 'text', key: 'sb_left_eyebrow', label: 'Sur-titre' },
+   315→                                                { type: 'text', key: 'sb_left_title', label: 'Titre' },
+   316→                                                { type: 'textarea', key: 'sb_left_desc', label: 'Description' },
+   317→                                                { type: 'text', key: 'sb_left_cta_text', label: 'Texte CTA' },
+   318→                                                { type: 'text', key: 'sb_left_cta_link', label: 'Lien CTA' },
+   319→                                        ],
+   320→                                        style: [
+   321→                                                { type: 'select', key: 'sb_left_cta_style', label: 'Style CTA', options: [
+   322→                                                        {v:'primary',l:'Principal'},{v:'gold',l:'Or'},{v:'outline',l:'Contour'}
+   323→                                                ]},
+   324→                                                { type: 'select', key: 'sb_left_style', label: 'Variante', options: [
+   325→                                                        {v:'dark',l:'Sombre'},{v:'light',l:'Clair'}
+   326→                                                ]},
+   327→                                        ],
+   328→                                        advanced: []
+   329→                                }
+   330→                        },
+   331→                        'banner-right': {
+   332→                                label: 'Banniere droite',
+   333→                                tabs: {
+   334→                                        content: [
+   335→                                                { type: 'media', key: 'sb_right_image', label: 'Image' },
+   336→                                                { type: 'text', key: 'sb_right_eyebrow', label: 'Sur-titre' },
+   337→                                                { type: 'text', key: 'sb_right_title', label: 'Titre' },
+   338→                                                { type: 'textarea', key: 'sb_right_desc', label: 'Description' },
+   339→                                                { type: 'text', key: 'sb_right_cta_text', label: 'Texte CTA' },
+   340→                                                { type: 'text', key: 'sb_right_cta_link', label: 'Lien CTA' },
+   341→                                        ],
+   342→                                        style: [
+   343→                                                { type: 'select', key: 'sb_right_cta_style', label: 'Style CTA', options: [
+   344→                                                        {v:'primary',l:'Principal'},{v:'gold',l:'Or'},{v:'outline',l:'Contour'}
+   345→                                                ]},
+   346→                                                { type: 'select', key: 'sb_right_style', label: 'Variante', options: [
+   347→                                                        {v:'dark',l:'Sombre'},{v:'light',l:'Clair'}
+   348→                                                ]},
+   349→                                        ],
+   350→                                        advanced: [
+   351→                                                { type: 'select', key: 'sb_layout', label: 'Disposition', options: [
+   352→                                                        {v:'50-50',l:'50 / 50'},{v:'60-40',l:'60 / 40'},{v:'40-60',l:'40 / 60'}
+   353→                                                ]},
+   354→                                        ]
+   355→                                }
+   356→                        },
+   357→
+   358→                        /* ──────────────── MARQUEE ──────────────── */
+   359→                        'marquee-track': {
+   360→                                label: 'Bandeau defilant',
+   361→                                tabs: {
+   362→                                        content: [],
+   363→                                        style: [
+   364→                                                { type: 'number', key: 'marquee_speed', label: 'Vitesse de defilement', unit:'s' },
+   365→                                                { type: 'select', key: 'marquee_direction', label: 'Direction', options: [
+   366→                                                        {v:'left',l:'Gauche'},{v:'right',l:'Droite'}
+   367→                                                ]},
+   368→                                                { type: 'select', key: 'marquee_bg', label: 'Fond', options: [
+   369→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   370→                                                ]},
+   371→                                        ],
+   372→                                        advanced: []
+   373→                                }
+   374→                        },
+   375→
+   376→                        /* ──────────────── TESTIMONIALS ──────────────── */
+   377→                        'testi-heading': {
+   378→                                label: 'En-tete Temoignages',
+   379→                                tabs: {
+   380→                                        content: [
+   381→                                                { type: 'text', key: 'testi_eyebrow', label: 'Sur-titre' },
+   382→                                                { type: 'text', key: 'section_title_testimonials', label: 'Titre de section' },
+   383→                                                { type: 'textarea', key: 'testi_description', label: 'Description' },
+   384→                                        ],
+   385→                                        style: [
+   386→                                                { type: 'select', key: 'testi_bg_style', label: 'Fond', options: [
+   387→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   388→                                                ]},
+   389→                                                { type: 'select', key: 'testi_columns', label: 'Colonnes', options: [
+   390→                                                        {v:'2',l:'2 colonnes'},{v:'3',l:'3 colonnes'}
+   391→                                                ]},
+   392→                                        ],
+   393→                                        advanced: [
+   394→                                                { type: 'number', key: 'testimonials_count', label: 'Nombre de temoignages' },
+   395→                                        ]
+   396→                                }
+   397→                        },
+   398→                        'testi-card': {
+   399→                                label: 'Carte temoignage',
+   400→                                tabs: {
+   401→                                        content: [],
+   402→                                        style: [],
+   403→                                        advanced: []
+   404→                                }
+   405→                        },
+   406→
+   407→                        /* ──────────────── BLOG ──────────────── */
+   408→                        'blog-heading': {
+   409→                                label: 'En-tete Blog',
+   410→                                tabs: {
+   411→                                        content: [
+   412→                                                { type: 'text', key: 'blog_eyebrow', label: 'Sur-titre' },
+   413→                                                { type: 'text', key: 'section_title_blog', label: 'Titre de section' },
+   414→                                                { type: 'textarea', key: 'blog_description', label: 'Description' },
+   415→                                        ],
+   416→                                        style: [
+   417→                                                { type: 'select', key: 'blog_bg_style', label: 'Fond', options: [
+   418→                                                        {v:'base',l:'Base'},{v:'soft',l:'Doux'},{v:'muted',l:'Mute'},{v:'dark',l:'Sombre'}
+   419→                                                ]},
+   420→                                                { type: 'select', key: 'blog_columns', label: 'Colonnes', options: [
+   421→                                                        {v:'2',l:'2 colonnes'},{v:'3',l:'3 colonnes'}
+   422→                                                ]},
+   423→                                        ],
+   424→                                        advanced: [
+   425→                                                { type: 'number', key: 'blog_posts_count', label: 'Nombre d\'articles' },
+   426→                                        ]
+   427→                                }
+   428→                        },
+   429→                        'blog-card': {
+   430→                                label: 'Carte article',
+   431→                                tabs: {
+   432→                                        content: [],
+   433→                                        style: [],
+   434→                                        advanced: []
+   435→                                }
+   436→                        },
+   437→                        'blog-cta': {
+   438→                                label: 'Bouton CTA',
+   439→                                tabs: {
+   440→                                        content: [
+   441→                                                { type: 'text', key: 'blog_cta_text', label: 'Texte du bouton' },
+   442→                                                { type: 'text', key: 'blog_cta_link', label: 'Lien', placeholder: '/blog/' },
+   443→                                        ],
+   444→                                        style: [],
+   445→                                        advanced: []
+   446→                                }
+   447→                        },
+   448→
+   449→                        /* ──────────────── INSTAGRAM ──────────────── */
+   450→                        'ig-heading': {
+   451→                                label: 'En-tete Instagram',
+   452→                                tabs: {
+   453→                                        content: [
+   454→                                                { type: 'text', key: 'ig_eyebrow', label: 'Sur-titre' },
+   455→                                                { type: 'text', key: 'instagram_handle', label: 'Nom du compte' },
+   456→                                        ],
+   457→                                        style: [
+   458→                                                { type: 'select', key: 'ig_columns', label: 'Colonnes', options: [
+   459→                                                        {v:'4',l:'4 colonnes'},{v:'5',l:'5 colonnes'},{v:'6',l:'6 colonnes'}
+   460→                                                ]},
+   461→                                                { type: 'select', key: 'ig_gap', label: 'Espacement', options: [
+   462→                                                        {v:'none',l:'Aucun'},{v:'small',l:'Petit'},{v:'medium',l:'Moyen'},{v:'large',l:'Grand'}
+   463→                                                ]},
+   464→                                        ],
+   465→                                        advanced: []
+   466→                                }
+   467→                        },
+   468→                        'ig-item': {
+   469→                                label: 'Image Instagram',
+   470→                                tabs: {
+   471→                                        content: [],
+   472→                                        style: [],
+   473→                                        advanced: []
+   474→                                }
+   475→                        },
+   476→                },
+   477→
+   478→                /* ═══════════════════════════════════════════════════════════════
+   479→                   CSS PREVIEW MAP
+   480→                   Maps setting keys → { cssProp, unit?, transform? }
+   481→                   When a field changes, we compute the CSS and push to iframe.
+   482→                   ═════════════════════════════════════════════════════════════ */
+   483→                CSS_MAP: {
+   484→                        /* Hero Eyebrow */
+   485→                        'hero_eyebrow_font_size':      { css: 'fontSize',      unit: 'px' },
+   486→                        'hero_eyebrow_font_weight':    { css: 'fontWeight' },
+   487→                        'hero_eyebrow_color':          { css: 'color' },
+   488→                        'hero_eyebrow_letter_spacing': { css: 'letterSpacing', unit: 'px' },
+   489→                        'hero_eyebrow_text_transform': { css: 'textTransform' },
+   490→                        'hero_eyebrow_margin_bottom':  { css: 'marginBottom',  unit: 'px' },
+   491→                        'hero_eyebrow_font_family':    { css: 'fontFamily' },
+   492→
+   493→                        /* Hero Title */
+   494→                        'hero_title_font_size':      { css: 'fontSize',      unit: 'px' },
+   495→                        'hero_title_font_weight':    { css: 'fontWeight' },
+   496→                        'hero_title_color':          { css: 'color' },
+   497→                        'hero_title_line_height':    { css: 'lineHeight' },
+   498→                        'hero_title_letter_spacing': { css: 'letterSpacing', unit: 'px' },
+   499→                        'hero_title_margin_bottom':  { css: 'marginBottom',  unit: 'px' },
+   500→                        'hero_title_font_family':    { css: 'fontFamily' },
+
+[showing lines 1-500 of 1054; use offset=501 with limit to continue reading]

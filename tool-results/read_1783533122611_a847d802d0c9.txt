@@ -1,0 +1,630 @@
+     1→<?php
+     2→/**
+     3→ * Velure Core — Canvas Renderer
+     4→ * Intercepts the admin page when &mode=canvas is present
+     5→ * and outputs ONLY the requested section HTML with theme CSS.
+     6→ * This HTML is loaded inside an iframe by the Visual Builder.
+     7→ *
+     8→ * @package VelureCore
+     9→ * @since 3.2.0
+    10→ */
+    11→
+    12→if ( ! defined( 'ABSPATH' ) ) exit;
+    13→
+    14→/**
+    15→ * Valid sections that can be rendered in the canvas.
+    16→ * Maps slugs to the nav-key used in admin-pages.php.
+    17→ */
+    18→function velure_core_canvas_valid_sections() {
+    19→        return array(
+    20→                'hero'         => 'hero',
+    21→                'features'     => 'features',
+    22→                'categories'   => 'categories',
+    23→                'products'     => 'products',
+    24→                'split_banner' => 'banner',
+    25→                'marquee'      => 'marquee',
+    26→                'testimonials' => 'testimonials',
+    27→                'blog'         => 'blog',
+    28→                'instagram'    => 'instagram',
+    29→        );
+    30→}
+    31→
+    32→/**
+    33→ * Check if the current request is a canvas render request.
+    34→ * Returns the section slug if valid, false otherwise.
+    35→ */
+    36→function velure_core_is_canvas_request() {
+    37→        if ( ! is_admin() ) {
+    38→                return false;
+    39→        }
+    40→        if ( ! isset( $_GET['mode'] ) || 'canvas' !== $_GET['mode'] ) {
+    41→                return false;
+    42→        }
+    43→        if ( ! current_user_can( 'edit_theme_options' ) ) {
+    44→                return false;
+    45→        }
+    46→        $section = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : '';
+    47→        $valid   = velure_core_canvas_valid_sections();
+    48→        if ( ! isset( $valid[ $section ] ) ) {
+    49→                return false;
+    50→        }
+    51→        return $section;
+    52→}
+    53→
+    54→/**
+    55→ * Render the canvas output and die.
+    56→ * IMPORTANT: Since v3.4.2, this is called from admin_init (via Velure_Core::intercept_canvas_request),
+    57→ * which means WordPress admin-header.php has NOT been output yet. The HTML we produce here
+    58→ * is the ONLY content sent to the browser — a pure, clean HTML document.
+    59→ *
+    60→ * @param string $section  The validated section slug.
+    61→ */
+    62→function velure_core_render_canvas( $section ) {
+    63→
+    64→        /* ═══ NOW CALLED FROM admin_init — NO WordPress admin chrome exists yet ═══ */
+    65→        define( 'IFRAME_REQUEST', true );
+    66→        show_admin_bar( false );
+    67→
+    68→        /* ── Theme CSS discovery ── */
+    69→        $theme     = wp_get_theme();
+    70→        $theme_uri = '';
+    71→        $css_files = array();
+    72→
+    73→        if ( $theme->exists() ) {
+    74→                $theme_uri = $theme->get_template_directory_uri();
+    75→                /* Real theme stylesheets — base.css + components.css (where section styles live) */
+    76→                $css_files[] = $theme_uri . '/assets/css/base.css';
+    77→                $css_files[] = $theme_uri . '/assets/css/components.css';
+    78→                /* style.css is just the WP header (14 lines), skip it to avoid useless request */
+    79→        }
+    80→
+    81→        /* Velure3 URI for fallback image paths */
+    82→        $velure3_uri = '';
+    83→        if ( defined( 'VELURE3_URI' ) ) {
+    84→                $velure3_uri = VELURE3_URI;
+    85→        } elseif ( $theme->get_template() === 'velure3' || $theme->get_stylesheet() === 'velure3' ) {
+    86→                $velure3_uri = $theme->get_template_directory_uri();
+    87→        }
+    88→
+    89→        /* Section label */
+    90→        $sections = velure_core_get_editable_sections();
+    91→        $label    = isset( $sections[ $section ] ) ? $sections[ $section ]['label'] : $section;
+    92→
+    93→        /* ── Pure HTML headers — NO WordPress admin assets will be injected ── */
+    94→        header( 'Content-Type: text/html; charset=' . get_bloginfo( 'charset' ) );
+    95→        header( 'X-Robots-Tag: noindex, nofollow' );
+    96→        @ini_set( 'display_errors', 0 );
+    97→
+    98→        /* Google Fonts URL (same as theme) */
+    99→        $google_fonts_url = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap';
+   100→
+   101→        ?>
+   102→<!DOCTYPE html>
+   103→<html <?php language_attributes(); ?>>
+   104→<head>
+   105→        <meta charset="<?php bloginfo( 'charset' ); ?>">
+   106→        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   107→        <title><?php echo esc_html( $label ); ?> — Canvas</title>
+   108→
+   109→        <?php foreach ( $css_files as $css_url ) : ?>
+   110→        <link rel="stylesheet" href="<?php echo esc_url( $css_url ); ?>?v=<?php echo esc_attr( $theme->get( 'Version' ) ); ?>" />
+   111→        <?php endforeach; ?>
+   112→
+   113→        <link rel="preconnect" href="https://fonts.googleapis.com">
+   114→        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   115→        <link href="<?php echo esc_url( $google_fonts_url ); ?>" rel="stylesheet">
+   116→
+   117→        <style>
+   118→                /* ── Canvas base reset ── */
+   119→                *, *::before, *::after { box-sizing: border-box; }
+   120→                html, body {
+   121→                        margin: 0;
+   122→                        padding: 0;
+   123→                        background: #FAFAF8;
+   124→                        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+   125→                        -webkit-font-smoothing: antialiased;
+   126→                        -moz-osx-font-smoothing: grayscale;
+   127→                }
+   128→                /* Safety: hide any WP admin remnants (shouldn't exist now, but belt & suspenders) */
+   129→                #wpadminbar, .admin-bar, .update-nag, .notice { display: none !important; }
+   130→                body.admin-bar { margin-top: 0 !important; }
+   131→
+   132→                /* Canvas wrapper */
+   133→                .vc-canvas-body {
+   134→                        width: 100%;
+   135→                        min-height: 100vh;
+   136→                        overflow-x: hidden;
+   137→                }
+   138→
+   139→                /* Section badge */
+   140→                .vc-canvas-badge {
+   141→                        position: fixed;
+   142→                        top: 10px;
+   143→                        left: 10px;
+   144→                        background: rgba(26, 26, 46, 0.85);
+   145→                        color: #C8A97E;
+   146→                        font-size: 11px;
+   147→                        font-weight: 600;
+   148→                        padding: 5px 12px;
+   149→                        border-radius: 20px;
+   150→                        z-index: 10000;
+   151→                        font-family: 'Inter', sans-serif;
+   152→                        letter-spacing: 0.5px;
+   153→                        text-transform: uppercase;
+   154→                        pointer-events: none;
+   155→                        backdrop-filter: blur(8px);
+   156→                }
+   157→
+   158→                /* Edit button from frontend-edit.php should be hidden in canvas */
+   159→                .vc-fe-edit-wrap { display: none !important; }
+   160→
+   161→                /* Widget hover outline (injected by canvas-bridge.js) */
+   162→                [data-vc-widget] { cursor: pointer; transition: outline 0.15s ease; }
+   163→                [data-vc-widget].vc-widget-selected {
+   164→                        outline: 2px dashed #4A90D9 !important;
+   165→                        outline-offset: 2px;
+   166→                }
+   167→
+   168→                <?php if ( $section === 'hero' ) : ?>
+   169→                /* ═══════════════════════════════════════════════════════════════
+   170→                   HERO SLIDER — CANVAS EDIT MODE
+   171→                   Force the first slide to display statically.
+   172→                   Disable transitions, auto-advance, and progress bar.
+   173→                   ═══════════════════════════════════════════════════════════════ */
+   174→                .v-hero-slide {
+   175→                        opacity: 1 !important;
+   176→                        transition: none !important;
+   177→                        z-index: 1 !important;
+   178→                }
+   179→                .v-hero-slide--active {
+   180→                        opacity: 1 !important;
+   181→                        z-index: 2 !important;
+   182→                }
+   183→                .v-hero-slide-bg {
+   184→                        background-size: cover !important;
+   185→                        background-position: center !important;
+   186→                        background-repeat: no-repeat !important;
+   187→                }
+   188→                /* Hide non-active slides so only the first is visible */
+   189→                .v-hero-slide:not(.v-hero-slide--active) {
+   190→                        display: none !important;
+   191→                }
+   192→                /* Disable progress bar animation */
+   193→                .v-hero-progress { display: none !important; }
+   194→                /* Disable dot click navigation in canvas */
+   195→                .v-hero-dot { pointer-events: none !important; }
+   196→                .v-hero-slider {
+   197→                        animation: none !important;
+   198→                }
+   199→                <?php endif; ?>
+   200→        </style>
+   201→</head>
+   202→<body class="vc-canvas-body" data-vc-section="<?php echo esc_attr( $section ); ?>">
+   203→        <div class="vc-canvas-badge"><?php echo esc_html( $label ); ?></div>
+   204→
+   205→        <?php
+   206→        /* ═══════════════════════════════════════════════════════════
+   207→           Render the requested section — reusing the same PHP logic
+   208→           as front-page.php but for a single section only.
+   209→           ═══════════════════════════════════════════════════════════ */
+   210→        velure_core_canvas_render_section( $section );
+   211→        ?>
+   212→
+   213→        <!-- Theme JS (hero slider, marquee animations) -->
+   214→        <?php if ( $theme_uri ) : ?>
+   215→        <script src="<?php echo esc_url( $theme_uri . '/assets/js/theme.js' ); ?>?v=<?php echo esc_attr( $theme->get( 'Version' ) ); ?>"></script>
+   216→        <?php endif; ?>
+   217→
+   218→        <!-- Canvas Bridge: widget identification + postMessage -->
+   219→        <script src="<?php echo esc_url( VELURE_CORE_URI . 'assets/js/canvas-bridge.js' ); ?>?v=<?php echo VELURE_CORE_VERSION; ?>"></script>
+   220→</body>
+   221→</html>
+   222→        <?php
+   223→        /* Stop all further WordPress execution */
+   224→        exit;
+   225→}
+   226→
+   227→/**
+   228→ * Render a single section's HTML inside the canvas.
+   229→ * This mirrors the switch-case from front-page.php
+   230→ * but only renders the requested section.
+   231→ *
+   232→ * @param string $section  The section slug.
+   233→ */
+   234→function velure_core_canvas_render_section( $section ) {
+   235→
+   236→        /* Ensure helper functions are available */
+   237→        if ( ! function_exists( 'velure_core_get_hero_data' ) ) {
+   238→                echo '<p style="padding:40px;text-align:center;color:#888;">Velure Core data helpers not loaded.</p>';
+   239→                return;
+   240→        }
+   241→
+   242→        switch ( $section ) {
+   243→
+   244→                /* ─── HERO SLIDER ─── */
+   245→                case 'hero' :
+   246→                        $hero  = function_exists( 'velure3_get_hero_data' ) ? velure3_get_hero_data() : velure_core_get_hero_data();
+   247→                        $h_cls = 'v-hero-slider';
+   248→                        if ( 'tall' === $hero['height'] )    $h_cls .= ' v-hero-tall';
+   249→                        if ( 'compact' === $hero['height'] ) $h_cls .= ' v-hero-compact';
+   250→                        ?>
+   251→                        <div class="<?php echo esc_attr( $h_cls ); ?>">
+   252→                          <div class="v-hero-main">
+   253→                                <?php foreach ( $hero['slides'] as $i => $slide ) : ?>
+   254→                                <div class="v-hero-slide<?php echo 0 === $i ? ' v-hero-slide--active' : ''; ?>">
+   255→                                  <div class="v-hero-slide-bg" style="background-image:url('<?php echo esc_url( $slide['image'] ); ?>');"></div>
+   256→                                  <div class="v-hero-slide-overlay"></div>
+   257→                                  <div class="v-hero-slide-content">
+   258→                                        <?php if ( $slide['eyebrow'] ) : ?>
+   259→                                          <span class="velure-eyebrow" data-vc-field="hero_slides[<?php echo $i; ?>][eyebrow]"><?php echo esc_html( $slide['eyebrow'] ); ?></span>
+   260→                                        <?php endif; ?>
+   261→                                        <h2 data-vc-field="hero_slides[<?php echo $i; ?>][title]"><?php echo wp_kses_post( $slide['title'] ); ?></h2>
+   262→                                        <?php if ( $slide['subtitle'] ) : ?>
+   263→                                          <p class="v-hero-subtitle" data-vc-field="hero_slides[<?php echo $i; ?>][subtitle]"><?php echo esc_html( $slide['subtitle'] ); ?></p>
+   264→                                        <?php endif; ?>
+   265→                                        <?php if ( $slide['cta_text'] ) : ?>
+   266→                                          <a href="#" class="velure-btn velure-btn-<?php echo esc_attr( $slide['cta_style'] ); ?>" data-vc-field="hero_slides[<?php echo $i; ?>][cta_text]" onclick="return false;">
+   267→                                                <?php echo esc_html( $slide['cta_text'] ); ?>
+   268→                                          </a>
+   269→                                        <?php endif; ?>
+   270→                                  </div>
+   271→                                </div>
+   272→                                <?php endforeach; ?>
+   273→
+   274→                                <?php if ( count( $hero['slides'] ) > 1 ) : ?>
+   275→                                <div class="v-hero-dots">
+   276→                                  <?php foreach ( $hero['slides'] as $i => $_s ) : ?>
+   277→                                  <button class="v-hero-dot<?php echo 0 === $i ? ' v-hero-dot--active' : ''; ?>" data-goto="<?php echo $i; ?>" aria-label="Slide <?php echo $i + 1; ?>"></button>
+   278→                                  <?php endforeach; ?>
+   279→                                </div>
+   280→                                <div class="v-hero-progress"><div class="v-hero-progress-bar"></div></div>
+   281→                                <?php endif; ?>
+   282→                          </div>
+   283→
+   284→                          <?php if ( $hero['show_side'] && ! empty( $hero['side_blocks'] ) ) : ?>
+   285→                          <div class="v-hero-side">
+   286→                                <?php
+   287→                                $bs = $hero['side_blocks']['bestseller'] ?? null;
+   288→                                if ( $bs ) :
+   289→                                ?>
+   290→                                <a href="#" class="v-hero-side-card" onclick="return false;">
+   291→                                  <div class="v-hero-side-card-img" style="background-image:url('<?php echo esc_url( $bs['image'] ); ?>');"></div>
+   292→                                  <div class="v-hero-side-card-body">
+   293→                                        <span class="velure-eyebrow" style="margin-bottom:0.25rem;font-size:0.6rem;" data-vc-field="hs_bestseller_label"><?php echo esc_html( $bs['label'] ); ?></span>
+   294→                                        <div class="v-hero-side-card-title" data-vc-field="hs_bestseller_title"><?php echo esc_html( $bs['title'] ); ?></div>
+   295→                                        <?php if ( ! empty( $bs['price'] ) ) : ?>
+   296→                                        <span class="v-hero-side-card-price" data-vc-field="hs_bestseller_price"><?php echo esc_html( $bs['price'] ); ?></span>
+   297→                                        <?php endif; ?>
+   298→                                        <span class="v-hero-side-card-cta" data-vc-field="hs_bestseller_cta"><?php echo esc_html( $bs['cta_text'] ?? 'VOIR' ); ?></span>
+   299→                                  </div>
+   300→                                </a>
+   301→                                <?php endif; ?>
+   302→
+   303→                                <?php
+   304→                                $cat = $hero['side_blocks']['category'] ?? null;
+   305→                                if ( $cat ) :
+   306→                                ?>
+   307→                                <a href="#" class="v-hero-side-card" onclick="return false;">
+   308→                                  <div class="v-hero-side-card-img" style="background-image:url('<?php echo esc_url( $cat['image'] ); ?>');"></div>
+   309→                                  <div class="v-hero-side-card-body">
+   310→                                        <span class="velure-eyebrow" style="margin-bottom:0.25rem;font-size:0.6rem;" data-vc-field="hs_category_label"><?php echo esc_html( $cat['label'] ); ?></span>
+   311→                                        <div class="v-hero-side-card-title" data-vc-field="hs_category_title"><?php echo esc_html( $cat['title'] ); ?></div>
+   312→                                        <span class="v-hero-side-card-cta" data-vc-field="hs_category_cta_link">DECOUVRIR</span>
+   313→                                  </div>
+   314→                                </a>
+   315→                                <?php endif; ?>
+   316→                          </div>
+   317→                          <?php endif; ?>
+   318→                        </div>
+   319→                        <?php
+   320→                        break;
+   321→
+   322→                /* ─── FEATURES / TRUST BAR ─── */
+   323→                case 'features' :
+   324→                        $features = function_exists( 'velure3_get_features' ) ? velure3_get_features() : velure_core_get_features();
+   325→                        $feat_bg  = function_exists('velure_core_bg_class') ? velure_core_bg_class( velure_core_opt( 'feat_bg_style', 'soft' ) ) : 'velure-section-soft';
+   326→                        ?>
+   327→                        <div class="velure-features <?php echo esc_attr( $feat_bg ); ?>">
+   328→                          <div class="velure-container">
+   329→                                <div class="velure-features-grid">
+   330→                                  <?php foreach ( $features as $fi => $feat ) : ?>
+   331→                                  <div class="velure-feature-item">
+   332→                                        <div class="velure-feature-icon">
+   333→                                          <?php echo wp_kses( $feat['icon'], velure_core_svg_allowed() ); ?>
+   334→                                        </div>
+   335→                                        <span class="velure-feature-title" data-vc-field="trust_features[<?php echo $fi; ?>][title]"><?php echo esc_html( $feat['title'] ); ?></span>
+   336→                                        <?php if ( $feat['desc'] ) : ?>
+   337→                                        <span class="velure-feature-desc" data-vc-field="trust_features[<?php echo $fi; ?>][description]"><?php echo esc_html( $feat['desc'] ); ?></span>
+   338→                                        <?php endif; ?>
+   339→                                  </div>
+   340→                                  <?php endforeach; ?>
+   341→                                </div>
+   342→                          </div>
+   343→                        </div>
+   344→                        <?php
+   345→                        break;
+   346→
+   347→                /* ─── CATEGORIES ─── */
+   348→                case 'categories' :
+   349→                        $categories  = function_exists( 'velure3_get_product_categories' ) ? velure3_get_product_categories() : velure_core_get_product_categories();
+   350→                        $cat_bg      = function_exists('velure3_bg_class') ? velure3_bg_class( velure3_opt( 'cat_bg_style', 'base' ) ) : 'velure-section-base';
+   351→                        $cat_eyebrow = velure3_opt( 'cat_eyebrow', 'Collections' );
+   352→                        $cat_title   = velure3_opt( 'section_title_categories', 'Explorer par Univers' );
+   353→                        $cat_desc    = velure3_opt( 'cat_description', '' );
+   354→                        $cat_cta_txt = velure3_opt( 'cat_cta_text', 'Toutes les categories' );
+   355→                        $cat_cta_url = velure3_opt( 'cat_cta_link', '/boutique/' );
+   356→                        ?>
+   357→                        <section class="velure-section <?php echo esc_attr( $cat_bg ); ?>">
+   358→                          <div class="velure-container">
+   359→                                <div class="velure-section-heading">
+   360→                                  <?php if ( $cat_eyebrow ) : ?>
+   361→                                        <span class="velure-eyebrow" data-vc-field="cat_eyebrow"><?php echo esc_html( $cat_eyebrow ); ?></span>
+   362→                                  <?php endif; ?>
+   363→                                  <h2 data-vc-field="section_title_categories"><?php echo esc_html( $cat_title ); ?></h2>
+   364→                                  <?php if ( $cat_desc ) : ?>
+   365→                                        <p data-vc-field="cat_description"><?php echo esc_html( $cat_desc ); ?></p>
+   366→                                  <?php endif; ?>
+   367→                                </div>
+   368→                                <div class="velure-carousel">
+   369→                                  <button class="velure-carousel-arrow velure-carousel-arrow--prev" aria-label="Precedent">
+   370→                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+   371→                                  </button>
+   372→                                  <div class="velure-carousel-track">
+   373→                                        <?php foreach ( $categories as $cat ) : ?>
+   374→                                        <a href="#" class="velure-category-card" onclick="return false;">
+   375→                                          <div class="velure-category-card-img">
+   376→                                                <img src="<?php echo esc_url( $cat['image'] ); ?>" alt="<?php echo esc_attr( $cat['name'] ); ?>" loading="lazy">
+   377→                                          </div>
+   378→                                          <div class="velure-category-card-name"><?php echo esc_html( $cat['name'] ); ?></div>
+   379→                                          <?php if ( $cat['count'] > 0 ) : ?>
+   380→                                          <div class="velure-category-card-count"><?php echo $cat['count']; ?> articles</div>
+   381→                                          <?php endif; ?>
+   382→                                        </a>
+   383→                                        <?php endforeach; ?>
+   384→                                  </div>
+   385→                                  <button class="velure-carousel-arrow velure-carousel-arrow--next" aria-label="Suivant">
+   386→                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+   387→                                  </button>
+   388→                                </div>
+   389→                                <?php if ( $cat_cta_txt ) : ?>
+   390→                                <div style="text-align:center;margin-top:2.5rem;">
+   391→                                  <a href="#" class="velure-btn velure-btn-outline" data-vc-field="cat_cta_text" onclick="return false;"><?php echo esc_html( $cat_cta_txt ); ?></a>
+   392→                                </div>
+   393→                                <?php endif; ?>
+   394→                          </div>
+   395→                        </section>
+   396→                        <?php
+   397→                        break;
+   398→
+   399→                /* ─── PRODUCTS ─── */
+   400→                case 'products' :
+   401→                        $products     = function_exists( 'velure3_get_featured_products' ) ? velure3_get_featured_products() : velure_core_get_featured_products();
+   402→                        $prod_cols    = velure3_opt( 'prod_columns', '4' );
+   403→                        $prod_eyebrow = velure3_opt( 'prod_eyebrow', 'Selection' );
+   404→                        $prod_title   = velure3_opt( 'section_title_products', 'Pieces Vedettes' );
+   405→                        $prod_desc    = velure3_opt( 'prod_description', '' );
+   406→                        $prod_cta_txt = velure3_opt( 'prod_cta_text', 'Voir toute la boutique' );
+   407→                        $prod_cta_url = velure3_opt( 'prod_cta_link', '/boutique/' );
+   408→                        $prod_bg      = function_exists('velure3_bg_class') ? velure3_bg_class( velure3_opt( 'prod_bg_style', 'soft' ) ) : 'velure-section-soft';
+   409→                        $grid_cls     = 'velure-grid-' . $prod_cols;
+   410→                        ?>
+   411→                        <section class="velure-section <?php echo esc_attr( $prod_bg ); ?>">
+   412→                          <div class="velure-container">
+   413→                                <div class="velure-section-heading">
+   414→                                  <?php if ( $prod_eyebrow ) : ?>
+   415→                                        <span class="velure-eyebrow" data-vc-field="prod_eyebrow"><?php echo esc_html( $prod_eyebrow ); ?></span>
+   416→                                  <?php endif; ?>
+   417→                                  <h2 data-vc-field="section_title_products"><?php echo esc_html( $prod_title ); ?></h2>
+   418→                                  <?php if ( $prod_desc ) : ?>
+   419→                                        <p data-vc-field="prod_description"><?php echo esc_html( $prod_desc ); ?></p>
+   420→                                  <?php endif; ?>
+   421→                                </div>
+   422→                                <div class="velure-grid <?php echo esc_attr( $grid_cls ); ?>">
+   423→                                  <?php foreach ( $products as $prod ) : ?>
+   424→                                  <a href="#" class="velure-product-card" onclick="return false;">
+   425→                                        <div class="velure-product-card-img">
+   426→                                          <?php if ( ! empty( $prod['image'] ) ) : ?>
+   427→                                          <img src="<?php echo esc_url( $prod['image'] ); ?>" alt="<?php echo esc_attr( $prod['name'] ); ?>" loading="lazy">
+   428→                                          <?php endif; ?>
+   429→                                          <?php echo ! empty( $prod['badge'] ) ? $prod['badge'] : ''; ?>
+   430→                                        </div>
+   431→                                        <div class="velure-product-card-name"><?php echo esc_html( $prod['name'] ); ?></div>
+   432→                                        <div class="velure-product-card-price">
+   433→                                          <?php echo isset( $prod['price_html'] ) ? $prod['price_html'] : esc_html( $prod['price'] ?? '' ); ?>
+   434→                                        </div>
+   435→                                  </a>
+   436→                                  <?php endforeach; ?>
+   437→                                </div>
+   438→                                <?php if ( $prod_cta_txt ) : ?>
+   439→                                <div style="text-align:center;margin-top:2.5rem;">
+   440→                                  <a href="#" class="velure-btn velure-btn-outline" data-vc-field="prod_cta_text" onclick="return false;"><?php echo esc_html( $prod_cta_txt ); ?></a>
+   441→                                </div>
+   442→                                <?php endif; ?>
+   443→                          </div>
+   444→                        </section>
+   445→                        <?php
+   446→                        break;
+   447→
+   448→                /* ─── SPLIT BANNER ─── */
+   449→                case 'split_banner' :
+   450→                        $banner = function_exists( 'velure3_get_split_banner' ) ? velure3_get_split_banner() : velure_core_get_split_banner();
+   451→                        ?>
+   452→                        <section class="velure-split-banner">
+   453→                          <?php foreach ( array( 'left', 'right' ) as $side ) :
+   454→                                $b     = $banner[ $side ];
+   455→                                $style = $b['style'] === 'dark' ? 'velure-split-side--dark' : 'velure-split-side--light';
+   456→                          ?>
+   457→                          <div class="velure-split-side <?php echo esc_attr( $style ); ?>">
+   458→                                <div class="velure-split-side-bg" style="background-image:url('<?php echo esc_url( $b['image'] ); ?>');"></div>
+   459→                                <div class="velure-split-side-content">
+   460→                                  <?php if ( $b['eyebrow'] ) : ?>
+   461→                                        <span class="velure-eyebrow" data-vc-field="sb_<?php echo $side; ?>_eyebrow"><?php echo esc_html( $b['eyebrow'] ); ?></span>
+   462→                                  <?php endif; ?>
+   463→                                  <h2 data-vc-field="sb_<?php echo $side; ?>_title"><?php echo esc_html( $b['title'] ); ?></h2>
+   464→                                  <?php if ( $b['desc'] ) : ?>
+   465→                                        <p data-vc-field="sb_<?php echo $side; ?>_desc"><?php echo esc_html( $b['desc'] ); ?></p>
+   466→                                  <?php endif; ?>
+   467→                                  <?php if ( $b['cta_text'] ) : ?>
+   468→                                        <a href="#" class="velure-btn velure-btn-<?php echo esc_attr( $b['cta_style'] ); ?>" data-vc-field="sb_<?php echo $side; ?>_cta_text" onclick="return false;">
+   469→                                          <?php echo esc_html( $b['cta_text'] ); ?>
+   470→                                        </a>
+   471→                                  <?php endif; ?>
+   472→                                </div>
+   473→                          </div>
+   474→                          <?php endforeach; ?>
+   475→                        </section>
+   476→                        <?php
+   477→                        break;
+   478→
+   479→                /* ─── MARQUEE ─── */
+   480→                case 'marquee' :
+   481→                        $brands      = function_exists( 'velure3_get_brands' ) ? velure3_get_brands() : velure_core_get_brands();
+   482→                        $speed       = absint( velure3_opt( 'marquee_speed', 25 ) );
+   483→                        $marquee_bg  = velure3_opt( 'marquee_bg', 'base' );
+   484→                        $marquee_dir = velure3_opt( 'marquee_direction', 'left' );
+   485→                        $marquee_cls = function_exists('velure3_bg_class') ? velure3_bg_class( $marquee_bg ) : '';
+   486→                        $marquee_items = '';
+   487→                        foreach ( $brands as $name ) {
+   488→                                $marquee_items .= '<span class="velure-marquee-item">' . esc_html( $name ) . '</span>';
+   489→                        }
+   490→                        $marquee_html = $marquee_items . $marquee_items;
+   491→                        $dir_style = ( 'right' === $marquee_dir ) ? 'animation-direction:reverse;' : '';
+   492→                        ?>
+   493→                        <div class="velure-marquee<?php echo $marquee_cls ? ' ' . esc_attr( $marquee_cls ) : ''; ?>">
+   494→                          <div class="velure-marquee-track" style="animation-duration:<?php echo $speed; ?>s;<?php echo $dir_style; ?>">
+   495→                                <?php echo $marquee_html; ?>
+   496→                          </div>
+   497→                        </div>
+   498→                        <?php
+   499→                        break;
+   500→
+   501→                /* ─── TESTIMONIALS ─── */
+   502→                case 'testimonials' :
+   503→                        $testi_count  = absint( velure3_opt( 'testimonials_count', 3 ) );
+   504→                        $testi_cols   = velure3_opt( 'testi_columns', '3' );
+   505→                        $testimonials = function_exists( 'velure3_get_testimonials' ) ? velure3_get_testimonials( $testi_count ) : velure_core_get_testimonials( $testi_count );
+   506→                        $testi_eyebrow = velure3_opt( 'testi_eyebrow', 'Avis Clients' );
+   507→                        $testi_title   = velure3_opt( 'section_title_testimonials', 'Ce Que Disent Nos Clients' );
+   508→                        $testi_desc    = velure3_opt( 'testi_description', '' );
+   509→                        $testi_bg      = function_exists('velure3_bg_class') ? velure3_bg_class( velure3_opt( 'testi_bg_style', 'base' ) ) : 'velure-section-base';
+   510→                        $testi_grid    = 'velure-grid-' . $testi_cols;
+   511→                        ?>
+   512→                        <section class="velure-section <?php echo esc_attr( $testi_bg ); ?>">
+   513→                          <div class="velure-container">
+   514→                                <div class="velure-section-heading">
+   515→                                  <?php if ( $testi_eyebrow ) : ?>
+   516→                                        <span class="velure-eyebrow" data-vc-field="testi_eyebrow"><?php echo esc_html( $testi_eyebrow ); ?></span>
+   517→                                  <?php endif; ?>
+   518→                                  <h2 data-vc-field="section_title_testimonials"><?php echo esc_html( $testi_title ); ?></h2>
+   519→                                  <?php if ( $testi_desc ) : ?>
+   520→                                        <p data-vc-field="testi_description"><?php echo esc_html( $testi_desc ); ?></p>
+   521→                                  <?php endif; ?>
+   522→                                </div>
+   523→                                <div class="velure-testimonials-grid <?php echo esc_attr( $testi_grid ); ?>">
+   524→                                  <?php foreach ( $testimonials as $t ) : ?>
+   525→                                  <div class="velure-testimonial-card">
+   526→                                        <div class="velure-testimonial-stars">
+   527→                                          <?php for ( $s = 0; $s < $t['stars']; $s++ ) echo velure3_star_svg(); ?>
+   528→                                        </div>
+   529→                                        <p class="velure-testimonial-text">"<?php echo esc_html( $t['text'] ); ?>"</p>
+   530→                                        <div class="velure-testimonial-author"><?php echo esc_html( $t['author'] ); ?></div>
+   531→                                        <?php if ( $t['role'] ) : ?>
+   532→                                        <div class="velure-testimonial-role"><?php echo esc_html( $t['role'] ); ?></div>
+   533→                                        <?php endif; ?>
+   534→                                  </div>
+   535→                                  <?php endforeach; ?>
+   536→                                </div>
+   537→                          </div>
+   538→                        </section>
+   539→                        <?php
+   540→                        break;
+   541→
+   542→                /* ─── BLOG ─── */
+   543→                case 'blog' :
+   544→                        $blog_count   = absint( velure3_opt( 'blog_posts_count', 3 ) );
+   545→                        $blog_cols    = velure3_opt( 'blog_columns', '3' );
+   546→                        $blog_posts   = function_exists( 'velure3_get_blog_posts' ) ? velure3_get_blog_posts( $blog_count ) : array();
+   547→                        $blog_eyebrow = velure3_opt( 'blog_eyebrow', 'Actualites' );
+   548→                        $blog_title   = velure3_opt( 'section_title_blog', 'Le Journal' );
+   549→                        $blog_desc    = velure3_opt( 'blog_description', '' );
+   550→                        $blog_cta_txt = velure3_opt( 'blog_cta_text', 'Voir tous les articles' );
+   551→                        $blog_cta_url = velure3_opt( 'blog_cta_link', '/blog/' );
+   552→                        $blog_bg      = function_exists('velure3_bg_class') ? velure3_bg_class( velure3_opt( 'blog_bg_style', 'muted' ) ) : 'velure-section-muted';
+   553→                        $blog_grid    = 'velure-grid-' . $blog_cols;
+   554→                        ?>
+   555→                        <section class="velure-section <?php echo esc_attr( $blog_bg ); ?>">
+   556→                          <div class="velure-container">
+   557→                                <div class="velure-section-heading">
+   558→                                  <?php if ( $blog_eyebrow ) : ?>
+   559→                                        <span class="velure-eyebrow" data-vc-field="blog_eyebrow"><?php echo esc_html( $blog_eyebrow ); ?></span>
+   560→                                  <?php endif; ?>
+   561→                                  <h2 data-vc-field="section_title_blog"><?php echo esc_html( $blog_title ); ?></h2>
+   562→                                  <?php if ( $blog_desc ) : ?>
+   563→                                        <p data-vc-field="blog_description"><?php echo esc_html( $blog_desc ); ?></p>
+   564→                                  <?php endif; ?>
+   565→                                </div>
+   566→                                <div class="velure-grid <?php echo esc_attr( $blog_grid ); ?>">
+   567→                                  <?php foreach ( $blog_posts as $post ) : ?>
+   568→                                  <a href="#" class="velure-blog-card" onclick="return false;">
+   569→                                        <?php if ( ! empty( $post['image'] ) ) : ?>
+   570→                                        <div class="velure-blog-card-img">
+   571→                                          <img src="<?php echo esc_url( $post['image'] ); ?>" alt="<?php echo esc_attr( $post['title'] ); ?>" loading="lazy">
+   572→                                        </div>
+   573→                                        <?php endif; ?>
+   574→                                        <?php if ( $post['category'] ) : ?>
+   575→                                        <div class="velure-blog-card-meta"><?php echo esc_html( $post['category'] ); ?></div>
+   576→                                        <?php endif; ?>
+   577→                                        <h3 class="velure-blog-card-title"><?php echo esc_html( $post['title'] ); ?></h3>
+   578→                                        <?php if ( $post['excerpt'] ) : ?>
+   579→                                        <p class="velure-blog-card-excerpt"><?php echo esc_html( $post['excerpt'] ); ?></p>
+   580→                                        <?php endif; ?>
+   581→                                  </a>
+   582→                                  <?php endforeach; ?>
+   583→                                </div>
+   584→                                <?php if ( $blog_cta_txt ) : ?>
+   585→                                <div style="text-align:center;margin-top:2.5rem;">
+   586→                                  <a href="#" class="velure-btn velure-btn-outline" data-vc-field="blog_cta_text" onclick="return false;"><?php echo esc_html( $blog_cta_txt ); ?></a>
+   587→                                </div>
+   588→                                <?php endif; ?>
+   589→                          </div>
+   590→                        </section>
+   591→                        <?php
+   592→                        break;
+   593→
+   594→                /* ─── INSTAGRAM ─── */
+   595→                case 'instagram' :
+   596→                        $ig_items  = function_exists( 'velure3_get_instagram_items' ) ? velure3_get_instagram_items() : array();
+   597→                        $ig_handle = velure3_opt( 'instagram_handle', '@velure.paris' );
+   598→                        $ig_eyebrow = velure3_opt( 'ig_eyebrow', 'Suivez-nous' );
+   599→                        $ig_cols    = velure3_opt( 'ig_columns', '6' );
+   600→                        $ig_gap     = velure3_opt( 'ig_gap', 'small' );
+   601→                        $gap_map    = array( 'none' => '0', 'small' => '4px', 'medium' => '8px', 'large' => '16px' );
+   602→                        $ig_gap_css = isset( $gap_map[ $ig_gap ] ) ? $gap_map[ $ig_gap ] : '4px';
+   603→                        ?>
+   604→                        <section class="velure-section">
+   605→                          <div class="velure-container">
+   606→                                <div class="velure-section-heading">
+   607→                                  <?php if ( $ig_eyebrow ) : ?>
+   608→                                        <span class="velure-eyebrow" data-vc-field="ig_eyebrow"><?php echo esc_html( $ig_eyebrow ); ?></span>
+   609→                                  <?php endif; ?>
+   610→                                  <h2 data-vc-field="instagram_handle"><?php echo esc_html( $ig_handle ); ?></h2>
+   611→                                </div>
+   612→                          </div>
+   613→                          <div class="velure-instagram-grid velure-grid-<?php echo esc_attr( $ig_cols ); ?>" style="gap:<?php echo esc_attr( $ig_gap_css ); ?>;">
+   614→                                <?php foreach ( $ig_items as $item ) : ?>
+   615→                                <a href="#" class="velure-instagram-item" onclick="return false;">
+   616→                                  <?php if ( ! empty( $item['image'] ) ) : ?>
+   617→                                  <img src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ?? 'Instagram' ); ?>" loading="lazy">
+   618→                                  <?php endif; ?>
+   619→                                </a>
+   620→                                <?php endforeach; ?>
+   621→                          </div>
+   622→                        </section>
+   623→                        <?php
+   624→                        break;
+   625→
+   626→                default :
+   627→                        echo '<p style="padding:60px 40px;text-align:center;color:#888;font-size:15px;">Section "' . esc_html( $section ) . '" non reconnue.</p>';
+   628→                        break;
+   629→        }
+   630→}

@@ -1,0 +1,1062 @@
+     1→/**
+     2→ * Velure Core — Admin JS v3.2
+     3→ * Elementor-inspired: sidebar nav, AJAX publish, templates, accordions, repeaters
+     4→ *
+     5→ * FIXES v3.2:
+     6→ *  - Nav: CSS-only panel switching (no .hide()/.show() conflicts)
+     7→ *  - Publish: robust form detection + serialized data with explicit nonce
+     8→ *  - Guard: graceful fallback if velureCoreAdmin missing
+     9→ */
+    10→(function($){
+    11→'use strict';
+    12→
+    13→var VC = {
+    14→        $form: null,
+    15→        unsaved: false,
+    16→        _initialForm: '',
+    17→        _toastTimer: null,
+    18→
+    19→        /* ═══════════════════════════════════════
+    20→           1. SIDEBAR NAVIGATION
+    21→           ═══════════════════════════════════════ */
+    22→        initNav: function() {
+    23→                var self = this;
+    24→                $(document).on('click', '.vc-nav-item', function(e){
+    25→                        e.preventDefault();
+    26→                        e.stopPropagation();
+    27→
+    28→                        var panel = $(this).attr('data-nav');
+    29→                        if (!panel) return;
+    30→
+    31→                        /* Update active state on nav items */
+    32→                        $('.vc-nav-item').removeClass('active');
+    33→                        $(this).addClass('active');
+    34→
+    35→                        /* Switch panels using ONLY CSS class — no .hide()/.show() */
+    36→                        $('.vc-section-panel').removeClass('active');
+    37→
+    38→                        var target = $('.vc-section-panel[data-panel="' + panel + '"]');
+    39→                        if (target.length) {
+    40→                                target.addClass('active');
+    41→                        }
+    42→
+    43→                        /* Update header */
+    44→                        var label = $(this).find('.vc-nav-item-label').text() || panel;
+    45→                        $('#vc-header-title').text(label);
+    46→                        $('#vc-breadcrumb-current').text(label);
+    47→
+    48→                        /* Scroll panel to top */
+    49→                        var panelEl = document.querySelector('.vc-panel');
+    50→                        if (panelEl) panelEl.scrollTop = 0;
+    51→
+    52→                        /* Init sortables on newly visible panel */
+    53→                        setTimeout(function(){
+    54→                                VC.initRepeaterSortable(target);
+    55→                        }, 60);
+    56→                });
+    57→        },
+    58→
+    59→        /* ═══════════════════════════════════════
+    60→           2. ACCORDIONS
+    61→           ═══════════════════════════════════════ */
+    62→        initAccordions: function() {
+    63→                $(document).on('click', '.vc-accordion-header', function(e){
+    64→                        e.stopPropagation();
+    65→                        $(this).closest('.vc-accordion-item').toggleClass('open');
+    66→                });
+    67→        },
+    68→
+    69→        /* ═══════════════════════════════════════
+    70→           3. REPEATER — Add / Remove / Sort
+    71→           ═══════════════════════════════════════ */
+    72→        _addRepeaterRow: function(templateEl, containerEl, label) {
+    73→                var clone = templateEl.clone().removeClass('vc-repeater-template').removeAttr('id').show();
+    74→                var idx = containerEl.find('.vc-repeater-row:not(.vc-repeater-template)').length;
+    75→
+    76→                clone.find('[name]').each(function(){
+    77→                        var name = $(this).attr('name');
+    78→                        if (!name) return;
+    79→                        name = name.replace(/\[\d+\]/g, '[' + idx + ']');
+    80→                        name = name.replace(/__INDEX__/g, idx);
+    81→                        name = name.replace(/__NUM__/g, (idx + 1));
+    82→                        $(this).attr('name', name);
+    83→                });
+    84→                clone.find('[data-index]').attr('data-index', idx);
+    85→
+    86→                clone.find('.vc-repeater-title').text((label || 'Element') + ' ' + (idx + 1));
+    87→                clone.addClass('open');
+    88→                containerEl.append(clone);
+    89→        },
+    90→
+    91→        initRepeaters: function() {
+    92→                var self = this;
+    93→
+    94→                /* Add button */
+    95→                $(document).on('click', '.vc-repeater-add', function(e){
+    96→                        e.preventDefault();
+    97→                        e.stopPropagation();
+    98→
+    99→                        var repeaterId = $(this).data('repeater');
+   100→                        var template = $('#' + repeaterId + '-template');
+   101→                        var container = $('#' + repeaterId);
+   102→
+   103→                        if (!template.length || !container.length) {
+   104→                                /* Fallback: search within parent */
+   105→                                var parent = $(this).closest('.vc-accordion-body, .vc-section-panel');
+   106→                                template = parent.find('.vc-repeater-template').first();
+   107→                                container = parent.find('.vc-repeater').first();
+   108→                        }
+   109→                        if (!template.length || !container.length) return;
+   110→
+   111→                        var label = template.data('label') || container.data('label') || 'Element';
+   112→                        self._addRepeaterRow(template, container, label);
+   113→                        self.markUnsaved();
+   114→                });
+   115→
+   116→                /* Remove row */
+   117→                $(document).on('click', '.vc-repeater-remove', function(e){
+   118→                        e.preventDefault();
+   119→                        e.stopPropagation();
+   120→                        var row = $(this).closest('.vc-repeater-row');
+   121→                        row.fadeOut(200, function(){ $(this).remove(); });
+   122→                        self.markUnsaved();
+   123→                });
+   124→
+   125→                /* Toggle collapse */
+   126→                $(document).on('click', '.vc-repeater-row-header', function(e){
+   127→                        if ($(e.target).closest('.vc-repeater-remove, .vc-repeater-toggle-btn').length) return;
+   128→                        $(this).closest('.vc-repeater-row').toggleClass('open');
+   129→                });
+   130→        },
+   131→
+   132→        /* Init sortable on visible repeaters — call after panel switch */
+   133→        initRepeaterSortable: function(container) {
+   134→                var self = this;
+   135→                var $containers = container ? container.find('.vc-repeater') : $('.vc-repeater');
+   136→                $containers.each(function(){
+   137→                        if ($(this).data('ui-sortable')) return; // already initialized
+   138→                        $(this).sortable({
+   139→                                handle: '.vc-repeater-handle',
+   140→                                items: '> .vc-repeater-row:not(.vc-repeater-template)',
+   141→                                opacity: 0.7,
+   142→                                placeholder: 'ui-sortable-placeholder',
+   143→                                update: function(){ self.markUnsaved(); }
+   144→                        });
+   145→                });
+   146→        },
+   147→
+   148→        /* ═══════════════════════════════════════
+   149→           4. MEDIA UPLOAD
+   150→           ═══════════════════════════════════════ */
+   151→        initMedia: function() {
+   152→                var self = this;
+   153→                $(document).on('click', '.vc-img-btn', function(e){
+   154→                        e.preventDefault();
+   155→                        e.stopPropagation();
+   156→                        var field = $(this).closest('.vc-image-field');
+   157→
+   158→                        /* In Visual Builder mode, open the wide modal (Proposition B) */
+   159→                        if ($('#vc-builder-app').length && typeof self.openMediaModal === 'function') {
+   160→                                self.openMediaModal(field);
+   161→                                return;
+   162→                        }
+   163→
+   164→                        /* Classic admin mode: use inline wp.media */
+   165→                        var wrap = field.find('.vc-img-wrap');
+   166→                        var input = field.find('.vc-img-id');
+   167→                        var removeBtn = field.find('.vc-img-remove');
+   168→
+   169→                        if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+   170→                                self.toast('WordPress Media Library non disponible.', 'error');
+   171→                                return;
+   172→                        }
+   173→
+   174→                        var frame = wp.media({
+   175→                                title: 'Choisir une image',
+   176→                                button: { text: 'Utiliser cette image' },
+   177→                                multiple: false,
+   178→                                library: { type: 'image' }
+   179→                        });
+   180→                        frame.on('select', function(){
+   181→                                var att = frame.state().get('selection').first().toJSON();
+   182→                                input.val(att.id);
+   183→                                wrap.html('<img src="' + att.url + '" class="vc-img-preview" />');
+   184→                                removeBtn.show();
+   185→                                self.markUnsaved();
+   186→                        });
+   187→                        frame.open();
+   188→                });
+   189→
+   190→                $(document).on('click', '.vc-img-remove', function(e){
+   191→                        e.preventDefault();
+   192→                        e.stopPropagation();
+   193→                        var field = $(this).closest('.vc-image-field');
+   194→                        var wrap = field.find('.vc-img-wrap');
+   195→                        var input = field.find('.vc-img-id');
+   196→                        wrap.html('<div class="vc-img-placeholder"><span class="vc-img-placeholder-icon">&#128247;</span>Cliquer ou glisser une image</div>');
+   197→                        input.val(0);
+   198→                        $(this).hide();
+   199→                        VC.markUnsaved();
+   200→                });
+   201→        },
+   202→
+   203→        /* ═══════════════════════════════════════
+   204→           5. RANGE SLIDERS
+   205→           ═══════════════════════════════════════ */
+   206→        initRanges: function() {
+   207→                $(document).on('input', '[data-range]', function(){
+   208→                        var val = $(this).val();
+   209→                        var display = $(this).closest('.vc-range-wrap').find('.vc-range-value');
+   210→                        if (display.length) {
+   211→                                var currentText = display.text();
+   212→                                var unit = currentText.replace(/[\d\s.,]+/, '').trim();
+   213→                                display.text(val + (unit ? ' ' + unit : ''));
+   214→                        }
+   215→                        VC.markUnsaved();
+   216→                });
+   217→        },
+   218→
+   219→        /* ═══════════════════════════════════════
+   220→           6. COLOR PICKERS
+   221→           ═══════════════════════════════════════ */
+   222→        initColors: function() {
+   223→                $(document).on('input', '[data-color]', function(){
+   224→                        var color = $(this).val();
+   225→                        $(this).closest('.vc-color-wrap').find('.vc-color-swatch').css('background', color);
+   226→                        var textInput = $(this).closest('.vc-color-wrap').find('[data-color-text]');
+   227→                        if (textInput.length) textInput.val(color);
+   228→                        VC.markUnsaved();
+   229→                });
+   230→                $(document).on('change', '[data-color-text]', function(){
+   231→                        var color = $(this).val();
+   232→                        if (/^#[0-9a-fA-F]{6}$/.test(color)) {
+   233→                                $(this).closest('.vc-color-wrap').find('[data-color]').val(color);
+   234→                                $(this).closest('.vc-color-wrap').find('.vc-color-swatch').css('background', color);
+   235→                        }
+   236→                        VC.markUnsaved();
+   237→                });
+   238→        },
+   239→
+   240→        /* ═══════════════════════════════════════
+   241→           7. SECTION ORDER SORTABLE
+   242→           ═══════════════════════════════════════ */
+   243→        initSectionOrder: function() {
+   244→                var self = this;
+   245→                $('.vc-section-order-list').sortable({
+   246→                        handle: '.vc-section-order-handle',
+   247→                        axis: 'y',
+   248→                        opacity: 0.7,
+   249→                        placeholder: 'ui-sortable-placeholder',
+   250→                        update: function(){ self.markUnsaved(); }
+   251→                });
+   252→                $('.vc-section-order-list input').on('mousedown', function(e){ e.stopPropagation(); });
+   253→        },
+   254→
+   255→        /* ═══════════════════════════════════════
+   256→           8. HERO SIDE BLOCKS TOGGLE
+   257→           ═══════════════════════════════════════ */
+   258→        initConditional: function() {
+   259→                $(document).on('change', '[name="hero_show_side"]', function(){
+   260→                        var el = document.getElementById('vc-hero-side-blocks');
+   261→                        if (el) el.style.display = this.checked ? '' : 'none';
+   262→                });
+   263→        },
+   264→
+   265→        /* ═══════════════════════════════════════
+   266→           9. TEMPLATES SYSTEM
+   267→           ═══════════════════════════════════════ */
+   268→        initTemplates: function() {
+   269→                var self = this;
+   270→                $(document).on('click', '.vc-template-card', function(e){
+   271→                        e.preventDefault();
+   272→                        e.stopPropagation();
+   273→                        if (!confirm('Appliquer ce modele ? Les reglages actuels de cette section seront remplaces.')) return;
+   274→
+   275→                        var section = $(this).data('template-section');
+   276→                        var name = $(this).data('template');
+   277→                        var templates = {};
+   278→                        try {
+   279→                                templates = JSON.parse($('#vc-templates-data').text() || '{}');
+   280→                        } catch(ex) {
+   281→                                self.toast('Erreur de lecture des modeles.', 'error');
+   282→                                return;
+   283→                        }
+   284→
+   285→                        var sectionTemplates = templates[section] || [];
+   286→                        var tmpl = null;
+   287→                        for (var i = 0; i < sectionTemplates.length; i++) {
+   288→                                if (sectionTemplates[i].name === name) { tmpl = sectionTemplates[i]; break; }
+   289→                        }
+   290→                        if (!tmpl || !tmpl.data) {
+   291→                                self.toast('Modele introuvable.', 'error');
+   292→                                return;
+   293→                        }
+   294→
+   295→                        /* Fill form fields from template data */
+   296→                        var skipKeys = ['hero_slides','trust_features','brand_names','instagram_images'];
+   297→                        $.each(tmpl.data, function(key, val){
+   298→                                if (skipKeys.indexOf(key) !== -1) return;
+   299→                                var field = $('[name="' + key + '"]');
+   300→                                if (field.length) {
+   301→                                        if (field.is(':checkbox')) {
+   302→                                                field.prop('checked', !!val);
+   303→                                        } else {
+   304→                                                field.val(val).trigger('change');
+   305→                                        }
+   306→                                }
+   307→                        });
+   308→
+   309→                        /* Trigger conditional fields */
+   310→                        $('[name="hero_show_side"]').trigger('change');
+   311→
+   312→                        self.markUnsaved();
+   313→                        self.toast('Modele "' + name + '" applique !', 'success');
+   314→                });
+   315→        },
+   316→
+   317→        /* ═══════════════════════════════════════
+   318→           10. UNSAVED CHANGES TRACKING
+   319→           ═══════════════════════════════════════ */
+   320→        markUnsaved: function() {
+   321→                VC.unsaved = true;
+   322→                $('#vc-unsaved-dot').addClass('active');
+   323→        },
+   324→        markSaved: function() {
+   325→                VC.unsaved = false;
+   326→                $('#vc-unsaved-dot').removeClass('active');
+   327→        },
+   328→
+   329→        /* ═══════════════════════════════════════
+   330→           11. AJAX PUBLISH
+   331→           ═══════════════════════════════════════ */
+   332→        initPublish: function() {
+   333→                var self = this;
+   334→
+   335→                /* Re-find the form every time (more reliable than caching) */
+   336→                $('#vc-publish-btn').on('click', function(e){
+   337→                        e.preventDefault();
+   338→
+   339→                        var $form = $('#vc-settings-form, #vc-builder-form').first();
+   340→                        if (!$form.length) {
+   341→                                self.toast('Formulaire introuvable. Rechargez la page.', 'error');
+   342→                                console.error('[Velure Core] #vc-settings-form not found');
+   343→                                return;
+   344→                        }
+   345→
+   346→                        var btn = $(this);
+   347→                        btn.prop('disabled', true).html('<span style="display:inline-flex;align-items:center;gap:6px"><span class="vc-spinner"></span> Publication...</span>');
+   348→                        self.toast('Publication en cours...', 'saving');
+   349→
+   350→                        /* Build data object explicitly for reliability */
+   351→                        var formData = $form.serialize();
+   352→                        var ajaxUrl = (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php';
+   353→
+   354→                        $.ajax({
+   355→                                url: ajaxUrl,
+   356→                                type: 'POST',
+   357→                                data: formData,
+   358→                                dataType: 'json',
+   359→                                success: function(res){
+   360→                                        if (res && res.success) {
+   361→                                                self.markSaved();
+   362→                                                self.toast(res.data && res.data.message ? res.data.message : 'Publie !', 'success');
+   363→                                                $('.vc-footer-status span:last-child').text('Derniere sauvegarde : ' + new Date().toLocaleTimeString());
+   364→                                                VC._initialForm = $form.serialize();
+   365→                                        } else {
+   366→                                                var errMsg = (res && res.data && res.data.message) ? res.data.message : 'Erreur lors de la publication.';
+   367→                                                self.toast(errMsg, 'error');
+   368→                                                console.error('[Velure Core] Save error:', res);
+   369→                                        }
+   370→                                },
+   371→                                error: function(xhr, status, err){
+   372→                                        self.toast('Erreur reseau (' + status + '). Veuillez reessayer.', 'error');
+   373→                                        console.error('[Velure Core] AJAX error:', status, err);
+   374→                                },
+   375→                                complete: function(){
+   376→                                        btn.prop('disabled', false).html('&#10003; Publier');
+   377→                                }
+   378→                        });
+   379→                });
+   380→
+   381→                /* Discard */
+   382→                $('#vc-discard-btn').on('click', function(){
+   383→                        if (VC.unsaved && !confirm('Voulez-vous vraiment annuler toutes les modifications non publiees ?')) return;
+   384→                        window.location.reload();
+   385→                });
+   386→        },
+   387→
+   388→        /* ═══════════════════════════════════════
+   389→           12. IMPORT / EXPORT
+   390→           ═══════════════════════════════════════ */
+   391→        initIO: function() {
+   392→                var self = this;
+   393→                var ajaxUrl = (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php';
+   394→                var nonce = (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.nonce : '';
+   395→
+   396→                /* Export */
+   397→                $(document).on('click', '#vc-export-btn', function(){
+   398→                        $.post(ajaxUrl, {
+   399→                                action: 'velure_core_get_settings',
+   400→                                _wpnonce: nonce
+   401→                        }, function(res){
+   402→                                if (res && res.success) {
+   403→                                        $('#vc-export-text').val(JSON.stringify(res.data, null, 2));
+   404→                                        $('#vc-export-output').show();
+   405→                                        $('#vc-import-input').hide();
+   406→                                }
+   407→                        });
+   408→                });
+   409→
+   410→                /* Copy */
+   411→                $(document).on('click', '#vc-copy-export', function(){
+   412→                        var ta = document.getElementById('vc-export-text');
+   413→                        if (ta) {
+   414→                                ta.select();
+   415→                                try { document.execCommand('copy'); } catch(e){}
+   416→                        }
+   417→                        var btn = $(this);
+   418→                        btn.text('\u2713 Copie !');
+   419→                        setTimeout(function(){ btn.text('&#128203; Copier'); }, 2000);
+   420→                });
+   421→
+   422→                /* Show import */
+   423→                $(document).on('click', '#vc-import-btn', function(){
+   424→                        $('#vc-import-input').toggle();
+   425→                        $('#vc-export-output').hide();
+   426→                });
+   427→
+   428→                /* Apply import */
+   429→                $(document).on('click', '#vc-do-import', function(){
+   430→                        var json = $('#vc-import-text').val().trim();
+   431→                        if (!json) { self.toast('Veuillez coller du JSON.', 'error'); return; }
+   432→                        try {
+   433→                                JSON.parse(json);
+   434→                        } catch(e) {
+   435→                                self.toast('JSON invalide.', 'error');
+   436→                                return;
+   437→                        }
+   438→                        $.post(ajaxUrl, {
+   439→                                action: 'velure_core_import_settings',
+   440→                                _wpnonce: nonce,
+   441→                                settings: json
+   442→                        }, function(res){
+   443→                                if (res && res.success) {
+   444→                                        self.toast('Import reussi ! Rechargement...', 'success');
+   445→                                        setTimeout(function(){ window.location.reload(); }, 1500);
+   446→                                } else {
+   447→                                        self.toast((res && res.data && res.data.message) ? res.data.message : "Erreur d'import.", 'error');
+   448→                                }
+   449→                        });
+   450→                });
+   451→
+   452→                /* Reset */
+   453→                $(document).on('click', '#vc-reset-btn', function(){
+   454→                        if (!confirm('Reinitialiser tous les reglages aux valeurs par defaut ? Cette action est irreversible.')) return;
+   455→                        $.post(ajaxUrl, {
+   456→                                action: 'velure_core_reset',
+   457→                                _wpnonce: nonce
+   458→                        }, function(res){
+   459→                                if (res && res.success) {
+   460→                                        self.toast('Reinitialisation reussie. Rechargement...', 'success');
+   461→                                        setTimeout(function(){ window.location.reload(); }, 1500);
+   462→                                }
+   463→                        });
+   464→                });
+   465→        },
+   466→
+   467→        /* ═══════════════════════════════════════
+   468→           13. TOAST NOTIFICATIONS
+   469→           ═══════════════════════════════════════ */
+   470→        toast: function(msg, type) {
+   471→                var el = $('#vc-toast');
+   472→                if (!el.length) {
+   473→                        /* Fallback: create toast if missing */
+   474→                        $('body').append('<div id="vc-toast" class="vc-toast"></div>');
+   475→                        el = $('#vc-toast');
+   476→                }
+   477→                var icon = '';
+   478→                if (type === 'success') icon = '\u2713 ';
+   479→                else if (type === 'error') icon = '\u2717 ';
+   480→                else if (type === 'saving') icon = '\u23F3 ';
+   481→                else if (type === 'info') icon = '\u2139 ';
+   482→
+   483→                el.removeClass('show vc-toast-success vc-toast-error vc-toast-saving');
+   484→                if (type) el.addClass('vc-toast-' + type);
+   485→                el.html(icon + msg).addClass('show');
+   486→                clearTimeout(VC._toastTimer);
+   487→                VC._toastTimer = setTimeout(function(){ el.removeClass('show'); }, 4000);
+   488→        },
+   489→
+   490→        /* ═══════════════════════════════════════
+   491→           14. TRACK CHANGES
+   492→           ═══════════════════════════════════════ */
+   493→        initChangeTracking: function() {
+   494→                if (!VC.$form || !VC.$form.length) return;
+   495→                VC._initialForm = VC.$form.serialize();
+   496→                VC.$form.on('change input', 'input, select, textarea', function(){
+   497→                        if (VC.$form.serialize() !== VC._initialForm) { VC.markUnsaved(); }
+   498→                        else { VC.markSaved(); }
+   499→                });
+   500→                $(window).on('beforeunload', function(){
+   501→                        if (VC.unsaved) return true;
+   502→                });
+   503→        },
+   504→
+   505→        /* ═══════════════════════════════════════
+   506→           15. VISUAL BUILDER — ROUTING + RESPONSIVE + TAB SWITCHING
+   507→           ═══════════════════════════════════════ */
+   508→        initBuilder: function() {
+   509→                /* Only run if we're in builder mode (the #vc-builder-app wrapper exists) */
+   510→                var $builderApp = $('#vc-builder-app');
+   511→                if ( ! $builderApp.length ) return;
+   512→
+   513→                var self = this;
+   514→                var $iframe  = $('#vc-builder-canvas');
+   515→                var $panel   = $('#vc-panel-form');
+   516→                var $wrap    = $('#vc-builder-canvas-wrap');
+   517→                var $modeLabel = $('#vc-builder-topbar-mode');
+   518→
+   519→                /* ── DYNAMIC HORIZONTAL TAB SWITCHING ── */
+   520→                $(document).on('click', '.vc-builder-section-tab[data-section]', function(e) {
+   521→                        e.preventDefault();
+   522→                        e.stopPropagation();
+   523→
+   524→                        var $tab = $(this);
+   525→                        var section = $tab.data('section');
+   526→                        if (!section) return;
+   527→
+   528→                        /* Don't reload if already active */
+   529→                        if ($tab.hasClass('active')) return;
+   530→
+   531→                        /* Update active tab */
+   532→                        $('.vc-builder-section-tab').removeClass('active');
+   533→                        $tab.addClass('active');
+   534→
+   535→                        /* Get tab label for topbar */
+   536→                        var tabLabel = $tab.find('.vc-builder-section-tab-label').text() || section;
+   537→                        if ($modeLabel.length) $modeLabel.text(tabLabel);
+   538→
+   539→                        /* Update hidden section field */
+   540→                        $('#vc-builder-section').val(section);
+   541→
+   542→                        /* 1) INSTANTLY change iframe src to load new section canvas */
+   543→                        var canvasUrl = velureCoreAdmin.ajaxUrl.replace('admin-ajax.php', 'admin.php')
+   544→                                + '?page=velure-front-page&mode=canvas&section=' + encodeURIComponent(section);
+   545→
+   546→                        if ($iframe.length) {
+   547→                                $wrap.addClass('loading').removeClass('loaded');
+   548→                                $iframe.attr('src', canvasUrl);
+   549→                                $iframe.on('load.vcTab', function() {
+   550→                                        $wrap.removeClass('loading').addClass('loaded');
+   551→                                        $iframe.off('load.vcTab');
+   552→                                });
+   553→                        }
+   554→
+   555→                        /* 2) AJAX: Load the new section's form into the panel */
+   556→                        $panel.css('opacity', '0.4');
+   557→                        $.ajax({
+   558→                                url: velureCoreAdmin.ajaxUrl,
+   559→                                type: 'POST',
+   560→                                data: {
+   561→                                        action: 'velure_core_section_form',
+   562→                                        section: section,
+   563→                                        _ajax_nonce: velureCoreAdmin.nonce
+   564→                                },
+   565→                                success: function(resp) {
+   566→                                        if (resp.success && resp.data && resp.data.html) {
+   567→                                                $panel.html(resp.data.html);
+   568→                                                /* Re-init accordions, ranges, colors, media, repeaters for new form */
+   569→                                                VC.initAccordions();
+   570→                                                VC.initRanges();
+   571→                                                VC.initColors();
+   572→                                                VC.initMedia();
+   573→                                                VC.initRepeaters();
+   574→                                                VC.initRepeaterSortable($panel.find('.vc-section-panel'));
+   575→                                                VC.initConditional();
+   576→                                        }
+   577→                                        $panel.css('opacity', '1');
+   578→                                },
+   579→                                error: function() {
+   580→                                        $panel.css('opacity', '1');
+   581→                                }
+   582→                        });
+   583→
+   584→                        /* 3) Update browser URL without full page reload */
+   585→                        var newUrl = velureCoreAdmin.ajaxUrl.replace('admin-ajax.php', 'admin.php')
+   586→                                + '?page=velure-front-page&section=' + encodeURIComponent(section);
+   587→                        if (history.pushState) {
+   588→                                history.pushState({ section: section }, '', newUrl);
+   589→                        }
+   590→
+   591→                        /* 4) Reset widget editor if open */
+   592→                        if (typeof VCB !== 'undefined') {
+   593→                                VCB.selected = null;
+   594→                                $('#vc-bp-widget-editor').hide();
+   595→                                VCB.section = section;
+   596→                        }
+   597→
+   598→                        self.toast('Section ' + tabLabel + ' chargée', 'info');
+   599→                });
+   600→
+   601→                /* ── PopState: handle browser back/forward ── */
+   602→                $(window).on('popstate', function(e) {
+   603→                        if (e.state && e.state.section) {
+   604→                                var $targetTab = $('.vc-builder-section-tab[data-section="' + e.state.section + '"]');
+   605→                                if ($targetTab.length) $targetTab.trigger('click');
+   606→                        }
+   607→                });
+   608→
+   609→                /* ── Responsive toggle ── */
+   610→                $(document).on('click', '.vc-builder-resp-btn', function(e){
+   611→                        e.preventDefault();
+   612→                        $('.vc-builder-resp-btn').removeClass('active');
+   613→                        $(this).addClass('active');
+   614→                        var width = $(this).data('width');
+   615→                        if ( width === '100%' ) {
+   616→                                $wrap.css('max-width', 'none');
+   617→                                $wrap.css('padding', '0');
+   618→                        } else {
+   619→                                var numW = parseInt(width, 10);
+   620→                                $wrap.css('max-width', numW + 'px');
+   621→                                $wrap.css('padding', '0 20px');
+   622→                        }
+   623→                        $wrap.css('margin', '0 auto');
+   624→                });
+   625→
+   626→                /* ── Mark canvas as loaded once iframe fires ── */
+   627→                $iframe.on('load', function() {
+   628→                        $wrap.removeClass('loading').addClass('loaded');
+   629→                });
+   630→
+   631→                /* ── PANEL TOGGLE (Proposition A: collapse / expand / resize) ── */
+   632→                self.initPanelToggle();
+   633→
+   634→                /* ── WIX-LIKE: Listen for vc-activate-control from canvas iframe ── */
+   635→                self.initCanvasFieldActivation();
+   636→
+   637→                /* ── Toast for builder context ── */
+   638→                self.toast('Mode Visual Builder actif. Canvas charge...', 'saving');
+   639→        },
+   640→
+   641→        /* ═══════════════════════════════════════════════════
+   642→           16. PANEL TOGGLE + RESIZE (Proposition A)
+   643→           ═══════════════════════════════════════════════════ */
+   644→        initPanelToggle: function() {
+   645→                var $panel = $('#vc-builder-panel');
+   646→                if (!$panel.length) return;
+   647→
+   648→                var self = this;
+   649→                var state = 'normal'; /* 'normal' | 'collapsed' | 'expanded' */
+   650→
+   651→                /* ── Toggle button click ── */
+   652→                $(document).on('click', '#vc-panel-toggle', function(e) {
+   653→                        e.preventDefault();
+   654→                        e.stopPropagation();
+   655→
+   656→                        if (state === 'normal') {
+   657→                                /* Collapse */
+   658→                                $panel.addClass('panel-collapsed').removeClass('panel-expanded');
+   659→                                state = 'collapsed';
+   660→                                $(this).attr('title', 'Afficher le panneau (Ctrl+[)');
+   661→                        } else {
+   662→                                /* Expand back to normal */
+   663→                                $panel.removeClass('panel-collapsed panel-expanded');
+   664→                                state = 'normal';
+   665→                                $(this).attr('title', 'Masquer le panneau (Ctrl+[)');
+   666→                        }
+   667→                });
+   668→
+   669→                /* ── Keyboard shortcut: Ctrl+[ to toggle ── */
+   670→                $(document).on('keydown', function(e) {
+   671→                        if ((e.ctrlKey || e.metaKey) && e.key === '[') {
+   672→                                e.preventDefault();
+   673→                                $('#vc-panel-toggle').trigger('click');
+   674→                        }
+   675→                });
+   676→
+   677→                /* ── Resize handle drag (320px ↔ 450px) ── */
+   678→                var $handle = $('#vc-panel-resize-handle');
+   679→                if (!$handle.length) return;
+   680→
+   681→                var isDragging = false;
+   682→                var startX = 0;
+   683→                var startWidth = 0;
+   684→
+   685→                $handle.on('mousedown', function(e) {
+   686→                        e.preventDefault();
+   687→                        e.stopPropagation();
+   688→                        isDragging = true;
+   689→                        startX = e.clientX;
+   690→                        startWidth = $panel.outerWidth();
+   691→                        $handle.addClass('resizing');
+   692→                        $('body').css('cursor', 'col-resize');
+   693→                        $('body').css('user-select', 'none');
+   694→                });
+   695→
+   696→                $(document).on('mousemove.vcResize', function(e) {
+   697→                        if (!isDragging) return;
+   698→                        var diff = e.clientX - startX;
+   699→                        var newWidth = Math.min(450, Math.max(320, startWidth + diff));
+   700→                        $panel.css({
+   701→                                'width': newWidth + 'px',
+   702→                                'min-width': newWidth + 'px',
+   703→                                'max-width': newWidth + 'px'
+   704→                        });
+   705→                });
+   706→
+   707→                $(document).on('mouseup.vcResize', function() {
+   708→                        if (!isDragging) return;
+   709→                        isDragging = false;
+   710→                        $handle.removeClass('resizing');
+   711→                        $('body').css('cursor', '');
+   712→                        $('body').css('user-select', '');
+   713→
+   714→                        /* Snap to expanded state if close enough */
+   715→                        var currentWidth = $panel.outerWidth();
+   716→                        if (currentWidth > 400) {
+   717→                                $panel.addClass('panel-expanded').css({ width: '', minWidth: '', maxWidth: '' });
+   718→                                state = 'expanded';
+   719→                        } else {
+   720→                                $panel.removeClass('panel-expanded').css({ width: '', minWidth: '', maxWidth: '' });
+   721→                                state = 'normal';
+   722→                        }
+   723→                });
+   724→        },
+   725→
+   726→        /* ═══════════════════════════════════════════════════
+   727→           17. MODAL SYSTEM (Proposition B)
+   728→           Reusable modal for media library, text editing, etc.
+   729→           ═══════════════════════════════════════════════════ */
+   730→        _modalOverlay: null,
+   731→
+   732→        openModal: function(options) {
+   733→                var self = this;
+   734→                var opts = $.extend({
+   735→                        title: 'Fenetre',
+   736→                        titleIcon: '',
+   737→                        type: 'generic', /* 'generic' | 'media' | 'text' */
+   738→                        content: '',
+   739→                        onClose: null,
+   740→                        onReady: null
+   741→                }, options);
+   742→
+   743→                /* Remove any existing modal */
+   744→                self.closeModal();
+   745→
+   746→                var $overlay = $(
+   747→                        '<div class="vc-modal-overlay" id="vc-modal-overlay">' +
+   748→                                '<div class="vc-modal-container vc-modal-' + opts.type + '">' +
+   749→                                        '<div class="vc-modal-header">' +
+   750→                                                '<div class="vc-modal-title">' +
+   751→                                                        (opts.titleIcon ? '<span class="vc-modal-title-icon">' + opts.titleIcon + '</span>' : '') +
+   752→                                                        '<span>' + opts.title + '</span>' +
+   753→                                                '</div>' +
+   754→                                                '<button type="button" class="vc-modal-close" id="vc-modal-close">' +
+   755→                                                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+   756→                                                '</button>' +
+   757→                                        '</div>' +
+   758→                                        '<div class="vc-modal-body" id="vc-modal-body">' + opts.content + '</div>' +
+   759→                                '</div>' +
+   760→                        '</div>'
+   761→                );
+   762→
+   763→                $('body').append($overlay);
+   764→                self._modalOverlay = $overlay;
+   765→
+   766→                /* Close handlers */
+   767→                $overlay.on('click', '#vc-modal-close', function() {
+   768→                        self.closeModal();
+   769→                        if (typeof opts.onClose === 'function') opts.onClose();
+   770→                });
+   771→                $overlay.on('click', function(e) {
+   772→                        if (e.target === this) {
+   773→                                self.closeModal();
+   774→                                if (typeof opts.onClose === 'function') opts.onClose();
+   775→                        }
+   776→                });
+   777→                /* Escape key */
+   778→                $(document).on('keydown.vcModal', function(e) {
+   779→                        if (e.key === 'Escape' && self._modalOverlay) {
+   780→                                self.closeModal();
+   781→                                if (typeof opts.onClose === 'function') opts.onClose();
+   782→                        }
+   783→                });
+   784→
+   785→                /* Animate in */
+   786→                requestAnimationFrame(function() {
+   787→                        $overlay.addClass('active');
+   788→                });
+   789→
+   790→                if (typeof opts.onReady === 'function') {
+   791→                        opts.onReady($overlay);
+   792→                }
+   793→
+   794→                return $overlay;
+   795→        },
+   796→
+   797→        closeModal: function() {
+   798→                if (this._modalOverlay) {
+   799→                        this._modalOverlay.remove();
+   800→                        this._modalOverlay = null;
+   801→                }
+   802→                $(document).off('keydown.vcModal');
+   803→                /* Detach WP media modal if it was appended to our overlay */
+   804→                $('.media-modal-backdrop, .media-modal').appendTo('body').hide();
+   805→        },
+   806→
+   807→        /**
+   808→         * Open the WordPress Media Library in a wide modal (Proposition B).
+   809→         * @param {jQuery} $field - The .vc-image-field container
+   810→         */
+   811→        openMediaModal: function($field) {
+   812→                var self = this;
+   813→
+   814→                if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+   815→                        self.toast('WordPress Media Library non disponible.', 'error');
+   816→                        return;
+   817→                }
+   818→
+   819→                var wrap = $field.find('.vc-img-wrap');
+   820→                var input = $field.find('.vc-img-id');
+   821→                var currentImg = wrap.find('.vc-img-preview').attr('src') || '';
+   822→
+   823→                /* Build modal content with preview + action buttons */
+   824→                var content = '';
+   825→                if (currentImg) {
+   826→                        content += '<img src="' + currentImg + '" class="vc-modal-media-preview" alt="Apercu" />';
+   827→                }
+   828→                content += '<div class="vc-modal-media-actions">';
+   829→                content += '<button type="button" class="vc-btn-modal vc-btn-modal-primary" id="vc-modal-choose-media">';
+   830→                content += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+   831→                content += ' Choisir une image</button>';
+   832→                content += '<button type="button" class="vc-btn-modal" id="vc-modal-remove-media" style="' + (currentImg ? '' : 'display:none;') + '">';
+   833→                content += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+   834→                content += ' Supprimer</button>';
+   835→                content += '</div>';
+   836→
+   837→                self.openModal({
+   838→                        title: 'Gerer l\'image',
+   839→                        titleIcon: '&#128247;',
+   840→                        type: 'media',
+   841→                        content: content,
+   842→                        onReady: function($overlay) {
+   843→                                /* "Choose image" opens WP Media Library */
+   844→                                $overlay.find('#vc-modal-choose-media').on('click', function() {
+   845→                                        var frame = wp.media({
+   846→                                                title: 'Choisir une image',
+   847→                                                button: { text: 'Utiliser cette image' },
+   848→                                                multiple: false,
+   849→                                                library: { type: 'image' }
+   850→                                        });
+   851→                                        frame.on('select', function() {
+   852→                                                var att = frame.state().get('selection').first().toJSON();
+   853→                                                input.val(att.id);
+   854→                                                wrap.html('<img src="' + att.url + '" class="vc-img-preview" />');
+   855→                                                $field.find('.vc-img-remove').show();
+   856→                                                self.markUnsaved();
+   857→
+   858→                                                /* Update modal preview */
+   859→                                                var $preview = $overlay.find('.vc-modal-media-preview');
+   860→                                                if ($preview.length) {
+   861→                                                        $preview.attr('src', att.url).show();
+   862→                                                } else {
+   863→                                                        $overlay.find('.vc-modal-body').prepend(
+   864→                                                                '<img src="' + att.url + '" class="vc-modal-media-preview" alt="Apercu" />'
+   865→                                                        );
+   866→                                                }
+   867→                                                $overlay.find('#vc-modal-remove-media').show();
+   868→                                        });
+   869→                                        frame.open();
+   870→                                });
+   871→
+   872→                                /* "Remove" clears the image */
+   873→                                $overlay.find('#vc-modal-remove-media').on('click', function() {
+   874→                                        input.val(0);
+   875→                                        wrap.html('<div class="vc-img-placeholder"><span class="vc-img-placeholder-icon">&#128247;</span>Cliquer ou glisser une image</div>');
+   876→                                        $field.find('.vc-img-remove').hide();
+   877→                                        self.markUnsaved();
+   878→                                        self.closeModal();
+   879→                                });
+   880→                        }
+   881→                });
+   882→        },
+   883→
+   884→        /**
+   885→         * Open a wide modal for text editing (Proposition B).
+   886→         * @param {jQuery} $textarea - The original textarea element
+   887→         */
+   888→        openTextModal: function($textarea) {
+   889→                var self = this;
+   890→                var fieldName = $textarea.closest('.vc-field').find('label').text() || 'Texte';
+   891→                var currentValue = $textarea.val();
+   892→
+   893→                var content = '<textarea class="vc-modal-textarea" id="vc-modal-textarea">' + currentValue + '</textarea>';
+   894→
+   895→                self.openModal({
+   896→                        title: 'Editer : ' + fieldName,
+   897→                        titleIcon: '&#9998;',
+   898→                        type: 'text',
+   899→                        content: content,
+   900→                        onClose: function() {
+   901→                                /* Sync modal content back to original field */
+   902→                                var $modalTa = $('#vc-modal-textarea');
+   903→                                if ($modalTa.length && $modalTa.val() !== currentValue) {
+   904→                                        $textarea.val($modalTa.val()).trigger('change');
+   905→                                        self.markUnsaved();
+   906→                                }
+   907→                        }
+   908→                });
+   909→        },
+   910→
+   911→        /* ═══════════════════════════════════════════════════
+   912→           18. WIX-LIKE CANVAS FIELD ACTIVATION
+   913→           When user clicks an element in the iframe, find the
+   914→           matching form field in the panel, open accordion/
+   915→           repeater, scroll to it, and focus it.
+   916→           ═══════════════════════════════════════════════════ */
+   917→        initCanvasFieldActivation: function() {
+   918→                var self = this;
+   919→
+   920→                window.addEventListener('message', function(e) {
+   921→                        if (!e.data || e.data.action !== 'vc-activate-control') return;
+   922→                        var fieldKey = e.data.key;
+   923→                        if (!fieldKey) return;
+   924→
+   925→                        /* Expand panel if collapsed */
+   926→                        var $panel = $('#vc-builder-panel');
+   927→                        if ($panel.hasClass('panel-collapsed')) {
+   928→                                $panel.removeClass('panel-collapsed panel-expanded');
+   929→                        }
+   930→
+   931→                        /* Find the field by name attribute */
+   932→                        var $field = null;
+   933→
+   934→                        /* Strategy 1: Direct match by name */
+   935→                        $field = $('[name="' + fieldKey + '"]');
+   936→
+   937→                        /* Strategy 2: For repeater template fields, match by data-index
+   938→                           e.g. fieldKey="hero_slides[0][title]" → find in repeater row with data-index="0" */
+   939→                        if (!$field.length) {
+   940→                                /* Extract index from key like hero_slides[0][title] */
+   941→                                var match = fieldKey.match(/^(\w+)\[(\d+)\]\[(\w+)\]$/);
+   942→                                if (match) {
+   943→                                        var base = match[1];     // hero_slides
+   944→                                        var idx  = match[2];     // 0
+   945→                                        var sub  = match[3];     // title
+   946→                                        /* Look for a repeater row with this index */
+   947→                                        var $rows = $('.vc-repeater-row:not(.vc-repeater-template)');
+   948→                                        $rows.each(function() {
+   949→                                                var rowIdx = $(this).attr('data-index');
+   950→                                                if (rowIdx === idx) {
+   951→                                                        var $f = $(this).find('[name$="[' + sub + ']"]');
+   952→                                                        if ($f.length) {
+   953→                                                                $field = $f;
+   954→                                                                return false; /* break */
+   955→                                                        }
+   956→                                                }
+   957→                                        });
+   958→                                }
+   959→                        }
+   960→
+   961→                        /* Strategy 3: Partial match — sometimes the form name uses a slightly
+   962→                           different format. Try matching the key ending. */
+   963→                        if (!$field.length) {
+   964→                                /* Normalize: hero_slides[0][title] → look for name ending with [title] */
+   965→                                var bracketMatch = fieldKey.match(/\[(\w+)\]$/);
+   966→                                if (bracketMatch) {
+   967→                                        var lastKey = bracketMatch[1];
+   968→                                        /* Only use this fallback for non-ambiguous short keys */
+   969→                                        if (lastKey.length > 2) {
+   970→                                                $field = $('[name$="[' + lastKey + ']"]').first();
+   971→                                        }
+   972→                                }
+   973→                        }
+   974→
+   975→                        if (!$field.length) {
+   976→                                console.log('[VC] Field not found for key:', fieldKey);
+   977→                                return;
+   978→                        }
+   979→
+   980→                        /* ── Open parent accordion(s) ── */
+   981→                        self._openParentAccordions($field);
+   982→
+   983→                        /* ── Open parent repeater row if collapsed ── */
+   984→                        var $repeaterRow = $field.closest('.vc-repeater-row');
+   985→                        if ($repeaterRow.length && !$repeaterRow.hasClass('open')) {
+   986→                                $repeaterRow.addClass('open');
+   987→                        }
+   988→
+   989→                        /* ── Scroll panel to the field ── */
+   990→                        var $panelForm = $('#vc-panel-form');
+   991→                        if ($panelForm.length) {
+   992→                                var fieldTop = $field.offset().top - $panelForm.offset().top + $panelForm.scrollTop();
+   993→                                $panelForm.animate({ scrollTop: fieldTop - 20 }, 300);
+   994→                        }
+   995→
+   996→                        /* ── Focus the field with highlight animation ── */
+   997→                        setTimeout(function() {
+   998→                                $field.focus();
+   999→
+  1000→                                /* Brief highlight glow */
+  1001→                                $field.css({
+  1002→                                        'box-shadow': '0 0 0 3px var(--vc-accent-glow), 0 0 12px var(--vc-accent-glow)',
+  1003→                                        'transition': 'box-shadow 0.3s ease'
+  1004→                                });
+  1005→                                setTimeout(function() {
+  1006→                                        $field.css({
+  1007→                                                'box-shadow': '',
+  1008→                                                'transition': 'box-shadow 0.6s ease'
+  1009→                                        });
+  1010→                                }, 1200);
+  1011→                        }, 350);
+  1012→                });
+  1013→        },
+  1014→
+  1015→        /**
+  1016→         * Open all ancestor accordions (.vc-accordion-item) for a given $field.
+  1017→         */
+  1018→        _openParentAccordions: function($field) {
+  1019→                $field.parents('.vc-accordion-item').each(function() {
+  1020→                        if (!$(this).hasClass('open')) {
+  1021→                                $(this).addClass('open');
+  1022→                        }
+  1023→                });
+  1024→        },
+  1025→
+  1026→        /* ═══════════════════════════════════════
+  1027→           INIT
+  1028→           ═══════════════════════════════════════ */
+  1029→        init: function() {
+  1030→                /* Route: Builder mode or Classic mode */
+  1031→                var isBuilder = $('#vc-builder-app').length > 0;
+  1032→
+  1033→                if ( isBuilder ) {
+  1034→                        VC.initBuilder();
+  1035→                        /* initPublish is NOT called here — visual-builder.js handles publish in builder mode */
+  1036→                        return;
+  1037→                }
+  1038→
+  1039→                /* Classic admin mode */
+  1040→                VC.$form = $('#vc-settings-form');
+  1041→
+  1042→                VC.initNav();
+  1043→                VC.initAccordions();
+  1044→                VC.initRepeaters();
+  1045→                VC.initMedia();
+  1046→                VC.initRanges();
+  1047→                VC.initColors();
+  1048→                VC.initSectionOrder();
+  1049→                VC.initConditional();
+  1050→                VC.initTemplates();
+  1051→                VC.initPublish();
+  1052→                VC.initIO();
+  1053→                VC.initChangeTracking();
+  1054→
+  1055→                /* Init sortable on the currently visible panel */
+  1056→                VC.initRepeaterSortable($('.vc-section-panel.active'));
+  1057→        }
+  1058→};
+  1059→
+  1060→$(document).ready(VC.init);
+  1061→
+  1062→})(jQuery);

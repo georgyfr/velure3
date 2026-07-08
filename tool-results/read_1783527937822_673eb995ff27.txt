@@ -1,0 +1,2002 @@
+     1→/* ═══════════════════════════════════════════════════════════════
+     2→   Velure Core — Admin Panel v3.1
+     3→   Elementor-inspired, fully redesigned interface
+     4→   ═══════════════════════════════════════════════════════════════ */
+     5→
+     6→/* ── CSS Variables ── */
+     7→:root {
+     8→        --vc-bg-dark: #1a1a2e;
+     9→        --vc-bg-darker: #13132b;
+    10→        --vc-bg-panel: #232340;
+    11→        --vc-bg-input: #2d2d4a;
+    12→        --vc-bg-hover: #33335a;
+    13→        --vc-accent: #C8A97E;
+    14→        --vc-accent-hover: #d4b88f;
+    15→        --vc-accent-glow: rgba(200, 169, 126, 0.25);
+    16→        --vc-text: #e0e0f0;
+    17→        --vc-text-dim: #8888aa;
+    18→        --vc-text-bright: #ffffff;
+    19→        --vc-border: #3a3a5c;
+    20→        --vc-success: #22c55e;
+    21→        --vc-danger: #ef4444;
+    22→        --vc-warning: #f59e0b;
+    23→        --vc-info: #3b82f6;
+    24→        --vc-radius: 8px;
+    25→        --vc-radius-sm: 5px;
+    26→        --vc-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    27→        --vc-sidebar-w: 280px;
+    28→        --vc-header-h: 56px;
+    29→        --vc-footer-h: 60px;
+    30→}
+    31→
+    32→/* ── CRITICAL: Override ALL WordPress admin chrome for our page ── */
+    33→#wpbody-content .velure-core-admin-wrap,
+    34→.velure-core-admin-wrap {
+    35→        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    36→        margin: -20px -20px 0 -20px !important;
+    37→        padding: 0 !important;
+    38→        max-width: none !important;
+    39→        min-height: calc(100vh - 32px);
+    40→        background: var(--vc-bg-darker) !important;
+    41→        color: var(--vc-text);
+    42→        display: flex !important;
+    43→        flex-direction: column !important;
+    44→        overflow: hidden;
+    45→        box-sizing: border-box;
+    46→        width: auto;
+    47→}
+    48→#wpbody-content .velure-core-admin-wrap *,
+    49→.velure-core-admin-wrap * {
+    50→        box-sizing: border-box;
+    51→}
+    52→.velure-core-admin-wrap .notice,
+    53→.velure-core-admin-wrap .update-nag,
+    54→.velure-core-admin-wrap #message { display: none !important; }
+    55→
+    56→/* ═══════════════════════════════════════════════════════════════
+    57→   LAYOUT: Sidebar + Main
+    58→   ═══════════════════════════════════════════════════════════════ */
+    59→.vc-app {
+    60→        display: flex;
+    61→        flex: 1;
+    62→        overflow: hidden;
+    63→}
+    64→
+    65→/* ── SIDEBAR ── */
+    66→.vc-sidebar {
+    67→        width: var(--vc-sidebar-w);
+    68→        background: var(--vc-bg-dark);
+    69→        border-right: 1px solid var(--vc-border);
+    70→        display: flex;
+    71→        flex-direction: column;
+    72→        flex-shrink: 0;
+    73→        overflow: hidden;
+    74→        transition: width var(--vc-transition);
+    75→}
+    76→.vc-sidebar-brand {
+    77→        padding: 18px 20px;
+    78→        border-bottom: 1px solid var(--vc-border);
+    79→        display: flex;
+    80→        align-items: center;
+    81→        gap: 10px;
+    82→}
+    83→.vc-sidebar-brand-icon {
+    84→        width: 32px;
+    85→        height: 32px;
+    86→        background: linear-gradient(135deg, var(--vc-accent) 0%, #8B5E3C 100%);
+    87→        border-radius: 8px;
+    88→        display: flex;
+    89→        align-items: center;
+    90→        justify-content: center;
+    91→        font-weight: 800;
+    92→        font-size: 14px;
+    93→        color: #fff;
+    94→        flex-shrink: 0;
+    95→}
+    96→.vc-sidebar-brand-text {
+    97→        display: flex;
+    98→        flex-direction: column;
+    99→}
+   100→.vc-sidebar-brand-text strong {
+   101→        color: var(--vc-text-bright);
+   102→        font-size: 14px;
+   103→        font-weight: 700;
+   104→        line-height: 1.2;
+   105→}
+   106→.vc-sidebar-brand-text span {
+   107→        color: var(--vc-text-dim);
+   108→        font-size: 11px;
+   109→}
+   110→
+   111→/* Sidebar nav */
+   112→.vc-sidebar-nav {
+   113→        flex: 1;
+   114→        overflow-y: auto;
+   115→        padding: 8px 0;
+   116→}
+   117→.vc-sidebar-nav::-webkit-scrollbar { width: 4px; }
+   118→.vc-sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+   119→.vc-sidebar-nav::-webkit-scrollbar-thumb { background: var(--vc-border); border-radius: 4px; }
+   120→
+   121→.vc-nav-section-label {
+   122→        padding: 14px 20px 6px;
+   123→        font-size: 10px;
+   124→        font-weight: 700;
+   125→        text-transform: uppercase;
+   126→        letter-spacing: 1.2px;
+   127→        color: var(--vc-text-dim);
+   128→}
+   129→
+   130→.vc-nav-item {
+   131→        display: flex;
+   132→        align-items: center;
+   133→        gap: 10px;
+   134→        padding: 10px 20px;
+   135→        margin: 1px 8px;
+   136→        border-radius: var(--vc-radius-sm);
+   137→        cursor: pointer !important;
+   138→        transition: all var(--vc-transition);
+   139→        color: var(--vc-text-dim);
+   140→        font-size: 13px;
+   141→        font-weight: 500;
+   142→        position: relative;
+   143→        user-select: none;
+   144→        -webkit-user-select: none;
+   145→}
+   146→.vc-nav-item:hover {
+   147→        background: var(--vc-bg-hover);
+   148→        color: var(--vc-text);
+   149→}
+   150→.vc-nav-item.active {
+   151→        background: var(--vc-accent-glow);
+   152→        color: var(--vc-accent);
+   153→}
+   154→.vc-nav-item.active::before {
+   155→        content: '';
+   156→        position: absolute;
+   157→        left: 0;
+   158→        top: 50%;
+   159→        transform: translateY(-50%);
+   160→        width: 3px;
+   161→        height: 60%;
+   162→        background: var(--vc-accent);
+   163→        border-radius: 0 3px 3px 0;
+   164→}
+   165→.vc-nav-item-icon {
+   166→        width: 18px;
+   167→        text-align: center;
+   168→        font-size: 15px;
+   169→        flex-shrink: 0;
+   170→}
+   171→.vc-nav-item-label {
+   172→        flex: 1;
+   173→        white-space: nowrap;
+   174→        overflow: hidden;
+   175→        text-overflow: ellipsis;
+   176→}
+   177→.vc-nav-item-badge {
+   178→        font-size: 10px;
+   179→        padding: 1px 6px;
+   180→        border-radius: 10px;
+   181→        background: var(--vc-accent);
+   182→        color: var(--vc-bg-darker);
+   183→        font-weight: 700;
+   184→}
+   185→
+   186→/* Sidebar footer */
+   187→.vc-sidebar-footer {
+   188→        padding: 12px 16px;
+   189→        border-top: 1px solid var(--vc-border);
+   190→}
+   191→.vc-sidebar-footer a {
+   192→        display: flex;
+   193→        align-items: center;
+   194→        gap: 8px;
+   195→        padding: 8px 12px;
+   196→        color: var(--vc-text-dim);
+   197→        text-decoration: none !important;
+   198→        font-size: 12px;
+   199→        border-radius: var(--vc-radius-sm);
+   200→        transition: all var(--vc-transition);
+   201→}
+   202→.vc-sidebar-footer a:hover {
+   203→        background: var(--vc-bg-hover);
+   204→        color: var(--vc-text);
+   205→}
+   206→
+   207→/* ═══════════════════════════════════════════════════════════════
+   208→   MAIN AREA
+   209→   ═══════════════════════════════════════════════════════════════ */
+   210→.vc-main {
+   211→        flex: 1;
+   212→        display: flex;
+   213→        flex-direction: column;
+   214→        overflow: hidden;
+   215→        min-width: 0;
+   216→}
+   217→
+   218→/* ── HEADER BAR ── */
+   219→.vc-header {
+   220→        height: var(--vc-header-h);
+   221→        background: var(--vc-bg-panel);
+   222→        border-bottom: 1px solid var(--vc-border);
+   223→        display: flex;
+   224→        align-items: center;
+   225→        padding: 0 24px;
+   226→        gap: 16px;
+   227→        flex-shrink: 0;
+   228→}
+   229→.vc-header-title {
+   230→        font-size: 15px;
+   231→        font-weight: 600;
+   232→        color: var(--vc-text-bright);
+   233→        flex: 1;
+   234→}
+   235→.vc-header-breadcrumb {
+   236→        font-size: 12px;
+   237→        color: var(--vc-text-dim);
+   238→}
+   239→.vc-header-breadcrumb span { color: var(--vc-accent); }
+   240→.vc-header-actions {
+   241→        display: flex;
+   242→        align-items: center;
+   243→        gap: 10px;
+   244→}
+   245→
+   246→/* Buttons */
+   247→.vc-btn {
+   248→        display: inline-flex;
+   249→        align-items: center;
+   250→        gap: 6px;
+   251→        padding: 8px 16px;
+   252→        border-radius: var(--vc-radius-sm);
+   253→        font-size: 13px;
+   254→        font-weight: 600;
+   255→        cursor: pointer;
+   256→        border: none;
+   257→        transition: all var(--vc-transition);
+   258→        text-decoration: none;
+   259→        white-space: nowrap;
+   260→}
+   261→.vc-btn-ghost {
+   262→        background: transparent;
+   263→        color: var(--vc-text-dim);
+   264→        border: 1px solid var(--vc-border);
+   265→}
+   266→.vc-btn-ghost:hover {
+   267→        background: var(--vc-bg-hover);
+   268→        color: var(--vc-text);
+   269→        border-color: var(--vc-text-dim);
+   270→}
+   271→.vc-btn-primary {
+   272→        background: var(--vc-accent);
+   273→        color: var(--vc-bg-darker);
+   274→}
+   275→.vc-btn-primary:hover {
+   276→        background: var(--vc-accent-hover);
+   277→        transform: translateY(-1px);
+   278→        box-shadow: 0 4px 12px var(--vc-accent-glow);
+   279→}
+   280→.vc-btn-publish {
+   281→        background: linear-gradient(135deg, var(--vc-accent) 0%, #8B5E3C 100%);
+   282→        color: #fff;
+   283→        padding: 8px 28px;
+   284→        font-size: 14px;
+   285→        border-radius: var(--vc-radius);
+   286→}
+   287→.vc-btn-publish:hover {
+   288→        transform: translateY(-1px);
+   289→        box-shadow: 0 4px 16px var(--vc-accent-glow);
+   290→}
+   291→.vc-btn-danger {
+   292→        background: transparent;
+   293→        color: var(--vc-danger);
+   294→        border: 1px solid var(--vc-danger);
+   295→}
+   296→.vc-btn-danger:hover {
+   297→        background: var(--vc-danger);
+   298→        color: #fff;
+   299→}
+   300→.vc-btn-sm {
+   301→        padding: 5px 12px;
+   302→        font-size: 12px;
+   303→}
+   304→.vc-btn-icon {
+   305→        padding: 7px 9px;
+   306→        font-size: 14px;
+   307→}
+   308→
+   309→/* ── PANEL (scrollable content area) ── */
+   310→.vc-panel {
+   311→        flex: 1;
+   312→        overflow-y: auto;
+   313→        padding: 28px;
+   314→}
+   315→.vc-panel::-webkit-scrollbar { width: 6px; }
+   316→.vc-panel::-webkit-scrollbar-track { background: transparent; }
+   317→.vc-panel::-webkit-scrollbar-thumb { background: var(--vc-border); border-radius: 6px; }
+   318→
+   319→/* ── FORM: transparent wrapper, must stay in DOM for serialize ── */
+   320→.vc-settings-form {
+   321→        /* DO NOT use display:contents — breaks jQuery serialize in some browsers */
+   322→        background: none;
+   323→        border: none;
+   324→        margin: 0;
+   325→        padding: 0;
+   326→}
+   327→
+   328→/* ── SECTION PANEL (each tab's content) ── */
+   329→.vc-section-panel {
+   330→        display: none;
+   331→}
+   332→.vc-section-panel.active {
+   333→        display: block;
+   334→        animation: vcFadeIn 0.3s ease;
+   335→}
+   336→@keyframes vcFadeIn {
+   337→        from { opacity: 0; transform: translateY(8px); }
+   338→        to { opacity: 1; transform: translateY(0); }
+   339→}
+   340→
+   341→/* ── FOOTER BAR ── */
+   342→.vc-footer {
+   343→        height: var(--vc-footer-h);
+   344→        background: var(--vc-bg-panel);
+   345→        border-top: 1px solid var(--vc-border);
+   346→        display: flex;
+   347→        align-items: center;
+   348→        justify-content: space-between;
+   349→        padding: 0 24px;
+   350→        flex-shrink: 0;
+   351→}
+   352→.vc-footer-status {
+   353→        display: flex;
+   354→        align-items: center;
+   355→        gap: 8px;
+   356→        font-size: 12px;
+   357→        color: var(--vc-text-dim);
+   358→}
+   359→.vc-footer-status-dot {
+   360→        width: 7px;
+   361→        height: 7px;
+   362→        border-radius: 50%;
+   363→        background: var(--vc-success);
+   364→}
+   365→.vc-footer-actions {
+   366→        display: flex;
+   367→        align-items: center;
+   368→        gap: 10px;
+   369→}
+   370→
+   371→/* ═══════════════════════════════════════════════════════════════
+   372→   SECTION PREVIEW CARD
+   373→   ═══════════════════════════════════════════════════════════════ */
+   374→.vc-preview-card {
+   375→        background: var(--vc-bg-panel);
+   376→        border: 1px solid var(--vc-border);
+   377→        border-radius: var(--vc-radius);
+   378→        overflow: hidden;
+   379→        margin-bottom: 24px;
+   380→}
+   381→.vc-preview-header {
+   382→        padding: 16px 20px;
+   383→        display: flex;
+   384→        align-items: center;
+   385→        justify-content: space-between;
+   386→        border-bottom: 1px solid var(--vc-border);
+   387→}
+   388→.vc-preview-header-left {
+   389→        display: flex;
+   390→        align-items: center;
+   391→        gap: 10px;
+   392→}
+   393→.vc-preview-header-left h3 {
+   394→        margin: 0;
+   395→        font-size: 15px;
+   396→        font-weight: 600;
+   397→        color: var(--vc-text-bright);
+   398→}
+   399→.vc-preview-badge {
+   400→        font-size: 10px;
+   401→        padding: 2px 8px;
+   402→        border-radius: 10px;
+   403→        background: rgba(200, 169, 126, 0.15);
+   404→        color: var(--vc-accent);
+   405→        font-weight: 600;
+   406→        text-transform: uppercase;
+   407→        letter-spacing: 0.5px;
+   408→}
+   409→.vc-preview-body {
+   410→        padding: 20px;
+   411→}
+   412→.vc-preview-visual {
+   413→        background: var(--vc-bg-input);
+   414→        border-radius: var(--vc-radius);
+   415→        padding: 40px 20px;
+   416→        text-align: center;
+   417→        color: var(--vc-text-dim);
+   418→        font-size: 13px;
+   419→        border: 1px dashed var(--vc-border);
+   420→        margin-bottom: 0;
+   421→        position: relative;
+   422→        min-height: 160px;
+   423→        display: flex;
+   424→        align-items: center;
+   425→        justify-content: center;
+   426→        flex-direction: column;
+   427→        gap: 8px;
+   428→}
+   429→.vc-preview-visual-icon {
+   430→        font-size: 32px;
+   431→        opacity: 0.5;
+   432→}
+   433→.vc-preview-visual-label {
+   434→        font-weight: 600;
+   435→        font-size: 14px;
+   436→        color: var(--vc-text);
+   437→}
+   438→.vc-preview-visual-desc {
+   439→        font-size: 12px;
+   440→}
+   441→
+   442→/* ═══════════════════════════════════════════════════════════════
+   443→   TEMPLATES BAR
+   444→   ═══════════════════════════════════════════════════════════════ */
+   445→.vc-templates-bar {
+   446→        margin-bottom: 24px;
+   447→}
+   448→.vc-templates-bar-title {
+   449→        font-size: 13px;
+   450→        font-weight: 600;
+   451→        color: var(--vc-text-dim);
+   452→        text-transform: uppercase;
+   453→        letter-spacing: 0.8px;
+   454→        margin-bottom: 12px;
+   455→}
+   456→.vc-templates-grid {
+   457→        display: grid;
+   458→        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   459→        gap: 12px;
+   460→}
+   461→.vc-template-card {
+   462→        background: var(--vc-bg-panel);
+   463→        border: 1px solid var(--vc-border);
+   464→        border-radius: var(--vc-radius);
+   465→        padding: 16px;
+   466→        cursor: pointer;
+   467→        transition: all var(--vc-transition);
+   468→        position: relative;
+   469→        overflow: hidden;
+   470→}
+   471→.vc-template-card:hover {
+   472→        border-color: var(--vc-accent);
+   473→        transform: translateY(-2px);
+   474→        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+   475→}
+   476→.vc-template-card-thumb {
+   477→        height: 80px;
+   478→        background: var(--vc-bg-input);
+   479→        border-radius: var(--vc-radius-sm);
+   480→        margin-bottom: 10px;
+   481→        display: flex;
+   482→        align-items: center;
+   483→        justify-content: center;
+   484→        font-size: 28px;
+   485→        color: var(--vc-accent);
+   486→        opacity: 0.6;
+   487→}
+   488→.vc-template-card-name {
+   489→        font-size: 13px;
+   490→        font-weight: 600;
+   491→        color: var(--vc-text-bright);
+   492→        margin-bottom: 2px;
+   493→}
+   494→.vc-template-card-desc {
+   495→        font-size: 11px;
+   496→        color: var(--vc-text-dim);
+   497→}
+   498→.vc-template-card-badge {
+   499→        position: absolute;
+   500→        top: 8px;
+   501→        right: 8px;
+   502→        font-size: 9px;
+   503→        padding: 2px 6px;
+   504→        border-radius: 6px;
+   505→        font-weight: 700;
+   506→        text-transform: uppercase;
+   507→}
+   508→.vc-template-card-badge.popular {
+   509→        background: var(--vc-accent);
+   510→        color: var(--vc-bg-darker);
+   511→}
+   512→.vc-template-card-badge.new {
+   513→        background: var(--vc-success);
+   514→        color: #fff;
+   515→}
+   516→
+   517→/* ═══════════════════════════════════════════════════════════════
+   518→   ACCORDION / COLLAPSIBLE GROUPS
+   519→   ═══════════════════════════════════════════════════════════════ */
+   520→.vc-accordion {
+   521→        margin-bottom: 24px;
+   522→}
+   523→.vc-accordion-item {
+   524→        background: var(--vc-bg-panel);
+   525→        border: 1px solid var(--vc-border);
+   526→        border-radius: var(--vc-radius);
+   527→        margin-bottom: 8px;
+   528→        overflow: hidden;
+   529→        transition: all var(--vc-transition);
+   530→}
+   531→.vc-accordion-item:hover {
+   532→        border-color: rgba(200, 169, 126, 0.3);
+   533→}
+   534→.vc-accordion-item.open {
+   535→        border-color: var(--vc-accent);
+   536→        box-shadow: 0 0 0 1px var(--vc-accent-glow);
+   537→}
+   538→.vc-accordion-header {
+   539→        padding: 14px 18px;
+   540→        display: flex;
+   541→        align-items: center;
+   542→        gap: 10px;
+   543→        cursor: pointer;
+   544→        transition: background var(--vc-transition);
+   545→        user-select: none;
+   546→        -webkit-user-select: none;
+   547→}
+   548→.vc-accordion-header:hover {
+   549→        background: var(--vc-bg-hover);
+   550→}
+   551→.vc-accordion-icon {
+   552→        font-size: 14px;
+   553→        color: var(--vc-text-dim);
+   554→        transition: transform var(--vc-transition);
+   555→        width: 20px;
+   556→        text-align: center;
+   557→}
+   558→.vc-accordion-item.open .vc-accordion-icon {
+   559→        transform: rotate(90deg);
+   560→        color: var(--vc-accent);
+   561→}
+   562→.vc-accordion-title {
+   563→        flex: 1;
+   564→        font-size: 13px;
+   565→        font-weight: 600;
+   566→        color: var(--vc-text-bright);
+   567→}
+   568→.vc-accordion-count {
+   569→        font-size: 11px;
+   570→        color: var(--vc-text-dim);
+   571→        background: var(--vc-bg-input);
+   572→        padding: 2px 8px;
+   573→        border-radius: 10px;
+   574→}
+   575→.vc-accordion-body {
+   576→        display: none;
+   577→        padding: 18px;
+   578→        border-top: 1px solid var(--vc-border);
+   579→}
+   580→.vc-accordion-item.open .vc-accordion-body {
+   581→        display: block;
+   582→        animation: vcFadeIn 0.2s ease;
+   583→}
+   584→
+   585→/* ═══════════════════════════════════════════════════════════════
+   586→   FORM FIELDS (redesigned)
+   587→   ═══════════════════════════════════════════════════════════════ */
+   588→.vc-field {
+   589→        margin-bottom: 18px;
+   590→}
+   591→.vc-field:last-child {
+   592→        margin-bottom: 0;
+   593→}
+   594→.vc-field-row {
+   595→        display: grid;
+   596→        grid-template-columns: 1fr 1fr;
+   597→        gap: 16px;
+   598→}
+   599→.vc-field-row-3 {
+   600→        display: grid;
+   601→        grid-template-columns: 1fr 1fr 1fr;
+   602→        gap: 16px;
+   603→}
+   604→.vc-field > label,
+   605→.vc-label {
+   606→        display: flex;
+   607→        align-items: center;
+   608→        gap: 6px;
+   609→        font-weight: 600;
+   610→        font-size: 12px;
+   611→        color: var(--vc-text);
+   612→        margin-bottom: 6px;
+   613→}
+   614→.vc-label-icon {
+   615→        font-size: 13px;
+   616→        color: var(--vc-accent);
+   617→}
+   618→.vc-field-hint {
+   619→        font-size: 11px;
+   620→        color: var(--vc-text-dim);
+   621→        margin-top: 4px;
+   622→        line-height: 1.5;
+   623→}
+   624→
+   625→/* Text / URL / Number inputs */
+   626→.vc-field input[type="text"],
+   627→.vc-field input[type="url"],
+   628→.vc-field input[type="number"],
+   629→.vc-field select,
+   630→.vc-field textarea {
+   631→        width: 100%;
+   632→        padding: 9px 14px;
+   633→        background: var(--vc-bg-input);
+   634→        border: 1px solid var(--vc-border);
+   635→        border-radius: var(--vc-radius-sm);
+   636→        color: var(--vc-text-bright);
+   637→        font-size: 13px;
+   638→        font-family: inherit;
+   639→        transition: all var(--vc-transition);
+   640→}
+   641→.vc-field input[type="text"]:focus,
+   642→.vc-field input[type="url"]:focus,
+   643→.vc-field input[type="number"]:focus,
+   644→.vc-field select:focus,
+   645→.vc-field textarea:focus {
+   646→        outline: none;
+   647→        border-color: var(--vc-accent);
+   648→        box-shadow: 0 0 0 3px var(--vc-accent-glow);
+   649→}
+   650→.vc-field input::placeholder,
+   651→.vc-field textarea::placeholder {
+   652→        color: var(--vc-text-dim);
+   653→}
+   654→.vc-field select {
+   655→        cursor: pointer;
+   656→        -webkit-appearance: none;
+   657→        -moz-appearance: none;
+   658→        appearance: none;
+   659→        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238888aa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+   660→        background-repeat: no-repeat;
+   661→        background-position: right 12px center;
+   662→        padding-right: 32px;
+   663→}
+   664→.vc-field select option {
+   665→        background: var(--vc-bg-panel);
+   666→        color: var(--vc-text-bright);
+   667→}
+   668→.vc-field textarea {
+   669→        resize: vertical;
+   670→        min-height: 80px;
+   671→        line-height: 1.6;
+   672→}
+   673→
+   674→/* Number with unit */
+   675→.vc-field-number-group {
+   676→        display: flex;
+   677→        gap: 0;
+   678→}
+   679→.vc-field-number-group input {
+   680→        border-radius: var(--vc-radius-sm) 0 0 var(--vc-radius-sm) !important;
+   681→        flex: 1;
+   682→}
+   683→.vc-field-number-unit {
+   684→        display: flex;
+   685→        align-items: center;
+   686→        padding: 0 12px;
+   687→        background: var(--vc-bg-input);
+   688→        border: 1px solid var(--vc-border);
+   689→        border-left: none;
+   690→        border-radius: 0 var(--vc-radius-sm) var(--vc-radius-sm) 0;
+   691→        color: var(--vc-text-dim);
+   692→        font-size: 12px;
+   693→        font-weight: 600;
+   694→        white-space: nowrap;
+   695→}
+   696→
+   697→/* Range slider */
+   698→.vc-range-wrap {
+   699→        display: flex;
+   700→        align-items: center;
+   701→        gap: 14px;
+   702→}
+   703→.vc-range-wrap input[type="range"] {
+   704→        flex: 1;
+   705→        -webkit-appearance: none;
+   706→        appearance: none;
+   707→        height: 4px;
+   708→        background: var(--vc-bg-input);
+   709→        border-radius: 4px;
+   710→        outline: none;
+   711→        border: none !important;
+   712→        box-shadow: none !important;
+   713→        padding: 0 !important;
+   714→}
+   715→.vc-range-wrap input[type="range"]::-webkit-slider-thumb {
+   716→        -webkit-appearance: none;
+   717→        appearance: none;
+   718→        width: 18px;
+   719→        height: 18px;
+   720→        border-radius: 50%;
+   721→        background: var(--vc-accent);
+   722→        cursor: pointer;
+   723→        border: 3px solid var(--vc-bg-darker);
+   724→        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+   725→        transition: transform 0.15s;
+   726→}
+   727→.vc-range-wrap input[type="range"]::-webkit-slider-thumb:hover {
+   728→        transform: scale(1.15);
+   729→}
+   730→.vc-range-value {
+   731→        min-width: 48px;
+   732→        text-align: center;
+   733→        padding: 5px 10px;
+   734→        background: var(--vc-bg-input);
+   735→        border: 1px solid var(--vc-border);
+   736→        border-radius: var(--vc-radius-sm);
+   737→        font-size: 13px;
+   738→        font-weight: 600;
+   739→        color: var(--vc-accent);
+   740→}
+   741→
+   742→/* Color picker */
+   743→.vc-color-wrap {
+   744→        display: flex;
+   745→        align-items: center;
+   746→        gap: 10px;
+   747→}
+   748→.vc-color-swatch {
+   749→        width: 40px;
+   750→        height: 40px;
+   751→        border-radius: var(--vc-radius-sm);
+   752→        border: 2px solid var(--vc-border);
+   753→        cursor: pointer;
+   754→        position: relative;
+   755→        overflow: hidden;
+   756→        flex-shrink: 0;
+   757→        transition: border-color var(--vc-transition);
+   758→}
+   759→.vc-color-swatch:hover {
+   760→        border-color: var(--vc-accent);
+   761→}
+   762→.vc-color-swatch input[type="color"] {
+   763→        position: absolute;
+   764→        top: -8px;
+   765→        left: -8px;
+   766→        width: calc(100% + 16px);
+   767→        height: calc(100% + 16px);
+   768→        border: none;
+   769→        cursor: pointer;
+   770→        opacity: 0;
+   771→}
+   772→.vc-color-text {
+   773→        flex: 1;
+   774→}
+   775→
+   776→/* Toggle switch (redesigned) */
+   777→.vc-toggle-field {
+   778→        display: flex;
+   779→        align-items: center;
+   780→        justify-content: space-between;
+   781→}
+   782→.vc-toggle-field > label {
+   783→        margin-bottom: 0 !important;
+   784→}
+   785→.vc-toggle {
+   786→        position: relative;
+   787→        display: inline-block;
+   788→        width: 44px;
+   789→        height: 24px;
+   790→        flex-shrink: 0;
+   791→}
+   792→.vc-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+   793→.vc-toggle-slider {
+   794→        position: absolute;
+   795→        cursor: pointer;
+   796→        top: 0; left: 0; right: 0; bottom: 0;
+   797→        background: var(--vc-bg-input);
+   798→        border: 1px solid var(--vc-border);
+   799→        transition: all var(--vc-transition);
+   800→        border-radius: 24px;
+   801→}
+   802→.vc-toggle-slider:before {
+   803→        content: "";
+   804→        position: absolute;
+   805→        height: 18px;
+   806→        width: 18px;
+   807→        left: 2px;
+   808→        bottom: 2px;
+   809→        background: var(--vc-text-dim);
+   810→        transition: all var(--vc-transition);
+   811→        border-radius: 50%;
+   812→}
+   813→.vc-toggle input:checked + .vc-toggle-slider {
+   814→        background: var(--vc-accent);
+   815→        border-color: var(--vc-accent);
+   816→}
+   817→.vc-toggle input:checked + .vc-toggle-slider:before {
+   818→        transform: translateX(20px);
+   819→        background: #fff;
+   820→}
+   821→
+   822→/* ── Image upload (redesigned) ── */
+   823→.vc-image-field .vc-img-wrap {
+   824→        width: 100%;
+   825→        max-width: 320px;
+   826→        height: 180px;
+   827→        border: 2px dashed var(--vc-border);
+   828→        border-radius: var(--vc-radius);
+   829→        overflow: hidden;
+   830→        display: flex;
+   831→        align-items: center;
+   832→        justify-content: center;
+   833→        margin-bottom: 10px;
+   834→        background: var(--vc-bg-input);
+   835→        transition: all var(--vc-transition);
+   836→        cursor: pointer;
+   837→}
+   838→.vc-image-field .vc-img-wrap:hover {
+   839→        border-color: var(--vc-accent);
+   840→}
+   841→.vc-image-field .vc-img-wrap img {
+   842→        width: 100%;
+   843→        height: 100%;
+   844→        object-fit: cover;
+   845→}
+   846→.vc-image-field .vc-img-placeholder {
+   847→        color: var(--vc-text-dim);
+   848→        font-size: 12px;
+   849→        text-align: center;
+   850→        display: flex;
+   851→        flex-direction: column;
+   852→        align-items: center;
+   853→        gap: 6px;
+   854→}
+   855→.vc-image-field .vc-img-placeholder-icon {
+   856→        font-size: 28px;
+   857→        opacity: 0.4;
+   858→}
+   859→.vc-image-field .vc-img-actions {
+   860→        display: flex;
+   861→        gap: 8px;
+   862→}
+   863→
+   864→/* ═══════════════════════════════════════════════════════════════
+   865→   REPEATER (redesigned)
+   866→   ═══════════════════════════════════════════════════════════════ */
+   867→.vc-repeater-header {
+   868→        display: flex;
+   869→        justify-content: space-between;
+   870→        align-items: center;
+   871→        margin-bottom: 12px;
+   872→}
+   873→.vc-repeater-header h4 {
+   874→        margin: 0;
+   875→        font-size: 14px;
+   876→        color: var(--vc-text-bright);
+   877→}
+   878→.vc-repeater {
+   879→        min-height: 4px;
+   880→}
+   881→.vc-repeater-row {
+   882→        border: 1px solid var(--vc-border);
+   883→        border-radius: var(--vc-radius);
+   884→        margin-bottom: 10px;
+   885→        background: var(--vc-bg-panel);
+   886→        overflow: hidden;
+   887→        transition: all var(--vc-transition);
+   888→}
+   889→.vc-repeater-row:hover {
+   890→        border-color: rgba(200, 169, 126, 0.3);
+   891→}
+   892→.vc-repeater-row.open {
+   893→        border-color: var(--vc-accent);
+   894→}
+   895→.vc-repeater-row-header {
+   896→        display: flex;
+   897→        align-items: center;
+   898→        padding: 10px 14px;
+   899→        background: rgba(0,0,0,0.15);
+   900→        border-bottom: 1px solid var(--vc-border);
+   901→        cursor: move;
+   902→        gap: 8px;
+   903→}
+   904→.vc-repeater-handle {
+   905→        font-size: 14px;
+   906→        color: var(--vc-text-dim);
+   907→        cursor: grab;
+   908→        opacity: 0.6;
+   909→        transition: opacity var(--vc-transition);
+   910→}
+   911→.vc-repeater-handle:hover { opacity: 1; }
+   912→.vc-repeater-handle:active { cursor: grabbing; }
+   913→.vc-repeater-title {
+   914→        flex: 1;
+   915→        font-weight: 600;
+   916→        font-size: 13px;
+   917→        color: var(--vc-text-bright);
+   918→}
+   919→.vc-repeater-row-actions {
+   920→        display: flex;
+   921→        gap: 4px;
+   922→}
+   923→.vc-repeater-row-actions button {
+   924→        background: none;
+   925→        border: none;
+   926→        color: var(--vc-text-dim);
+   927→        cursor: pointer;
+   928→        padding: 4px 6px;
+   929→        border-radius: 4px;
+   930→        font-size: 14px;
+   931→        transition: all var(--vc-transition);
+   932→}
+   933→.vc-repeater-row-actions button:hover {
+   934→        background: rgba(239, 68, 68, 0.15);
+   935→        color: var(--danger);
+   936→}
+   937→.vc-repeater-fields {
+   938→        padding: 16px;
+   939→        display: none;
+   940→}
+   941→.vc-repeater-row.open .vc-repeater-fields {
+   942→        display: block;
+   943→        animation: vcFadeIn 0.2s ease;
+   944→}
+   945→.vc-repeater-template { display: none !important; }
+   946→
+   947→/* ═══════════════════════════════════════════════════════════════
+   948→   SECTION ORDER (redesigned)
+   949→   ═══════════════════════════════════════════════════════════════ */
+   950→.vc-section-order-list {
+   951→        list-style: none;
+   952→        padding: 0;
+   953→        margin: 0;
+   954→}
+   955→.vc-section-order-list li {
+   956→        display: flex;
+   957→        align-items: center;
+   958→        padding: 12px 16px;
+   959→        background: var(--vc-bg-panel);
+   960→        border: 1px solid var(--vc-border);
+   961→        margin-bottom: 6px;
+   962→        gap: 12px;
+   963→        border-radius: var(--vc-radius-sm);
+   964→        transition: all var(--vc-transition);
+   965→}
+   966→.vc-section-order-list li:hover {
+   967→        border-color: var(--vc-accent);
+   968→}
+   969→.vc-section-order-list li.ui-sortable-helper {
+   970→        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+   971→        border-color: var(--vc-accent);
+   972→}
+   973→.vc-section-order-handle {
+   974→        cursor: grab;
+   975→        color: var(--vc-text-dim);
+   976→        font-size: 16px;
+   977→}
+   978→.vc-section-order-handle:active { cursor: grabbing; }
+   979→.vc-section-order-label {
+   980→        flex: 1;
+   981→        font-weight: 500;
+   982→        font-size: 13px;
+   983→        color: var(--vc-text-bright);
+   984→}
+   985→.vc-section-order-label small {
+   986→        display: block;
+   987→        font-weight: 400;
+   988→        font-size: 11px;
+   989→        color: var(--vc-text-dim);
+   990→}
+   991→.vc-section-order-toggle {
+   992→        flex-shrink: 0;
+   993→}
+   994→
+   995→/* ═══════════════════════════════════════════════════════════════
+   996→   SEPARATOR
+   997→   ═══════════════════════════════════════════════════════════════ */
+   998→.vc-separator {
+   999→        border: none;
+  1000→        border-top: 1px solid var(--vc-border);
+  1001→        margin: 20px 0;
+  1002→}
+  1003→
+  1004→/* ═══════════════════════════════════════════════════════════════
+  1005→   SAVE INDICATOR / TOAST
+  1006→   ═══════════════════════════════════════════════════════════════ */
+  1007→.vc-toast {
+  1008→        position: fixed;
+  1009→        top: 40px;
+  1010→        right: 20px;
+  1011→        padding: 14px 20px;
+  1012→        border-radius: var(--vc-radius);
+  1013→        font-size: 13px;
+  1014→        font-weight: 600;
+  1015→        z-index: 99999;
+  1016→        transform: translateX(120%);
+  1017→        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  1018→        display: flex;
+  1019→        align-items: center;
+  1020→        gap: 8px;
+  1021→        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  1022→        pointer-events: none;
+  1023→}
+  1024→.vc-toast.show {
+  1025→        transform: translateX(0);
+  1026→        pointer-events: auto;
+  1027→}
+  1028→.vc-toast-success {
+  1029→        background: #166534;
+  1030→        color: #fff;
+  1031→        border: 1px solid #22c55e;
+  1032→}
+  1033→.vc-toast-error {
+  1034→        background: #7f1d1d;
+  1035→        color: #fff;
+  1036→        border: 1px solid #ef4444;
+  1037→}
+  1038→.vc-toast-saving {
+  1039→        background: var(--vc-bg-panel);
+  1040→        color: var(--vc-text);
+  1041→        border: 1px solid var(--vc-border);
+  1042→}
+  1043→
+  1044→/* Unsaved changes indicator */
+  1045→.vc-unsaved-dot {
+  1046→        width: 8px;
+  1047→        height: 8px;
+  1048→        border-radius: 50%;
+  1049→        background: var(--vc-warning);
+  1050→        display: none;
+  1051→        animation: vcPulse 1.5s infinite;
+  1052→        flex-shrink: 0;
+  1053→}
+  1054→.vc-unsaved-dot.active,
+  1055→.vc-unsaved-dot.show {
+  1056→        display: block;
+  1057→}
+  1058→@keyframes vcPulse {
+  1059→        0%, 100% { opacity: 1; }
+  1060→        50% { opacity: 0.4; }
+  1061→}
+  1062→
+  1063→/* ═══════════════════════════════════════════════════════════════
+  1064→   Auto-Save Indicator (Builder Topbar)
+  1065→   ═══════════════════════════════════════════════════════════════ */
+  1066→.vc-save-indicator {
+  1067→        display: flex;
+  1068→        align-items: center;
+  1069→        gap: 6px;
+  1070→        font-size: 12px;
+  1071→        color: var(--vc-text-dim);
+  1072→        opacity: 0;
+  1073→        transition: opacity 0.3s ease;
+  1074→        flex-shrink: 0;
+  1075→        white-space: nowrap;
+  1076→}
+  1077→.vc-save-indicator.vc-visible {
+  1078→        opacity: 1;
+  1079→}
+  1080→.vc-save-dot {
+  1081→        width: 6px;
+  1082→        height: 6px;
+  1083→        border-radius: 50%;
+  1084→        background: var(--vc-text-dim);
+  1085→        flex-shrink: 0;
+  1086→        transition: background 0.2s ease;
+  1087→}
+  1088→.vc-save-indicator.vc-saving .vc-save-dot {
+  1089→        background: var(--vc-accent);
+  1090→        animation: vcPulse 0.8s infinite;
+  1091→}
+  1092→.vc-save-indicator.vc-saved {
+  1093→        color: var(--vc-success);
+  1094→}
+  1095→.vc-save-indicator.vc-saved .vc-save-dot {
+  1096→        background: var(--vc-success);
+  1097→        animation: none;
+  1098→}
+  1099→.vc-save-indicator.vc-error {
+  1100→        color: var(--vc-danger);
+  1101→}
+  1102→.vc-save-indicator.vc-error .vc-save-dot {
+  1103→        background: var(--vc-danger);
+  1104→        animation: none;
+  1105→}
+  1106→
+  1107→/* ── Spinner ── */
+  1108→.vc-spinner {
+  1109→        display: inline-block;
+  1110→        width: 14px;
+  1111→        height: 14px;
+  1112→        border: 2px solid rgba(255,255,255,0.3);
+  1113→        border-top-color: #fff;
+  1114→        border-radius: 50%;
+  1115→        animation: vcSpin 0.6s linear infinite;
+  1116→}
+  1117→@keyframes vcSpin {
+  1118→        to { transform: rotate(360deg); }
+  1119→}
+  1120→
+  1121→/* ═══════════════════════════════════════════════════════════════
+  1122→   RESPONSIVE TABS (within sections)
+  1123→   ═══════════════════════════════════════════════════════════════ */
+  1124→.vc-sub-tabs {
+  1125→        display: flex;
+  1126→        gap: 2px;
+  1127→        background: var(--vc-bg-input);
+  1128→        border-radius: var(--vc-radius-sm);
+  1129→        padding: 3px;
+  1130→        margin-bottom: 20px;
+  1131→}
+  1132→.vc-sub-tab {
+  1133→        flex: 1;
+  1134→        text-align: center;
+  1135→        padding: 8px 16px;
+  1136→        border-radius: 4px;
+  1137→        font-size: 12px;
+  1138→        font-weight: 600;
+  1139→        cursor: pointer;
+  1140→        color: var(--vc-text-dim);
+  1141→        transition: all var(--vc-transition);
+  1142→        border: none;
+  1143→        background: none;
+  1144→}
+  1145→.vc-sub-tab:hover {
+  1146→        color: var(--vc-text);
+  1147→}
+  1148→.vc-sub-tab.active {
+  1149→        background: var(--vc-bg-panel);
+  1150→        color: var(--vc-accent);
+  1151→        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  1152→}
+  1153→
+  1154→/* ═══════════════════════════════════════════════════════════════
+  1155→   IMPORT / EXPORT MODAL
+  1156→   ═══════════════════════════════════════════════════════════════ */
+  1157→.vc-modal-overlay {
+  1158→        position: fixed;
+  1159→        top: 0; left: 0; right: 0; bottom: 0;
+  1160→        background: rgba(0,0,0,0.7);
+  1161→        z-index: 99990;
+  1162→        display: none;
+  1163→        align-items: center;
+  1164→        justify-content: center;
+  1165→}
+  1166→.vc-modal-overlay.open {
+  1167→        display: flex;
+  1168→}
+  1169→.vc-modal {
+  1170→        background: var(--vc-bg-panel);
+  1171→        border: 1px solid var(--vc-border);
+  1172→        border-radius: 12px;
+  1173→        width: 560px;
+  1174→        max-width: 90vw;
+  1175→        max-height: 80vh;
+  1176→        overflow-y: auto;
+  1177→        box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+  1178→        animation: vcFadeIn 0.3s ease;
+  1179→}
+  1180→.vc-modal-header {
+  1181→        padding: 20px 24px;
+  1182→        border-bottom: 1px solid var(--vc-border);
+  1183→        display: flex;
+  1184→        align-items: center;
+  1185→        justify-content: space-between;
+  1186→}
+  1187→.vc-modal-header h3 {
+  1188→        margin: 0;
+  1189→        font-size: 16px;
+  1190→        color: var(--vc-text-bright);
+  1191→}
+  1192→.vc-modal-close {
+  1193→        background: none;
+  1194→        border: none;
+  1195→        color: var(--vc-text-dim);
+  1196→        font-size: 20px;
+  1197→        cursor: pointer;
+  1198→        padding: 4px;
+  1199→        line-height: 1;
+  1200→        transition: color var(--vc-transition);
+  1201→}
+  1202→.vc-modal-close:hover { color: var(--vc-text-bright); }
+  1203→.vc-modal-body {
+  1204→        padding: 24px;
+  1205→}
+  1206→.vc-modal-footer {
+  1207→        padding: 16px 24px;
+  1208→        border-top: 1px solid var(--vc-border);
+  1209→        display: flex;
+  1210→        justify-content: flex-end;
+  1211→        gap: 10px;
+  1212→}
+  1213→
+  1214→/* ═══════════════════════════════════════════════════════════════
+  1215→   WYSIWYG TYPOGRAPHY GROUPS (v3.1)
+  1216→   ═══════════════════════════════════════════════════════════════ */
+  1217→.vc-typo-group {
+  1218→        border: 1px solid var(--vc-border);
+  1219→        border-radius: var(--vc-radius);
+  1220→        margin-bottom: 16px;
+  1221→        overflow: hidden;
+  1222→        transition: border-color var(--vc-transition);
+  1223→}
+  1224→.vc-typo-group:hover {
+  1225→        border-color: var(--vc-accent);
+  1226→}
+  1227→.vc-typo-group-header {
+  1228→        display: flex;
+  1229→        align-items: center;
+  1230→        gap: 10px;
+  1231→        padding: 12px 16px;
+  1232→        background: var(--vc-bg-input);
+  1233→        border-bottom: 1px solid var(--vc-border);
+  1234→        cursor: pointer;
+  1235→        user-select: none;
+  1236→}
+  1237→.vc-typo-group-icon {
+  1238→        font-size: 18px;
+  1239→}
+  1240→.vc-typo-group-label {
+  1241→        font-weight: 600;
+  1242→        font-size: 13px;
+  1243→        color: var(--vc-text-bright);
+  1244→        flex: 1;
+  1245→}
+  1246→.vc-typo-group-body {
+  1247→        padding: 16px;
+  1248→}
+  1249→.vc-typo-divider {
+  1250→        font-size: 11px;
+  1251→        font-weight: 600;
+  1252→        text-transform: uppercase;
+  1253→        letter-spacing: 1px;
+  1254→        color: var(--vc-accent);
+  1255→        margin: 16px 0 12px 0;
+  1256→        padding-bottom: 8px;
+  1257→        border-bottom: 1px solid var(--vc-border);
+  1258→}
+  1259→.vc-typo-divider:first-child {
+  1260→        margin-top: 0;
+  1261→}
+  1262→.vc-responsive-notice {
+  1263→        background: rgba(59, 130, 246, 0.1);
+  1264→        border-left: 3px solid #3b82f6;
+  1265→        border-radius: var(--vc-radius-sm);
+  1266→        padding: 12px 16px;
+  1267→        color: var(--vc-text);
+  1268→        font-size: 13px;
+  1269→}
+  1270→.vc-field-row-2 {
+  1271→        display: grid;
+  1272→        grid-template-columns: 1fr 1fr;
+  1273→        gap: 16px;
+  1274→}
+  1275→
+  1276→/* Color field improvements */
+  1277→.vc-color-wrap {
+  1278→        display: flex;
+  1279→        align-items: center;
+  1280→        gap: 10px;
+  1281→}
+  1282→.vc-color-swatch {
+  1283→        width: 36px;
+  1284→        height: 36px;
+  1285→        border-radius: var(--vc-radius-sm);
+  1286→        border: 2px solid var(--vc-border);
+  1287→        cursor: pointer;
+  1288→        position: relative;
+  1289→        overflow: hidden;
+  1290→        flex-shrink: 0;
+  1291→}
+  1292→.vc-color-swatch input[type="color"] {
+  1293→        position: absolute;
+  1294→        top: -10px;
+  1295→        left: -10px;
+  1296→        width: 60px;
+  1297→        height: 60px;
+  1298→        border: none;
+  1299→        cursor: pointer;
+  1300→        opacity: 0;
+  1301→}
+  1302→.vc-color-text {
+  1303→        flex: 1;
+  1304→        background: var(--vc-bg-input);
+  1305→        border: 1px solid var(--vc-border);
+  1306→        color: var(--vc-text-bright);
+  1307→        padding: 8px 10px;
+  1308→        border-radius: var(--vc-radius-sm);
+  1309→        font-family: monospace;
+  1310→        font-size: 13px;
+  1311→        max-width: 120px;
+  1312→}
+  1313→.vc-color-text:focus {
+  1314→        outline: none;
+  1315→        border-color: var(--vc-accent);
+  1316→}
+  1317→
+  1318→/* Number group with unit */
+  1319→.vc-field-number-group {
+  1320→        display: flex;
+  1321→        align-items: center;
+  1322→        gap: 0;
+  1323→}
+  1324→.vc-field-number-group input {
+  1325→        border-radius: var(--vc-radius-sm) 0 0 var(--vc-radius-sm);
+  1326→        border-right: none;
+  1327→}
+  1328→.vc-field-number-unit {
+  1329→        background: var(--vc-bg-hover);
+  1330→        border: 1px solid var(--vc-border);
+  1331→        border-left: none;
+  1332→        padding: 8px 10px;
+  1333→        font-size: 12px;
+  1334→        color: var(--vc-text-dim);
+  1335→        border-radius: 0 var(--vc-radius-sm) var(--vc-radius-sm) 0;
+  1336→        white-space: nowrap;
+  1337→}
+  1338→
+  1339→/* ═══════════════════════════════════════════════════════════════
+  1340→   RESPONSIVE
+  1341→   ═══════════════════════════════════════════════════════════════ */
+  1342→@media (max-width: 1200px) {
+  1343→        .vc-field-row { grid-template-columns: 1fr; }
+  1344→        .vc-field-row-2 { grid-template-columns: 1fr; }
+  1345→        .vc-field-row-3 { grid-template-columns: 1fr 1fr; }
+  1346→}
+  1347→@media (max-width: 782px) {
+  1348→        :root {
+  1349→                --vc-sidebar-w: 60px;
+  1350→        }
+  1351→        .vc-sidebar-brand-text,
+  1352→        .vc-nav-item-label,
+  1353→        .vc-nav-item-badge,
+  1354→        .vc-nav-section-label { display: none; }
+  1355→        .vc-nav-item { justify-content: center; padding: 12px; margin: 1px 4px; }
+  1356→        .vc-sidebar-brand { justify-content: center; padding: 12px 8px; }
+  1357→        .vc-panel { padding: 16px; }
+  1358→        .vc-templates-grid { grid-template-columns: 1fr 1fr; }
+  1359→        .vc-field-row-3 { grid-template-columns: 1fr; }
+  1360→}
+  1361→
+  1362→/* ═══════════════════════════════════════════════════════════════
+  1363→   VISUAL BUILDER LAYOUT
+  1364→   ═══════════════════════════════════════════════════════════════ */
+  1365→
+  1366→/* Hide classic sidebar + footer when in builder mode */
+  1367→#vc-builder-app .vc-sidebar,
+  1368→#vc-builder-app .vc-main > .vc-header,
+  1369→#vc-builder-app .vc-main > .vc-panel,
+  1370→#vc-builder-app .vc-main > .vc-footer {
+  1371→        display: none !important;
+  1372→}
+  1373→
+  1374→/* Builder root: full-width, no sidebar, flex column */
+  1375→#vc-builder-app .vc-app {
+  1376→        display: block;
+  1377→}
+  1378→#vc-builder-app .vc-main {
+  1379→        width: 100%;
+  1380→        margin-left: 0 !important;
+  1381→        display: flex;
+  1382→        flex-direction: column;
+  1383→        flex: 1;
+  1384→}
+  1385→
+  1386→/* ═══════════════════════════════════════════════════════════════
+  1387→   BUILDER-SPECIFIC OVERRIDES
+  1388→   Hide preview cards, template selectors, section panel wrappers
+  1389→   ═══════════════════════════════════════════════════════════════ */
+  1390→#vc-builder-app .vc-preview-card,
+  1391→#vc-builder-app .vc-templates-bar {
+  1392→        display: none !important;
+  1393→}
+  1394→#vc-builder-app .vc-section-panel {
+  1395→        display: block !important;
+  1396→        animation: none !important;
+  1397→}
+  1398→#vc-builder-app .vc-section-panel > .vc-preview-card {
+  1399→        display: none !important;
+  1400→}
+  1401→
+  1402→/* Force wrapper to EXACT viewport height (not min-height) for proper flex */
+  1403→#vc-builder-app.velure-core-admin-wrap {
+  1404→        height: calc(100vh - 32px) !important;
+  1405→        min-height: 0 !important;
+  1406→        max-height: calc(100vh - 32px) !important;
+  1407→        position: relative !important;
+  1408→}
+  1409→/* Remove any margin/padding from .wrap that WordPress adds */
+  1410→#vc-builder-app.wrap {
+  1411→        margin: 0 !important;
+  1412→        padding: 0 !important;
+  1413→}
+  1414→/* ── Builder Container — MUST fill entire viewport ═══ */
+  1415→.vc-builder {
+  1416→        display: flex;
+  1417→        flex-direction: column;
+  1418→        flex: 1 1 0%;
+  1419→        min-height: 0;
+  1420→        overflow: hidden;
+  1421→        height: 100%;
+  1422→}
+  1423→
+  1424→/* ═══════════════════════════════════════════════════════════════
+  1425→   HORIZONTAL SECTION TABS (replaces vertical sidebar nav)
+  1426→   ═══════════════════════════════════════════════════════════════ */
+  1427→.vc-builder-section-tabs {
+  1428→        display: flex;
+  1429→        align-items: center;
+  1430→        height: 40px;
+  1431→        min-height: 40px;
+  1432→        max-height: 40px;
+  1433→        background: var(--vc-bg-panel);
+  1434→        border-bottom: 1px solid var(--vc-border);
+  1435→        padding: 0 8px;
+  1436→        gap: 2px;
+  1437→        overflow-x: auto;
+  1438→        overflow-y: hidden;
+  1439→        flex-shrink: 0;
+  1440→        scrollbar-width: none;
+  1441→}
+  1442→.vc-builder-section-tabs::-webkit-scrollbar { display: none; }
+  1443→
+  1444→.vc-builder-section-tab {
+  1445→        display: flex;
+  1446→        align-items: center;
+  1447→        gap: 5px;
+  1448→        padding: 6px 14px;
+  1449→        border-radius: 6px;
+  1450→        color: var(--vc-text-dim);
+  1451→        text-decoration: none !important;
+  1452→        font-size: 12px;
+  1453→        font-weight: 500;
+  1454→        white-space: nowrap;
+  1455→        transition: all 0.2s ease;
+  1456→        flex-shrink: 0;
+  1457→        border: 1px solid transparent;
+  1458→}
+  1459→.vc-builder-section-tab:hover {
+  1460→        background: var(--vc-bg-hover);
+  1461→        color: var(--vc-text);
+  1462→}
+  1463→.vc-builder-section-tab.active {
+  1464→        background: var(--vc-bg-dark);
+  1465→        color: var(--vc-accent);
+  1466→        border-color: var(--vc-border);
+  1467→        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  1468→}
+  1469→.vc-builder-section-tab-icon {
+  1470→        font-size: 13px;
+  1471→        line-height: 1;
+  1472→}
+  1473→.vc-builder-section-tab-label {
+  1474→        line-height: 1;
+  1475→}
+  1476→
+  1477→/* Gear icon tab (rightmost — global settings) */
+  1478→.vc-builder-section-tab--gear {
+  1479→        margin-left: auto;
+  1480→        padding: 6px 10px;
+  1481→        color: var(--vc-text-dim);
+  1482→        opacity: 0.6;
+  1483→        transition: all 0.2s ease;
+  1484→}
+  1485→.vc-builder-section-tab--gear:hover {
+  1486→        opacity: 1;
+  1487→        color: var(--vc-accent);
+  1488→        background: var(--vc-bg-hover);
+  1489→}
+  1490→
+  1491→/* ═══ TOP BAR ═══ */
+  1492→.vc-builder-topbar {
+  1493→        display: flex;
+  1494→        align-items: center;
+  1495→        justify-content: space-between;
+  1496→        height: 52px;
+  1497→        min-height: 52px;
+  1498→        max-height: 52px;
+  1499→        padding: 0 16px;
+  1500→        background: var(--vc-bg-dark);
+  1501→        border-bottom: 1px solid var(--vc-border);
+  1502→        z-index: 100;
+  1503→        gap: 12px;
+  1504→        flex-shrink: 0;
+  1505→}
+  1506→
+  1507→.vc-builder-topbar-left {
+  1508→        display: flex;
+  1509→        align-items: center;
+  1510→        gap: 12px;
+  1511→        flex-shrink: 0;
+  1512→}
+  1513→
+  1514→.vc-builder-topbar-center {
+  1515→        display: flex;
+  1516→        align-items: center;
+  1517→        justify-content: center;
+  1518→        flex: 1;
+  1519→}
+  1520→
+  1521→.vc-builder-topbar-right {
+  1522→        display: flex;
+  1523→        align-items: center;
+  1524→        gap: 10px;
+  1525→        flex-shrink: 0;
+  1526→}
+  1527→
+  1528→/* Back button */
+  1529→.vc-builder-back-btn {
+  1530→        display: flex;
+  1531→        align-items: center;
+  1532→        justify-content: center;
+  1533→        width: 34px;
+  1534→        height: 34px;
+  1535→        border-radius: 6px;
+  1536→        color: var(--vc-text);
+  1537→        text-decoration: none;
+  1538→        transition: background var(--vc-transition), color var(--vc-transition);
+  1539→}
+  1540→.vc-builder-back-btn:hover {
+  1541→        background: var(--vc-bg-hover);
+  1542→        color: var(--vc-accent);
+  1543→}
+  1544→
+  1545→/* Title area */
+  1546→.vc-builder-topbar-title {
+  1547→        display: flex;
+  1548→        flex-direction: column;
+  1549→        line-height: 1.2;
+  1550→}
+  1551→.vc-builder-topbar-section {
+  1552→        font-size: 14px;
+  1553→        font-weight: 600;
+  1554→        color: var(--vc-text-bright);
+  1555→}
+  1556→.vc-builder-topbar-mode {
+  1557→        font-size: 10px;
+  1558→        font-weight: 500;
+  1559→        color: var(--vc-accent);
+  1560→        text-transform: uppercase;
+  1561→        letter-spacing: 1px;
+  1562→}
+  1563→
+  1564→/* ═══ RESPONSIVE TOGGLES ═══ */
+  1565→.vc-builder-responsive-toggles {
+  1566→        display: flex;
+  1567→        align-items: center;
+  1568→        gap: 4px;
+  1569→        background: var(--vc-bg-panel);
+  1570→        padding: 3px;
+  1571→        border-radius: 8px;
+  1572→}
+  1573→.vc-builder-resp-btn {
+  1574→        display: flex;
+  1575→        align-items: center;
+  1576→        justify-content: center;
+  1577→        width: 36px;
+  1578→        height: 32px;
+  1579→        border: none;
+  1580→        background: transparent;
+  1581→        color: var(--vc-text-dim);
+  1582→        border-radius: 6px;
+  1583→        cursor: pointer;
+  1584→        transition: all var(--vc-transition);
+  1585→}
+  1586→.vc-builder-resp-btn:hover {
+  1587→        color: var(--vc-text);
+  1588→        background: var(--vc-bg-hover);
+  1589→}
+  1590→.vc-builder-resp-btn.active {
+  1591→        background: var(--vc-accent);
+  1592→        color: var(--vc-bg-dark);
+  1593→}
+  1594→
+  1595→/* ═══ BUILDER BODY: Panel (left 320px) + Canvas (flex:1) ═══ */
+  1596→.vc-builder-body {
+  1597→        display: flex;
+  1598→        flex-direction: row;
+  1599→        flex: 1 1 0%;
+  1600→        min-height: 0;
+  1601→        min-width: 0;
+  1602→        overflow: hidden;
+  1603→        background: var(--vc-bg-darker);
+  1604→}
+  1605→
+  1606→/* ── Zone 2: Left Properties Panel — strict 320px, INDEPENDENT scroll ── */
+  1607→.vc-builder-panel {
+  1608→        width: 320px !important;
+  1609→        min-width: 320px !important;
+  1610→        max-width: 320px !important;
+  1611→        height: calc(100vh - 124px) !important; /* 52px topbar + 40px tabs + 32px WP adminbar */
+  1612→        max-height: calc(100vh - 124px) !important;
+  1613→        background: var(--vc-bg-dark);
+  1614→        border-right: 1px solid var(--vc-border);
+  1615→        overflow-y: auto !important;
+  1616→        overflow-x: hidden !important;
+  1617→        display: flex;
+  1618→        flex-direction: column;
+  1619→        flex-shrink: 0;
+  1620→        position: relative;
+  1621→        z-index: 10;
+  1622→}
+  1623→.vc-builder-panel::-webkit-scrollbar { width: 5px; }
+  1624→.vc-builder-panel::-webkit-scrollbar-track { background: transparent; }
+  1625→.vc-builder-panel::-webkit-scrollbar-thumb { background: var(--vc-border); border-radius: 4px; }
+  1626→
+  1627→/* ═══════════════════════════════════════════════════════════════
+  1628→   Panel Widget Editor (3-tab contextual, shown on element click)
+  1629→   ═══════════════════════════════════════════════════════════════ */
+  1630→.vc-bp-widget-editor {
+  1631→        flex-shrink: 0;
+  1632→        border-bottom: 1px solid var(--vc-border);
+  1633→}
+  1634→.vc-bp-divider {
+  1635→        display: flex;
+  1636→        align-items: center;
+  1637→        gap: 10px;
+  1638→        padding: 12px 16px;
+  1639→        font-size: 10px;
+  1640→        font-weight: 700;
+  1641→        text-transform: uppercase;
+  1642→        letter-spacing: 1px;
+  1643→        color: var(--vc-text-dim);
+  1644→        flex-shrink: 0;
+  1645→}
+  1646→.vc-bp-divider::before,
+  1647→.vc-bp-divider::after {
+  1648→        content: '';
+  1649→        flex: 1;
+  1650→        height: 1px;
+  1651→        background: var(--vc-border);
+  1652→}
+  1653→
+  1654→/* ═══════════════════════════════════════════════════════════════
+  1655→   Panel Form Area (section accordions — always visible, scrollable)
+  1656→   ═══════════════════════════════════════════════════════════════ */
+  1657→.vc-panel-form {
+  1658→        flex: 1;
+  1659→        min-height: 0;
+  1660→        overflow-y: auto;
+  1661→        overflow-x: hidden;
+  1662→        padding: 0 0 40px 0;
+  1663→}
+  1664→.vc-panel-form::-webkit-scrollbar { width: 4px; }
+  1665→.vc-panel-form::-webkit-scrollbar-track { background: transparent; }
+  1666→.vc-panel-form::-webkit-scrollbar-thumb { background: var(--vc-border); border-radius: 4px; }
+  1667→#vc-builder-app .vc-panel-form .vc-section-panel {
+  1668→        display: block !important;
+  1669→        animation: none !important;
+  1670→        padding: 0;
+  1671→}
+  1672→
+  1673→/* ═══════════════════════════════════════════════════════════════
+  1674→   Panel Header (shown when widget selected)
+  1675→   ═══════════════════════════════════════════════════════════════ */
+  1676→.vc-bp-header {
+  1677→        display: flex;
+  1678→        align-items: center;
+  1679→        justify-content: space-between;
+  1680→        padding: 12px 16px;
+  1681→        border-bottom: 1px solid var(--vc-border);
+  1682→        background: var(--vc-bg-darker);
+  1683→        flex-shrink: 0;
+  1684→}
+  1685→.vc-bp-header-info {
+  1686→        min-width: 0;
+  1687→        overflow: hidden;
+  1688→}
+  1689→.vc-bp-header-title {
+  1690→        font-size: 13px;
+  1691→        font-weight: 600;
+  1692→        color: var(--vc-text-bright);
+  1693→        white-space: nowrap;
+  1694→        overflow: hidden;
+  1695→        text-overflow: ellipsis;
+  1696→}
+  1697→.vc-bp-header-label {
+  1698→        font-size: 10px;
+  1699→        color: var(--vc-text-dim);
+  1700→        font-family: 'SF Mono', 'Fira Code', monospace;
+  1701→        margin-top: 2px;
+  1702→        text-transform: uppercase;
+  1703→        letter-spacing: 0.5px;
+  1704→}
+  1705→.vc-bp-close-btn {
+  1706→        background: none;
+  1707→        border: none;
+  1708→        color: var(--vc-text-dim);
+  1709→        cursor: pointer;
+  1710→        padding: 4px;
+  1711→        border-radius: 4px;
+  1712→        transition: all var(--vc-transition);
+  1713→        flex-shrink: 0;
+  1714→        display: flex;
+  1715→        align-items: center;
+  1716→        justify-content: center;
+  1717→}
+  1718→.vc-bp-close-btn:hover {
+  1719→        background: var(--vc-bg-hover);
+  1720→        color: var(--vc-danger);
+  1721→}
+  1722→
+  1723→/* ═══════════════════════════════════════════════════════════════
+  1724→   Panel Tabs (Contenu / Style / Avancé)
+  1725→   ═══════════════════════════════════════════════════════════════ */
+  1726→.vc-bp-tabs {
+  1727→        display: flex;
+  1728→        border-bottom: 1px solid var(--vc-border);
+  1729→        background: var(--vc-bg-darker);
+  1730→        flex-shrink: 0;
+  1731→}
+  1732→.vc-bp-tab-btn {
+  1733→        flex: 1;
+  1734→        padding: 10px 0;
+  1735→        border: none;
+  1736→        background: transparent;
+  1737→        color: var(--vc-text-dim);
+  1738→        font-size: 11px;
+  1739→        font-weight: 600;
+  1740→        text-transform: uppercase;
+  1741→        letter-spacing: 0.5px;
+  1742→        cursor: pointer;
+  1743→        transition: all var(--vc-transition);
+  1744→        border-bottom: 2px solid transparent;
+  1745→        font-family: 'Inter', sans-serif;
+  1746→}
+  1747→.vc-bp-tab-btn:hover {
+  1748→        color: var(--vc-text);
+  1749→        background: rgba(255,255,255,0.03);
+  1750→}
+  1751→.vc-bp-tab-btn.active {
+  1752→        color: var(--vc-accent);
+  1753→        border-bottom-color: var(--vc-accent);
+  1754→}
+  1755→
+  1756→/* ═══════════════════════════════════════════════════════════════
+  1757→   Panel Tab Panes
+  1758→   ═══════════════════════════════════════════════════════════════ */
+  1759→.vc-bp-panes {
+  1760→        flex: 1;
+  1761→        overflow-y: auto;
+  1762→        overflow-x: hidden;
+  1763→        padding: 0;
+  1764→}
+  1765→.vc-bp-tab-pane {
+  1766→        display: none;
+  1767→        padding: 16px;
+  1768→}
+  1769→.vc-bp-tab-pane.active {
+  1770→        display: block;
+  1771→}
+  1772→.vc-bp-no-fields {
+  1773→        font-size: 12px;
+  1774→        color: var(--vc-text-dim);
+  1775→        text-align: center;
+  1776→        padding: 24px 0;
+  1777→        margin: 0;
+  1778→}
+  1779→
+  1780→/* ═══════════════════════════════════════════════════════════════
+  1781→   Panel Fields
+  1782→   ═══════════════════════════════════════════════════════════════ */
+  1783→.vc-bp-field {
+  1784→        margin-bottom: 16px;
+  1785→}
+  1786→.vc-bp-field:last-child {
+  1787→        margin-bottom: 0;
+  1788→}
+  1789→.vc-bp-field label {
+  1790→        display: block;
+  1791→        font-size: 11px;
+  1792→        font-weight: 600;
+  1793→        color: var(--vc-text-dim);
+  1794→        margin-bottom: 6px;
+  1795→        text-transform: uppercase;
+  1796→        letter-spacing: 0.3px;
+  1797→}
+  1798→
+  1799→/* ── Text / Number inputs ── */
+  1800→.vc-bp-field input[type="text"],
+  1801→.vc-bp-field input[type="number"],
+  1802→.vc-bp-field textarea,
+  1803→.vc-bp-field select {
+  1804→        width: 100%;
+  1805→        background: var(--vc-bg-input);
+  1806→        border: 1px solid var(--vc-border);
+  1807→        color: var(--vc-text);
+  1808→        font-size: 13px;
+  1809→        padding: 8px 10px;
+  1810→        border-radius: var(--vc-radius-sm);
+  1811→        outline: none;
+  1812→        transition: border-color var(--vc-transition);
+  1813→        font-family: 'Inter', sans-serif;
+  1814→}
+  1815→.vc-bp-field input[type="text"]:focus,
+  1816→.vc-bp-field input[type="number"]:focus,
+  1817→.vc-bp-field textarea:focus,
+  1818→.vc-bp-field select:focus {
+  1819→        border-color: var(--vc-accent);
+  1820→}
+  1821→.vc-bp-field textarea {
+  1822→        resize: vertical;
+  1823→        min-height: 60px;
+  1824→}
+  1825→.vc-bp-field select {
+  1826→        cursor: pointer;
+  1827→        -webkit-appearance: none;
+  1828→        appearance: none;
+  1829→        background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238888aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  1830→        background-repeat: no-repeat;
+  1831→        background-position: right 10px center;
+  1832→        padding-right: 28px;
+  1833→}
+  1834→.vc-bp-unit {
+  1835→        font-weight: 400;
+  1836→        color: var(--vc-accent);
+  1837→        font-size: 10px;
+  1838→        text-transform: none;
+  1839→        letter-spacing: 0;
+  1840→}
+  1841→
+  1842→/* ── Color picker ── */
+  1843→.vc-bp-color-wrap {
+  1844→        display: flex;
+  1845→        gap: 8px;
+  1846→        align-items: center;
+  1847→}
+  1848→.vc-bp-color-wrap input[type="color"] {
+  1849→        width: 36px;
+  1850→        height: 36px;
+  1851→        padding: 2px;
+  1852→        border: 1px solid var(--vc-border);
+  1853→        border-radius: var(--vc-radius-sm);
+  1854→        background: var(--vc-bg-input);
+  1855→        cursor: pointer;
+  1856→        flex-shrink: 0;
+  1857→}
+  1858→.vc-bp-color-wrap input[type="color"]::-webkit-color-swatch-wrapper {
+  1859→        padding: 2px;
+  1860→}
+  1861→.vc-bp-color-wrap input[type="color"]::-webkit-color-swatch {
+  1862→        border: none;
+  1863→        border-radius: 3px;
+  1864→}
+  1865→.vc-bp-color-text {
+  1866→        flex: 1;
+  1867→        background: var(--vc-bg-input);
+  1868→        border: 1px solid var(--vc-border);
+  1869→        color: var(--vc-text);
+  1870→        font-size: 13px;
+  1871→        padding: 8px 10px;
+  1872→        border-radius: var(--vc-radius-sm);
+  1873→        font-family: 'SF Mono', 'Fira Code', monospace;
+  1874→        font-size: 12px;
+  1875→        outline: none;
+  1876→        transition: border-color var(--vc-transition);
+  1877→}
+  1878→.vc-bp-color-text:focus {
+  1879→        border-color: var(--vc-accent);
+  1880→}
+  1881→
+  1882→/* ── Toggle switch ── */
+  1883→.vc-bp-toggle-label {
+  1884→        display: flex !important;
+  1885→        align-items: center;
+  1886→        justify-content: space-between;
+  1887→        text-transform: none !important;
+  1888→        letter-spacing: 0 !important;
+  1889→        font-weight: 500 !important;
+  1890→        font-size: 13px !important;
+  1891→        color: var(--vc-text) !important;
+  1892→        cursor: pointer;
+  1893→}
+  1894→.vc-bp-toggle {
+  1895→        width: 38px;
+  1896→        height: 20px;
+  1897→        background: var(--vc-bg-input);
+  1898→        border: 1px solid var(--vc-border);
+  1899→        border-radius: 12px;
+  1900→        position: relative;
+  1901→        transition: all var(--vc-transition);
+  1902→        flex-shrink: 0;
+  1903→        cursor: pointer;
+  1904→}
+  1905→.vc-bp-toggle.active {
+  1906→        background: var(--vc-accent);
+  1907→        border-color: var(--vc-accent);
+  1908→}
+  1909→.vc-bp-toggle-knob {
+  1910→        width: 14px;
+  1911→        height: 14px;
+  1912→        background: #fff;
+  1913→        border-radius: 50%;
+  1914→        position: absolute;
+  1915→        top: 2px;
+  1916→        left: 2px;
+  1917→        transition: transform var(--vc-transition);
+  1918→        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  1919→}
+  1920→.vc-bp-toggle.active .vc-bp-toggle-knob {
+  1921→        transform: translateX(18px);
+  1922→}
+  1923→
+  1924→/* ── Range slider ── */
+  1925→.vc-bp-field input[type="range"] {
+  1926→        width: 100%;
+  1927→        height: 4px;
+  1928→        -webkit-appearance: none;
+  1929→        appearance: none;
+  1930→        background: var(--vc-bg-input);
+  1931→        border-radius: 2px;
+  1932→        outline: none;
+  1933→        margin-top: 4px;
+  1934→}
+  1935→.vc-bp-field input[type="range"]::-webkit-slider-thumb {
+  1936→        -webkit-appearance: none;
+  1937→        width: 14px;
+  1938→        height: 14px;
+  1939→        background: var(--vc-accent);
+  1940→        border-radius: 50%;
+  1941→        cursor: pointer;
+  1942→        box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  1943→}
+  1944→.vc-bp-field input[type="range"]::-moz-range-thumb {
+  1945→        width: 14px;
+  1946→        height: 14px;
+  1947→        background: var(--vc-accent);
+  1948→        border-radius: 50%;
+  1949→        cursor: pointer;
+  1950→        border: none;
+  1951→}
+  1952→.vc-bp-range-val {
+  1953→        color: var(--vc-accent);
+  1954→        font-weight: 700;
+  1955→        font-size: 12px;
+  1956→}
+  1957→
+  1958→/* ── Media picker ── */
+  1959→.vc-bp-media-wrap {
+  1960→        display: flex;
+  1961→        flex-direction: column;
+  1962→        gap: 8px;
+  1963→}
+  1964→.vc-bp-media-thumb {
+  1965→        width: 100%;
+  1966→        height: 120px;
+  1967→        border-radius: var(--vc-radius-sm);
+  1968→        overflow: hidden;
+  1969→        border: 1px solid var(--vc-border);
+  1970→}
+  1971→.vc-bp-media-thumb img {
+  1972→        width: 100%;
+  1973→        height: 100%;
+  1974→        object-fit: cover;
+  1975→        display: block;
+  1976→}
+  1977→.vc-bp-media-input {
+  1978→        width: 100%;
+  1979→        background: var(--vc-bg-input);
+  1980→        border: 1px solid var(--vc-border);
+  1981→        color: var(--vc-text-dim);
+  1982→        font-size: 12px;
+  1983→        padding: 8px 10px;
+  1984→        border-radius: var(--vc-radius-sm);
+  1985→        outline: none;
+  1986→        font-family: 'Inter', sans-serif;
+  1987→}
+  1988→.vc-bp-media-btn {
+  1989→        display: inline-flex;
+  1990→        align-items: center;
+  1991→        justify-content: center;
+  1992→        padding: 7px 16px;
+  1993→        background: var(--vc-bg-hover);
+  1994→        border: 1px solid var(--vc-border);
+  1995→        color: var(--vc-text);
+  1996→        font-size: 12px;
+  1997→        font-weight: 600;
+  1998→        border-radius: var(--vc-radius-sm);
+  1999→        cursor: pointer;
+  2000→        transition: all var(--vc-transition);
+
+[showing lines 1-2000 of 2094; use offset=2001 with limit to continue reading]

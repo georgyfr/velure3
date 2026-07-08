@@ -1,0 +1,75 @@
+/* ═══════════════════════════════════════════════════════════════
+   Velure Core — Frontend Edit Button Styles
+   Hover-revealed "Modifier" buttons on each section.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Wrapper: positioned relative so the button is anchored to the section */
+.vc-fe-edit-wrap {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	z-index: 9999;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	pointer-events: none;
+}
+
+/* Show on hover of the parent section container */
+section:hover > .vc-fe-edit-wrap,
+div:hover > .vc-fe-edit-wrap,
+.v-hero-slider:hover > .vc-fe-edit-wrap {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+/* For sections that are position:static, we need the parent to be relative */
+.vc-fe-edit-section-context {
+	position: relative !important;
+}
+
+/* The button itself */
+.vc-fe-edit-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 14px;
+	background: #C8A97E;
+	color: #1A1A1A;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	text-decoration: none;
+	border-radius: 6px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+	letter-spacing: 0.3px;
+	white-space: nowrap;
+	transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+	cursor: pointer;
+}
+
+.vc-fe-edit-btn:hover {
+	background: #d4b88f;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.vc-fe-edit-btn:active {
+	transform: translateY(0);
+}
+
+.vc-fe-edit-btn svg {
+	flex-shrink: 0;
+	width: 14px;
+	height: 14px;
+}
+
+/* ── Mobile / Touch: always visible ── */
+@media (hover: none) and (pointer: coarse) {
+	.vc-fe-edit-wrap {
+		opacity: 1;
+		pointer-events: auto;
+	}
+}
+
+/* ── Hide for all non-admin screens via admin-bar check ──
+   (PHP already handles the capability check, this is defense-in-depth) */
