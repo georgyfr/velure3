@@ -3,7 +3,7 @@
  * Plugin Name: Velure Core
  * Plugin URI:  https://velure.paris
  * Description: Personnalisation a 100% de la page d'accueil du theme Velure3. Sections, ordre, styles — tout est configurable depuis l'admin. Aucune dependance ACF requise.
- * Version:     3.5.2
+ * Version:     3.5.3
  * Author:      Velure
  * Author URI:  https://velure.paris
  * License:     GPL-2.0+

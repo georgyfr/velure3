@@ -1,5 +1,5 @@
 /**
- * Velure Core — Admin JS v3.5.1
+ * Velure Core — Admin JS v3.5.3
  * Elementor-inspired: sidebar nav, AJAX publish, templates, accordions, repeaters
  *
  * FIXES v3.2:
@@ -7,7 +7,7 @@
  *  - Publish: robust form detection + serialized data with explicit nonce
  *  - Guard: graceful fallback if velureCoreAdmin missing
  *
- * v3.5.2: Complete real-time live preview — all controls synced to canvas
+ * v3.5.3: Media library + dynamic block add/remove synced to canvas — all controls synced to canvas
  */
 (function($){
 'use strict';
@@ -71,6 +71,14 @@ var VC = {
         /* ═══════════════════════════════════════
            3. REPEATER — Add / Remove / Sort
            ═══════════════════════════════════════ */
+        /* Maps repeater container IDs → canvas widget base IDs */
+        _repeaterWidgetMap: {
+                'vc-hero-slides-repeater': '',
+                'vc-trust-features-repeater': 'feature-item',
+                'vc-brand-names-repeater': '',
+                'vc-instagram-images-repeater': 'ig-item',
+        },
+
         _addRepeaterRow: function(templateEl, containerEl, label) {
                 var clone = templateEl.clone().removeClass('vc-repeater-template').removeAttr('id').show();
                 var idx = containerEl.find('.vc-repeater-row:not(.vc-repeater-template)').length;
@@ -88,22 +96,28 @@ var VC = {
                 clone.find('.vc-repeater-title').text((label || 'Element') + ' ' + (idx + 1));
                 clone.addClass('open');
                 containerEl.append(clone);
+
+                /* v3.5.3: Attach widget-base for canvas sync on delete */
+                var containerId = containerEl.attr('id') || '';
+                var widgetBase = VC._repeaterWidgetMap[containerId] || '';
+                if (widgetBase) {
+                        clone.attr('data-widget-base', widgetBase);
+                }
         },
 
         initRepeaters: function() {
                 var self = this;
 
-                /* Add button */
+                /* Add button — creates a new block and syncs to canvas */
                 $(document).on('click', '.vc-repeater-add', function(e){
                         e.preventDefault();
                         e.stopPropagation();
 
                         var repeaterId = $(this).data('repeater');
                         var template = $('#' + repeaterId + '-template');
-                        var container = $('#' + repeaterId);
+                        var container = $('#' + repeaterId + '');
 
                         if (!template.length || !container.length) {
-                                /* Fallback: search within parent */
                                 var parent = $(this).closest('.vc-accordion-body, .vc-section-panel');
                                 template = parent.find('.vc-repeater-template').first();
                                 container = parent.find('.vc-repeater').first();
@@ -113,21 +127,64 @@ var VC = {
                         var label = template.data('label') || container.data('label') || 'Element';
                         self._addRepeaterRow(template, container, label);
                         self.markUnsaved();
+
+                        /* v3.5.3: Sync structural change to canvas iframe */
+                        self._syncStructuralChange();
                 });
 
-                /* Remove row */
+                /* Remove row — deletes block from panel AND canvas */
                 $(document).on('click', '.vc-repeater-remove', function(e){
                         e.preventDefault();
                         e.stopPropagation();
                         var row = $(this).closest('.vc-repeater-row');
-                        row.fadeOut(200, function(){ $(this).remove(); });
+
+                        /* v3.5.3: Tell canvas to remove the widget before DOM removal */
+                        var widgetBase = row.data('widget-base');
+                        var widgetIndex = row.attr('data-index');
+                        if (widgetBase && widgetIndex !== undefined) {
+                                var widgetId = widgetBase + '-' + widgetIndex;
+                                self._sendToCanvas({ action: 'vc-remove-widget', widget: widgetId });
+                        }
+
+                        row.fadeOut(200, function(){
+                                $(this).remove();
+                                /* Re-index remaining rows */
+                                container.find('.vc-repeater-row:not(.vc-repeater-template)').each(function(i){
+                                        $(this).attr('data-index', i);
+                                        $(this).find('[name]').each(function(){
+                                                var name = $(this).attr('name');
+                                                if (!name) return;
+                                                name = name.replace(/\[\d+\]/g, '[' + i + ']');
+                                                $(this).attr('name', name);
+                                        });
+                                });
+                        });
+
                         self.markUnsaved();
+                        /* v3.5.3: Sync after removal */
+                        self._syncStructuralChange();
                 });
 
                 /* Toggle collapse */
                 $(document).on('click', '.vc-repeater-row-header', function(e){
                         if ($(e.target).closest('.vc-repeater-remove, .vc-repeater-toggle-btn').length) return;
                         $(this).closest('.vc-repeater-row').toggleClass('open');
+                });
+
+                /* v3.5.3: Tag existing rows with widget-base for canvas sync */
+                self._tagRepeaterRows();
+        },
+
+        /** Tag all existing repeater rows with data-widget-base */
+        _tagRepeaterRows: function() {
+                $('.vc-repeater').each(function(){
+                        var containerId = $(this).attr('id') || '';
+                        var widgetBase = VC._repeaterWidgetMap[containerId] || '';
+                        if (widgetBase) {
+                                $(this).find('.vc-repeater-row:not(.vc-repeater-template)').each(function(i){
+                                        $(this).attr('data-widget-base', widgetBase).attr('data-index', i);
+                                });
+                        }
                 });
         },
 
@@ -150,6 +207,9 @@ var VC = {
         /* ═══════════════════════════════════════
            4. MEDIA UPLOAD
            ═══════════════════════════════════════ */
+        /* ═══════════════════════════════════════
+           4. MEDIA UPLOAD — with canvas sync
+           ═══════════════════════════════════════ */
         initMedia: function() {
                 var self = this;
                 $(document).on('click', '.vc-img-btn', function(e){
@@ -157,48 +217,21 @@ var VC = {
                         e.stopPropagation();
                         var field = $(this).closest('.vc-image-field');
 
-                        /* In Visual Builder mode, open the wide modal (Proposition B) */
+                        /* In Visual Builder mode, open the wide modal */
                         if ($('#vc-builder-app').length && typeof self.openMediaModal === 'function') {
                                 self.openMediaModal(field);
                                 return;
                         }
 
                         /* Classic admin mode: use inline wp.media */
-                        var wrap = field.find('.vc-img-wrap');
-                        var input = field.find('.vc-img-id');
-                        var removeBtn = field.find('.vc-img-remove');
-
-                        if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-                                self.toast('WordPress Media Library non disponible.', 'error');
-                                return;
-                        }
-
-                        var frame = wp.media({
-                                title: 'Choisir une image',
-                                button: { text: 'Utiliser cette image' },
-                                multiple: false,
-                                library: { type: 'image' }
-                        });
-                        frame.on('select', function(){
-                                var att = frame.state().get('selection').first().toJSON();
-                                input.val(att.id);
-                                wrap.html('<img src="' + att.url + '" class="vc-img-preview" />');
-                                removeBtn.show();
-                                self.markUnsaved();
-                        });
-                        frame.open();
+                        self._openWpMedia(field);
                 });
 
                 $(document).on('click', '.vc-img-remove', function(e){
                         e.preventDefault();
                         e.stopPropagation();
                         var field = $(this).closest('.vc-image-field');
-                        var wrap = field.find('.vc-img-wrap');
-                        var input = field.find('.vc-img-id');
-                        wrap.html('<div class="vc-img-placeholder"><span class="vc-img-placeholder-icon">&#128247;</span>Cliquer ou glisser une image</div>');
-                        input.val(0);
-                        $(this).hide();
-                        VC.markUnsaved();
+                        self._clearImage(field);
                 });
         },
 
@@ -813,6 +846,10 @@ var VC = {
 
         /**
          * Open the WordPress Media Library in a wide modal (Proposition B).
+        /**
+         * Open Media Modal (Builder mode) — Wix-like.
+         * Selects image from WP media library, updates panel preview,
+         * AND pushes the image to the canvas iframe in real-time.
          * @param {jQuery} $field - The .vc-image-field container
          */
         openMediaModal: function($field) {
@@ -825,20 +862,20 @@ var VC = {
 
                 var wrap = $field.find('.vc-img-wrap');
                 var input = $field.find('.vc-img-id');
+                var fieldName = input.attr('name') || '';
                 var currentImg = wrap.find('.vc-img-preview').attr('src') || '';
 
-                /* Build modal content with preview + action buttons */
-                var content = '';
+                /* Build modal content */
+                var content = '<div class="vc-modal-media-preview-wrap">';
                 if (currentImg) {
                         content += '<img src="' + currentImg + '" class="vc-modal-media-preview" alt="Apercu" />';
+                } else {
+                        content += '<div class="vc-img-placeholder" style="padding:40px 20px;text-align:center;">&#128247; Aucune image selectionnee</div>';
                 }
+                content += '</div>';
                 content += '<div class="vc-modal-media-actions">';
-                content += '<button type="button" class="vc-btn-modal vc-btn-modal-primary" id="vc-modal-choose-media">';
-                content += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
-                content += ' Choisir une image</button>';
-                content += '<button type="button" class="vc-btn-modal" id="vc-modal-remove-media" style="' + (currentImg ? '' : 'display:none;') + '">';
-                content += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
-                content += ' Supprimer</button>';
+                content += '<button type="button" class="vc-btn-modal vc-btn-modal-primary" id="vc-modal-choose-media">&#128194; Choisir une image</button>';
+                content += '<button type="button" class="vc-btn-modal" id="vc-modal-remove-media" style="' + (currentImg ? '' : 'display:none;') + '">&#128465; Supprimer</button>';
                 content += '</div>';
 
                 self.openModal({
@@ -847,7 +884,7 @@ var VC = {
                         type: 'media',
                         content: content,
                         onReady: function($overlay) {
-                                /* "Choose image" opens WP Media Library */
+                                /* Open WP Media Library */
                                 $overlay.find('#vc-modal-choose-media').on('click', function() {
                                         var frame = wp.media({
                                                 title: 'Choisir une image',
@@ -857,485 +894,130 @@ var VC = {
                                         });
                                         frame.on('select', function() {
                                                 var att = frame.state().get('selection').first().toJSON();
-                                                input.val(att.id);
-                                                wrap.html('<img src="' + att.url + '" class="vc-img-preview" />');
+                                                var url = att.url;
+                                                var id = att.id;
+
+                                                /* Update panel */
+                                                input.val(id);
+                                                wrap.html('<img src="' + url + '" class="vc-img-preview" />');
                                                 $field.find('.vc-img-remove').show();
                                                 self.markUnsaved();
 
                                                 /* Update modal preview */
-                                                var $preview = $overlay.find('.vc-modal-media-preview');
-                                                if ($preview.length) {
-                                                        $preview.attr('src', att.url).show();
-                                                } else {
-                                                        $overlay.find('.vc-modal-body').prepend(
-                                                                '<img src="' + att.url + '" class="vc-modal-media-preview" alt="Apercu" />'
-                                                        );
-                                                }
+                                                var $previewWrap = $overlay.find('.vc-modal-media-preview-wrap');
+                                                $previewWrap.html('<img src="' + url + '" class="vc-modal-media-preview" alt="Apercu" />');
                                                 $overlay.find('#vc-modal-remove-media').show();
+
+                                                /* ═══ v3.5.3: Push image to canvas iframe ═══ */
+                                                self._pushImageToCanvas(fieldName, url);
                                         });
                                         frame.open();
                                 });
 
-                                /* "Remove" clears the image */
+                                /* Remove image */
                                 $overlay.find('#vc-modal-remove-media').on('click', function() {
-                                        input.val(0);
-                                        wrap.html('<div class="vc-img-placeholder"><span class="vc-img-placeholder-icon">&#128247;</span>Cliquer ou glisser une image</div>');
-                                        $field.find('.vc-img-remove').hide();
-                                        self.markUnsaved();
+                                        self._clearImage($field);
                                         self.closeModal();
                                 });
                         }
                 });
         },
 
-        /**
-         * Open a wide modal for text editing (Proposition B).
-         * @param {jQuery} $textarea - The original textarea element
-         */
-        openTextModal: function($textarea) {
-                var self = this;
-                var fieldName = $textarea.closest('.vc-field').find('label').text() || 'Texte';
-                var currentValue = $textarea.val();
-
-                var content = '<textarea class="vc-modal-textarea" id="vc-modal-textarea">' + currentValue + '</textarea>';
-
-                self.openModal({
-                        title: 'Editer : ' + fieldName,
-                        titleIcon: '&#9998;',
-                        type: 'text',
-                        content: content,
-                        onClose: function() {
-                                /* Sync modal content back to original field */
-                                var $modalTa = $('#vc-modal-textarea');
-                                if ($modalTa.length && $modalTa.val() !== currentValue) {
-                                        $textarea.val($modalTa.val()).trigger('change');
-                                        self.markUnsaved();
-                                }
-                        }
-                });
-        },
-
-        /* ═══════════════════════════════════════════════════
-           18. WIX-LIKE CANVAS FIELD ACTIVATION
-           When user clicks an element in the iframe, find the
-           matching form field in the panel, open accordion/
-           repeater, scroll to it, and focus it.
-           ═══════════════════════════════════════════════════ */
-        initCanvasFieldActivation: function() {
-                var self = this;
-
-                window.addEventListener('message', function(e) {
-                        if (!e.data || e.data.action !== 'vc-activate-control') return;
-                        var fieldKey = e.data.key;
-                        if (!fieldKey) return;
-
-                        /* Expand panel if collapsed */
-                        var $panel = $('#vc-builder-panel');
-                        if ($panel.hasClass('panel-collapsed')) {
-                                $panel.removeClass('panel-collapsed panel-expanded');
-                        }
-
-                        /* Find the field by name attribute */
-                        var $field = null;
-
-                        /* Strategy 1: Direct match by name */
-                        $field = $('[name="' + fieldKey + '"]');
-
-                        /* Strategy 2: For repeater template fields, match by data-index
-                           e.g. fieldKey="hero_slides[0][title]" → find in repeater row with data-index="0" */
-                        if (!$field.length) {
-                                /* Extract index from key like hero_slides[0][title] */
-                                var match = fieldKey.match(/^(\w+)\[(\d+)\]\[(\w+)\]$/);
-                                if (match) {
-                                        var base = match[1];     // hero_slides
-                                        var idx  = match[2];     // 0
-                                        var sub  = match[3];     // title
-                                        /* Look for a repeater row with this index */
-                                        var $rows = $('.vc-repeater-row:not(.vc-repeater-template)');
-                                        $rows.each(function() {
-                                                var rowIdx = $(this).attr('data-index');
-                                                if (rowIdx === idx) {
-                                                        var $f = $(this).find('[name$="[' + sub + ']"]');
-                                                        if ($f.length) {
-                                                                $field = $f;
-                                                                return false; /* break */
-                                                        }
-                                                }
-                                        });
-                                }
-                        }
-
-                        /* Strategy 3: Partial match — sometimes the form name uses a slightly
-                           different format. Try matching the key ending. */
-                        if (!$field.length) {
-                                /* Normalize: hero_slides[0][title] → look for name ending with [title] */
-                                var bracketMatch = fieldKey.match(/\[(\w+)\]$/);
-                                if (bracketMatch) {
-                                        var lastKey = bracketMatch[1];
-                                        /* Only use this fallback for non-ambiguous short keys */
-                                        if (lastKey.length > 2) {
-                                                $field = $('[name$="[' + lastKey + ']"]').first();
-                                        }
-                                }
-                        }
-
-                        if (!$field.length) {
-                                console.log('[VC] Field not found for key:', fieldKey);
-                                return;
-                        }
-
-                        /* ── Open parent accordion(s) ── */
-                        self._openParentAccordions($field);
-
-                        /* ── Open parent repeater row if collapsed ── */
-                        var $repeaterRow = $field.closest('.vc-repeater-row');
-                        if ($repeaterRow.length && !$repeaterRow.hasClass('open')) {
-                                $repeaterRow.addClass('open');
-                        }
-
-                        /* ── Scroll panel to the field ── */
-                        var $panelForm = $('#vc-panel-form');
-                        if ($panelForm.length) {
-                                var fieldTop = $field.offset().top - $panelForm.offset().top + $panelForm.scrollTop();
-                                $panelForm.animate({ scrollTop: fieldTop - 20 }, 300);
-                        }
-
-                        /* ── Focus the field with highlight animation ── */
-                        setTimeout(function() {
-                                $field.focus();
-
-                                /* Brief highlight glow */
-                                $field.css({
-                                        'box-shadow': '0 0 0 3px var(--vc-accent-glow), 0 0 12px var(--vc-accent-glow)',
-                                        'transition': 'box-shadow 0.3s ease'
-                                });
-                                setTimeout(function() {
-                                        $field.css({
-                                                'box-shadow': '',
-                                                'transition': 'box-shadow 0.6s ease'
-                                        });
-                                }, 1200);
-                        }, 350);
-                });
-        },
-
-        /**
-         * Open all ancestor accordions (.vc-accordion-item) for a given $field.
-         */
-        _openParentAccordions: function($field) {
-                $field.parents('.vc-accordion-item').each(function() {
-                        if (!$(this).hasClass('open')) {
-                                $(this).addClass('open');
-                        }
-                });
-        },
-
-        /* ═══════════════════════════════════════════════════════════════
-           19. REAL-TIME LIVE PREVIEW — Left Panel Controls → Canvas
-           v3.5.1: Wix-like instant sync for ALL controls in the
-           left panel (ranges, selects, colors, text fields, images).
-           Uses input event (continuous) instead of change (on blur).
-           ═══════════════════════════════════════════════════════════════ */
-        initRealTimePreview: function() {
-                var self = this;
-                var $panel = $('#vc-panel-form');
+        /* ═══════════════════════════════════════
+           UTILITY: Send message to canvas iframe
+           ═══════════════════════════════════════ */
+        _sendToCanvas: function(msg) {
                 var $iframe = $('#vc-builder-canvas');
-                if (!$panel.length || !$iframe.length) return;
-
-                /* Send a message to the canvas iframe */
-                function send(msg) {
-                        var win = $iframe[0] && $iframe[0].contentWindow;
-                        if (win) win.postMessage(msg, '*');
-                }
-
-                /* Determine current section from the active tab */
-                function currentSection() {
-                        return $('.vc-builder-section-tab.active').data('section') || '';
-                }
-
-                /* ── RANGE SLIDERS: input event (continuous drag) ── */
-                $panel.on('input', 'input[type="range"][name]', function() {
-                        var name = $(this).attr('name');
-                        var val  = $(this).val();
-                        self._pushPanelPreview(name, val, currentSection(), send);
-                });
-
-                /* ── COLOR PICKERS: input event (continuous) ── */
-                $panel.on('input', 'input[type="color"]', function() {
-                        var name = $(this).attr('name');
-                        var val  = $(this).val();
-                        self._pushPanelPreview(name, val, currentSection(), send);
-                });
-
-                /* ── SELECT DROPDOWNS: input+change event (continuous) ── */
-                $panel.on('input change', 'select[name]', function() {
-                        var name = $(this).attr('name');
-                        var val  = $(this).val();
-                        self._pushPanelPreview(name, val, currentSection(), send);
-                });
-
-                /* ── NUMBER INPUTS: input event (continuous typing) ── */
-                $panel.on('input', 'input[type="number"][name]', function() {
-                        var name = $(this).attr('name');
-                        var val  = $(this).val();
-                        self._pushPanelPreview(name, val, currentSection(), send);
-                });
-
-                /* ── TEXT INPUTS: input with debounce 150ms ── */
-                var textTimer = null;
-                $panel.on('input', 'input[type="text"][name], textarea[name]', function() {
-                        var name = $(this).attr('name');
-                        var val  = $(this).val();
-                        clearTimeout(textTimer);
-                        textTimer = setTimeout(function() {
-                                self._pushPanelPreview(name, val, currentSection(), send);
-                        }, 150);
-                });
-
-                /* ── TOGGLE SWITCHES ── */
-                $panel.on('change', 'input[type="checkbox"][name]', function() {
-                        var name = $(this).attr('name');
-                        var val  = this.checked ? '1' : '0';
-                        self._pushPanelPreview(name, val, currentSection(), send);
-                });
-
-                /* ── IMAGE CHANGES (after media modal closes) ──
-                   We watch for changes to hidden inputs that store attachment IDs */
-                var imageObserver = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(m) {
-                                if (m.type === 'attributes' && m.attributeName === 'value') {
-                                        var $input = $(m.target);
-                                        if ($input.hasClass('vc-img-id')) {
-                                                var name = $input.attr('name');
-                                                var val  = $input.val();
-                                                /* Get the image URL from the preview */
-                                                var url = $input.closest('.vc-image-field')
-                                                        .find('.vc-img-preview').attr('src') || '';
-                                                if (url) {
-                                                        self._pushPanelPreview(name, url, currentSection(), send);
-                                                } else {
-                                                        /* Fallback: AJAX partial render for image changes without URL */
-                                                        self._requestPanelPartialRender(name, val, currentSection());
-                                                }
-                                        }
-                                }
-                        });
-                });
-                /* Observe all existing and future image ID inputs */
-                $panel.find('.vc-img-id').each(function() {
-                        imageObserver.observe(this, { attributes: true });
-                });
-                /* Also catch dynamically added inputs via AJAX tab load */
-                self._imageObserver = imageObserver;
-                $(document).on('vc-panel-loaded', function() {
-                        $panel.find('.vc-img-id').each(function() {
-                                imageObserver.observe(this, { attributes: true });
-                        });
-                });
+                if (!$iframe.length) return;
+                var win = $iframe[0] && $iframe[0].contentWindow;
+                if (win) win.postMessage(msg, '*');
         },
 
-        /**
-         * Map a panel field name to a canvas preview action.
-         * This is the left-panel equivalent of VCB.onFieldChange.
-         * v3.5.2: Complete — handles ALL field types including
-         * non-hero text, image URLs, and structural changes.
-         * @param {string} name     Form field name attribute
-         * @param {string} value    Current value
-         * @param {string} section  Current section slug
-         * @param {Function} send   postMessage sender
-         */
-        _pushPanelPreview: function(name, value, section, send) {
+        /* ═══════════════════════════════════════
+           UTILITY: Push image URL to canvas after media selection
+           ═══════════════════════════════════════ */
+        _pushImageToCanvas: function(fieldName, url) {
+                if (!url || !fieldName) return;
+                var section = $('.vc-builder-section-tab.active').data('section') || '';
                 if (!section) return;
 
-                /* ── Convert bracket notation to dot notation for CSS_MAP lookup ──
-                   e.g. hero_slides[0][title] → hero_slides.0.title */
-                var dotKey = name.replace(/\[/g, '.').replace(/\]/g, '');
+                /* Convert bracket to dot notation */
+                var dotKey = fieldName.replace(/\\[/g, '.').replace(/\\]/g, '');
 
-                /* Check VCB.CSS_MAP if available (visual-builder.js is loaded) */
+                /* Check CSS_MAP for bgImage entries */
                 var def = (typeof VCB !== 'undefined' && VCB.CSS_MAP) ? VCB.CSS_MAP[dotKey] : null;
-                if (def) {
-                        /* TYPE 1: Widget inline CSS */
-                        if (def.css) {
-                                var cssVal = def.transform ? def.transform(value) : value;
-                                var numVal = parseFloat(cssVal);
-                                if (!isNaN(numVal) && !def.transform) cssVal = numVal + (def.unit || '');
-                                var css = {};
-                                css[def.css] = cssVal;
-                                if (def.also) {
-                                        var av = def.transform ? def.transform(value) : value;
-                                        var an = parseFloat(av);
-                                        css[def.also] = (!isNaN(an) && !def.transform) ? an + (def.alsoUnit || def.unit || '') : av;
-                                }
-                                var tw = def.widget;
-                                if (tw) send({ action: 'vc-apply-style', widget: tw, css: css });
-                                return;
-                        }
-
-                        /* TYPE 2: CSS custom property */
-                        if (def.cssVar) {
-                                var cv = (def.unit && !def.transform) ? value + def.unit : (def.transform ? def.transform(value) : value);
-                                send({ action: 'vc-apply-css-var', widget: def.widget || '__section__', property: def.cssVar, value: cv });
-                                return;
-                        }
-
-                        /* TYPE 3: Section CSS */
-                        if (def.sectionCss) {
-                                var sv = def.transform ? def.transform(value) : value;
-                                var sn = parseFloat(sv);
-                                if (!isNaN(sn) && !def.transform) sv = sn + (def.unit || '');
-                                var sc = {};
-                                sc[def.sectionCss] = sv;
-                                if (def.also) {
-                                        var asv = def.transform ? def.transform(value) : value;
-                                        var asn = parseFloat(asv);
-                                        sc[def.also] = (!isNaN(asn) && !def.transform) ? asn + (def.alsoUnit || def.unit || '') : asv;
-                                }
-                                send({ action: 'vc-apply-section-css', css: sc });
-                                return;
-                        }
-
-                        /* TYPE 4: Class toggle */
-                        if (def['class']) {
-                                var cm = def['class'];
-                                var cd = cm[String(value)];
-                                if (cd) {
-                                        if (def.section) {
-                                                send({ action: 'vc-apply-class', widget: '__section__', add: cd.add || '', remove: cd.remove || '' });
-                                        } else if (def.widget) {
-                                                send({ action: 'vc-apply-class', widget: def.widget, add: cd.add || '', remove: cd.remove || '' });
-                                        }
-                                }
-                                return;
-                        }
-
-                        /* TYPE 5: Background image */
-                        if (def.bgImage) {
-                                /* For image IDs, we need the URL — value might be a URL already */
-                                var url = (value && !/^\d+$/.test(value)) ? value : '';
-                                if (url) {
-                                        send({ action: 'vc-update-bg-image', widget: def.widget || '', url: url });
-                                }
-                                return;
-                        }
-
-                        /* TYPE 6: { none } marker — server-render only, fall through */
-                        if (def.none) {
-                                /* Intentionally no live preview */
-                        }
-                }
-
-                /* ── TEXT CONTENT: Hero text fields (widget-based) ── */
-                var heroTextWidgets = {
-                        'hero_slides.0.eyebrow':  'hero-eyebrow',
-                        'hero_slides.0.title':    'hero-title',
-                        'hero_slides.0.subtitle': 'hero-subtitle',
-                        'hero_slides.0.cta_text': 'hero-cta',
-                };
-                if (heroTextWidgets[dotKey]) {
-                        send({ action: 'vc-apply-text', widget: heroTextWidgets[dotKey], text: value, key: dotKey });
+                if (def && def.bgImage) {
+                        this._sendToCanvas({ action: 'vc-update-bg-image', widget: def.widget || '__section__', url: url });
                         return;
                 }
 
-                /* ── TEXT CONTENT: Non-hero text fields (key-based selector) ──
-                   These use the key so canvas-bridge.js TEXT_SELECTOR_MAP
-                   can find the right DOM element even without a widget ID. */
-                var nonHeroTextKeys = [
-                        'cat_eyebrow', 'section_title_categories', 'cat_description', 'cat_cta_text',
-                        'prod_eyebrow', 'section_title_products', 'prod_description', 'prod_cta_text',
-                        'testi_eyebrow', 'section_title_testimonials', 'testi_description',
-                        'blog_eyebrow', 'section_title_blog', 'blog_description', 'blog_cta_text',
-                        'ig_eyebrow', 'instagram_handle',
-                        'hs_bestseller_label', 'hs_bestseller_title', 'hs_bestseller_price',
-                                'hs_bestseller_cta', 'hs_category_label', 'hs_category_title',
-                        'sb_left_eyebrow', 'sb_left_title', 'sb_left_desc', 'sb_left_cta_text',
-                                'sb_right_eyebrow', 'sb_right_title', 'sb_right_desc', 'sb_right_cta_text',
-                ];
-                if (nonHeroTextKeys.indexOf(dotKey) !== -1 || nonHeroTextKeys.indexOf(name) !== -1) {
-                        send({ action: 'vc-apply-text', widget: '__section__', text: value, key: dotKey || name });
+                /* For hero slide image */
+                if (dotKey === 'hero_slides.0.image') {
+                        this._sendToCanvas({ action: 'vc-update-bg-image', widget: 'hero-bg', url: url });
                         return;
                 }
 
-                /* ── IMAGE FIELDS: Resolve attachment ID to URL via WordPress ── */
-                var imageFields = ['hs_bestseller_image', 'hs_category_image', 'sb_left_image', 'sb_right_image'];
-                if (imageFields.indexOf(name) !== -1 || imageFields.indexOf(dotKey) !== -1) {
-                        /* If value is already a URL, send directly */
-                        if (value && !/^\d+$/.test(value)) {
-                                send({ action: 'vc-update-bg-image', widget: '__section__', url: value, key: dotKey || name });
-                                return;
-                        }
-                        /* If value is an attachment ID, resolve URL via REST API */
-                        if (value && /^\d+$/.test(value)) {
-                                VC._resolveImageUrl(parseInt(value, 10), function(resolvedUrl) {
-                                        if (resolvedUrl) {
-                                                send({ action: 'vc-update-bg-image', widget: '__section__', url: resolvedUrl, key: dotKey || name });
-                                        }
-                                });
-                                return;
-                        }
-                }
-
-                /* ── STRUCTURAL CHANGES: AJAX partial render for everything else ──
-                   Count changes, column changes, new blocks, sort order, etc.
-                   Debounced 300ms to avoid flooding. */
-                VC._requestPanelPartialRender(dotKey || name, value, section);
+                /* Fallback: AJAX partial render to handle image in server context */
+                this._requestPanelPartialRender(dotKey, url, section);
         },
 
-        /**
-         * Resolve a WordPress attachment ID to its URL.
-         * @param {number}   id       Attachment post ID
-         * @param {Function} callback Receives the URL string
-         */
-        _resolveImageUrl: function(id, callback) {
-                if (typeof wp === 'undefined' || !wp.api || !wp.api.request) {
-                        callback('');
-                        return;
-                }
-                wp.api.request({ path: '/wp/v2/media/' + id + '?_fields=source_url' })
-                        .then(function(res) {
-                                callback(res && res.source_url ? res.source_url : '');
-                        })
-                        .fail(function() {
-                                callback('');
-                        });
+        /* ═══════════════════════════════════════
+           UTILITY: Clear image field + sync canvas
+           ═══════════════════════════════════════ */
+        _clearImage: function($field) {
+                var self = this;
+                var wrap = $field.find('.vc-img-wrap');
+                var input = $field.find('.vc-img-id');
+                var fieldName = input.attr('name') || '';
+                wrap.html('<div class="vc-img-placeholder"><span class="vc-img-placeholder-icon">&#128247;</span>Cliquer ou glisser une image</div>');
+                input.val(0);
+                $field.find('.vc-img-remove').hide();
+                this.markUnsaved();
+
+                /* v3.5.3: Push image removal to canvas */
+                if (fieldName) this._pushImageToCanvas(fieldName, '');
         },
 
-        /**
-         * Request a surgical AJAX partial render from the server.
-         * Used by the left panel for structural changes that can't be
-         * handled by CSS alone (count changes, new blocks, sort, etc.)
-         * Debounced to 300ms.
-         * @param {string} key     Settings key (dot-notation)
-         * @param {string} value   New value
-         * @param {string} section Current section slug
-         */
-        _panelPartialTimer: null,
-        _requestPanelPartialRender: function(key, value, section) {
+        /* ═══════════════════════════════════════
+           UTILITY: Open WP media inline (classic mode)
+           ═══════════════════════════════════════ */
+        _openWpMedia: function($field) {
+                var self = this;
+                if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+                        self.toast('WordPress Media Library non disponible.', 'error');
+                        return;
+                }
+
+                var wrap = $field.find('.vc-img-wrap');
+                var input = $field.find('.vc-img-id');
+                var fieldName = input.attr('name') || '';
+
+                var frame = wp.media({
+                        title: 'Choisir une image',
+                        button: { text: 'Utiliser cette image' },
+                        multiple: false,
+                        library: { type: 'image' }
+                });
+                frame.on('select', function(){
+                        var att = frame.state().get('selection').first().toJSON();
+                        input.val(att.id);
+                        wrap.html('<img src="' + att.url + '" class="vc-img-preview" />');
+                        $field.find('.vc-img-remove').show();
+                        self.markUnsaved();
+                });
+                frame.open();
+        },
+
+        /* ═══════════════════════════════════════
+           UTILITY: Sync structural change to canvas via AJAX
+           Called after add/remove block to re-render the section.
+           ═══════════════════════════════════════ */
+        _syncStructuralChange: function() {
+                var section = $('.vc-builder-section-tab.active').data('section') || '';
                 if (!section) return;
-                var $iframe = $('#vc-builder-canvas');
-
-                clearTimeout(VC._panelPartialTimer);
-                VC._panelPartialTimer = setTimeout(function() {
-                        $.ajax({
-                                url:  (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.ajaxUrl : '/wp-admin/admin-ajax.php',
-                                type: 'POST',
-                                data: {
-                                        action:  'vc_render_component_preview',
-                                        section: section,
-                                        key:     key,
-                                        value:   value,
-                                        _ajax_nonce: (typeof velureCoreAdmin !== 'undefined') ? velureCoreAdmin.nonce : '',
-                                },
-                                success: function(res) {
-                                        if (res && res.success && res.data && res.data.html) {
-                                                var win = $iframe[0] && $iframe[0].contentWindow;
-                                                if (win) {
-                                                        win.postMessage({ action: 'vc-replace-html', html: res.data.html }, '*');
-                                                }
-                                        }
-                                }
-                        });
-                }, 300);
+                this._requestPanelPartialRender('__structural__', '1', section);
         },
+
 
         /* ═══════════════════════════════════════
            INIT

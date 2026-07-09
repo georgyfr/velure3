@@ -432,6 +432,14 @@
                                 replaceWidgetHtml(e.data.widget, e.data.html);
                                 break;
 
+                        /* Remove a specific widget from the DOM.
+                           Used when a repeater row is deleted in the panel.
+                           E.g. { widget: 'feature-item-2' }
+                           → finds [data-vc-widget="feature-item-2"] and removes it. */
+                        case 'vc-remove-widget':
+                                removeWidget(e.data.widget);
+                                break;
+
                         /* ── Deselect / Select ── */
                         case 'vc-deselect':
                                 deselectAll();
@@ -693,6 +701,26 @@
                 setTimeout(function () {
                         el.classList.remove('vc-flash-replace');
                 }, 350);
+        }
+
+        /**
+         * Remove a specific widget element from the DOM.
+         * @param {string} widgetId  Widget to remove (e.g. 'feature-item-2')
+         */
+        function removeWidget(widgetId) {
+                if (!widgetId) return;
+                var el = document.querySelector('[data-vc-widget="' + widgetId + '"]');
+                if (!el) return;
+
+                /* Flash-out animation */
+                el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                el.style.opacity = '0';
+                el.style.transform = 'scale(0.95)';
+                setTimeout(function () {
+                        el.remove();
+                        /* Clean up cache */
+                        delete _inlineStyleCache[widgetId];
+                }, 220);
         }
 
         /* ─────────────────────────────────────────────────────────────────
